@@ -7,9 +7,9 @@
 - [x] Review `NPOlawyers.com`.
 - [x] Review the board training brainstorming site.
 - [x] Research nonprofit board training, governance, accessibility, and SEO references.
-- [ ] Initialize local git repository and private GitHub repository.
-- [ ] Add requested GitHub admin collaborators if GitHub accepts the accounts.
-- [ ] Record final setup results and any blockers.
+- [x] Initialize local git repository and private GitHub repository.
+- [x] Add requested GitHub admin collaborators if GitHub accepts the accounts.
+- [x] Record final setup results and any blockers.
 
 ## Project Goal
 
@@ -274,6 +274,13 @@ Before calling the implementation done:
 - The NPO Lawyers site uses a clean white/slate law-firm presentation with the central message "Providing Wisdom to the Nonprofit Sector." The training site should inherit trust, phone/contact access, and disclaimer discipline, but it should feel more like a practical learning library than a service brochure.
 - The brainstorming site has a memorable voice and useful article concepts, especially the clarity/governance framing. Its top visual treatment is elegant, but the final site needs stronger content navigation, clearer CTAs, more accessible typography, and less reliance on stylized text for important meaning.
 - The strongest differentiator is not generic nonprofit advice; it is legally literate, scenario-based board training grounded in real governance failure patterns.
+
+## Setup Results
+
+- Local git repository initialized at `C:\CDX`.
+- Private GitHub repository created and pushed: `https://github.com/erewhonsgroup/CDX`.
+- Admin collaborator invitations were created for `VoteWood`, `auronpep`, and `JWoodMedia`.
+- AM status check-in failed because AM had no session matched to `C:\CDX`; continue normal project work unless AM is configured for this workspace later.
 
 ## Open Decisions
 
