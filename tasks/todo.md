@@ -405,9 +405,17 @@ Before calling the implementation done:
 - [x] Inspect the temporary Hostinger reference site and extract its actual CSS palette.
 - [x] Protect local SSH/deployment keys from git in `.gitignore`.
 - [x] Generate a dedicated deployment SSH key and provide only the public key.
-- [ ] After approval, remap the Astro design tokens to the reference palette.
-- [ ] Verify the changed theme with `npm run build`, live route checks, and browser smoke testing.
-- [ ] Commit and push the palette update branch.
+- [x] After approval, remap the Astro design tokens to the reference palette.
+- [x] Verify the changed theme with `npm run build`, live route checks, and browser smoke testing.
+- [x] Commit and push the palette update branch.
+
+### Palette Match Results
+
+- Reference palette applied from the temporary Hostinger site: `#E7E1DB`, `#1E2A43`, `#374157`, `#5F4B27`, `#7A6544`, and `#87721F`.
+- Header and footer now render navy, body background renders beige, primary CTA renders navy, and muted/secondary accents use brown and gold.
+- Browser computed-style smoke check on `http://127.0.0.1:8120/` confirmed the live tokens and no console warnings/errors.
+- Mobile browser smoke check at 390px confirmed the mobile menu opens, desktop nav hides, and the palette is applied.
+- In-app browser screenshot capture still timed out in the browser backend, so visual evidence is via rendered computed styles and live browser state rather than a saved screenshot.
 
 ### Integrated Local Live Prototype Review
 

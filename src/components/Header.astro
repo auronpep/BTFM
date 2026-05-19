@@ -45,9 +45,9 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 1px solid var(--color-soft-border);
-    background: rgba(247, 241, 230, 0.94);
-    backdrop-filter: blur(14px);
+    border-bottom: 0.25rem solid var(--color-brass);
+    background: var(--color-navy);
+    color: var(--color-paper);
   }
 
   .header-inner {
@@ -62,12 +62,12 @@ const navItems = [
     display: inline-flex;
     align-items: center;
     gap: var(--space-3);
-    color: var(--color-ink);
+    color: var(--color-paper);
     text-decoration: none;
   }
 
   .brand:hover {
-    color: var(--color-ink);
+    color: var(--color-paper);
   }
 
   .brand-mark {
@@ -75,9 +75,9 @@ const navItems = [
     height: 2.75rem;
     display: grid;
     place-items: center;
-    border: 1px solid var(--color-brass);
+    border: 1px solid rgba(231, 225, 219, 0.35);
     border-radius: var(--radius-sm);
-    background: var(--color-ink);
+    background: var(--color-burgundy);
     color: var(--color-paper);
     font-family: var(--font-serif);
     font-weight: 800;
@@ -96,7 +96,7 @@ const navItems = [
   }
 
   .brand-subtitle {
-    color: var(--color-muted-ink);
+    color: var(--color-brass);
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 700;
@@ -118,12 +118,12 @@ const navItems = [
     display: inline-flex;
     align-items: center;
     border-radius: var(--radius-sm);
-    color: var(--color-ink);
+    color: var(--color-paper);
     text-decoration: none;
   }
 
   .desktop-nav a:hover {
-    color: var(--color-slate);
+    color: var(--color-brass);
   }
 
   .desktop-nav .nav-legal {
@@ -133,7 +133,7 @@ const navItems = [
   }
 
   .desktop-nav .nav-legal:hover {
-    background: #5a2530;
+    background: var(--color-brass);
     color: var(--color-white);
   }
 
@@ -159,7 +159,7 @@ const navItems = [
       gap: 0.22rem;
       border: 1px solid var(--color-soft-border);
       border-radius: var(--radius-md);
-      background: var(--color-white);
+      background: var(--color-burgundy);
       cursor: pointer;
       list-style: none;
     }
@@ -172,7 +172,7 @@ const navItems = [
       width: 1.1rem;
       height: 0.12rem;
       display: block;
-      background: var(--color-ink);
+      background: var(--color-paper);
     }
 
     .mobile-nav nav {
@@ -195,13 +195,13 @@ const navItems = [
       align-items: center;
       border-radius: var(--radius-sm);
       padding: var(--space-2) var(--space-3);
-      color: var(--color-ink);
+      color: var(--color-navy);
       font-weight: 800;
       text-decoration: none;
     }
 
     .mobile-nav nav a:hover {
-      background: var(--color-fog);
+      background: rgba(135, 114, 31, 0.14);
     }
 
     .mobile-nav nav .nav-legal {

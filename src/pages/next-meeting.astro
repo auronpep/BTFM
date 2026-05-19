@@ -26,7 +26,7 @@ const description =
 
 <style>
   .legal-cta a:focus-visible {
-    outline: 3px solid #c29a4a;
+    outline: 3px solid var(--color-brass);
     outline-offset: 3px;
   }
 
@@ -36,20 +36,20 @@ const description =
     gap: 2rem;
     align-items: center;
     padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4.5rem);
-    background: #f7f1e6;
+    background: var(--color-paper);
   }
 
   .legal-cta h2 {
     max-width: 21ch;
     margin: 0;
-    color: #101827;
+    color: var(--color-ink);
     font: 700 clamp(1.8rem, 3.5vw, 2.8rem)/1.08 Georgia, "Times New Roman", serif;
   }
 
   .legal-cta p {
     max-width: 52rem;
     margin: 1rem 0 0;
-    color: #314055;
+    color: var(--color-muted-ink);
     font: 400 1rem/1.6 ui-sans-serif, system-ui, sans-serif;
   }
 
@@ -58,8 +58,8 @@ const description =
     min-height: 2.85rem;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: #ffffff;
-    background: #101827;
+    color: var(--color-white);
+    background: var(--color-navy);
     text-decoration: none;
     font: 700 0.95rem/1.2 ui-sans-serif, system-ui, sans-serif;
   }

@@ -56,7 +56,7 @@ const scenarios = [
 <style>
   .resources {
     padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4.5rem);
-    background: #f7f1e6;
+    background: var(--color-paper);
   }
 
   .resources__heading {
@@ -69,14 +69,14 @@ const scenarios = [
   .resources h2,
   .training-band h2 {
     margin: 0;
-    color: #101827;
+    color: var(--color-ink);
     font: 700 clamp(2rem, 4vw, 3.1rem)/1.05 Georgia, "Times New Roman", serif;
   }
 
   .resources__heading p,
   .training-band p {
     margin: 0;
-    color: #4a5568;
+    color: var(--color-muted-ink);
     font: 400 1.05rem/1.6 ui-sans-serif, system-ui, sans-serif;
   }
 
@@ -89,8 +89,8 @@ const scenarios = [
 
   .resources article {
     padding: 1.35rem;
-    background: #ffffff;
-    border-top: 5px solid #176c68;
+    background: var(--color-white);
+    border-top: 5px solid var(--color-slate);
   }
 
   .resources h3 {
@@ -103,19 +103,19 @@ const scenarios = [
     gap: 0.7rem;
     margin: 1rem 0 1.25rem;
     padding-left: 1.2rem;
-    color: #314055;
+    color: var(--color-muted-ink);
     font: 500 1rem/1.45 ui-sans-serif, system-ui, sans-serif;
   }
 
   .resources a,
   .training-band a {
-    color: #176c68;
+    color: var(--color-slate);
     font: 700 0.98rem/1.2 ui-sans-serif, system-ui, sans-serif;
   }
 
   .resources a:focus-visible,
   .training-band a:focus-visible {
-    outline: 3px solid #c29a4a;
+    outline: 3px solid var(--color-brass);
     outline-offset: 3px;
   }
 
@@ -125,8 +125,8 @@ const scenarios = [
     gap: 2rem;
     align-items: center;
     padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4.5rem);
-    background: #ffffff;
-    border-top: 1px solid #e7eaf0;
+    background: var(--color-white);
+    border-top: 1px solid var(--color-fog);
   }
 
   .training-band p {

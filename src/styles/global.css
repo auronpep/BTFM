@@ -1,17 +1,18 @@
 :root {
   color-scheme: light;
-  --color-ink: #101827;
-  --color-paper: #f7f1e6;
-  --color-slate: #3f4d8f;
-  --color-teal: #176c68;
-  --color-brass: #c29a4a;
-  --color-copper: #a5562d;
-  --color-burgundy: #6e2f3b;
-  --color-fog: #e7eaf0;
-  --color-white: #ffffff;
-  --color-muted-ink: #4a5262;
-  --color-soft-border: rgba(16, 24, 39, 0.14);
-  --color-shadow: rgba(16, 24, 39, 0.12);
+  --color-ink: #5f4b27;
+  --color-paper: #e7e1db;
+  --color-navy: #1e2a43;
+  --color-slate: #374157;
+  --color-teal: #374157;
+  --color-brass: #87721f;
+  --color-copper: #7a6544;
+  --color-burgundy: #5f4b27;
+  --color-fog: #d6d0ca;
+  --color-white: #f5f0ea;
+  --color-muted-ink: #7a6544;
+  --color-soft-border: rgba(95, 75, 39, 0.28);
+  --color-shadow: rgba(30, 42, 67, 0.16);
 
   --font-serif: "Source Serif 4", "Libre Baskerville", Georgia, serif;
   --font-sans: "Inter", "Source Sans 3", "Segoe UI", system-ui, sans-serif;
@@ -51,7 +52,7 @@ body {
   margin: 0;
   min-width: 20rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(247, 241, 230, 0) 22rem),
+    linear-gradient(180deg, rgba(245, 240, 234, 0.54), rgba(231, 225, 219, 0) 22rem),
     var(--color-paper);
   color: var(--color-ink);
 }
@@ -71,14 +72,14 @@ svg {
 }
 
 a {
-  color: var(--color-slate);
-  text-decoration-color: rgba(63, 77, 143, 0.38);
+  color: var(--color-navy);
+  text-decoration-color: rgba(55, 65, 87, 0.38);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
 }
 
 a:hover {
-  color: var(--color-teal);
+  color: var(--color-brass);
   text-decoration-color: currentColor;
 }
 
@@ -179,19 +180,19 @@ button.button {
 }
 
 .button:hover {
-  background: #33407a;
+  background: var(--color-navy);
   color: var(--color-white);
 }
 
 .button.secondary {
   border-color: var(--color-soft-border);
-  background: var(--color-white);
+  background: transparent;
   color: var(--color-ink);
 }
 
 .button.secondary:hover {
   border-color: var(--color-brass);
-  background: #fffaf0;
+  background: rgba(135, 114, 31, 0.12);
   color: var(--color-ink);
 }
 
@@ -200,7 +201,7 @@ button.button {
 }
 
 .button.legal:hover {
-  background: #5a2530;
+  background: var(--color-copper);
 }
 
 .field-manual-grid {
