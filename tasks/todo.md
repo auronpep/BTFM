@@ -400,6 +400,15 @@ Before calling the implementation done:
 - CMS preference. Default recommendation is MDX content collections in Astro; use a CMS only if non-developers need direct publishing access.
 - Whether the training site should live on a subdomain of `NPOlawyers.com` or a separate branded domain.
 
+## Palette Match And Deployment Access Plan
+
+- [x] Inspect the temporary Hostinger reference site and extract its actual CSS palette.
+- [x] Protect local SSH/deployment keys from git in `.gitignore`.
+- [x] Generate a dedicated deployment SSH key and provide only the public key.
+- [ ] After approval, remap the Astro design tokens to the reference palette.
+- [ ] Verify the changed theme with `npm run build`, live route checks, and browser smoke testing.
+- [ ] Commit and push the palette update branch.
+
 ### Integrated Local Live Prototype Review
 
 - Ran all 10 worker roles as subagents in waves, then integrated build blockers and missing navigation routes in the main workspace.
