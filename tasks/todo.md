@@ -482,3 +482,24 @@ Before calling the implementation done:
 - Improved curriculum control semantics by changing the visual tabs into a named radio fieldset with `aria-controls`, panel IDs, and region labels.
 - Fixed mobile sticky CTA overlap by adding safe-area-aware sticky padding and footer bottom breathing room.
 - Verification note: Browser QA loaded `/training/board-training-program/`, confirmed title/URL, no console warnings/errors, no horizontal overflow, article/webinar/in-person/inquiry/`NPOlawyers.com` links, curriculum tab state changes, footer secondary contrast, and mobile footer clearance. Contrast spot checks were 11.03:1 for light text on navy, 5.75:1 for the selected tab, 8.38:1 for the packet label, and 7.35:1 for tab kicker text. `npm run check`, `git diff --check`, and `npm run build` passed; Astro generated 51 static pages. Live route checks returned 200 for `/training/board-training-program/`, `/training/`, `/articles/`, `/training/webinars`, and `/training/in-person`; built HTML contains the four primary action links and sitemap includes `/training/board-training-program/`.
+
+## Hostinger Deployment - Board Training Program QA Build
+
+- [x] Build the current static site locally.
+- [x] Confirm SSH key access and the Hostinger temporary-domain webroot.
+- [x] Back up the current remote `public_html`.
+- [x] Upload and extract a staged build archive.
+- [x] Replace the remote webroot from the staged build.
+- [x] Verify live HTTPS routes, including `/training/board-training-program/`.
+- [x] Document deployment results.
+
+### Hostinger Deployment - Board Training Program QA Build Review
+
+- Deployed the current Astro static build to `https://powderblue-bat-208812.hostingersite.com/`.
+- Fresh local `npm run build` passed with 0 errors, 0 warnings, and 0 hints; Astro generated 51 static pages.
+- Confirmed SSH key access and webroot `/home/u211961595/domains/powderblue-bat-208812.hostingersite.com/public_html`.
+- Backed up the previous remote webroot to `/home/u211961595/cdx-backups/powderblue-bat-208812.hostingersite.com/public_html-20260519-094536.tgz`.
+- Uploaded the build archive to `/home/u211961595/cdx-deploys/20260519-094536`, extracted it, verified `index.html`, `.htaccess`, and `training/board-training-program/index.html`, then replaced the confirmed webroot after a resolved-path guard.
+- HTTPS smoke checks returned 200 for `/`, `/training/board-training-program/`, `/training/`, `/articles/`, trailing-slash webinar and in-person routes, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`; a missing route returned 404.
+- Remote HTML checks confirmed `Read the Article Library`, `panel-meetings`, `aria-controls="panel-meetings"`, and sitemap inclusion for `/training/board-training-program/`.
+- In-app browser live check confirmed the deployed program page title, inquiry anchor, curriculum panel, article CTA, no horizontal overflow, and no console warnings/errors.
