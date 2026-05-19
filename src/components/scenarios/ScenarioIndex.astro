@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ScenarioCard from './ScenarioCard.astro';
+
+interface Props {
+  scenarios: CollectionEntry<'scenarios'>[];
+}
+
+const { scenarios } = Astro.props;
+
+const topicOrder = [
+  'next-meeting',
+  'money-audit',
+  'executive-oversight',
+  'risk-safety',
+  'minutes-records',
+];
+
+const topicLabels: Record<string, string> = {
+  'next-meeting': 'Next meeting',
+  'money-audit': 'Money and audit',
+  'executive-oversight': 'Executive oversight',
+  'risk-safety': 'Risk and safety',
+  'minutes-records': 'Minutes and records',
+};
+
+const groupedScenarios = topicOrder
+  .map((topic) => ({
+    topic,
+    label: topicLabels[topic],
+    items: scenarios.filter((scenario) => scenario.data.category === topic),
+  }))
+  .filter((group) => group.items.length > 0);
+---
+
+<section class="scenario-index" aria-labelledby="scenarios-title">
+  <div class="scenario-index__hero">
+    <p class="eyebrow">Boardroom scenarios</p>
+    <h1 id="scenarios-title">Practice the moment before the board acts.</h1>
+    <p>
+      Scenarios turn common meeting pressure into a short decision path:
+      what the board sees, where the risk sits, what to ask, what to avoid,
+      and what the minutes should preserve.
+    </p>
+  </div>
+
+  <div class="scenario-index__groups">
+    {groupedScenarios.map((group) => (
+      <section class="scenario-index__group" aria-labelledby={`${group.topic}-scenarios-title`}>
+        <h2 id={`${group.topic}-scenarios-title`}>{group.label}</h2>
+        <div class="scenario-index__grid">
+          {group.items.map((scenario) => <ScenarioCard scenario={scenario} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</section>
+
+<style>
+  .scenario-index {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+  }
+
+  .scenario-index__hero {
+    width: min(100% - 2rem, 62rem);
+    margin-inline: auto;
+  }
+
+  .scenario-index__hero h1 {
+    max-width: 13ch;
+  }
+
+  .scenario-index__hero p:not(.eyebrow) {
+    max-width: 48rem;
+    color: var(--color-muted-ink);
+    font-size: 1.12rem;
+  }
+
+  .scenario-index__groups {
+    display: grid;
+    gap: var(--space-12);
+    width: min(100% - 2rem, var(--container));
+    margin: var(--space-12) auto 0;
+  }
+
+  .scenario-index__group {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .scenario-index__group h2 {
+    margin: 0;
+    font-size: clamp(1.65rem, 3vw, 2.4rem);
+  }
+
+  .scenario-index__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+  }
+</style>

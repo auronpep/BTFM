@@ -1,0 +1,233 @@
+---
+const agendaChoices = [
+  {
+    id: "budget-approval",
+    title: "Budget approval",
+    ask: "What changed from the prior plan, and what is the board authorizing management to do?",
+    documents: "Proposed budget, year-to-date actuals, variance notes, cash forecast.",
+  },
+  {
+    id: "audit-or-form-990",
+    title: "Audit or Form 990",
+    ask: "What did the reviewer flag, and what governance answer will become public?",
+    documents: "Draft audit, management letter, Form 990 governance section, committee notes.",
+  },
+  {
+    id: "executive-director-report",
+    title: "Executive director report",
+    ask: "Which items require board judgment instead of passive receipt?",
+    documents: "ED report, dashboard, strategic plan, prior board assignments.",
+  },
+  {
+    id: "compensation",
+    title: "Compensation",
+    ask: "Who is disinterested, what comparability data exists, and what should the minutes show?",
+    documents: "Compensation benchmark, conflict disclosures, executive session notes.",
+  },
+  {
+    id: "conflict-of-interest",
+    title: "Conflict of interest",
+    ask: "Who has a financial or personal interest, and what process protects the decision?",
+    documents: "Conflict policy, disclosure form, board roster, proposed transaction terms.",
+  },
+  {
+    id: "insurance-safety",
+    title: "Insurance/safety",
+    ask: "Does the risk system match the actual programs, people, facilities, and incidents?",
+    documents: "Insurance summary, incident log, safety policy, vendor or program reports.",
+  },
+  {
+    id: "bylaws-or-policy-changes",
+    title: "Bylaws or policy changes",
+    ask: "What authority is changing, and does the board know the consequence before voting?",
+    documents: "Current bylaws, redline, policy draft, vote threshold notes.",
+  },
+  {
+    id: "difficult-board-member-issue",
+    title: "Difficult board member issue",
+    ask: "Is this a conduct, confidentiality, authority, attendance, or conflict problem?",
+    documents: "Bylaws, code of conduct, attendance record, relevant correspondence.",
+  },
+  {
+    id: "annual-meeting",
+    title: "Annual meeting",
+    ask: "What must be elected, approved, disclosed, or recorded before the year turns?",
+    documents: "Agenda, board terms, officer slate, annual calendar, prior minutes.",
+  },
+];
+---
+
+<section class="meeting-picker" aria-labelledby="meeting-picker-title">
+  <div class="meeting-picker__intro">
+    <h1 id="meeting-picker-title">Pick the problem on the next board agenda.</h1>
+    <p>
+      Choose the agenda item that is making the meeting serious. Each prompt is
+      designed to help a director prepare before the packet becomes a vote.
+    </p>
+  </div>
+
+  <div class="meeting-picker__grid" aria-label="Agenda choices">
+    {agendaChoices.map((choice) => (
+      <a class="meeting-picker__choice" href={`#${choice.id}`}>
+        <span>{choice.title}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<section class="meeting-guides" aria-labelledby="meeting-guides-title">
+  <h2 id="meeting-guides-title">What to ask before the vote</h2>
+  <div class="meeting-guides__list">
+    {agendaChoices.map((choice) => (
+      <article id={choice.id} class="meeting-guide">
+        <h3>{choice.title}</h3>
+        <dl>
+          <div>
+            <dt>Ask this</dt>
+            <dd>{choice.ask}</dd>
+          </div>
+          <div>
+            <dt>Documents to open</dt>
+            <dd>{choice.documents}</dd>
+          </div>
+        </dl>
+        <p class="meeting-guide__minutes">
+          Minutes should show the motion, material abstentions or recusals, documents
+          reviewed, and the final action taken.
+        </p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .meeting-picker {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+    padding: clamp(4rem, 8vw, 6.5rem) clamp(1.25rem, 5vw, 4.5rem);
+    color: #101827;
+    background: #f7f1e6;
+  }
+
+  .meeting-picker h1 {
+    max-width: 12ch;
+    margin: 0;
+    font: 700 clamp(2.8rem, 6vw, 5.5rem)/0.96 Georgia, "Times New Roman", serif;
+    letter-spacing: 0;
+  }
+
+  .meeting-picker p {
+    max-width: 38rem;
+    margin: 1.25rem 0 0;
+    color: #314055;
+    font: 400 1.08rem/1.65 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .meeting-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .meeting-picker__choice {
+    display: flex;
+    min-height: 7rem;
+    align-items: flex-end;
+    padding: 0.9rem;
+    border: 1px solid #d9dee8;
+    color: #101827;
+    background: #ffffff;
+    text-decoration: none;
+  }
+
+  .meeting-picker__choice span {
+    font: 700 1rem/1.25 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .meeting-picker__choice:hover {
+    border-color: #176c68;
+    background: #eef7f6;
+  }
+
+  .meeting-picker__choice:focus-visible {
+    outline: 3px solid #c29a4a;
+    outline-offset: 3px;
+  }
+
+  .meeting-guides {
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4.5rem);
+    background: #ffffff;
+  }
+
+  .meeting-guides h2 {
+    margin: 0;
+    color: #101827;
+    font: 700 clamp(2rem, 4vw, 3.3rem)/1.05 Georgia, "Times New Roman", serif;
+  }
+
+  .meeting-guides__list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .meeting-guide {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1fr) minmax(12rem, 0.45fr);
+    gap: 1.25rem;
+    padding: 1.2rem 0;
+    border-top: 1px solid #e7eaf0;
+    scroll-margin-top: 1rem;
+  }
+
+  .meeting-guide h3 {
+    margin: 0;
+    color: #101827;
+    font: 700 1.25rem/1.25 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .meeting-guide dl {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .meeting-guide dt {
+    color: #176c68;
+    font: 800 0.78rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .meeting-guide dd,
+  .meeting-guide__minutes {
+    margin: 0.35rem 0 0;
+    color: #314055;
+    font: 400 1rem/1.5 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .meeting-guide__minutes {
+    margin-top: 0;
+    padding-left: 1rem;
+    border-left: 4px solid #c29a4a;
+  }
+
+  @media (max-width: 900px) {
+    .meeting-picker,
+    .meeting-guide {
+      grid-template-columns: 1fr;
+    }
+
+    .meeting-picker__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .meeting-picker__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

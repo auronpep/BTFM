@@ -1,0 +1,46 @@
+---
+interface Props {
+  href?: string;
+  label?: string;
+  detail?: string;
+}
+
+const {
+  href = "/tools/board-packet-lab",
+  label = "Open Board Packet Mode",
+  detail = "Meeting soon?",
+} = Astro.props;
+---
+
+<a class="packet-mode" href={href}>
+  <span>{detail}</span>
+  <strong>{label}</strong>
+</a>
+
+<style>
+  .packet-mode {
+    min-height: 3.5rem;
+    display: inline-grid;
+    gap: 0.1rem;
+    align-content: center;
+    border: 1px solid rgba(194, 154, 74, 0.55);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    text-decoration: none;
+  }
+
+  .packet-mode:hover {
+    color: var(--color-white);
+  }
+
+  .packet-mode span {
+    color: var(--color-brass);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>

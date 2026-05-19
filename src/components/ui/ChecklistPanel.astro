@@ -1,0 +1,64 @@
+---
+interface ChecklistItem {
+  label: string;
+  checked?: boolean;
+}
+
+interface Props {
+  title?: string;
+  items?: ChecklistItem[];
+}
+
+const {
+  title = "Before the board votes",
+  items = [
+    { label: "Directors received the packet with enough time to read it." },
+    { label: "The requested decision is stated in plain English." },
+    { label: "Material risks, assumptions, and alternatives are visible." },
+    { label: "The minutes will identify what was approved." },
+  ],
+} = Astro.props;
+---
+
+<section class="boardroom-card checklist-panel" style="--card-accent: var(--color-slate);">
+  <h3 class="boardroom-title">{title}</h3>
+  <ul class="checklist">
+    {items.map((item) => (
+      <li>
+        <span class:list={["checkmark", { checked: item.checked }]} aria-hidden="true"></span>
+        <span>{item.label}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    display: grid;
+    grid-template-columns: 1.35rem 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    padding-block: var(--space-2);
+  }
+
+  .checkmark {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.2rem;
+    border: 2px solid var(--color-slate);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+  }
+
+  .checkmark.checked {
+    background:
+      linear-gradient(135deg, transparent 45%, var(--color-white) 45% 58%, transparent 58%),
+      var(--color-teal);
+    border-color: var(--color-teal);
+  }
+</style>

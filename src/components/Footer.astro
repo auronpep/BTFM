@@ -1,0 +1,93 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <section>
+      <p class="footer-kicker">The Boardroom Field Manual</p>
+      <h2>The Principles of Board Training</h2>
+      <p>
+        Practical educational material for California nonprofit directors who need to
+        prepare, ask better questions, and document decisions with care.
+      </p>
+    </section>
+
+    <section class="footer-actions" aria-label="Footer actions">
+      <a class="button" href="/training">Request board training</a>
+      <a class="button secondary" href="/tools">Open board tools</a>
+      <a class="button legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+    </section>
+
+    <section class="footer-disclaimer" aria-label="Educational disclaimer">
+      <p>
+        This site provides general educational information for nonprofit boards. It is
+        not legal advice and does not create an attorney-client relationship. For legal
+        advice about a specific organization or situation, contact qualified counsel.
+      </p>
+      <p class="footer-meta">&copy; {year} California Center for Nonprofit Law / NPO Lawyers.</p>
+    </section>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-16);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(14rem, 0.7fr);
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+  }
+
+  .site-footer h2 {
+    color: var(--color-white);
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+  }
+
+  .site-footer p {
+    max-width: 62ch;
+    color: rgba(247, 241, 230, 0.84);
+  }
+
+  .footer-kicker,
+  .footer-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer-kicker {
+    color: var(--color-brass);
+  }
+
+  .footer-actions {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .footer-disclaimer {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgba(247, 241, 230, 0.18);
+    padding-top: var(--space-5);
+  }
+
+  .footer-disclaimer p {
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 48rem) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      padding-block: var(--space-10);
+    }
+  }
+</style>

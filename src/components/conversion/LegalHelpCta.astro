@@ -1,0 +1,112 @@
+---
+type LegalHelpVariant =
+  | "audit-structure"
+  | "compensation"
+  | "bylaws-mismatch"
+  | "conflict-of-interest"
+  | "governance-dispute"
+  | "safety-youth-protection"
+  | "general";
+
+interface Props {
+  variant?: LegalHelpVariant;
+  heading?: string;
+}
+
+const { variant = "general", heading } = Astro.props;
+
+const legalHelpCtas: Record<
+  LegalHelpVariant,
+  {
+    eyebrow: string;
+    title: string;
+    prompt: string;
+    eventName: string;
+  }
+> = {
+  "audit-structure": {
+    eyebrow: "Audit structure",
+    title: "When audit oversight becomes a legal structure question",
+    prompt:
+      "If the board is unsure about audit committee composition, Form 990 process, restricted funds, or California audit obligations, route the specific facts to nonprofit counsel.",
+    eventName: "legal_cta_audit_structure_click",
+  },
+  compensation: {
+    eyebrow: "Compensation",
+    title: "Before approving insider or executive compensation",
+    prompt:
+      "Compensation involving founders, executives, relatives, or conflicted directors should be reviewed before the board treats a training checklist as legal advice.",
+    eventName: "legal_cta_compensation_click",
+  },
+  "bylaws-mismatch": {
+    eyebrow: "Bylaws mismatch",
+    title: "When practice and bylaws do not match",
+    prompt:
+      "If officer authority, voting rules, membership rights, committee powers, or notice requirements do not match actual practice, get legal review before relying on custom.",
+    eventName: "legal_cta_bylaws_mismatch_click",
+  },
+  "conflict-of-interest": {
+    eyebrow: "Conflict of interest",
+    title: "When a conflict affects the decision",
+    prompt:
+      "If a director, officer, founder, vendor, landlord, funder, or family member has a personal stake in the decision, the board may need legal advice on process and documentation.",
+    eventName: "legal_cta_conflict_interest_click",
+  },
+  "governance-dispute": {
+    eyebrow: "Governance dispute",
+    title: "When the board cannot agree who has authority",
+    prompt:
+      "Disputes over board control, officer power, director removal, executive authority, or records access should be treated as legal matters, not just meeting management problems.",
+    eventName: "legal_cta_governance_dispute_click",
+  },
+  "safety-youth-protection": {
+    eyebrow: "Safety and youth protection",
+    title: "When safety controls may carry legal exposure",
+    prompt:
+      "Youth protection, abuse reporting, insurance gaps, personnel safety, and incident response questions need advice tied to the organization's facts and obligations.",
+    eventName: "legal_cta_safety_youth_protection_click",
+  },
+  general: {
+    eyebrow: "Legal help",
+    title: "For specific legal advice, leave the field manual",
+    prompt:
+      "This site is educational. For specific governance, compliance, tax-exempt, dispute, or board authority advice, visit NPOlawyers.com.",
+    eventName: "legal_cta_general_click",
+  },
+};
+
+const cta = legalHelpCtas[variant];
+---
+
+<aside class="legal-help-cta" aria-labelledby={`legal-help-${variant}`}>
+  <p class="eyebrow">{cta.eyebrow}</p>
+  <h2 id={`legal-help-${variant}`}>{heading ?? cta.title}</h2>
+  <p>{cta.prompt}</p>
+  <a
+    class="button legal"
+    href="https://NPOlawyers.com"
+    data-conversion-event={cta.eventName}
+    rel="noopener"
+  >
+    Visit NPOlawyers.com
+  </a>
+</aside>
+
+<style>
+  .legal-help-cta {
+    border: 1px solid rgba(110, 47, 59, 0.22);
+    border-left: 0.35rem solid var(--color-burgundy);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+  }
+
+  .legal-help-cta h2 {
+    max-width: 18ch;
+    font-size: clamp(1.45rem, 3vw, 2.2rem);
+  }
+
+  .legal-help-cta p:not(.eyebrow) {
+    max-width: 62ch;
+  }
+</style>

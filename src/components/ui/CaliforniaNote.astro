@@ -1,0 +1,15 @@
+---
+interface Props {
+  note?: string;
+}
+
+const {
+  note = "California nonprofits over certain thresholds may have audit and audit committee obligations. Check current law and your organization's facts before relying on a general summary.",
+} = Astro.props;
+---
+
+<aside class="boardroom-card california-note" style="--card-accent: var(--color-slate);">
+  <p class="boardroom-label">California Note</p>
+  <p>{note}</p>
+  <slot />
+</aside>

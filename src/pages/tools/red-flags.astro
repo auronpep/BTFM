@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolHero from "../../components/tools/ToolHero.astro";
+
+const severityOrder = { urgent: 0, serious: 1, watch: 2 };
+const flags = (await getCollection("redFlags")).sort(
+  (a, b) => severityOrder[a.data.severity] - severityOrder[b.data.severity],
+);
+
+const title = "Board Red Flags";
+const description =
+  "Signals that a nonprofit board should slow down, ask for better information, document follow-up, or call counsel.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/tools/red-flags/">
+  <ToolHero
+    eyebrow="Tool"
+    title="Board Red Flags"
+    deck="Red flags are not accusations. They are signals that directors need better facts, clearer authority, stronger minutes, or professional advice before the organization relies on a decision."
+    actions={[
+      { label: "Open Question Bank", href: "/tools/question-bank", variant: "secondary" },
+      { label: "Download Checklist", href: "/downloads/board-red-flags.md" },
+    ]}
+  />
+
+  <section class="red-flags" aria-labelledby="red-flags-title">
+    <div class="red-flags__header">
+      <p class="eyebrow">Signals</p>
+      <h2 id="red-flags-title">Slow down when the signal changes the decision</h2>
+    </div>
+    <div class="red-flags__grid">
+      {
+        flags.map((entry) => (
+          <article class:list={["boardroom-card", "red-flags__card", `red-flags__card--${entry.data.severity}`]}>
+            <p class="boardroom-label">{entry.data.severity}</p>
+            <h3 class="boardroom-title">{entry.data.title}</h3>
+            <p><strong>Signal:</strong> {entry.data.signal}</p>
+            <p><strong>Why it matters:</strong> {entry.data.whyItMatters}</p>
+            <h4>Immediate board action</h4>
+            <ul>
+              {entry.data.immediateBoardAction.map((action) => <li>{action}</li>)}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .red-flags {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .red-flags__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .red-flags__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .red-flags__card h4 {
+    margin-top: var(--space-5);
+    font-size: 1.05rem;
+  }
+
+  .red-flags__card--urgent {
+    --card-accent: var(--color-burgundy);
+  }
+
+  .red-flags__card--serious {
+    --card-accent: var(--color-copper);
+  }
+
+  .red-flags__card--watch {
+    --card-accent: var(--color-brass);
+  }
+</style>

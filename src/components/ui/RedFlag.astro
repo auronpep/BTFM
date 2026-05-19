@@ -1,0 +1,18 @@
+---
+interface Props {
+  flag?: string;
+  detail?: string;
+}
+
+const {
+  flag = "The board packet arrives too late for directors to read before the vote.",
+  detail = "Late packets can turn oversight into rubber-stamping, especially for budgets, audits, compensation, and policy changes.",
+} = Astro.props;
+---
+
+<aside class="boardroom-card red-flag" style="--card-accent: var(--color-copper);">
+  <p class="boardroom-label">Red Flag</p>
+  <p class="boardroom-title">{flag}</p>
+  <p>{detail}</p>
+  <slot />
+</aside>

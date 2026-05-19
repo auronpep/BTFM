@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolDetailLayout from "../../components/tools/ToolDetailLayout.astro";
+
+export async function getStaticPaths() {
+  const reservedToolPages = new Set([
+    "board-packet-lab",
+    "board-question-bank",
+    "board-red-flags",
+    "mature-board-self-assessment",
+  ]);
+  const tools = (await getCollection("tools")).filter((tool) => !reservedToolPages.has(tool.id));
+  return tools.map((tool) => ({
+    params: { slug: tool.id },
+    props: { tool },
+  }));
+}
+
+const { tool } = Astro.props;
+const { Content } = await render(tool);
+---
+
+<BaseLayout title={tool.data.title} description={tool.data.description} canonicalPath={`/tools/${tool.id}/`} pageType="tool">
+  <ToolDetailLayout data={tool.data}>
+    <Content />
+  </ToolDetailLayout>
+</BaseLayout>

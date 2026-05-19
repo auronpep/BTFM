@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LegalHelpCta from "../components/conversion/LegalHelpCta.astro";
+import TrainingInquiryForm from "../components/forms/TrainingInquiryForm.astro";
+
+const pageTitle = "Contact and Training Inquiry";
+const description =
+  "Contact fallback for nonprofit board training inquiries, webinar notifications, in-person training requests, and NPO Lawyers referral paths.";
+---
+
+<BaseLayout title={pageTitle} description={description} canonicalPath="/contact">
+  <section class="contact-hero">
+    <div class="container">
+      <p class="eyebrow">Contact</p>
+      <h1>Training inquiries and legal-help referrals</h1>
+      <p>
+        Use this page when a registration form is not available yet, when an organization needs a private training
+        conversation, or when the issue should move from general education to NPO Lawyers.
+      </p>
+    </div>
+  </section>
+
+  <section class="container section-block">
+    <TrainingInquiryForm
+      formName="contact-training-inquiry"
+      eventName="contact_training_inquiry_submit_mailto"
+      heading="Send a board training inquiry"
+      intro="This static fallback opens an email with the core routing details. Do not include confidential legal facts in this training form."
+      defaultInterest="private-training"
+    />
+  </section>
+
+  <section class="container section-block contact-grid" aria-labelledby="contact-routes-heading">
+    <div>
+      <p class="eyebrow">Routing</p>
+      <h2 id="contact-routes-heading">Pick the right next step</h2>
+      <ul class="route-list">
+        <li>
+          <a href="/training/webinars" data-conversion-event="contact_webinars_click">Webinar registration or notices</a>
+          <span>Use this for individual directors or board chairs looking for a scheduled session.</span>
+        </li>
+        <li>
+          <a href="/training/in-person" data-conversion-event="contact_in_person_click">In-person board training</a>
+          <span>Use this for retreats, full-board sessions, and leadership cohorts.</span>
+        </li>
+        <li>
+          <a href="https://NPOlawyers.com" data-conversion-event="contact_npo_lawyers_click">Specific legal advice</a>
+          <span>Use NPOlawyers.com for governance, compliance, tax-exempt, dispute, or board authority advice.</span>
+        </li>
+      </ul>
+    </div>
+    <LegalHelpCta variant="general" heading="Do not send specific legal facts through a training inquiry" />
+  </section>
+
+  <section class="narrow section-block disclaimer" aria-label="Educational disclaimer">
+    <p>
+      Training inquiries are for educational programming. They do not create an attorney-client relationship. For
+      legal advice about specific facts, use the NPO Lawyers path.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    padding: var(--space-16) 0 var(--space-10);
+  }
+
+  .contact-hero p:not(.eyebrow) {
+    max-width: 64ch;
+    font-size: 1.12rem;
+  }
+
+  .section-block {
+    padding: var(--space-10) 0;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.9fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .route-list {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .route-list li {
+    display: grid;
+    gap: var(--space-1);
+    border-bottom: 1px solid var(--color-fog);
+    padding-bottom: var(--space-4);
+  }
+
+  .route-list a {
+    font-weight: 800;
+  }
+
+  .route-list span,
+  .disclaimer {
+    color: var(--color-muted-ink);
+  }
+
+  @media (max-width: 52rem) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

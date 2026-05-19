@@ -1,0 +1,204 @@
+---
+import LegalHelpCta from "../conversion/LegalHelpCta.astro";
+import TrainingCtaPanel from "../conversion/TrainingCtaPanel.astro";
+import type { TopicPageConfig } from "../../data/topic-pages";
+import type { TopicResource } from "../../utils/topic-content";
+
+interface Props {
+  config: TopicPageConfig;
+  resources: {
+    articles: TopicResource[];
+    scenarios: TopicResource[];
+    tools: TopicResource[];
+    rules: TopicResource[];
+  };
+}
+
+const { config, resources } = Astro.props;
+const resourceGroups = [
+  { title: "Articles", items: resources.articles },
+  { title: "Scenarios", items: resources.scenarios },
+  { title: "Tools", items: resources.tools },
+  { title: "California rules", items: resources.rules },
+].filter((group) => group.items.length > 0);
+---
+
+<section class="topic-hero">
+  <div>
+    <p class="eyebrow">{config.eyebrow}</p>
+    <h1>{config.title}</h1>
+    <p class="topic-hero__deck">{config.deck}</p>
+    <div class="topic-actions" aria-label={`${config.title} actions`}>
+      <a class="button" href={config.primaryAction.href}>{config.primaryAction.label}</a>
+      <a class="button secondary" href={config.secondaryAction.href}>{config.secondaryAction.label}</a>
+      <a class="button secondary" href="/articles/">View Articles</a>
+    </div>
+  </div>
+  <aside class="topic-note" aria-label="Use boundary">
+    <p class="boardroom-label">Use Boundary</p>
+    <p>
+      This section is for board education and meeting preparation. Specific facts,
+      filings, rights, disputes, or legal exposure should be routed to counsel.
+    </p>
+  </aside>
+</section>
+
+<section class="topic-section" aria-labelledby={`${config.slug}-focus`}>
+  <div class="topic-section__header">
+    <p class="eyebrow">Board Focus</p>
+    <h2 id={`${config.slug}-focus`}>What the board should watch</h2>
+  </div>
+  <div class="field-manual-grid">
+    {config.focusAreas.map((item) => (
+      <article class="boardroom-card">
+        <p class="boardroom-label">Focus</p>
+        <p>{item}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="topic-section topic-section--fog" aria-labelledby={`${config.slug}-meeting`}>
+  <div class="topic-section__header">
+    <p class="eyebrow">Meeting Prep</p>
+    <h2 id={`${config.slug}-meeting`}>Questions, minutes, and red flags</h2>
+  </div>
+  <div class="topic-three">
+    <article class="boardroom-card">
+      <p class="boardroom-label">Ask This</p>
+      <ul class="boardroom-list">
+        {config.questions.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+    <article class="boardroom-card">
+      <p class="boardroom-label">Minutes Should Show</p>
+      <ul class="boardroom-list">
+        {config.minutesShouldShow.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+    <article class="boardroom-card">
+      <p class="boardroom-label">Escalate When</p>
+      <ul class="boardroom-list">
+        {config.escalationSignals.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="topic-section" aria-labelledby={`${config.slug}-resources`}>
+  <div class="topic-section__header">
+    <p class="eyebrow">Related Resources</p>
+    <h2 id={`${config.slug}-resources`}>Read, test, and download</h2>
+  </div>
+  <div class="resource-groups">
+    {resourceGroups.map((group) => (
+      <section class="resource-group" aria-labelledby={`${config.slug}-${group.title.toLowerCase().replaceAll(" ", "-")}`}>
+        <h3 id={`${config.slug}-${group.title.toLowerCase().replaceAll(" ", "-")}`}>{group.title}</h3>
+        <div class="resource-grid">
+          {group.items.map((item) => (
+            <article class="boardroom-card">
+              <p class="boardroom-label">{item.label}</p>
+              <h4 class="boardroom-title"><a href={item.href}>{item.title}</a></h4>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</section>
+
+<section class="topic-section topic-section--cta" aria-label="Training and legal help">
+  <TrainingCtaPanel
+    title={`Train your board on ${config.title.toLowerCase()}`}
+    body="Use the free resource path as pre-work, then bring the board through a practical webinar or in-person training session."
+  />
+  <LegalHelpCta variant={config.legalVariant} />
+</section>
+
+<style>
+  .topic-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+    background: var(--color-paper);
+  }
+
+  .topic-hero__deck {
+    max-width: 66ch;
+    color: var(--color-muted-ink);
+    font-size: clamp(1.08rem, 2vw, 1.3rem);
+  }
+
+  .topic-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .topic-note {
+    border: 1px solid var(--color-soft-border);
+    border-left: 0.35rem solid var(--color-teal);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .topic-note p:last-child {
+    margin-bottom: 0;
+  }
+
+  .topic-section {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .topic-section--fog {
+    background: var(--color-fog);
+  }
+
+  .topic-section--cta {
+    display: grid;
+    gap: var(--space-5);
+    background: #f4ead8;
+  }
+
+  .topic-section__header {
+    max-width: 54rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .topic-three {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .resource-groups {
+    display: grid;
+    gap: var(--space-10);
+  }
+
+  .resource-group h3 {
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+  }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .resource-grid h4 {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 56rem) {
+    .topic-hero,
+    .topic-three {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

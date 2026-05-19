@@ -1,0 +1,22 @@
+---
+interface Props {
+  triggers?: string[];
+}
+
+const {
+  triggers = [
+    "Compensation, contracts, or benefits may involve an insider.",
+    "Bylaws, actual practice, and board authority do not match.",
+    "A donor restriction, government grant, or compliance duty may be affected.",
+    "The board is responding to a conflict, investigation, dispute, or threatened claim.",
+  ],
+} = Astro.props;
+---
+
+<aside class="boardroom-card legal-escalation" style="--card-accent: var(--color-burgundy);">
+  <p class="boardroom-label">When To Call Counsel</p>
+  <ul class="boardroom-list">
+    {triggers.map((trigger) => <li>{trigger}</li>)}
+  </ul>
+  <a class="button legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+</aside>

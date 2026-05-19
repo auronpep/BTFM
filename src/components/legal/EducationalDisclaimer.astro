@@ -1,0 +1,46 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<aside class:list={["legal-disclaimer", { compact }]} aria-label="Educational information disclaimer">
+  <p class="legal-disclaimer__label">Educational Information Only</p>
+  <p>
+    This field manual is general educational information for California nonprofit board members.
+    It is not legal advice, does not create an attorney-client relationship, and may not fit
+    your organization's facts, governing documents, tax status, funding, or current law.
+    Ask qualified counsel about specific decisions.
+  </p>
+</aside>
+
+<style>
+  .legal-disclaimer {
+    border: 1px solid rgba(110, 47, 59, 0.28);
+    border-left: 0.35rem solid var(--color-burgundy);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: #fff7f3;
+    color: var(--color-ink);
+  }
+
+  .legal-disclaimer.compact {
+    padding: var(--space-4);
+  }
+
+  .legal-disclaimer__label {
+    margin-bottom: var(--space-2);
+    color: var(--color-burgundy);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .legal-disclaimer p:last-child {
+    margin-bottom: 0;
+  }
+</style>

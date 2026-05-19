@@ -1,0 +1,17 @@
+---
+interface Props {
+  title?: string;
+  rule?: string;
+}
+
+const {
+  title = "Boardroom Rule",
+  rule = "The board has ultimate authority. Individual directors do not.",
+} = Astro.props;
+---
+
+<aside class="boardroom-card boardroom-rule" style="--card-accent: var(--color-slate);">
+  <p class="boardroom-label">{title}</p>
+  <p class="boardroom-title">{rule}</p>
+  <slot />
+</aside>

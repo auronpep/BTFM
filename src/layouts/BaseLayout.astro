@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { buildJsonLd, buildSeo, type SeoPageType } from "../utils/seo";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  pageType?: SeoPageType;
+  noindex?: boolean;
+  publishedDate?: Date | string;
+  modifiedDate?: Date | string;
+}
+
+const {
+  title = "The Principles of Board Training",
+  description = "A practical boardroom field manual for California nonprofit directors reviewing budgets, reports, risk, minutes, and governance decisions.",
+  canonicalPath,
+  pageType,
+  noindex,
+  publishedDate,
+  modifiedDate,
+} = Astro.props;
+
+const seo = buildSeo({
+  title,
+  description,
+  canonicalPath: canonicalPath ?? Astro.url.pathname,
+  pageType,
+  noindex,
+  publishedDate,
+  modifiedDate,
+});
+const jsonLd = buildJsonLd(seo);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={seo.description} />
+    {seo.noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={seo.canonicalUrl} />
+    <meta property="og:site_name" content="The Principles of Board Training" />
+    <meta property="og:title" content={seo.pageTitle} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:type" content={seo.pageType === "website" ? "website" : "article"} />
+    <meta property="og:url" content={seo.canonicalUrl} />
+    <meta property="og:image" content={seo.imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.pageTitle} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={seo.imageUrl} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <title>{seo.pageTitle}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <a class="skip-link button secondary" href="#main">Skip to content</a>
+      <Header />
+      <main class="site-main" id="main">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

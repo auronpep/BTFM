@@ -1,0 +1,15 @@
+---
+interface Props {
+  warning?: string;
+}
+
+const {
+  warning = "Do not approve a budget if no one can explain the revenue assumptions.",
+} = Astro.props;
+---
+
+<aside class="boardroom-card do-not" style="--card-accent: var(--color-copper);">
+  <p class="boardroom-label">Do Not Do This</p>
+  <p class="boardroom-title">{warning}</p>
+  <slot />
+</aside>

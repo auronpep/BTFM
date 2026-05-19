@@ -1,0 +1,73 @@
+<section class="prep-flow" aria-labelledby="prep-flow-title">
+  <h2 id="prep-flow-title">Use the same discipline for every serious agenda item.</h2>
+  <div class="prep-flow__steps">
+    <article>
+      <span>1</span>
+      <h3>Name the decision</h3>
+      <p>If there is no decision, ask why the item is taking board time.</p>
+    </article>
+    <article>
+      <span>2</span>
+      <h3>Find the authority</h3>
+      <p>Check bylaws, policies, prior votes, committees, and delegated limits.</p>
+    </article>
+    <article>
+      <span>3</span>
+      <h3>Build the record</h3>
+      <p>Make sure minutes show the action, documents, conflicts, and vote result.</p>
+    </article>
+  </div>
+</section>
+
+<style>
+  .prep-flow {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4.5rem);
+    color: #ffffff;
+    background: #176c68;
+  }
+
+  .prep-flow h2 {
+    max-width: 16ch;
+    margin: 0;
+    font: 700 clamp(2rem, 4vw, 3.2rem)/1.05 Georgia, "Times New Roman", serif;
+  }
+
+  .prep-flow__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .prep-flow article {
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+  }
+
+  .prep-flow span {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    color: #101827;
+    background: #c29a4a;
+    font: 800 0.9rem/1 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .prep-flow h3 {
+    margin: 1rem 0 0;
+    font: 700 1.25rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .prep-flow p {
+    margin: 0.65rem 0 0;
+    color: #eef7f6;
+    font: 400 1rem/1.5 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (max-width: 760px) {
+    .prep-flow__steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

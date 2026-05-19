@@ -1,0 +1,212 @@
+---
+const navItems = [
+  { label: "Next Meeting", href: "/next-meeting" },
+  { label: "Money & Audit", href: "/money-audit" },
+  { label: "Executive Oversight", href: "/executive-oversight" },
+  { label: "Risk & Safety", href: "/risk-safety" },
+  { label: "Minutes & Records", href: "/minutes-records" },
+  { label: "California Board Rules", href: "/california-board-rules" },
+  { label: "Tools", href: "/tools" },
+  { label: "Training", href: "/training" },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="The Principles of Board Training home">
+      <span class="brand-mark" aria-hidden="true">BT</span>
+      <span>
+        <span class="brand-name">The Principles of Board Training</span>
+        <span class="brand-subtitle">Boardroom Field Manual</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a class="nav-legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+    </nav>
+
+    <details class="mobile-nav">
+      <summary aria-label="Open navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </summary>
+      <nav aria-label="Mobile primary navigation">
+        {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+        <a class="nav-legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--color-soft-border);
+    background: rgba(247, 241, 230, 0.94);
+    backdrop-filter: blur(14px);
+  }
+
+  .header-inner {
+    min-height: 4.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .brand:hover {
+    color: var(--color-ink);
+  }
+
+  .brand-mark {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-brass);
+    border-radius: var(--radius-sm);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-serif);
+    font-weight: 800;
+  }
+
+  .brand-name,
+  .brand-subtitle {
+    display: block;
+  }
+
+  .brand-name {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .brand-subtitle {
+    color: var(--color-muted-ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(0.55rem, 1vw, 1rem);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .desktop-nav a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .desktop-nav a:hover {
+    color: var(--color-slate);
+  }
+
+  .desktop-nav .nav-legal {
+    padding-inline: var(--space-3);
+    background: var(--color-burgundy);
+    color: var(--color-white);
+  }
+
+  .desktop-nav .nav-legal:hover {
+    background: #5a2530;
+    color: var(--color-white);
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
+  @media (max-width: 68rem) {
+    .desktop-nav {
+      display: none;
+    }
+
+    .mobile-nav {
+      position: relative;
+      display: block;
+    }
+
+    .mobile-nav summary {
+      width: 2.75rem;
+      height: 2.75rem;
+      display: grid;
+      place-items: center;
+      gap: 0.22rem;
+      border: 1px solid var(--color-soft-border);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .mobile-nav summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-nav summary span {
+      width: 1.1rem;
+      height: 0.12rem;
+      display: block;
+      background: var(--color-ink);
+    }
+
+    .mobile-nav nav {
+      position: absolute;
+      right: 0;
+      top: calc(100% + var(--space-2));
+      width: min(20rem, calc(100vw - 1.25rem));
+      display: grid;
+      gap: var(--space-1);
+      border: 1px solid var(--color-soft-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-2);
+      background: var(--color-white);
+      box-shadow: 0 1rem 2.5rem var(--color-shadow);
+    }
+
+    .mobile-nav nav a {
+      min-height: 2.75rem;
+      display: flex;
+      align-items: center;
+      border-radius: var(--radius-sm);
+      padding: var(--space-2) var(--space-3);
+      color: var(--color-ink);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .mobile-nav nav a:hover {
+      background: var(--color-fog);
+    }
+
+    .mobile-nav nav .nav-legal {
+      background: var(--color-burgundy);
+      color: var(--color-white);
+    }
+  }
+</style>

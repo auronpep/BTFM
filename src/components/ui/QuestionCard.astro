@@ -1,0 +1,19 @@
+---
+interface Props {
+  question?: string;
+  audience?: string;
+  why?: string;
+}
+
+const {
+  question = "Which three budget lines changed the most from last year, and why?",
+  audience = "Ask the CEO, CFO, or treasurer",
+  why = "This keeps the conversation focused on judgment, assumptions, and material changes rather than line-by-line micromanagement.",
+} = Astro.props;
+---
+
+<article class="boardroom-card question-card" style="--card-accent: var(--color-teal);">
+  <p class="boardroom-label">{audience}</p>
+  <h3 class="boardroom-title">{question}</h3>
+  <p>{why}</p>
+</article>

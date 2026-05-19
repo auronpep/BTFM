@@ -1,0 +1,64 @@
+---
+interface Props {
+  title?: string;
+  summary?: string;
+  triggers?: string[];
+  href?: string;
+}
+
+const {
+  title = "When to call counsel",
+  summary = "Use the rule page to spot the issue. Get legal advice when the facts, documents, or board action matter.",
+  triggers = [],
+  href = "https://NPOlawyers.com",
+} = Astro.props;
+---
+
+<aside class="when-counsel" aria-labelledby="when-counsel-title">
+  <p class="when-counsel__label">Legal Escalation</p>
+  <h2 id="when-counsel-title">{title}</h2>
+  <p>{summary}</p>
+  {
+    triggers.length > 0 && (
+      <ul>
+        {triggers.map((trigger) => (
+          <li>{trigger}</li>
+        ))}
+      </ul>
+    )
+  }
+  <a class="button legal" href={href}>Visit NPOlawyers.com</a>
+</aside>
+
+<style>
+  .when-counsel {
+    border: 1px solid rgba(110, 47, 59, 0.22);
+    border-top: 0.35rem solid var(--color-burgundy);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .when-counsel__label {
+    margin-bottom: var(--space-2);
+    color: var(--color-burgundy);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .when-counsel h2 {
+    font-size: clamp(1.45rem, 3vw, 2rem);
+  }
+
+  .when-counsel ul {
+    padding-left: 1.1rem;
+  }
+
+  .when-counsel li::marker {
+    color: var(--color-burgundy);
+  }
+</style>

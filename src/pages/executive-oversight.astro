@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TopicLanding from "../components/topic/TopicLanding.astro";
+import { topicPages } from "../data/topic-pages";
+import { getTopicResources } from "../utils/topic-content";
+
+const config = topicPages["executive-oversight"];
+const resources = await getTopicResources(config.slug);
+---
+
+<BaseLayout title={config.title} description={config.description} canonicalPath="/executive-oversight/">
+  <TopicLanding config={config} resources={resources} />
+</BaseLayout>

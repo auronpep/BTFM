@@ -2,6 +2,33 @@
 
 ## Checklist
 
+- [x] Worker 10: Record Hostinger deployment documentation plan.
+- [x] Worker 10: Review current Astro build/deploy configuration.
+- [x] Worker 10: Update Hostinger static deployment documentation.
+- [x] Worker 10: Add concise deployment checklist.
+- [x] Worker 10: Run build verification or document exact blocker.
+- [x] Worker 10: Document deployment review results.
+- [x] Worker 1: Record foundation/schema implementation plan.
+- [x] Worker 1: Add Astro static package/config/TypeScript scaffold.
+- [x] Worker 1: Define MDX/content collection schemas for boardroom field manual content.
+- [x] Worker 1: Add shared site, navigation, and content constants.
+- [x] Worker 1: Run available verification and document results.
+- [x] Worker 3: Record design-system implementation plan.
+- [x] Worker 3: Create V2 global CSS tokens and layout primitives.
+- [x] Worker 3: Add `BaseLayout`, responsive header, and footer.
+- [x] Worker 3: Add boardroom UI components under `src/components/ui`.
+- [x] Worker 3: Run available verification and document results.
+- [x] Worker 4: Record homepage and next-meeting implementation plan.
+- [x] Worker 4: Create only owned `src/pages` and page-local component files.
+- [x] Worker 4: Build homepage around the V2 boardroom promise.
+- [x] Worker 4: Build `/next-meeting` boardroom problem picker.
+- [x] Worker 4: Run available verification and document results.
+- [x] Worker 2: Confirm ownership boundaries and existing implementation state.
+- [x] Worker 2: Define V2 boardroom navigation with working-board path first and startup path second.
+- [x] Worker 2: Map launch routes to the four primary actions.
+- [x] Worker 2: Define contextual `NPOlawyers.com` referral prompts by issue type.
+- [x] Worker 2: Add route shells for `/working-board` and `/starting-a-nonprofit`.
+- [x] Worker 2: Verify changed files and document results.
 - [x] Inspect workspace and repository state.
 - [x] Read the three project documents in `docs/`.
 - [x] Review `NPOlawyers.com`.
@@ -16,6 +43,11 @@
 - [x] Add tooling recommendations for Codex, Claude Code, Google Stitch, Figma, and supporting tools.
 - [x] Record lesson that AM is bypassed for this project.
 - [x] Review `docs/BT_Plan_v2.md` and revise worker plan before implementation kickoff.
+- [x] Worker 9: Record SEO/accessibility/QA implementation plan.
+- [x] Worker 9: Inspect current metadata, routing, and static-site support.
+- [x] Worker 9: Add scoped SEO helpers and static files for Astro hosting.
+- [x] Worker 9: Add concise QA checklist artifact.
+- [x] Worker 9: Run available verification and document results.
 
 ## Project Goal
 
@@ -290,6 +322,55 @@ Before calling the implementation done:
 
 ## Review Notes
 
+### Worker 1 Foundation and Content Schema Review
+
+- Added the Astro 6 static scaffold with MDX support, strict TypeScript configuration, package scripts, and a lockfile for reproducible installs.
+- Defined content collections for `articles`, `scenarios`, `tools`, `meetingPrep`, `packetGuides`, `questionBank`, `redFlags`, `californiaRules`, and `trainingEvents` in `src/content.config.ts`, using shared field-manual fields for audience, board stage, jurisdiction, meeting use, documents, board questions, minutes evidence, red flags, legal escalation, related tools, and attorney-review flags.
+- Added shared site/navigation/content constants for the Boardroom Field Manual concept and kept compatibility with Worker 2 route/CTA files by exporting `PrimaryAction`, `primaryNavigation`, `sitePaths`, and `pathNavigation`.
+- Verification note: `npm install`, `npm run check`, and `npm run build` passed. `npm run dev -- --host 127.0.0.1 --port 4321` started successfully at `http://127.0.0.1:4321/`. Astro reports expected empty-collection warnings until content workers add MDX files. `npm install` reports five moderate audit findings in third-party dependencies; no forced audit fix was applied.
+
+### Worker 4 Homepage and Next Meeting Review
+
+- Rebuilt the homepage around `Board service gets serious when the organization gets serious`, the `$3M Board Member Guide`, next-meeting entry, Strategy/Safety/Audit jobs, featured tools, featured scenarios, training CTA, and contextual `NPOlawyers.com` CTA.
+- Built `/next-meeting` as an anchor-based boardroom problem picker covering budget approval, audit/Form 990, executive director report, compensation, conflict of interest, insurance/safety, bylaws or policy changes, difficult board member issues, and annual meeting prep.
+- Kept implementation static and local to Worker 4 paths while importing the shared `BaseLayout`, header, and footer once they became available.
+- Verification note: `npm run build` passed. Astro built `/`, `/next-meeting`, `/working-board`, and `/starting-a-nonprofit`; expected empty-content warnings appeared for placeholder content collections. `git diff --check` passed with only CRLF warnings on task files. Static `dist/` checks confirmed the homepage promise, problem picker, next-meeting agenda choices, difficult board member issue, and `NPOlawyers.com` CTA render. In-app Browser QA was attempted on `127.0.0.1:4322` and `localhost:4322`, but both were blocked by `net::ERR_BLOCKED_BY_CLIENT`.
+
+### Worker 3 Design System and Boardroom Components Review
+
+- Added the V2 palette, typography tokens, focus states, layout utilities, buttons, boardroom cards, and checklist/data primitives in `src/styles/global.css`.
+- Added `src/layouts/BaseLayout.astro`, `src/components/Header.astro`, and `src/components/Footer.astro` with responsive navigation, page metadata defaults, skip link, and the global educational disclaimer.
+- Added `BoardroomRule`, `AskThis`, `DoNotDoThis`, `MinutesShouldShow`, `LegalEscalation`, `CaliforniaNote`, `RedFlag`, `DecisionTrail`, `AuthorityMap`, `BoardPacketModeButton`, `ToolCard`, `QuestionCard`, and `ChecklistPanel` under `src/components/ui`.
+- Verification note: `git diff --check` passed. `npm run build` could not start because dependencies are not installed locally and `astro` is not available in `node_modules/.bin`. Temporary `astro check` via `npm exec` ran, but current non-Worker-3 scaffold/page/data files have type errors in `src/data/cta-map.ts`, `src/data/site-map.ts`, `src/pages/starting-a-nonprofit.astro`, and `src/pages/working-board.astro`.
+
+### Worker 2 Product IA and Routing Review
+
+- Created the V2 boardroom navigation contract around `Next Meeting`, `Money & Audit`, `Executive Oversight`, `Risk & Safety`, `Minutes & Records`, `California Board Rules`, `Tools`, `Training`, and `Visit NPOlawyers.com`.
+- Defined the two-path model with `/working-board` as the primary field-manual path and `/starting-a-nonprofit` as the secondary founder path.
+- Mapped launch routes to the four primary actions: prepare/read, understand training, webinar/in-person inquiry, and visit `NPOlawyers.com`.
+- Added contextual `NPOlawyers.com` referral prompts for audit, compensation, records, safety, governance disputes, formation, California rules, and general legal help.
+- Added semantic route shells for `/working-board` and `/starting-a-nonprofit` without shared component or style edits.
+- Verification note: `npm run build` passed after the Astro scaffold and local dependencies were available. Astro built `/`, `/next-meeting`, `/working-board`, and `/starting-a-nonprofit`; expected empty-content warnings appeared for placeholder content collections. `git diff --check` passed with only CRLF warnings on task files, and every route `ctaKeys` entry resolves to a `ctaMap` key.
+
+### Worker 9 SEO, Accessibility, and QA Review
+
+- Added shared SEO helpers, canonical URL normalization, Open Graph/Twitter card metadata, and JSON-LD defaults through `BaseLayout`.
+- Added Astro static endpoints for `robots.txt`, `sitemap.xml`, and `rss.xml`, plus a custom `404` recovery page.
+- Added `planning/SEO_ACCESSIBILITY_QA.md` with implemented SEO support, accessibility checklist items, four-primary-action review, known cross-worker route gaps, and verification notes.
+- Verification note: `npm run check` passed with 0 errors, 0 warnings, and 0 hints. `npm run build` passed and generated 46 static pages, including `404.html`, `robots.txt`, `rss.xml`, and `sitemap.xml`. `git diff --check` passed with only CRLF normalization warnings on existing text files.
+- Integrated follow-up: `/money-audit`, `/executive-oversight`, `/risk-safety`, and `/minutes-records` now have topic landing pages, and the sitemap includes them.
+
+### Worker 10 Hostinger Deployment Review
+
+- Updated `planning/HOSTINGER_DEPLOYMENT_PLAN.md` from a broad deployment plan into a concise operational Hostinger deployment guide for the current Astro static build.
+- Added `planning/HOSTINGER_DEPLOYMENT_CHECKLIST.md` for staging/production uploads, including pre-build checks, build checks, `public_html` upload rules, cache purge, smoke tests, four-primary-action verification, and rollback.
+- Deployment decision: use Astro static output for Hostinger. Current settings are `output: 'static'`, build command `npm run build`, output directory `dist/`, and Hostinger target `public_html`. Do not choose Node.js hosting unless future server-side behavior is approved.
+- GitHub/Hostinger note: do not add heavyweight CI yet. Confirm whether the actual Hostinger plan can build source or only pull static files; if it only pulls files, use a generated `hostinger-dist` branch later.
+- Environment note: static builds have no private runtime. Public form/webinar URLs are acceptable when intentional, but secrets must not be committed or referenced in client-rendered output.
+- Rollback note: keep the previous successful `dist/` artifact or `public_html` backup, restore it on failed deploy, purge Hostinger/CDN cache, and retest homepage plus direct deep links.
+- Verification note: the integrated `npm run build` now passes with `astro check` reporting 0 errors, 0 warnings, and 0 hints across 79 files, and Astro generates 50 static pages into `C:\CDX\dist`. The earlier SEO type issue and JSON-LD inline-script hint were fixed during integration. `git diff --check -- planning/HOSTINGER_DEPLOYMENT_PLAN.md planning/HOSTINGER_DEPLOYMENT_CHECKLIST.md tasks/todo.md` passed with only CRLF normalization warnings during Worker 10 review.
+- AM check-in note: the working and review status commands failed because no AM session matched `C:\CDX`.
+
 - The NPO Lawyers site uses a clean white/slate law-firm presentation with the central message "Providing Wisdom to the Nonprofit Sector." The training site should inherit trust, phone/contact access, and disclaimer discipline, but it should feel more like a practical learning library than a service brochure.
 - The brainstorming site has a memorable voice and useful article concepts, especially the clarity/governance framing. Its top visual treatment is elegant, but the final site needs stronger content navigation, clearer CTAs, more accessible typography, and less reliance on stylized text for important meaning.
 - The strongest differentiator is not generic nonprofit advice; it is legally literate, scenario-based board training grounded in real governance failure patterns.
@@ -318,3 +399,12 @@ Before calling the implementation done:
 - Whether downloads are fully free or require optional email capture.
 - CMS preference. Default recommendation is MDX content collections in Astro; use a CMS only if non-developers need direct publishing access.
 - Whether the training site should live on a subdomain of `NPOlawyers.com` or a separate branded domain.
+
+### Integrated Local Live Prototype Review
+
+- Ran all 10 worker roles as subagents in waves, then integrated build blockers and missing navigation routes in the main workspace.
+- Local live server is running at `http://127.0.0.1:8120/`.
+- Final `npm run build` passed with 0 errors, 0 warnings, and 0 hints; Astro generated 50 static pages.
+- Live smoke checks returned 200 for homepage, next meeting, four topic pages, articles, scenarios, tools, California rules, training, contact, robots, sitemap, and RSS.
+- Static internal-link check passed for 1,128 local `href` / `src` references across 50 HTML files.
+- Browser DOM/console smoke check passed for the homepage and `/money-audit`; mobile nav opened at 390px width with no console warnings/errors. In-app screenshot capture timed out twice, so screenshot evidence was not captured.

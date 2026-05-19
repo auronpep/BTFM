@@ -1,0 +1,228 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalHelpCta from "../../components/conversion/LegalHelpCta.astro";
+import TrainingCtaPanel from "../../components/conversion/TrainingCtaPanel.astro";
+
+const trainingEvents = await getCollection("trainingEvents");
+const featuredEvents = trainingEvents.slice(0, 3);
+
+const framework = [
+  {
+    label: "Strategy",
+    title: "What decision is the board making?",
+    body: "Directors learn to separate updates from decisions, ask for options, and connect agenda items to mission, budget, authority, and follow-through.",
+  },
+  {
+    label: "Safety",
+    title: "What risk needs board attention?",
+    body: "The session helps boards spot safety, insurance, personnel, donor-restriction, reporting, and internal-control issues that should not be buried in staff reports.",
+  },
+  {
+    label: "Audit",
+    title: "What evidence will show the board did its job?",
+    body: "Training connects financial oversight, Form 990 awareness, committee work, minutes, recusals, and packet review to practical board behavior.",
+  },
+];
+
+const pageTitle = "Board Training";
+const description =
+  "Board training for California nonprofit directors built around Strategy, Safety, Audit, webinars, in-person sessions, and contextual legal-help referrals.";
+---
+
+<BaseLayout title={pageTitle} description={description} canonicalPath="/training">
+  <section class="training-hero">
+    <div class="container training-hero-inner">
+      <div>
+        <p class="eyebrow">Training</p>
+        <h1>Board training for directors already in the boardroom</h1>
+        <p class="hero-copy">
+          The Principles of Board Training turns the field manual into practical sessions for California nonprofit
+          boards reviewing budgets, reports, executives, risk, minutes, and legal escalation.
+        </p>
+        <div class="hero-actions" aria-label="Training actions">
+          <a class="button" href="/training/webinars" data-conversion-event="training_overview_webinars_click">
+            Register for a Webinar
+          </a>
+          <a class="button secondary" href="/training/in-person" data-conversion-event="training_overview_in_person_click">
+            Request In-Person Training
+          </a>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="Training promise">
+        <p class="boardroom-label">Boardroom framework</p>
+        <p class="panel-statement">Strategy. Safety. Audit.</p>
+        <p>
+          Training starts with free practical tools, then gives boards a shared language for asking better questions
+          and documenting decisions.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="framework-heading">
+    <div class="section-heading">
+      <p class="eyebrow">The training model</p>
+      <h2 id="framework-heading">Three jobs every serious board has to practice</h2>
+    </div>
+    <div class="field-manual-grid">
+      {framework.map((item) => (
+        <article class="boardroom-card">
+          <p class="boardroom-label">{item.label}</p>
+          <h3 class="boardroom-title">{item.title}</h3>
+          <p>{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="formats-heading">
+    <div class="section-heading">
+      <p class="eyebrow">Formats</p>
+      <h2 id="formats-heading">Choose the training path that fits the board's calendar</h2>
+    </div>
+    <div class="format-grid">
+      <article>
+        <h3>Webinars</h3>
+        <p>
+          Best for individual directors, board chairs, committee members, and organizations that want a practical
+          introduction before a meeting cycle.
+        </p>
+        <a class="button" href="/training/webinars" data-conversion-event="training_overview_webinar_card_click">
+          View Webinars
+        </a>
+      </article>
+      <article>
+        <h3>In-person training</h3>
+        <p>
+          Best for board retreats, leadership cohorts, committee refreshers, and organizations that need shared
+          practice around real packet and governance problems.
+        </p>
+        <a class="button secondary" href="/training/in-person" data-conversion-event="training_overview_in_person_card_click">
+          Request Training
+        </a>
+      </article>
+    </div>
+  </section>
+
+  {featuredEvents.length > 0 && (
+    <section class="container section-block" aria-labelledby="events-heading">
+      <div class="section-heading">
+        <p class="eyebrow">Training events</p>
+        <h2 id="events-heading">Current training options</h2>
+      </div>
+      <div class="field-manual-grid">
+        {featuredEvents.map((event) => (
+          <article class="boardroom-card">
+            <p class="boardroom-label">{event.data.eventType.replace("-", " ")}</p>
+            <h3 class="boardroom-title">{event.data.title}</h3>
+            <p>{event.data.description}</p>
+            <a
+              href={event.data.eventType === "webinar" ? "/training/webinars" : "/training/in-person"}
+              data-conversion-event={`training_event_${event.id}_click`}
+            >
+              View details
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="container section-block">
+    <TrainingCtaPanel />
+  </section>
+
+  <section class="container section-block legal-grid" aria-label="Contextual legal help">
+    <LegalHelpCta variant="audit-structure" />
+    <LegalHelpCta variant="governance-dispute" />
+  </section>
+
+  <section class="narrow section-block disclaimer" aria-label="Educational disclaimer">
+    <p>
+      This site provides general educational information for nonprofit board training. It is not legal advice and
+      does not create an attorney-client relationship.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .training-hero {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+
+  .training-hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 25rem);
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .hero-copy {
+    max-width: 62ch;
+    font-size: 1.15rem;
+  }
+
+  .hero-actions,
+  .format-grid article {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-panel {
+    border: 1px solid var(--color-soft-border);
+    border-top: 0.35rem solid var(--color-brass);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .panel-statement {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.08;
+  }
+
+  .section-block {
+    padding: var(--space-10) 0;
+  }
+
+  .section-heading {
+    max-width: 46rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .format-grid,
+  .legal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .format-grid article {
+    align-content: start;
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+  }
+
+  .format-grid h3 {
+    width: 100%;
+  }
+
+  .disclaimer {
+    color: var(--color-muted-ink);
+  }
+
+  @media (max-width: 52rem) {
+    .training-hero-inner,
+    .format-grid,
+    .legal-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import { sitePaths } from "../data/navigation";
+import { routeMap, primaryActionLabels } from "../data/site-map";
+import { ctaMap } from "../data/cta-map";
+
+const startupPath = sitePaths.find((path) => path.href === "/starting-a-nonprofit");
+const startupRoute = routeMap.find((route) => route.path === "/starting-a-nonprofit");
+const founderTopics = [
+  {
+    label: "Should you start, sponsor, or join?",
+    href: "/starting-a-nonprofit#formation-choice",
+    summary: "Compare formation with fiscal sponsorship or joining an existing charity before building a new entity.",
+  },
+  {
+    label: "Recruit the first board",
+    href: "/starting-a-nonprofit#first-board",
+    summary: "Build early board discipline around unrelated directors, authority, meetings, and records.",
+  },
+  {
+    label: "Hold the first meeting",
+    href: "/starting-a-nonprofit#first-meeting",
+    summary: "Organize articles, bylaws, officers, banking authority, conflicts, minutes, and follow-up assignments.",
+  },
+  {
+    label: "Plan filings and exemption",
+    href: "/starting-a-nonprofit#filings",
+    summary: "Track state registration, tax exemption, annual filings, and public governance expectations.",
+  },
+];
+---
+
+<main>
+  <header>
+    <p>The Principles of Board Training</p>
+    <h1>Starting a Nonprofit</h1>
+    <p>
+      {startupPath?.promise}
+    </p>
+    <nav aria-label="Startup path actions">
+      <a href="/starting-a-nonprofit#formation-choice">Start the Founder Path</a>
+      <a href="/training">Explore Board Training</a>
+      <a href="/training/webinars">Register for a Webinar</a>
+      <a href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+    </nav>
+  </header>
+
+  <section aria-labelledby="secondary-path">
+    <h2 id="secondary-path">Secondary path, not an afterthought</h2>
+    <p>
+      Founder and first-board content stays visible, but the launch architecture leads with working-board judgment.
+      This path helps new organizations make formation decisions without skipping governance, authority, records,
+      conflicts, filings, and early board habits.
+    </p>
+  </section>
+
+  <section aria-labelledby="founder-topics">
+    <h2 id="founder-topics">Founder path topics</h2>
+    <ul>
+      {founderTopics.map((topic) => (
+        <li>
+          <h3><a href={topic.href}>{topic.label}</a></h3>
+          <p>{topic.summary}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {startupRoute && (
+    <section aria-labelledby="startup-route-contract">
+      <h2 id="startup-route-contract">Route contract</h2>
+      <p>{startupRoute.summary}</p>
+      <p>Primary action: {primaryActionLabels[startupRoute.primaryAction]}</p>
+      <p>Issue types: {startupRoute.issueTypes.join(", ")}</p>
+      <p>CTA keys: {startupRoute.ctaKeys.join(", ")}</p>
+    </section>
+  )}
+
+  <section aria-labelledby="startup-ctas">
+    <h2 id="startup-ctas">Next steps</h2>
+    <ul>
+      <li>
+        <a href={ctaMap.startupGuide.href}>{ctaMap.startupGuide.label}</a>
+        <p>{ctaMap.startupGuide.prompt}</p>
+      </li>
+      <li>
+        <a href={ctaMap.boardTraining.href}>{ctaMap.boardTraining.label}</a>
+        <p>{ctaMap.boardTraining.prompt}</p>
+      </li>
+      <li>
+        <a href={ctaMap.formationLegalHelp.href}>{ctaMap.formationLegalHelp.label}</a>
+        <p>{ctaMap.formationLegalHelp.prompt}</p>
+      </li>
+    </ul>
+  </section>
+
+  <aside aria-label="Educational disclaimer">
+    <p>
+      This site provides general educational information for nonprofit board training. It is not legal advice and
+      does not create an attorney-client relationship.
+    </p>
+  </aside>
+</main>

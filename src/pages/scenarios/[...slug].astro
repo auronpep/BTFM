@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScenarioTemplate from '../../components/scenarios/ScenarioTemplate.astro';
+
+interface Props {
+  scenario: CollectionEntry<'scenarios'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const scenarios = await getCollection('scenarios', ({ data }) => !data.draft);
+
+  return scenarios.map((scenario) => ({
+    params: { slug: scenario.id },
+    props: { scenario },
+  }));
+};
+
+const { scenario } = Astro.props as Props;
+const { Content } = await render(scenario);
+---
+
+<BaseLayout
+  title={scenario.data.title}
+  description={scenario.data.description}
+  canonicalPath={`/scenarios/${scenario.id}/`}
+  pageType="scenario"
+  publishedDate={scenario.data.pubDate}
+  modifiedDate={scenario.data.updatedDate}
+>
+  <ScenarioTemplate scenario={scenario}>
+    <Content />
+  </ScenarioTemplate>
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScenarioIndex from '../../components/scenarios/ScenarioIndex.astro';
+
+const scenarios = (await getCollection('scenarios', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0) ||
+    a.data.title.localeCompare(b.data.title),
+);
+
+const title = 'Boardroom Scenarios';
+const description =
+  'Meeting-ready scenarios for California nonprofit directors practicing board judgment, questions, red flags, minutes, and legal escalation.';
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/scenarios/">
+  <ScenarioIndex scenarios={scenarios} />
+</BaseLayout>

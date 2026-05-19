@@ -1,0 +1,210 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  scenario: CollectionEntry<'scenarios'>;
+}
+
+const { scenario } = Astro.props;
+const {
+  title,
+  description,
+  category,
+  boardroomProblem,
+  decisionPressure,
+  recommendedBoardResponse,
+  whatNotToDo,
+  documents,
+  questionsToAsk,
+  minutesShouldShow,
+  redFlags,
+  legalEscalation,
+  trainingCta,
+  relatedTools,
+} = scenario.data;
+
+const categoryLabel = category.replaceAll('-', ' ');
+---
+
+<article class="scenario-detail">
+  <header class="scenario-detail__header">
+    <p class="eyebrow">{categoryLabel}</p>
+    <h1>{title}</h1>
+    <p>{description}</p>
+  </header>
+
+  <div class="scenario-detail__grid">
+    <section class="scenario-panel lead-panel" id="problem">
+      <h2>The boardroom problem</h2>
+      <p>{boardroomProblem}</p>
+      {decisionPressure && <p class="pressure">{decisionPressure}</p>}
+    </section>
+
+    <section class="scenario-panel" id="response">
+      <h2>Recommended board response</h2>
+      <ol>
+        {recommendedBoardResponse.map((item) => <li>{item}</li>)}
+      </ol>
+    </section>
+
+    <section class="scenario-panel" id="ask">
+      <h2>What the board should ask</h2>
+      <ul>
+        {questionsToAsk.map((question) => <li>{question}</li>)}
+      </ul>
+    </section>
+
+    <section class="scenario-panel" id="not-to-do">
+      <h2>What not to do</h2>
+      <ul>
+        {whatNotToDo.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="scenario-panel" id="documents">
+      <h2>Documents to pull</h2>
+      <ul>
+        {documents.map((document) => (
+          <li>
+            <strong>{document.label}</strong>
+            {document.description && <>: {document.description}</>}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="scenario-panel" id="minutes">
+      <h2>Minutes should show</h2>
+      <ul>
+        {minutesShouldShow.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="scenario-panel warning-panel" id="red-flags">
+      <h2>Red flags</h2>
+      <ul>
+        {redFlags.map((flag) => <li>{flag}</li>)}
+      </ul>
+    </section>
+
+    <section class="scenario-panel legal-panel" id="legal">
+      <h2>When this becomes legal</h2>
+      <p>{legalEscalation?.summary ?? 'Call counsel when the scenario turns on governing documents, corporate authority, conflicts, compensation, safety, employment, donor restrictions, filings, or disputed facts.'}</p>
+      {legalEscalation?.triggers.length ? (
+        <ul>
+          {legalEscalation.triggers.map((trigger) => <li>{trigger}</li>)}
+        </ul>
+      ) : null}
+      <a class="button legal" href={legalEscalation?.npoLawyersUrl ?? 'https://NPOlawyers.com'}>Visit NPOlawyers.com</a>
+    </section>
+
+    <section class="scenario-panel scenario-prose">
+      <h2>Boardroom notes</h2>
+      <slot />
+    </section>
+
+    <section class="scenario-panel training-panel">
+      <h2>Training CTA</h2>
+      <p>{trainingCta ?? 'Use this scenario in board training to practice questions, motions, and minutes before the real meeting pressure arrives.'}</p>
+      <a class="button" href="/training/">Explore training</a>
+      {relatedTools.length ? <p class="related-tools">Related tools: {relatedTools.join(', ')}</p> : null}
+    </section>
+
+    <section class="scenario-panel disclaimer-panel">
+      <h2>Disclaimer</h2>
+      <p>
+        This scenario is for educational board training. It is not legal advice
+        and does not create an attorney-client relationship. A real board
+        should consult qualified counsel when specific facts, California law,
+        tax rules, employment issues, safety issues, conflicts, compensation,
+        or governing documents affect the decision.
+      </p>
+    </section>
+  </div>
+</article>
+
+<style>
+  .scenario-detail {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+  }
+
+  .scenario-detail__header {
+    width: min(100% - 2rem, 62rem);
+    margin-inline: auto;
+  }
+
+  .scenario-detail__header h1 {
+    max-width: 13ch;
+  }
+
+  .scenario-detail__header p:not(.eyebrow) {
+    max-width: 50rem;
+    color: var(--color-muted-ink);
+    font-size: 1.12rem;
+  }
+
+  .scenario-detail__grid {
+    width: min(100% - 2rem, var(--container));
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-12) auto 0;
+  }
+
+  .scenario-panel {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--color-white);
+  }
+
+  .scenario-panel h2 {
+    font-size: clamp(1.35rem, 3vw, 2rem);
+  }
+
+  .lead-panel,
+  .scenario-prose,
+  .training-panel,
+  .disclaimer-panel {
+    grid-column: 1 / -1;
+  }
+
+  .lead-panel {
+    border-top: 0.3rem solid var(--color-copper);
+  }
+
+  .warning-panel {
+    border-top: 0.3rem solid var(--color-brass);
+  }
+
+  .legal-panel {
+    border-top: 0.3rem solid var(--color-burgundy);
+  }
+
+  .training-panel {
+    border-top: 0.3rem solid var(--color-slate);
+  }
+
+  .disclaimer-panel {
+    background: #fffaf0;
+  }
+
+  .pressure,
+  .related-tools {
+    color: var(--color-muted-ink);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .scenario-prose :global(:last-child),
+  .scenario-panel > :last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .scenario-detail__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

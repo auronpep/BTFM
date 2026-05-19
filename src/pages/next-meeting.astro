@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MeetingProblemPicker from "../components/next-meeting/MeetingProblemPicker.astro";
+import MeetingPrepFlow from "../components/next-meeting/MeetingPrepFlow.astro";
+
+const title = "Prepare for Your Next Board Meeting";
+const description =
+  "Choose the boardroom problem on the next agenda and prepare questions, documents, and minutes discipline before the vote.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/next-meeting/">
+  <MeetingProblemPicker />
+  <MeetingPrepFlow />
+  <section class="legal-cta" aria-labelledby="legal-cta-title">
+    <div>
+      <h2 id="legal-cta-title">When the issue has legal edges, stop treating it as a template problem.</h2>
+      <p>
+        Conflicts, compensation, bylaws, corporate records, safety failures,
+        and governance disputes can require legal judgment. Use this field
+        manual for education, then call counsel when the facts matter.
+      </p>
+    </div>
+    <a href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-cta a:focus-visible {
+    outline: 3px solid #c29a4a;
+    outline-offset: 3px;
+  }
+
+  .legal-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4.5rem);
+    background: #f7f1e6;
+  }
+
+  .legal-cta h2 {
+    max-width: 21ch;
+    margin: 0;
+    color: #101827;
+    font: 700 clamp(1.8rem, 3.5vw, 2.8rem)/1.08 Georgia, "Times New Roman", serif;
+  }
+
+  .legal-cta p {
+    max-width: 52rem;
+    margin: 1rem 0 0;
+    color: #314055;
+    font: 400 1rem/1.6 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .legal-cta a {
+    display: inline-flex;
+    min-height: 2.85rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    background: #101827;
+    text-decoration: none;
+    font: 700 0.95rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (max-width: 720px) {
+    .legal-cta {
+      align-items: flex-start;
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

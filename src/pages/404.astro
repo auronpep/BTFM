@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Page Not Found";
+const description =
+  "This board training page could not be found. Use the field manual paths to prepare for a meeting, open board tools, explore training, or visit NPOlawyers.com.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/404/" noindex>
+  <section class="not-found">
+    <div class="container not-found__inner">
+      <p class="eyebrow">404</p>
+      <h1>That boardroom page is not available.</h1>
+      <p>
+        Use one of the core paths below to get back to the field manual, board tools,
+        training information, or the legal-services site.
+      </p>
+      <div class="not-found__actions" aria-label="404 recovery links">
+        <a class="button" href="/next-meeting/">Prepare for Your Next Meeting</a>
+        <a class="button secondary" href="/tools/">Open Board Tools</a>
+        <a class="button secondary" href="/training/">Explore Board Training</a>
+        <a class="button legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: clamp(4rem, 10vw, 8rem) 0;
+  }
+
+  .not-found__inner {
+    max-width: 52rem;
+  }
+
+  .not-found__inner p {
+    max-width: 42rem;
+    color: var(--color-muted-ink);
+    font-size: 1.08rem;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+</style>

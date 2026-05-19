@@ -1,0 +1,173 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AttorneyReviewFlag from "../../components/legal/AttorneyReviewFlag.astro";
+import EducationalDisclaimer from "../../components/legal/EducationalDisclaimer.astro";
+import SourceList from "../../components/legal/SourceList.astro";
+import WhenToCallCounsel from "../../components/legal/WhenToCallCounsel.astro";
+
+export async function getStaticPaths() {
+  const rules = await getCollection("californiaRules", ({ data }) => !data.draft);
+
+  return rules.map((rule) => ({
+    params: { slug: rule.id.replace(/\.mdx?$/, "") },
+    props: { rule },
+  }));
+}
+
+const { rule } = Astro.props;
+const { Content } = await render(rule);
+const slug = rule.id.replace(/\.mdx?$/, "");
+---
+
+<BaseLayout title={rule.data.title} description={rule.data.description} canonicalPath={`/california-board-rules/${slug}/`} pageType="legal">
+  <article class="rule-page">
+    <header class="rule-page__header">
+      <div class="container rule-page__header-grid">
+        <div>
+          <a class="rule-page__back" href="/california-board-rules/">California Board Rules</a>
+          <p class="eyebrow">{rule.data.ruleType.replaceAll("-", " ")}</p>
+          <h1>{rule.data.title}</h1>
+          {rule.data.deck && <p class="rule-page__deck">{rule.data.deck}</p>}
+        </div>
+        <div class="rule-page__side">
+          <AttorneyReviewFlag required={rule.data.attorneyReviewRequired} />
+          <EducationalDisclaimer compact />
+        </div>
+      </div>
+    </header>
+
+    <div class="container rule-page__layout">
+      <div class="rule-page__content">
+        <Content />
+        <SourceList sources={rule.data.sourceCitations} />
+      </div>
+      <aside class="rule-page__rail">
+        <WhenToCallCounsel
+          summary={rule.data.legalEscalation?.summary}
+          triggers={rule.data.legalEscalation?.triggers}
+          href={rule.data.legalEscalation?.npoLawyersUrl}
+        />
+        {
+          rule.data.questionsToAsk.length > 0 && (
+            <section class="rail-card">
+              <p class="rail-card__label">Ask Before Voting</p>
+              <ul>
+                {rule.data.questionsToAsk.map((question) => (
+                  <li>{question}</li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        {
+          rule.data.minutesShouldShow.length > 0 && (
+            <section class="rail-card">
+              <p class="rail-card__label">Minutes Should Show</p>
+              <ul>
+                {rule.data.minutesShouldShow.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .rule-page__header {
+    padding: clamp(3rem, 6vw, 5rem) 0;
+    background: var(--color-white);
+  }
+
+  .rule-page__header-grid,
+  .rule-page__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .rule-page__back {
+    display: inline-flex;
+    margin-bottom: var(--space-6);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .rule-page__deck {
+    max-width: 56rem;
+    color: var(--color-muted-ink);
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+  }
+
+  .rule-page__side,
+  .rule-page__rail {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .rule-page__layout {
+    padding: clamp(3rem, 6vw, 5rem) 0;
+  }
+
+  .rule-page__content {
+    max-width: var(--measure);
+  }
+
+  .rule-page__content :global(h2) {
+    margin-top: var(--space-10);
+    font-size: clamp(1.45rem, 3vw, 2.15rem);
+  }
+
+  .rule-page__content :global(h3) {
+    margin-top: var(--space-8);
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  }
+
+  .rule-page__content :global(blockquote) {
+    margin: var(--space-8) 0;
+    border-left: 0.35rem solid var(--color-teal);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-white);
+  }
+
+  .rule-page__content :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .rail-card {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .rail-card__label {
+    margin-bottom: var(--space-3);
+    color: var(--color-teal);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .rail-card ul {
+    margin-bottom: 0;
+    padding-left: 1.1rem;
+  }
+
+  @media (max-width: 56rem) {
+    .rule-page__header-grid,
+    .rule-page__layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

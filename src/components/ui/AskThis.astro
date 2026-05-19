@@ -1,0 +1,18 @@
+---
+interface Props {
+  question?: string;
+  context?: string;
+}
+
+const {
+  question = "What information would change management's recommendation?",
+  context = "Use this when a report asks the board to approve, accept, or rely on a management recommendation.",
+} = Astro.props;
+---
+
+<aside class="boardroom-card ask-this" style="--card-accent: var(--color-teal);">
+  <p class="boardroom-label">Ask This</p>
+  <p class="boardroom-title">{question}</p>
+  <p>{context}</p>
+  <slot />
+</aside>

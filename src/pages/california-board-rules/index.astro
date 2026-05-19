@@ -1,0 +1,256 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AttorneyReviewFlag from "../../components/legal/AttorneyReviewFlag.astro";
+import EducationalDisclaimer from "../../components/legal/EducationalDisclaimer.astro";
+import WhenToCallCounsel from "../../components/legal/WhenToCallCounsel.astro";
+
+const rules = (await getCollection("californiaRules"))
+  .filter((rule) => !rule.data.draft)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const featured = [
+  "audit-threshold",
+  "audit-committee",
+  "form-990",
+  "attorney-general-registry",
+];
+
+const featuredRules = rules.filter((rule) => featured.includes(rule.data.ruleType));
+const otherRules = rules.filter((rule) => !featured.includes(rule.data.ruleType));
+const rulePath = (id: string) => `/california-board-rules/${id.replace(/\.mdx?$/, "")}/`;
+---
+
+<BaseLayout
+  title="California Board Rules"
+  description="Sourced, attorney-review-flagged issue spotters for California nonprofit boards reviewing audits, filings, conflicts, compensation, records, and fundraising."
+  canonicalPath="/california-board-rules/"
+>
+  <section class="rules-hero">
+    <div class="container rules-hero__grid">
+      <div>
+        <p class="eyebrow">California Board Rules</p>
+        <h1>Use rules as issue spotters, not shortcuts.</h1>
+        <p class="rules-hero__deck">
+          These pages help working California nonprofit directors recognize governance and compliance
+          questions before the board treats them like routine agenda items. Each page is sourced,
+          conservative, and flagged for attorney review.
+        </p>
+        <div class="rules-hero__actions" aria-label="Primary actions">
+          <a class="button" href="#rule-list">Review Rule Pages</a>
+          <a class="button secondary" href="/training">Explore Board Training</a>
+          <a class="button legal" href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+        </div>
+      </div>
+      <div class="rules-hero__panel">
+        <AttorneyReviewFlag />
+        <EducationalDisclaimer compact />
+      </div>
+    </div>
+  </section>
+
+  <section class="rules-section" aria-labelledby="featured-rules-title">
+    <div class="container">
+      <p class="kicker">Start Here</p>
+      <h2 id="featured-rules-title">Rules most likely to affect a mature board</h2>
+      <div class="rules-grid">
+        {
+          featuredRules.map((rule) => (
+            <a class="rule-card" href={rulePath(rule.id)}>
+              <span>{rule.data.ruleType.replaceAll("-", " ")}</span>
+              <h3>{rule.data.title}</h3>
+              <p>{rule.data.description}</p>
+              {rule.data.attorneyReviewRequired && <strong>Attorney review required</strong>}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="rules-section rules-section--paper" id="rule-list" aria-labelledby="all-rules-title">
+    <div class="container">
+      <p class="kicker">Rule Library</p>
+      <h2 id="all-rules-title">Issue-specific California prompts</h2>
+      <div class="rules-list">
+        {
+          otherRules.map((rule) => (
+            <article class="rules-row">
+              <div>
+                <p class="rules-row__type">{rule.data.ruleType.replaceAll("-", " ")}</p>
+                <h3>
+                  <a href={rulePath(rule.id)}>{rule.data.title}</a>
+                </h3>
+                <p>{rule.data.deck ?? rule.data.description}</p>
+              </div>
+              <ul>
+                {rule.data.legalEscalation?.triggers.slice(0, 2).map((trigger) => <li>{trigger}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="rules-section" aria-labelledby="counsel-title">
+    <div class="container rules-counsel-grid">
+      <div>
+        <p class="kicker">Escalation Pattern</p>
+        <h2 id="counsel-title">When a boardroom question becomes a legal question</h2>
+        <p>
+          The practical signal is not whether a topic sounds legal. It is whether the board is about
+          to rely on a threshold, exception, filing status, conflicted vote, public disclosure, donor
+          restriction, contract, investigation, or enforcement deadline.
+        </p>
+      </div>
+      <WhenToCallCounsel
+        summary="Call counsel before the board acts when the decision depends on facts this field manual cannot verify."
+        triggers={[
+          "The board is near a filing, audit, registration, or solicitation deadline.",
+          "A director, officer, executive, donor, or vendor may have an interest in the decision.",
+          "The organization is delinquent, suspended, under inquiry, or unsure which filings are current.",
+          "Minutes, bylaws, policies, or past practice do not clearly support the proposed action.",
+        ]}
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .rules-hero,
+  .rules-section {
+    padding: clamp(3rem, 6vw, 5rem) 0;
+  }
+
+  .rules-hero {
+    background: var(--color-white);
+  }
+
+  .rules-hero__grid,
+  .rules-counsel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .rules-hero__deck {
+    max-width: 58rem;
+    color: var(--color-muted-ink);
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+  }
+
+  .rules-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .rules-hero__panel {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .rules-section--paper {
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+  }
+
+  .rule-card {
+    display: grid;
+    gap: var(--space-3);
+    min-height: 18rem;
+    border: 1px solid var(--color-soft-border);
+    border-top: 0.35rem solid var(--color-teal);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+    color: var(--color-ink);
+    text-decoration: none;
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .rule-card:hover {
+    border-top-color: var(--color-burgundy);
+    color: var(--color-ink);
+  }
+
+  .rule-card span,
+  .rules-row__type {
+    color: var(--color-muted-ink);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .rule-card h3,
+  .rules-row h3 {
+    margin-bottom: 0;
+    font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  }
+
+  .rule-card p {
+    color: var(--color-muted-ink);
+  }
+
+  .rule-card strong {
+    align-self: end;
+    color: var(--color-burgundy);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .rules-list {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .rules-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.7fr);
+    gap: var(--space-6);
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .rules-row p {
+    color: var(--color-muted-ink);
+  }
+
+  .rules-row ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .rules-row li::marker {
+    color: var(--color-burgundy);
+  }
+
+  @media (max-width: 48rem) {
+    .rules-hero__grid,
+    .rules-counsel-grid,
+    .rules-row {
+      grid-template-columns: 1fr;
+    }
+
+    .rules-hero__actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+</style>

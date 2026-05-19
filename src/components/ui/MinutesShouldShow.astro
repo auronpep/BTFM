@@ -1,0 +1,22 @@
+---
+interface Props {
+  items?: string[];
+}
+
+const {
+  items = [
+    "The exact motion or action approved.",
+    "The version of the document, budget, policy, or report relied on.",
+    "The vote result, abstentions, and recusals.",
+    "Any follow-up assignment that affects board oversight.",
+  ],
+} = Astro.props;
+---
+
+<aside class="boardroom-card minutes-show" style="--card-accent: var(--color-brass);">
+  <p class="boardroom-label">Minutes Should Show</p>
+  <ul class="boardroom-list">
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+  <slot />
+</aside>

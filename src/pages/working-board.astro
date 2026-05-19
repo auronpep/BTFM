@@ -1,0 +1,87 @@
+---
+import { primaryNavigation, sitePaths } from "../data/navigation";
+import { routeMap, primaryActionLabels } from "../data/site-map";
+import { ctaMap, referralCtas } from "../data/cta-map";
+
+const workingBoardPath = sitePaths.find((path) => path.href === "/working-board");
+const workingBoardRoutes = routeMap.filter((route) => route.audience === "working-board" || route.audience === "both");
+const fieldManualSections = primaryNavigation.filter((item) => !item.isExternal);
+const legalReferralPrompts = referralCtas.filter((cta) =>
+  cta.issueTypes.some((issueType) =>
+    ["audit", "compensation", "conflict", "risk-safety", "minutes-records", "california-rules", "legal-help"].includes(issueType),
+  ),
+);
+---
+
+<main>
+  <header>
+    <p>The Principles of Board Training</p>
+    <h1>Serving on a Working Board</h1>
+    <p>
+      {workingBoardPath?.promise}
+    </p>
+    <nav aria-label="Primary path actions">
+      <a href="/next-meeting">Prepare for Your Next Board Meeting</a>
+      <a href="/tools/board-packet-lab">Open Board Packet Mode</a>
+      <a href="/training">Explore Board Training</a>
+      <a href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+    </nav>
+  </header>
+
+  <section aria-labelledby="path-audience">
+    <h2 id="path-audience">Built for directors already in the room</h2>
+    <p>
+      This is the primary path for established California nonprofit boards that have moved beyond startup governance:
+      staff, revenue, board packets, audits, insurance, public filings, policy questions, executive oversight, and
+      decisions that need to hold up later.
+    </p>
+  </section>
+
+  <section aria-labelledby="field-manual-sections">
+    <h2 id="field-manual-sections">Boardroom field manual sections</h2>
+    <ul>
+      {fieldManualSections.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+          <p>{item.description}</p>
+          <p>Primary action: {primaryActionLabels[item.action]}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="route-map">
+    <h2 id="route-map">Route map for page owners</h2>
+    <ul>
+      {workingBoardRoutes.map((route) => (
+        <li>
+          <h3><a href={route.path}>{route.label}</a></h3>
+          <p>{route.summary}</p>
+          <p>Primary action: {primaryActionLabels[route.primaryAction]}</p>
+          <p>CTA keys: {route.ctaKeys.join(", ")}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="training-and-referral">
+    <h2 id="training-and-referral">Training and legal referral model</h2>
+    <p>{ctaMap.boardTraining.prompt}</p>
+    <p>{ctaMap.requestInPersonTraining.prompt}</p>
+    <ul>
+      {legalReferralPrompts.map((cta) => (
+        <li>
+          <a href={cta.href}>{cta.label}</a>
+          <p>{cta.prompt}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <aside aria-label="Educational disclaimer">
+    <p>
+      This site provides general educational information for nonprofit board training. It is not legal advice and
+      does not create an attorney-client relationship.
+    </p>
+  </aside>
+</main>

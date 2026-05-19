@@ -1,0 +1,208 @@
+---
+interface ToolData {
+  title: string;
+  description: string;
+  deck?: string;
+  toolType: string;
+  estimatedMinutes?: number;
+  inputsNeeded: string[];
+  output?: string;
+  documents: { label: string; description?: string; required?: boolean; href?: string }[];
+  questionsToAsk: string[];
+  minutesShouldShow: string[];
+  redFlags: string[];
+  legalEscalation?: { summary: string; triggers: string[]; npoLawyersUrl: string };
+  downloadHref?: string;
+  attorneyReviewRequired: boolean;
+}
+
+interface Props {
+  data: ToolData;
+}
+
+const { data } = Astro.props;
+const typeLabel = data.toolType
+  .split("-")
+  .map((part) => part[0].toUpperCase() + part.slice(1))
+  .join(" ");
+---
+
+<article class="tool-detail">
+  <header class="tool-detail__header">
+    <p class="eyebrow">{typeLabel}</p>
+    <h1>{data.title}</h1>
+    <p>{data.deck ?? data.description}</p>
+    <div class="tool-detail__actions">
+      <a class="button secondary" href="/tools">All tools</a>
+      {data.downloadHref && <a class="button" href={data.downloadHref}>Download template</a>}
+    </div>
+  </header>
+
+  <div class="tool-detail__body">
+    <aside class="tool-detail__meta" aria-label="Tool details">
+      <ul class="data-list">
+        {data.estimatedMinutes && (
+          <li>
+            <span class="data-key">Time</span>
+            <span>{data.estimatedMinutes} minutes</span>
+          </li>
+        )}
+        {data.output && (
+          <li>
+            <span class="data-key">Output</span>
+            <span>{data.output}</span>
+          </li>
+        )}
+        <li>
+          <span class="data-key">Review</span>
+          <span>{data.attorneyReviewRequired ? "Attorney review flagged" : "Educational draft"}</span>
+        </li>
+      </ul>
+
+      {data.inputsNeeded.length > 0 && (
+        <section>
+          <h2>Inputs Needed</h2>
+          <ul>
+            {data.inputsNeeded.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {data.documents.length > 0 && (
+        <section>
+          <h2>Documents</h2>
+          <ul>
+            {data.documents.map((document) => (
+              <li>
+                {document.href ? <a href={document.href}>{document.label}</a> : document.label}
+                {document.required && " (required)"}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </aside>
+
+    <div class="tool-detail__content">
+      <slot />
+
+      {data.questionsToAsk.length > 0 && (
+        <section class="tool-detail__panel">
+          <h2>Questions to Ask</h2>
+          <ul>
+            {data.questionsToAsk.map((question) => <li>{question}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {data.minutesShouldShow.length > 0 && (
+        <section class="tool-detail__panel">
+          <h2>Minutes Should Show</h2>
+          <ul>
+            {data.minutesShouldShow.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {data.redFlags.length > 0 && (
+        <section class="tool-detail__panel tool-detail__panel--red">
+          <h2>Red Flags</h2>
+          <ul>
+            {data.redFlags.map((flag) => <li>{flag}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {data.legalEscalation && (
+        <section class="tool-detail__panel tool-detail__panel--legal">
+          <h2>When to Call Counsel</h2>
+          <p>{data.legalEscalation.summary}</p>
+          <ul>
+            {data.legalEscalation.triggers.map((trigger) => <li>{trigger}</li>)}
+          </ul>
+          <a class="button legal" href={data.legalEscalation.npoLawyersUrl}>
+            Visit NPOlawyers.com
+          </a>
+        </section>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .tool-detail {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .tool-detail__header {
+    max-width: 58rem;
+    margin-bottom: var(--space-10);
+  }
+
+  .tool-detail__header > p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.18rem;
+  }
+
+  .tool-detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .tool-detail__body {
+    display: grid;
+    grid-template-columns: minmax(15rem, 22rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .tool-detail__meta,
+  .tool-detail__panel {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .tool-detail__meta {
+    position: sticky;
+    top: var(--space-4);
+  }
+
+  .tool-detail__meta h2,
+  .tool-detail__panel h2 {
+    font-size: 1.25rem;
+  }
+
+  .tool-detail__content {
+    max-width: 52rem;
+  }
+
+  .tool-detail__content :global(h2) {
+    margin-top: var(--space-8);
+  }
+
+  .tool-detail__panel {
+    margin-top: var(--space-6);
+  }
+
+  .tool-detail__panel--red {
+    border-left: 0.3rem solid var(--color-copper);
+  }
+
+  .tool-detail__panel--legal {
+    border-left: 0.3rem solid var(--color-burgundy);
+  }
+
+  @media (max-width: 56rem) {
+    .tool-detail__body {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-detail__meta {
+      position: static;
+    }
+  }
+</style>

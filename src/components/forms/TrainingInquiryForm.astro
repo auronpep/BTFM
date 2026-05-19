@@ -1,0 +1,123 @@
+---
+interface Props {
+  formName?: string;
+  eventName?: string;
+  heading?: string;
+  intro?: string;
+  defaultInterest?: string;
+}
+
+const {
+  formName = "training-inquiry",
+  eventName = "training_inquiry_submit_mailto",
+  heading = "Send a training inquiry",
+  intro = "Use this static-site fallback to start the conversation. Include only the details needed to route the request.",
+  defaultInterest = "",
+} = Astro.props;
+---
+
+<section class="inquiry-form-section" aria-labelledby={`${formName}-heading`}>
+  <div>
+    <p class="eyebrow">Inquiry fallback</p>
+    <h2 id={`${formName}-heading`}>{heading}</h2>
+    <p>{intro}</p>
+    <p class="fallback-note">
+      Prefer email? Write to
+      <a href="mailto:info@NPOlawyers.com?subject=Board%20training%20inquiry">info@NPOlawyers.com</a>
+      with "Board training inquiry" in the subject.
+    </p>
+  </div>
+
+  <form
+    action="mailto:info@NPOlawyers.com"
+    method="post"
+    enctype="text/plain"
+    data-conversion-event={eventName}
+  >
+    <input type="hidden" name="conversion_event" value={eventName} />
+    <label>
+      Name
+      <input name="name" autocomplete="name" required />
+    </label>
+    <label>
+      Organization
+      <input name="organization" autocomplete="organization" required />
+    </label>
+    <label>
+      Email
+      <input name="email" type="email" autocomplete="email" required />
+    </label>
+    <label>
+      Training interest
+      <select name="training_interest" required>
+        <option value="">Choose one</option>
+        <option value="webinar" selected={defaultInterest === "webinar"}>Webinar registration or notification</option>
+        <option value="in-person" selected={defaultInterest === "in-person"}>In-person board training</option>
+        <option value="private-training" selected={defaultInterest === "private-training"}>Private board or retreat session</option>
+        <option value="legal-referral" selected={defaultInterest === "legal-referral"}>Legal-help referral</option>
+      </select>
+    </label>
+    <label>
+      What should the session help your board do?
+      <textarea
+        name="board_need"
+        rows="5"
+        placeholder="Example: prepare for audit review, clarify board-management boundaries, improve minutes, or train a new board cohort."
+        required></textarea>
+    </label>
+    <button class="button" type="submit">Open Email Inquiry</button>
+  </form>
+</section>
+
+<style>
+  .inquiry-form-section {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(18rem, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .fallback-note {
+    padding: var(--space-4);
+    border-left: 0.25rem solid var(--color-brass);
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  form {
+    display: grid;
+    gap: var(--space-4);
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  label {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-ink);
+    font-weight: 800;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-sm);
+    padding: 0.78rem 0.85rem;
+    background: var(--color-white);
+    color: var(--color-ink);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  @media (max-width: 52rem) {
+    .inquiry-form-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

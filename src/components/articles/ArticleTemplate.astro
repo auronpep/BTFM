@@ -1,0 +1,279 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const {
+  title,
+  description,
+  deck,
+  category,
+  useBefore,
+  documents,
+  questionsToAsk,
+  minutesShouldShow,
+  redFlags,
+  legalEscalation,
+  relatedTools,
+  trainingCta,
+  download,
+  attorneyReviewRequired,
+} = article.data;
+
+const categoryLabel = category.replaceAll('-', ' ');
+const useBeforeLabel = useBefore.map((item) => item.replaceAll('-', ' ')).join(', ');
+---
+
+<article class="manual-article">
+  <header class="manual-article__header">
+    <p class="eyebrow">{categoryLabel}</p>
+    <h1>{title}</h1>
+    <p>{deck ?? description}</p>
+    {attorneyReviewRequired && (
+      <p class="review-note">Attorney review recommended before publication or board reliance.</p>
+    )}
+  </header>
+
+  <div class="manual-article__body">
+    <aside class="manual-article__toc" aria-label="Article sections">
+      <a href="#use-this-when">Use this when</a>
+      <a href="#problem">The boardroom problem</a>
+      <a href="#rule">The rule</a>
+      <a href="#questions">What the board should ask</a>
+      <a href="#not-to-do">What not to do</a>
+      <a href="#documents">What documents matter</a>
+      <a href="#minutes">What the minutes should show</a>
+      <a href="#red-flags">Red flags</a>
+      <a href="#legal">When this becomes legal</a>
+      <a href="#download">Download</a>
+      <a href="#training">Training CTA</a>
+      <a href="#disclaimer">Disclaimer</a>
+    </aside>
+
+    <div class="manual-article__sections">
+      <section id="use-this-when" class="manual-panel">
+        <h2>Use this when</h2>
+        <p>{useBeforeLabel || 'Use this before a board meeting where directors need to prepare, ask, vote, and document with care.'}</p>
+      </section>
+
+      <section id="problem" class="manual-panel">
+        <h2>The boardroom problem</h2>
+        <p>{description}</p>
+      </section>
+
+      <section id="rule" class="manual-panel manual-prose">
+        <h2>The rule</h2>
+        <slot />
+      </section>
+
+      <section id="questions" class="manual-panel">
+        <h2>What the board should ask</h2>
+        <ul>
+          {questionsToAsk.map((question) => <li>{question}</li>)}
+        </ul>
+      </section>
+
+      <section id="not-to-do" class="manual-panel">
+        <h2>What not to do</h2>
+        <ul>
+          <li>Do not vote only because a committee, officer, or executive says the issue is routine.</li>
+          <li>Do not let missing documents become a permanent board habit.</li>
+          <li>Do not use minutes to hide disagreement, conflicts, recusals, or uncertainty about the motion.</li>
+        </ul>
+      </section>
+
+      <section id="documents" class="manual-panel">
+        <h2>What documents matter</h2>
+        <ul>
+          {documents.map((document) => (
+            <li>
+              <strong>{document.label}</strong>
+              {document.description && <>: {document.description}</>}
+              {document.href && <> <a href={document.href}>Open</a></>}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="minutes" class="manual-panel">
+        <h2>What the minutes should show</h2>
+        <ul>
+          {minutesShouldShow.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+
+      <section id="red-flags" class="manual-panel">
+        <h2>Red flags</h2>
+        <ul>
+          {redFlags.map((flag) => <li>{flag}</li>)}
+        </ul>
+      </section>
+
+      <section id="legal" class="manual-panel legal-panel">
+        <h2>When this becomes legal</h2>
+        <p>{legalEscalation?.summary ?? 'Call counsel when the facts, governing documents, conflicts, filings, employment issues, donor restrictions, safety risk, or corporate authority questions could change the right board action.'}</p>
+        {legalEscalation?.triggers.length ? (
+          <ul>
+            {legalEscalation.triggers.map((trigger) => <li>{trigger}</li>)}
+          </ul>
+        ) : null}
+        <a class="button legal" href={legalEscalation?.npoLawyersUrl ?? 'https://NPOlawyers.com'}>Visit NPOlawyers.com</a>
+      </section>
+
+      <section id="download" class="manual-panel">
+        <h2>Download</h2>
+        {download ? (
+          <p>
+            <strong>{download.label}</strong>
+            {download.description && <>: {download.description}</>}
+            {download.href ? <> <a href={download.href}>Open download</a></> : <> Download asset pending.</>}
+          </p>
+        ) : (
+          <p>Use the related tools library for the board packet worksheet, scorecard, or checklist tied to this topic.</p>
+        )}
+        {relatedTools.length ? <p class="related-tools">Related tools: {relatedTools.join(', ')}</p> : null}
+      </section>
+
+      <section id="training" class="manual-panel training-panel">
+        <h2>Training CTA</h2>
+        <p>{trainingCta ?? 'Use this article as a meeting-prep handout, then bring the topic into a board training session when the board needs shared practice.'}</p>
+        <a class="button" href="/training/">Explore training</a>
+      </section>
+
+      <section id="disclaimer" class="manual-panel disclaimer-panel">
+        <h2>Disclaimer</h2>
+        <p>
+          This article is for educational information for nonprofit board
+          training. It is not legal advice and does not create an
+          attorney-client relationship. Board members should consult qualified
+          counsel about specific facts, governing documents, filings,
+          conflicts, compensation, employment, safety, tax, or California law
+          questions.
+        </p>
+      </section>
+    </div>
+  </div>
+</article>
+
+<style>
+  .manual-article {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+  }
+
+  .manual-article__header {
+    width: min(100% - 2rem, 62rem);
+    margin-inline: auto;
+  }
+
+  .manual-article__header h1 {
+    max-width: 13ch;
+  }
+
+  .manual-article__header p:not(.eyebrow) {
+    max-width: 50rem;
+    color: var(--color-muted-ink);
+    font-size: 1.12rem;
+  }
+
+  .review-note {
+    display: inline-flex;
+    border-left: 0.3rem solid var(--color-burgundy);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-white);
+    color: var(--color-ink) !important;
+    font-weight: 800;
+  }
+
+  .manual-article__body {
+    width: min(100% - 2rem, var(--container));
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+    margin: var(--space-12) auto 0;
+  }
+
+  .manual-article__toc {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: var(--space-2);
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: var(--color-white);
+  }
+
+  .manual-article__toc a {
+    color: var(--color-ink);
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .manual-article__toc a:hover {
+    color: var(--color-slate);
+    text-decoration: underline;
+  }
+
+  .manual-article__sections {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .manual-panel {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--color-white);
+  }
+
+  .manual-panel h2 {
+    font-size: clamp(1.45rem, 3vw, 2.15rem);
+  }
+
+  .manual-panel > :last-child,
+  .manual-prose :global(:last-child) {
+    margin-bottom: 0;
+  }
+
+  .manual-prose :global(h2) {
+    margin-top: var(--space-8);
+    font-size: 1.55rem;
+  }
+
+  .manual-prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .legal-panel {
+    border-top: 0.3rem solid var(--color-burgundy);
+  }
+
+  .training-panel {
+    border-top: 0.3rem solid var(--color-slate);
+  }
+
+  .disclaimer-panel {
+    background: #fffaf0;
+  }
+
+  .related-tools {
+    color: var(--color-muted-ink);
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 58rem) {
+    .manual-article__body {
+      grid-template-columns: 1fr;
+    }
+
+    .manual-article__toc {
+      position: static;
+    }
+  }
+</style>

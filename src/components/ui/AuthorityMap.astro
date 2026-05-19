@@ -1,0 +1,75 @@
+---
+interface Role {
+  title: string;
+  authority: string;
+  boundary: string;
+}
+
+interface Props {
+  roles?: Role[];
+}
+
+const {
+  roles = [
+    {
+      title: "Board",
+      authority: "Acts collectively through meetings, motions, approvals, and delegated authority.",
+      boundary: "Does not manage staff work one director at a time.",
+    },
+    {
+      title: "Officers",
+      authority: "Carry out duties assigned by bylaws, board action, and approved policies.",
+      boundary: "Do not replace board approval where approval is required.",
+    },
+    {
+      title: "Executive / Staff",
+      authority: "Operate programs and management systems within approved plans and budgets.",
+      boundary: "Escalate material changes, risks, and decisions reserved to the board.",
+    },
+    {
+      title: "Volunteers / Agents",
+      authority: "Serve within written roles, supervision, and delegated limits.",
+      boundary: "Do not bind the organization outside assigned authority.",
+    },
+  ],
+} = Astro.props;
+---
+
+<section class="authority-map" aria-label="Board authority map">
+  {roles.map((role) => (
+    <article class="authority-node">
+      <h3>{role.title}</h3>
+      <p>{role.authority}</p>
+      <p class="authority-boundary">{role.boundary}</p>
+    </article>
+  ))}
+</section>
+
+<style>
+  .authority-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-4);
+    margin-block: var(--space-5);
+  }
+
+  .authority-node {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .authority-node h3 {
+    margin-bottom: var(--space-2);
+    font-size: 1.25rem;
+  }
+
+  .authority-boundary {
+    margin-top: var(--space-4);
+    border-left: 0.25rem solid var(--color-copper);
+    padding-left: var(--space-3);
+    color: var(--color-muted-ink);
+    font-weight: 700;
+  }
+</style>

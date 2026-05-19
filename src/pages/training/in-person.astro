@@ -1,0 +1,152 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalHelpCta from "../../components/conversion/LegalHelpCta.astro";
+import TrainingCtaPanel from "../../components/conversion/TrainingCtaPanel.astro";
+import TrainingInquiryForm from "../../components/forms/TrainingInquiryForm.astro";
+
+const inPersonEvents = (await getCollection("trainingEvents")).filter((event) =>
+  ["in-person", "private-training", "workshop"].includes(event.data.eventType),
+);
+
+const sessionBlocks = [
+  "Board packet review and question practice",
+  "Strategy, Safety, Audit decision paths",
+  "Committee and officer authority boundaries",
+  "Minutes-ready motions, recusals, abstentions, and follow-up",
+  "When to pause training and call counsel",
+];
+
+const pageTitle = "In-Person Board Training";
+const description =
+  "In-person nonprofit board training for retreats, leadership groups, and California boards that need practical governance behavior change.";
+---
+
+<BaseLayout title={pageTitle} description={description} canonicalPath="/training/in-person">
+  <section class="training-page-hero">
+    <div class="container">
+      <p class="eyebrow">In-person training</p>
+      <h1>Board training for the room where decisions happen</h1>
+      <p>
+        Use in-person training when the goal is not just information, but shared board behavior: better packet review,
+        clearer questions, stronger minutes, and cleaner escalation to professional advice.
+      </p>
+      <a class="button" href="#in-person-inquiry" data-conversion-event="in_person_top_request_click">
+        Request Training
+      </a>
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="in-person-options-heading">
+    <div class="section-heading">
+      <p class="eyebrow">Training options</p>
+      <h2 id="in-person-options-heading">Built for boards, retreats, and leadership cohorts</h2>
+    </div>
+    <div class="field-manual-grid">
+      {inPersonEvents.map((event) => (
+        <article class="boardroom-card">
+          <p class="boardroom-label">{event.data.locationType}</p>
+          <h3 class="boardroom-title">{event.data.title}</h3>
+          <p>{event.data.description}</p>
+          <ul class="boardroom-list">
+            {event.data.audienceFit.map((fit) => <li>{fit}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="session-design-heading">
+    <div class="session-design">
+      <div>
+        <p class="eyebrow">Session design</p>
+        <h2 id="session-design-heading">What a practical session can include</h2>
+        <p>
+          The session can be tailored for new directors, a full board retreat, an audit or governance committee, or a
+          leadership group preparing for a serious annual cycle.
+        </p>
+      </div>
+      <ul class="session-list">
+        {sessionBlocks.map((block) => <li>{block}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container section-block" id="in-person-inquiry">
+    <TrainingInquiryForm
+      formName="in-person-inquiry"
+      eventName="in_person_training_inquiry_submit_mailto"
+      heading="Request in-person board training"
+      intro="Use this fallback inquiry to describe the board, the setting, and the decisions or habits the session should improve."
+      defaultInterest="in-person"
+    />
+  </section>
+
+  <section class="container section-block legal-grid" aria-label="Legal help prompts">
+    <LegalHelpCta variant="bylaws-mismatch" />
+    <LegalHelpCta variant="safety-youth-protection" />
+  </section>
+
+  <section class="container section-block">
+    <TrainingCtaPanel
+      eyebrow="Need a lighter first step?"
+      title="Start with a webinar before a board retreat"
+      body="A webinar can give individual directors shared vocabulary before the board commits to a customized in-person session."
+      primaryHref="/training/webinars"
+      primaryLabel="View Webinars"
+      primaryEvent="in_person_webinar_cross_cta_click"
+      secondaryHref="/training"
+      secondaryLabel="Back to Training Overview"
+      secondaryEvent="in_person_overview_cross_cta_click"
+    />
+  </section>
+</BaseLayout>
+
+<style>
+  .training-page-hero {
+    padding: var(--space-16) 0 var(--space-10);
+  }
+
+  .training-page-hero p:not(.eyebrow) {
+    max-width: 64ch;
+    font-size: 1.12rem;
+  }
+
+  .section-block {
+    padding: var(--space-10) 0;
+  }
+
+  .section-heading {
+    max-width: 48rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .session-design {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .session-list {
+    display: grid;
+    gap: var(--space-3);
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-5) var(--space-5) 2.25rem;
+    background: var(--color-white);
+  }
+
+  .legal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 52rem) {
+    .session-design,
+    .legal-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolHero from "../../components/tools/ToolHero.astro";
+
+const questions = (await getCollection("questionBank")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
+);
+
+const title = "Board Question Bank";
+const description =
+  "Meeting-ready questions directors can ask about budget, audit, executive oversight, risk, minutes, and legal escalation.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/tools/question-bank/">
+  <ToolHero
+    eyebrow="Tool"
+    title="Board Question Bank"
+    deck="Use these prompts to move from passive report listening to active board judgment. Pick the question before the meeting, then listen for whether the answer belongs in the minutes, a follow-up assignment, or a legal escalation."
+    actions={[
+      { label: "Open Red Flags", href: "/tools/red-flags", variant: "secondary" },
+      { label: "Open Board Packet Lab", href: "/tools/board-packet-lab", variant: "secondary" },
+    ]}
+  />
+
+  <section class="question-bank" aria-labelledby="question-bank-title">
+    <div class="question-bank__header">
+      <p class="eyebrow">Questions</p>
+      <h2 id="question-bank-title">Ask the question that matches the decision</h2>
+    </div>
+    <div class="question-bank__grid">
+      {
+        questions.map((entry) => (
+          <article class="boardroom-card question-bank__card">
+            <p class="boardroom-label">{entry.data.questionType}</p>
+            <h3 class="boardroom-title">{entry.data.title}</h3>
+            <p>{entry.data.description}</p>
+            <ul>
+              {entry.data.questionsToAsk.map((question) => <li>{question}</li>)}
+              {entry.data.followUpQuestions.map((question) => <li>{question}</li>)}
+            </ul>
+            {entry.data.legalEscalation && (
+              <p class="question-bank__legal">{entry.data.legalEscalation.summary}</p>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .question-bank {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .question-bank__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .question-bank__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .question-bank__legal {
+    border-left: 0.25rem solid var(--color-burgundy);
+    padding-left: var(--space-3);
+    color: var(--color-muted-ink);
+    font-weight: 700;
+  }
+</style>

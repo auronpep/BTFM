@@ -1,0 +1,137 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LegalHelpCta from "../../components/conversion/LegalHelpCta.astro";
+import TrainingCtaPanel from "../../components/conversion/TrainingCtaPanel.astro";
+import TrainingInquiryForm from "../../components/forms/TrainingInquiryForm.astro";
+
+const webinarEvents = (await getCollection("trainingEvents")).filter((event) => event.data.eventType === "webinar");
+
+const pageTitle = "Board Training Webinars";
+const description =
+  "Webinars for California nonprofit board members on Strategy, Safety, Audit, meeting preparation, risk, minutes, and practical oversight.";
+---
+
+<BaseLayout title={pageTitle} description={description} canonicalPath="/training/webinars">
+  <section class="training-page-hero">
+    <div class="container">
+      <p class="eyebrow">Webinars</p>
+      <h1>Practical board training without waiting for a retreat</h1>
+      <p>
+        Webinars are built for directors, board chairs, committee members, and executive leaders who need meeting-ready
+        guidance on budgets, audit, reports, risk, minutes, and board-management boundaries.
+      </p>
+      <a class="button" href="#webinar-inquiry" data-conversion-event="webinars_top_register_click">
+        Register or Request Notice
+      </a>
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="webinar-list-heading">
+    <div class="section-heading">
+      <p class="eyebrow">Available webinars</p>
+      <h2 id="webinar-list-heading">Start with the Strategy, Safety, Audit session</h2>
+    </div>
+    <div class="field-manual-grid">
+      {webinarEvents.map((event) => (
+        <article class="boardroom-card">
+          <p class="boardroom-label">{event.data.locationType}</p>
+          <h3 class="boardroom-title">{event.data.title}</h3>
+          <p>{event.data.description}</p>
+          <ul class="boardroom-list">
+            {event.data.audienceFit.map((fit) => <li>{fit}</li>)}
+          </ul>
+          <a
+            class="button"
+            href={event.data.registrationUrl?.toString() ?? "#webinar-inquiry"}
+            data-conversion-event={`webinar_registration_${event.id}_click`}
+          >
+            Register or Ask for the Next Date
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container section-block" aria-labelledby="webinar-topics-heading">
+    <div class="section-heading">
+      <p class="eyebrow">What the webinar covers</p>
+      <h2 id="webinar-topics-heading">A practical agenda for working-board directors</h2>
+    </div>
+    <ol class="agenda-list">
+      <li>Read the board packet for decisions, not background noise.</li>
+      <li>Ask Strategy questions before approving budgets, plans, or major changes.</li>
+      <li>Ask Safety questions about insurance, controls, youth protection, people, and reporting.</li>
+      <li>Ask Audit questions about evidence, minutes, Form 990, financial review, and committee follow-up.</li>
+      <li>Know when the issue has moved from education to specific legal advice.</li>
+    </ol>
+  </section>
+
+  <section class="container section-block" id="webinar-inquiry">
+    <TrainingInquiryForm
+      formName="webinar-inquiry"
+      eventName="webinar_inquiry_submit_mailto"
+      heading="Register or ask for the next webinar date"
+      intro="If registration is not yet open, use this fallback inquiry so the training team can follow up with dates or group options."
+      defaultInterest="webinar"
+    />
+  </section>
+
+  <section class="container section-block">
+    <TrainingCtaPanel
+      eyebrow="Need the full board in the room?"
+      title="Use in-person training for board retreats and cohorts"
+      body="When the board needs shared practice around real decisions, use the in-person path instead of a general webinar."
+      primaryHref="/training/in-person"
+      primaryLabel="Request In-Person Training"
+      primaryEvent="webinars_in_person_cross_cta_click"
+      secondaryHref="/training"
+      secondaryLabel="Back to Training Overview"
+      secondaryEvent="webinars_overview_cross_cta_click"
+    />
+  </section>
+
+  <section class="container section-block legal-grid" aria-label="Legal help prompts">
+    <LegalHelpCta variant="compensation" />
+    <LegalHelpCta variant="conflict-of-interest" />
+  </section>
+</BaseLayout>
+
+<style>
+  .training-page-hero {
+    padding: var(--space-16) 0 var(--space-10);
+  }
+
+  .training-page-hero p:not(.eyebrow) {
+    max-width: 64ch;
+    font-size: 1.12rem;
+  }
+
+  .section-block {
+    padding: var(--space-10) 0;
+  }
+
+  .section-heading {
+    max-width: 48rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .agenda-list {
+    display: grid;
+    gap: var(--space-3);
+    padding-left: 1.5rem;
+    font-size: 1.08rem;
+  }
+
+  .legal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 52rem) {
+    .legal-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

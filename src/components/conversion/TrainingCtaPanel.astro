@@ -1,0 +1,82 @@
+---
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  primaryEvent?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  secondaryEvent?: string;
+}
+
+const {
+  eyebrow = "Board training",
+  title = "Bring the field manual into the boardroom",
+  body = "Use a webinar or in-person session to turn Strategy, Safety, Audit, and meeting preparation into board behavior.",
+  primaryHref = "/training/webinars",
+  primaryLabel = "Register for a Webinar",
+  primaryEvent = "training_webinar_cta_click",
+  secondaryHref = "/training/in-person",
+  secondaryLabel = "Request In-Person Training",
+  secondaryEvent = "training_in_person_cta_click",
+} = Astro.props;
+---
+
+<aside class="training-cta-panel" aria-labelledby="training-cta-title">
+  <div>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 id="training-cta-title">{title}</h2>
+    <p>{body}</p>
+  </div>
+  <div class="training-cta-actions">
+    <a class="button" href={primaryHref} data-conversion-event={primaryEvent}>{primaryLabel}</a>
+    <a class="button secondary" href={secondaryHref} data-conversion-event={secondaryEvent}>{secondaryLabel}</a>
+  </div>
+</aside>
+
+<style>
+  .training-cta-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-6);
+    align-items: center;
+    border: 1px solid var(--color-soft-border);
+    border-top: 0.35rem solid var(--color-teal);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .training-cta-panel h2 {
+    max-width: 16ch;
+    font-size: clamp(1.55rem, 3vw, 2.35rem);
+  }
+
+  .training-cta-panel p:not(.eyebrow) {
+    max-width: 58ch;
+  }
+
+  .training-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 48rem) {
+    .training-cta-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .training-cta-actions {
+      justify-content: stretch;
+    }
+
+    .training-cta-actions .button {
+      width: 100%;
+    }
+  }
+</style>

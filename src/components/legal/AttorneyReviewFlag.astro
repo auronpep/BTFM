@@ -1,0 +1,42 @@
+---
+interface Props {
+  required?: boolean;
+}
+
+const { required = true } = Astro.props;
+---
+
+{
+  required && (
+    <aside class="attorney-review" aria-label="Attorney review required">
+      <p class="attorney-review__label">Attorney Review Required</p>
+      <p>
+        This page summarizes legal-sensitive rules. Treat it as an issue-spotting draft until
+        California nonprofit counsel confirms the citations, thresholds, exceptions, and wording.
+      </p>
+    </aside>
+  )
+}
+
+<style>
+  .attorney-review {
+    border: 1px solid rgba(194, 154, 74, 0.52);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: #fffaf0;
+  }
+
+  .attorney-review__label {
+    margin-bottom: var(--space-2);
+    color: #7a5219;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .attorney-review p:last-child {
+    margin-bottom: 0;
+  }
+</style>

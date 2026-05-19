@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolHero from "../../components/tools/ToolHero.astro";
+import ToolGrid from "../../components/tools/ToolGrid.astro";
+
+const tools = (await getCollection("tools")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
+);
+
+const featured = tools.filter((tool) =>
+  ["board-packet-lab", "board-question-bank", "board-red-flags", "mature-board-self-assessment"].includes(
+    tool.id,
+  ),
+);
+
+const launchTools = tools.filter((tool) => !featured.some((item) => item.id === tool.id));
+
+const title = "Tools";
+const description =
+  "Boardroom tools, labs, checklists, question prompts, red flags, and downloadable worksheets for California nonprofit directors.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/tools/">
+  <ToolHero
+    title="Boardroom tools for the meeting before the meeting."
+    deck="Use these labs and worksheets to read the packet, ask sharper questions, document decisions, and recognize when the issue needs legal or professional judgment."
+    actions={[
+      { label: "Open Board Packet Lab", href: "/tools/board-packet-lab" },
+      { label: "Browse Question Bank", href: "/tools/question-bank", variant: "secondary" },
+      { label: "Check Red Flags", href: "/tools/red-flags", variant: "secondary" },
+    ]}
+  />
+
+  <section class="tools-section" aria-labelledby="featured-tools-title">
+    <div class="tools-section__header">
+      <p class="eyebrow">Labs</p>
+      <h2 id="featured-tools-title">Start with the hard boardroom moments</h2>
+      <p>
+        These are not generic downloads. Each one is a board-preparation route:
+        what to review, what to ask, what the minutes should show, and when to
+        stop using a template.
+      </p>
+    </div>
+    <ToolGrid tools={featured} />
+  </section>
+
+  <section class="tools-section tools-section--fog" aria-labelledby="launch-tools-title">
+    <div class="tools-section__header">
+      <p class="eyebrow">Launch Tools</p>
+      <h2 id="launch-tools-title">Downloadable field manual assets</h2>
+      <p>
+        Draft templates for budget review, audit readiness, minutes quality,
+        authority boundaries, annual governance rhythm, and the $3M board
+        member checklist.
+      </p>
+    </div>
+    <ToolGrid tools={launchTools} />
+  </section>
+</BaseLayout>
+
+<style>
+  .tools-section {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .tools-section--fog {
+    background: var(--color-fog);
+  }
+
+  .tools-section__header {
+    max-width: 54rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .tools-section__header p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.08rem;
+  }
+</style>

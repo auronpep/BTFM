@@ -1,0 +1,80 @@
+---
+import { getToolHref } from "../../utils/tool-routes";
+
+interface ToolItem {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    toolType: string;
+    estimatedMinutes?: number;
+    downloadHref?: string;
+  };
+}
+
+interface Props {
+  tools: ToolItem[];
+}
+
+const { tools } = Astro.props;
+
+const typeLabel = (type: string) =>
+  type
+    .split("-")
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(" ");
+---
+
+<div class="tool-grid">
+  {
+    tools.map((tool) => (
+      <article class="boardroom-card tool-grid__card">
+        <p class="boardroom-label">{typeLabel(tool.data.toolType)}</p>
+        <h2 class="boardroom-title">{tool.data.title}</h2>
+        <p>{tool.data.description}</p>
+        <ul class="data-list">
+          {tool.data.estimatedMinutes && (
+            <li>
+              <span class="data-key">Time</span>
+              <span>{tool.data.estimatedMinutes} minutes</span>
+            </li>
+          )}
+          <li>
+            <span class="data-key">Format</span>
+            <span>{tool.data.downloadHref ? "Page + download" : "Field manual page"}</span>
+          </li>
+        </ul>
+        <div class="tool-grid__actions">
+          <a class="button secondary" href={getToolHref(tool.id)}>Open tool</a>
+          {tool.data.downloadHref && (
+            <a class="button secondary" href={tool.data.downloadHref}>Download</a>
+          )}
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .tool-grid__card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-grid__card .data-list {
+    margin-top: auto;
+  }
+
+  .tool-grid__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+</style>

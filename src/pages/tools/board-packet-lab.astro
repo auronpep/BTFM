@@ -1,0 +1,133 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolHero from "../../components/tools/ToolHero.astro";
+
+const packetGuides = await getCollection("packetGuides");
+const meetingPrep = await getCollection("meetingPrep");
+
+const title = "Board Packet Lab";
+const description =
+  "A guided lab for reviewing nonprofit board packets before budget, audit, executive oversight, conflict, insurance, and annual meeting decisions.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/tools/board-packet-lab/">
+  <ToolHero
+    eyebrow="Lab"
+    title="Board Packet Lab"
+    deck="Turn the board packet into a decision map. Choose the agenda item, confirm what documents should be present, write the oversight question, and identify what the minutes need to preserve."
+    actions={[
+      { label: "Download Review Sheet", href: "/downloads/board-packet-review-sheet.md" },
+      { label: "Open Red Flags", href: "/tools/red-flags", variant: "secondary" },
+    ]}
+  />
+
+  <section class="packet-lab" aria-labelledby="packet-lab-title">
+    <div class="packet-lab__header">
+      <p class="eyebrow">Packet Modes</p>
+      <h2 id="packet-lab-title">Choose the review mode before reading</h2>
+      <p>
+        Skim mode is for routine reports. Standard mode is for normal votes.
+        Deep review is for material money, audit, executive, risk, conflict,
+        insurance, and governing-document decisions.
+      </p>
+    </div>
+    <div class="packet-lab__modes">
+      <article class="boardroom-card">
+        <p class="boardroom-label">Skim</p>
+        <h3 class="boardroom-title">Spot what changed</h3>
+        <p>Use for monitoring reports where no board action is requested.</p>
+      </article>
+      <article class="boardroom-card">
+        <p class="boardroom-label">Standard</p>
+        <h3 class="boardroom-title">Confirm decision support</h3>
+        <p>Use for ordinary approvals with clear motion language and complete attachments.</p>
+      </article>
+      <article class="boardroom-card">
+        <p class="boardroom-label">Deep Review</p>
+        <h3 class="boardroom-title">Test assumptions and authority</h3>
+        <p>Use when the decision affects money, risk, filings, executives, policies, or records.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="packet-lab packet-lab--fog" aria-labelledby="packet-guide-title">
+    <div class="packet-lab__header">
+      <p class="eyebrow">Guides</p>
+      <h2 id="packet-guide-title">Packet guide by agenda item</h2>
+    </div>
+    <div class="packet-lab__grid">
+      {
+        packetGuides.map((guide) => (
+          <article class="boardroom-card">
+            <p class="boardroom-label">{guide.data.reviewMode}</p>
+            <h3 class="boardroom-title">{guide.data.title}</h3>
+            <p>{guide.data.description}</p>
+            <h4>Expected packet items</h4>
+            <ul>
+              {guide.data.expectedPacketItems.map((item) => <li>{item}</li>)}
+            </ul>
+            <h4>If missing, ask</h4>
+            <ul>
+              {guide.data.missingItemQuestions.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="packet-lab" aria-labelledby="meeting-prep-title">
+    <div class="packet-lab__header">
+      <p class="eyebrow">Prep Windows</p>
+      <h2 id="meeting-prep-title">What to do before the meeting</h2>
+    </div>
+    <div class="packet-lab__grid">
+      {
+        meetingPrep.map((prep) => (
+          <article class="boardroom-card">
+            <p class="boardroom-label">{prep.data.preparationWindow}</p>
+            <h3 class="boardroom-title">{prep.data.title}</h3>
+            <p>{prep.data.description}</p>
+            <ul>
+              {prep.data.packetSections.map((section) => <li>{section}</li>)}
+            </ul>
+            {prep.data.decisionNeeded && <p><strong>Decision:</strong> {prep.data.decisionNeeded}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .packet-lab {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+  }
+
+  .packet-lab--fog {
+    background: var(--color-fog);
+  }
+
+  .packet-lab__header {
+    max-width: 55rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .packet-lab__header p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.08rem;
+  }
+
+  .packet-lab__modes,
+  .packet-lab__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .packet-lab h4 {
+    margin-top: var(--space-5);
+    font-size: 1.05rem;
+  }
+</style>

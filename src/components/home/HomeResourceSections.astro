@@ -1,0 +1,150 @@
+---
+const tools = [
+  "Board Packet Review Sheet",
+  "Budget Deviation Worksheet",
+  "Minutes Quality Scorecard",
+];
+
+const scenarios = [
+  "The Board Packet Arrived Too Late",
+  "The Finance Committee Says Everything Is Fine",
+  "The Minutes Are Long, But No One Knows What Passed",
+];
+---
+
+<section class="resources" aria-labelledby="resources-title">
+  <div class="resources__heading">
+    <h2 id="resources-title">Field manual entries, not filler articles.</h2>
+    <p>
+      Tools and scenarios are written for directors who need to prepare, ask,
+      vote, and document with discipline.
+    </p>
+  </div>
+  <div class="resources__columns">
+    <article>
+      <h3>Featured tools</h3>
+      <ul>
+        {tools.map((tool) => <li>{tool}</li>)}
+      </ul>
+      <a href="/tools/">Open the tools library</a>
+    </article>
+    <article>
+      <h3>Featured scenarios</h3>
+      <ul>
+        {scenarios.map((scenario) => <li>{scenario}</li>)}
+      </ul>
+      <a href="/scenarios/">Read boardroom scenarios</a>
+    </article>
+  </div>
+</section>
+
+<section class="training-band" aria-labelledby="training-title">
+  <div>
+    <h2 id="training-title">Bring the field manual into the boardroom.</h2>
+    <p>
+      Use the free guides first. When your board needs a shared language for
+      strategy, safety, audit, executive oversight, or difficult decisions, ask
+      about webinar or in-person training.
+    </p>
+  </div>
+  <div class="training-band__actions">
+    <a href="/training/">Explore training</a>
+    <a href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
+  </div>
+</section>
+
+<style>
+  .resources {
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4.5rem);
+    background: #f7f1e6;
+  }
+
+  .resources__heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: end;
+  }
+
+  .resources h2,
+  .training-band h2 {
+    margin: 0;
+    color: #101827;
+    font: 700 clamp(2rem, 4vw, 3.1rem)/1.05 Georgia, "Times New Roman", serif;
+  }
+
+  .resources__heading p,
+  .training-band p {
+    margin: 0;
+    color: #4a5568;
+    font: 400 1.05rem/1.6 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .resources__columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .resources article {
+    padding: 1.35rem;
+    background: #ffffff;
+    border-top: 5px solid #176c68;
+  }
+
+  .resources h3 {
+    margin: 0;
+    font: 700 1.25rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .resources ul {
+    display: grid;
+    gap: 0.7rem;
+    margin: 1rem 0 1.25rem;
+    padding-left: 1.2rem;
+    color: #314055;
+    font: 500 1rem/1.45 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .resources a,
+  .training-band a {
+    color: #176c68;
+    font: 700 0.98rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .resources a:focus-visible,
+  .training-band a:focus-visible {
+    outline: 3px solid #c29a4a;
+    outline-offset: 3px;
+  }
+
+  .training-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4.5rem);
+    background: #ffffff;
+    border-top: 1px solid #e7eaf0;
+  }
+
+  .training-band p {
+    max-width: 50rem;
+    margin-top: 0.9rem;
+  }
+
+  .training-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  @media (max-width: 800px) {
+    .resources__heading,
+    .resources__columns,
+    .training-band {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

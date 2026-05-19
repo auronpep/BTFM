@@ -1,0 +1,24 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  href?: string;
+  category?: string;
+  actionLabel?: string;
+}
+
+const {
+  title = "$3M Board Member Checklist",
+  description = "A field checklist for directors reviewing finance, audit, Form 990, insurance, conflicts, minutes, and board authority.",
+  href = "/tools/3m-board-member-checklist",
+  category = "Board Tool",
+  actionLabel = "Open tool",
+} = Astro.props;
+---
+
+<article class="boardroom-card tool-card" style="--card-accent: var(--color-brass);">
+  <p class="boardroom-label">{category}</p>
+  <h3 class="boardroom-title">{title}</h3>
+  <p>{description}</p>
+  <a class="button secondary" href={href}>{actionLabel}</a>
+</article>

@@ -1,0 +1,94 @@
+---
+interface Action {
+  label: string;
+  href: string;
+  variant?: "primary" | "secondary";
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  deck: string;
+  actions?: Action[];
+}
+
+const { eyebrow = "Boardroom Field Manual", title, deck, actions = [] } = Astro.props;
+---
+
+<section class="tool-hero">
+  <div class="tool-hero__copy">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="tool-hero__deck">{deck}</p>
+    {
+      actions.length > 0 && (
+        <div class="tool-hero__actions" aria-label="Tool actions">
+          {actions.map((action) => (
+            <a
+              class:list={["button", { secondary: action.variant === "secondary" }]}
+              href={action.href}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <aside class="tool-hero__note" aria-label="Educational use note">
+    <p class="boardroom-label">Use Boundary</p>
+    <p>
+      These tools are educational board-preparation materials. They do not
+      provide legal advice, do not create an attorney-client relationship, and
+      should be escalated to counsel when facts, filings, disputes, or legal
+      rights matter.
+    </p>
+  </aside>
+</section>
+
+<style>
+  .tool-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 4rem);
+    background: var(--color-paper);
+  }
+
+  .tool-hero__copy {
+    max-width: 56rem;
+  }
+
+  .tool-hero__deck {
+    max-width: 64ch;
+    color: var(--color-muted-ink);
+    font-size: clamp(1.08rem, 2vw, 1.3rem);
+  }
+
+  .tool-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .tool-hero__note {
+    border: 1px solid var(--color-soft-border);
+    border-left: 0.35rem solid var(--color-burgundy);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .tool-hero__note p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 50rem) {
+    .tool-hero {
+      grid-template-columns: 1fr;
+      padding-inline: 1rem;
+    }
+  }
+</style>

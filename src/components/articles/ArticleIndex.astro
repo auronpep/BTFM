@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  articles: CollectionEntry<'articles'>[];
+}
+
+const { articles } = Astro.props;
+
+const topicOrder = [
+  'next-meeting',
+  'money-audit',
+  'executive-oversight',
+  'risk-safety',
+  'minutes-records',
+  'california-board-rules',
+  'starting-a-nonprofit',
+];
+
+const topicLabels: Record<string, string> = {
+  'next-meeting': 'Next meeting',
+  'money-audit': 'Money and audit',
+  'executive-oversight': 'Executive oversight',
+  'risk-safety': 'Risk and safety',
+  'minutes-records': 'Minutes and records',
+  'california-board-rules': 'California board rules',
+  'starting-a-nonprofit': 'Starting a nonprofit',
+};
+
+const groupedArticles = topicOrder
+  .map((topic) => ({
+    topic,
+    label: topicLabels[topic],
+    items: articles.filter((article) => article.data.category === topic),
+  }))
+  .filter((group) => group.items.length > 0);
+---
+
+<section class="manual-index" aria-labelledby="articles-title">
+  <div class="manual-index__hero">
+    <p class="eyebrow">Boardroom field manual</p>
+    <h1 id="articles-title">Meeting-ready articles for working nonprofit boards.</h1>
+    <p>
+      Start with the problem on the agenda. Each article is built to help a
+      director read the packet, ask better questions, document the decision,
+      and know when the issue needs legal judgment.
+    </p>
+  </div>
+
+  <div class="manual-index__groups">
+    {groupedArticles.map((group) => (
+      <section class="manual-index__group" aria-labelledby={`${group.topic}-title`}>
+        <h2 id={`${group.topic}-title`}>{group.label}</h2>
+        <div class="manual-index__grid">
+          {group.items.map((article) => <ArticleCard article={article} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</section>
+
+<style>
+  .manual-index {
+    padding: clamp(3rem, 7vw, 6rem) 0;
+  }
+
+  .manual-index__hero {
+    width: min(100% - 2rem, 62rem);
+    margin-inline: auto;
+  }
+
+  .manual-index__hero h1 {
+    max-width: 13ch;
+  }
+
+  .manual-index__hero p:not(.eyebrow) {
+    max-width: 48rem;
+    color: var(--color-muted-ink);
+    font-size: 1.12rem;
+  }
+
+  .manual-index__groups {
+    display: grid;
+    gap: var(--space-12);
+    width: min(100% - 2rem, var(--container));
+    margin: var(--space-12) auto 0;
+  }
+
+  .manual-index__group {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .manual-index__group h2 {
+    margin: 0;
+    font-size: clamp(1.65rem, 3vw, 2.4rem);
+  }
+
+  .manual-index__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+  }
+</style>
