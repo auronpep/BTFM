@@ -37,6 +37,7 @@ export const staticSiteRoutes = [
   "/tools/mature-board-self-assessment/",
   "/california-board-rules/",
   "/training/",
+  "/training/board-training-program/",
   "/training/webinars/",
   "/training/in-person/",
   "/contact/",

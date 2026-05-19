@@ -41,6 +41,9 @@ const description =
           boards reviewing budgets, reports, executives, risk, minutes, and legal escalation.
         </p>
         <div class="hero-actions" aria-label="Training actions">
+          <a class="button" href="/training/board-training-program" data-conversion-event="training_overview_program_click">
+            View the Training Program
+          </a>
           <a class="button" href="/training/webinars" data-conversion-event="training_overview_webinars_click">
             Register for a Webinar
           </a>
@@ -82,6 +85,16 @@ const description =
       <h2 id="formats-heading">Choose the training path that fits the board's calendar</h2>
     </div>
     <div class="format-grid">
+      <article>
+        <h3>Program overview</h3>
+        <p>
+          Best for board members, chairs, presidents, and executive leaders who want the full training path before
+          choosing a webinar or private session.
+        </p>
+        <a class="button" href="/training/board-training-program" data-conversion-event="training_overview_program_card_click">
+          View Program
+        </a>
+      </article>
       <article>
         <h3>Webinars</h3>
         <p>
@@ -198,7 +211,7 @@ const description =
   .format-grid,
   .legal-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-5);
   }
 

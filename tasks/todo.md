@@ -446,3 +446,21 @@ Before calling the implementation done:
 - Live smoke checks returned 200 for homepage, next meeting, four topic pages, articles, scenarios, tools, California rules, training, contact, robots, sitemap, and RSS.
 - Static internal-link check passed for 1,128 local `href` / `src` references across 50 HTML files.
 - Browser DOM/console smoke check passed for the homepage and `/money-audit`; mobile nav opened at 390px width with no console warnings/errors. In-app screenshot capture timed out twice, so screenshot evidence was not captured.
+
+## CGI Clone Structure Adaptation
+
+- [x] Inspect `website-clones/cgi-governance-building-blocks` reference structure, screenshots, and React/CSS source.
+- [x] Add a standalone Astro training-program page that follows the clone's section order using CDX copy and palette.
+- [x] Add the minimum route discovery link from the existing training page.
+- [x] Run production build verification.
+- [x] Run live/local route smoke checks for the new standalone page.
+- [x] Review and document results.
+
+### CGI Clone Structure Adaptation Review
+
+- Added `/training/board-training-program/` as a standalone Astro page inside the existing `BaseLayout`, so it uses the current header, footer, SEO pipeline, global tokens, `.button`, `.eyebrow`, and `TrainingInquiryForm`.
+- Adapted the clone's section structure into CDX content: notice bar, course-style hero, facts strip, value cards, free-resource promise panel, tabbed curriculum, legal-help callout, working-board callout, scenarios, publisher/about section, related resources, inquiry form, and mobile sticky CTA.
+- Added a discovery CTA/card on `/training/` and added the route to `staticSiteRoutes` for sitemap output.
+- Excluded `website-clones/**` from TypeScript/Astro checking and git tracking so clone reference artifacts do not create third-party build warnings or accidental commits.
+- Verification note: `npm run build` passed with 0 errors, 0 warnings, and 0 hints across 80 checked files; Astro generated 51 static pages. Local route smoke checks returned 200 for `/training/board-training-program/` and `/training/`; `/training/` contains the new program link; `dist/sitemap.xml` contains `/training/board-training-program/`.
+- Visual QA note: Browser plugin was not exposed and project Playwright is not installed, so screenshots were captured with temporary Playwright CLI using the system Chrome channel. Desktop 1440px and mobile 390px screenshots were reviewed; mobile clipping found in the first Chrome-headless pass was fixed by tightening hero copy, using deterministic headline line groups, and adding mobile wrapping rules.

@@ -1,0 +1,1034 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TrainingInquiryForm from "../../components/forms/TrainingInquiryForm.astro";
+
+const pageTitle = "Nonprofit Board Training Program";
+const description =
+  "A standalone course-style overview of the nonprofit board training program, with webinars, in-person sessions, board packet practice, downloadable tools, and NPO Lawyers referral paths.";
+
+const facts = [
+  { label: "Start with", value: "Free resources" },
+  { label: "Best for", value: "Working boards" },
+  { label: "Core session", value: "75-90 minutes" },
+  { label: "Format", value: "Webinar or in person" },
+  { label: "Legal path", value: "NPOlawyers.com" },
+];
+
+const introCards = [
+  {
+    title: "Board Authority",
+    body: "Directors learn what belongs to the board, what belongs to officers or staff, and why individual board members do not act alone.",
+  },
+  {
+    title: "Oversight Evidence",
+    body: "The program turns budgets, audit materials, executive reports, minutes, conflicts, and Form 990 questions into practical board behavior.",
+  },
+  {
+    title: "Meeting Discipline",
+    body: "Board members practice asking better questions before the meeting, making clear motions, and leaving minutes that prove the board did its job.",
+  },
+];
+
+const scenarios = [
+  {
+    title: "The executive director wants a raise",
+    body: "Practice disinterested review, comparability, recusal, minutes evidence, and when compensation needs legal review.",
+    href: "/scenarios/executive-director-wants-a-raise",
+  },
+  {
+    title: "The board packet arrived too late",
+    body: "Decide what can be approved, what should be tabled, and what directors should ask for before voting.",
+    href: "/scenarios/board-packet-arrived-too-late",
+  },
+  {
+    title: "The minutes are long, but unclear",
+    body: "Separate discussion notes from board action and learn what the record should show after a serious decision.",
+    href: "/scenarios/minutes-long-no-one-knows-what-passed",
+  },
+];
+
+const relatedResources = [
+  {
+    title: "Board Packet Lab",
+    body: "A guided practice area for reviewing agenda decisions, missing documents, oversight questions, and minutes notes.",
+    href: "/tools/board-packet-lab",
+  },
+  {
+    title: "Board Question Bank",
+    body: "Meeting-ready questions for budgets, audit, executive oversight, risk, minutes, and legal escalation.",
+    href: "/tools/question-bank",
+  },
+  {
+    title: "California Board Rules",
+    body: "Issue spotters for audit thresholds, compensation, conflicts, records, filings, fundraising, and public disclosure.",
+    href: "/california-board-rules",
+  },
+];
+---
+
+<BaseLayout title={pageTitle} description={description} canonicalPath="/training/board-training-program" pageType="training">
+  <section class="program-alert" aria-label="Program notice">
+    <div class="container program-alert-inner">
+      <span>Free online board resources are available now.</span>
+      <a href="#program-inquiry">Ask about webinar or in-person training</a>
+    </div>
+  </section>
+
+  <section class="program-hero">
+    <div class="container program-hero-grid">
+      <div class="program-hero-copy">
+        <p class="eyebrow">Program Level</p>
+        <h1>
+          <span>Board</span>
+          <span>training</span>
+          <span>for the next</span>
+          <span>hard vote</span>
+        </h1>
+        <div class="program-status">
+          <span aria-hidden="true"></span>
+          Built for directors, chairs, presidents, founders, and executive leaders.
+        </div>
+        <p class="program-hero-text">
+          The Principles of Board Training packages the field manual into a practical course path: read the board
+          packet, spot the board-level issue, ask the right questions, document the decision, and know when the issue
+          belongs with nonprofit counsel.
+        </p>
+        <div class="program-actions" aria-label="Program actions">
+          <a class="button" href="/training/webinars" data-conversion-event="program_page_webinar_click">
+            Register for a Webinar
+          </a>
+          <a class="button secondary" href="/training/in-person" data-conversion-event="program_page_in_person_click">
+            Request In-Person Training
+          </a>
+        </div>
+      </div>
+
+      <aside class="program-visual" aria-label="Board packet preview">
+        <div class="packet-cover">
+          <span class="packet-label">Board Packet</span>
+          <h2>Strategy. Safety. Audit.</h2>
+          <p>Questions, motions, documents, minutes, and legal escalation prompts.</p>
+        </div>
+        <div class="packet-sheet">
+          <span>Before the meeting</span>
+          <strong>What decision is the board actually making?</strong>
+        </div>
+        <div class="packet-sheet muted">
+          <span>After the meeting</span>
+          <strong>What should the minutes prove?</strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="program-facts" aria-label="Program facts">
+    <div class="container program-facts-grid">
+      {facts.map((fact) => (
+        <div class="program-fact">
+          <span>{fact.label}</span>
+          <strong>{fact.value}</strong>
+        </div>
+      ))}
+      <a class="program-facts-action" href="/training/webinars" data-conversion-event="program_facts_webinar_click">
+        View webinars
+      </a>
+    </div>
+  </section>
+
+  <section class="program-section" aria-labelledby="program-why-heading">
+    <div class="container">
+      <div class="program-section-heading centered">
+        <p class="eyebrow">Board Training Principles</p>
+        <h2 id="program-why-heading">Many boards are active. Few are effective.</h2>
+        <p>
+          The difference is usually not goodwill. It is clarity about authority, oversight, records, and the practical
+          habits that make a board useful before something goes wrong.
+        </p>
+      </div>
+      <div class="program-card-grid">
+        {introCards.map((card) => (
+          <article class="program-card">
+            <span class="program-card-icon" aria-hidden="true"></span>
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="program-promise">
+    <div class="container program-promise-panel">
+      <div>
+        <p class="eyebrow">Free resources first</p>
+        <h2>Use the tools before you book training</h2>
+        <p>
+          The online field manual and downloadable files stay free. Webinars and in-person sessions are for boards that
+          want a shared training experience, a retreat format, or a guided walk through real boardroom issues.
+        </p>
+      </div>
+      <div class="promise-stamp" aria-hidden="true">
+        <span>Free</span>
+        <strong>Field Manual</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="program-curriculum" aria-labelledby="program-curriculum-heading">
+    <div class="container program-curriculum-layout">
+      <div class="program-curriculum-copy">
+        <p class="eyebrow">Curriculum</p>
+        <h2 id="program-curriculum-heading">What the training covers</h2>
+        <p>
+          The program follows the same tabbed course-page structure as the reference clone, but the content is tailored
+          to nonprofit board behavior and California nonprofit risk.
+        </p>
+        <a class="button secondary" href="/tools/board-packet-lab">Open the Board Packet Lab</a>
+      </div>
+
+      <div class="program-tabs">
+        <input id="tab-directors" name="program-tabs" type="radio" checked />
+        <label for="tab-directors">Directors</label>
+        <input id="tab-officers" name="program-tabs" type="radio" />
+        <label for="tab-officers">Chairs & Presidents</label>
+        <input id="tab-oversight" name="program-tabs" type="radio" />
+        <label for="tab-oversight">Money & Risk</label>
+        <input id="tab-meetings" name="program-tabs" type="radio" />
+        <label for="tab-meetings">Annual Meeting</label>
+
+        <div class="tab-panels">
+          <article class="tab-panel panel-directors">
+            <p class="tab-kicker">Director fundamentals</p>
+            <ol>
+              <li>What the board can do that individual directors cannot.</li>
+              <li>How to read a packet for decisions, missing information, and red flags.</li>
+              <li>How duties of care, loyalty, and obedience show up in ordinary votes.</li>
+              <li>What questions belong in the meeting before the board approves action.</li>
+            </ol>
+          </article>
+          <article class="tab-panel panel-officers">
+            <p class="tab-kicker">Officer and chair practice</p>
+            <ol>
+              <li>Build agendas that separate reports, decisions, consent items, and follow-up.</li>
+              <li>Keep board-management boundaries clear between meetings.</li>
+              <li>Handle difficult board member behavior without turning every issue into a legal fight.</li>
+              <li>Use committees without losing board accountability.</li>
+            </ol>
+          </article>
+          <article class="tab-panel panel-oversight">
+            <p class="tab-kicker">Money, audit, and risk</p>
+            <ol>
+              <li>Review budgets, variances, reserves, and restricted funds without pretending to be staff.</li>
+              <li>Know what audit, Form 990, insurance, safety, and internal-control questions belong to the board.</li>
+              <li>Document conflicts, recusals, compensation approvals, and financial follow-up.</li>
+              <li>Recognize when the board should pause and get legal advice.</li>
+            </ol>
+          </article>
+          <article class="tab-panel panel-meetings">
+            <p class="tab-kicker">Board rhythm</p>
+            <ol>
+              <li>Prepare for the annual meeting before officer elections and compliance questions become urgent.</li>
+              <li>Use the 40-40-20 meeting rule to reduce passive report-listening.</li>
+              <li>Leave minutes that show action, authority, votes, recusals, and assigned follow-up.</li>
+              <li>Turn the next board meeting into a repeatable governance routine.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="program-legal-callout">
+    <div class="container program-legal-panel">
+      <div>
+        <p class="eyebrow">When training is not enough</p>
+        <h2>Some board problems need nonprofit counsel</h2>
+        <p>
+          The training page should teach practical issue spotting, but it should also move serious legal questions to
+          the law firm site without making the resource library feel like a sales brochure.
+        </p>
+      </div>
+      <a class="button legal" href="https://NPOlawyers.com" data-conversion-event="program_page_npo_lawyers_click">
+        Visit NPOlawyers.com
+      </a>
+    </div>
+  </section>
+
+  <section class="program-join">
+    <div class="container program-join-panel">
+      <div>
+        <p class="eyebrow">For working boards</p>
+        <h2>Train the board before the next hard vote</h2>
+      </div>
+      <p>
+        The best session is not abstract. Bring the board's real pressure points: budget approval, executive oversight,
+        officer roles, records, audit, insurance, safety, conflict review, or annual meeting discipline.
+      </p>
+      <a class="button" href="#program-inquiry" data-conversion-event="program_join_inquiry_click">Start an Inquiry</a>
+    </div>
+  </section>
+
+  <section class="program-section" aria-labelledby="program-scenarios-heading">
+    <div class="container">
+      <div class="program-section-heading">
+        <p class="eyebrow">Practice scenarios</p>
+        <h2 id="program-scenarios-heading">What boards work through in training</h2>
+      </div>
+      <div class="program-card-grid">
+        {scenarios.map((scenario) => (
+          <article class="program-card scenario-card">
+            <h3>{scenario.title}</h3>
+            <p>{scenario.body}</p>
+            <a href={scenario.href}>Read the scenario</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="program-about" aria-labelledby="program-about-heading">
+    <div class="container program-about-grid">
+      <div class="about-visual" aria-hidden="true">
+        <div>Agenda</div>
+        <div>Budget</div>
+        <div>Minutes</div>
+        <div>Follow-up</div>
+      </div>
+      <div>
+        <p class="eyebrow">Publisher</p>
+        <h2 id="program-about-heading">Published by California Center for Nonprofit Law / NPO Lawyers</h2>
+        <p>
+          This resource is educational. It is designed to help nonprofit board members prepare, govern, and know when
+          an issue has crossed from general training into organization-specific legal advice.
+        </p>
+        <ul class="program-check-list">
+          <li>Free field-manual articles and scenario guides.</li>
+          <li>Downloadable meeting and oversight tools.</li>
+          <li>Webinar and in-person training paths.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="program-section" aria-labelledby="program-resources-heading">
+    <div class="container">
+      <div class="program-section-heading">
+        <p class="eyebrow">Related resources</p>
+        <h2 id="program-resources-heading">Start with these before booking a session</h2>
+      </div>
+      <div class="program-card-grid">
+        {relatedResources.map((resource) => (
+          <article class="program-card resource-card">
+            <h3>{resource.title}</h3>
+            <p>{resource.body}</p>
+            <a href={resource.href}>Open resource</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="program-inquiry-section container" id="program-inquiry">
+    <TrainingInquiryForm
+      formName="program-training-inquiry"
+      eventName="program_page_training_inquiry_submit_mailto"
+      heading="Ask about webinar or in-person board training"
+      intro="Use this static-site inquiry path to ask about the next webinar, a board retreat, a private training session, or a group presentation."
+      defaultInterest="private-training"
+    />
+  </section>
+
+  <div class="program-mobile-sticky">
+    <a href="#program-inquiry">Ask about training</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .program-alert {
+    border-bottom: 1px solid rgba(231, 225, 219, 0.18);
+    background: var(--color-slate);
+    color: var(--color-paper);
+  }
+
+  .program-alert-inner {
+    min-height: 2.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .program-alert-inner > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .program-alert a {
+    color: var(--color-paper);
+    overflow-wrap: anywhere;
+    text-decoration-color: rgba(231, 225, 219, 0.5);
+  }
+
+  .program-hero {
+    background: var(--color-white);
+    padding: var(--space-16) 0 0;
+  }
+
+  .program-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(20rem, 0.9fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .program-hero-copy {
+    padding-bottom: var(--space-12);
+    min-width: 0;
+  }
+
+  .program-hero-copy h1 {
+    max-width: 11ch;
+    color: var(--color-ink);
+    font-size: clamp(2.75rem, 6vw, 5.25rem);
+    line-height: 0.95;
+    overflow-wrap: break-word;
+  }
+
+  .program-hero-copy h1 span {
+    display: block;
+  }
+
+  .program-status {
+    width: fit-content;
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 var(--space-5);
+    background: rgba(135, 114, 31, 0.14);
+    color: var(--color-ink);
+    font-weight: 800;
+  }
+
+  .program-status span {
+    width: 0.35rem;
+    background: var(--color-brass);
+  }
+
+  .program-status {
+    padding: 0.65rem 1rem 0.65rem 0;
+  }
+
+  .program-hero-text {
+    max-width: 42rem;
+    color: var(--color-muted-ink);
+    font-size: 1.12rem;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+  }
+
+  .program-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .program-visual {
+    position: relative;
+    min-height: 32rem;
+    display: grid;
+    align-content: end;
+    padding: var(--space-8);
+    background:
+      linear-gradient(90deg, rgba(30, 42, 67, 0.12) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(30, 42, 67, 0.12) 1px, transparent 1px),
+      var(--color-paper);
+    background-size: 2.5rem 2.5rem;
+    border-left: 0.45rem solid var(--color-brass);
+  }
+
+  .packet-cover,
+  .packet-sheet {
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    box-shadow: 0 1rem 2.5rem var(--color-shadow);
+  }
+
+  .packet-cover {
+    max-width: 26rem;
+    min-height: 18rem;
+    display: grid;
+    align-content: end;
+    padding: var(--space-6);
+    background: var(--color-navy);
+    color: var(--color-paper);
+  }
+
+  .packet-cover h2 {
+    max-width: 9ch;
+    color: var(--color-white);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+  }
+
+  .packet-cover p {
+    color: rgba(231, 225, 219, 0.82);
+    overflow-wrap: anywhere;
+  }
+
+  .packet-label,
+  .packet-sheet span,
+  .tab-kicker {
+    color: var(--color-brass);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .packet-sheet {
+    position: absolute;
+    right: var(--space-5);
+    width: min(18rem, 42%);
+    padding: var(--space-4);
+  }
+
+  .packet-sheet strong {
+    display: block;
+    margin-top: var(--space-2);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    line-height: 1.1;
+  }
+
+  .packet-sheet:not(.muted) {
+    top: var(--space-8);
+  }
+
+  .packet-sheet.muted {
+    bottom: var(--space-8);
+    background: var(--color-paper);
+  }
+
+  .program-facts {
+    background: rgba(214, 208, 202, 0.72);
+  }
+
+  .program-facts-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-4);
+  }
+
+  .program-fact {
+    min-height: 4.5rem;
+    display: grid;
+    align-content: center;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border-left: 1px solid var(--color-soft-border);
+  }
+
+  .program-fact:first-child {
+    border-left: 0;
+    background: rgba(135, 114, 31, 0.2);
+    border-radius: var(--radius-md);
+  }
+
+  .program-fact span {
+    color: var(--color-muted-ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .program-fact strong {
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+
+  .program-facts-action {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1rem;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .program-section,
+  .program-about,
+  .program-inquiry-section {
+    padding: var(--space-16) 0;
+  }
+
+  .program-section-heading {
+    max-width: 48rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .program-section-heading.centered {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .program-section-heading p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .program-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .program-card {
+    min-height: 17rem;
+    display: grid;
+    align-content: start;
+    border: 1px solid var(--color-soft-border);
+    border-top: 0.35rem solid var(--color-slate);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .program-card-icon {
+    width: 3.3rem;
+    height: 3.3rem;
+    display: block;
+    margin-bottom: var(--space-5);
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-sm);
+    background:
+      linear-gradient(90deg, transparent 42%, var(--color-brass) 42%, var(--color-brass) 58%, transparent 58%),
+      linear-gradient(180deg, transparent 42%, var(--color-brass) 42%, var(--color-brass) 58%, transparent 58%),
+      rgba(135, 114, 31, 0.12);
+  }
+
+  .program-card p {
+    color: var(--color-muted-ink);
+  }
+
+  .program-card a {
+    align-self: end;
+    margin-top: var(--space-3);
+    font-weight: 800;
+  }
+
+  .program-promise {
+    background: rgba(135, 114, 31, 0.2);
+    padding: var(--space-12) 0;
+  }
+
+  .program-promise-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 10rem;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .program-promise-panel p:not(.eyebrow) {
+    max-width: 62rem;
+    color: var(--color-muted-ink);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .promise-stamp {
+    width: 9rem;
+    height: 9rem;
+    display: grid;
+    place-items: center;
+    justify-self: end;
+    border: 1px solid var(--color-soft-border);
+    border-radius: 50%;
+    background: var(--color-white);
+    box-shadow: 0 1rem 2.5rem var(--color-shadow);
+    text-align: center;
+  }
+
+  .promise-stamp span,
+  .promise-stamp strong {
+    display: block;
+  }
+
+  .promise-stamp span {
+    color: var(--color-brass);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .promise-stamp strong {
+    max-width: 6rem;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    line-height: 1.05;
+  }
+
+  .program-curriculum {
+    background: var(--color-navy);
+    color: var(--color-paper);
+    padding: var(--space-16) 0;
+  }
+
+  .program-curriculum-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(22rem, 1.15fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .program-curriculum h2,
+  .program-legal-callout h2 {
+    color: var(--color-white);
+  }
+
+  .program-curriculum-copy p:not(.eyebrow),
+  .program-legal-callout p {
+    color: rgba(231, 225, 219, 0.82);
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+
+  .program-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .program-tabs input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .program-tabs label {
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(231, 225, 219, 0.18);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    background: rgba(231, 225, 219, 0.08);
+    color: var(--color-paper);
+    font-weight: 900;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .program-tabs input:focus-visible + label {
+    outline: 0.1875rem solid var(--color-brass);
+    outline-offset: 0.1875rem;
+  }
+
+  #tab-directors:checked + label,
+  #tab-officers:checked + label,
+  #tab-oversight:checked + label,
+  #tab-meetings:checked + label {
+    background: var(--color-brass);
+    color: var(--color-white);
+  }
+
+  .tab-panels {
+    grid-column: 1 / -1;
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-white);
+    color: var(--color-ink);
+    box-shadow: 0 0.75rem 1.875rem rgba(0, 0, 0, 0.18);
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  #tab-directors:checked ~ .tab-panels .panel-directors,
+  #tab-officers:checked ~ .tab-panels .panel-officers,
+  #tab-oversight:checked ~ .tab-panels .panel-oversight,
+  #tab-meetings:checked ~ .tab-panels .panel-meetings {
+    display: block;
+  }
+
+  .tab-panel ol {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-4) 0 0;
+    padding-left: 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  .program-legal-callout {
+    background: var(--color-slate);
+    padding: var(--space-12) 0;
+  }
+
+  .program-legal-panel,
+  .program-join-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .program-legal-panel p {
+    max-width: 58rem;
+  }
+
+  .program-join {
+    background: rgba(135, 114, 31, 0.28);
+    padding: var(--space-10) 0;
+  }
+
+  .program-join-panel {
+    grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1fr) auto;
+  }
+
+  .program-join-panel p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.08rem;
+    line-height: 1.65;
+  }
+
+  .scenario-card,
+  .resource-card {
+    min-height: 15rem;
+  }
+
+  .program-about {
+    background: var(--color-white);
+  }
+
+  .program-about-grid {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .about-visual {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-left: 0.45rem solid var(--color-brass);
+    background: var(--color-paper);
+    box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  }
+
+  .about-visual div {
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-soft-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+
+  .program-about-grid p:not(.eyebrow) {
+    color: var(--color-muted-ink);
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+
+  .program-check-list {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-left: 1.25rem;
+    font-weight: 800;
+  }
+
+  .program-check-list li::marker {
+    color: var(--color-brass);
+  }
+
+  .program-inquiry-section {
+    scroll-margin-top: 6rem;
+  }
+
+  .program-mobile-sticky {
+    display: none;
+  }
+
+  @media (max-width: 64rem) {
+    .program-hero-grid,
+    .program-curriculum-layout,
+    .program-about-grid,
+    .program-legal-panel,
+    .program-promise-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .program-facts-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .program-facts-action {
+      grid-column: 1 / -1;
+    }
+
+    .program-card-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .program-join-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .promise-stamp {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .program-alert-inner {
+      display: grid;
+      gap: var(--space-1);
+      padding-block: var(--space-2);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .program-hero {
+      padding-top: var(--space-12);
+    }
+
+    .program-hero-copy {
+      padding-bottom: var(--space-8);
+    }
+
+    .program-hero-copy h1 {
+      max-width: 100%;
+      font-size: clamp(1.95rem, 8.7vw, 2.45rem);
+      line-height: 0.98;
+    }
+
+    .program-status {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+      border-left: 0.35rem solid var(--color-brass);
+      padding-left: var(--space-3);
+      padding-right: var(--space-3);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .program-status span {
+      display: none;
+    }
+
+    .program-hero-text {
+      max-width: 100%;
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .program-actions {
+      display: grid;
+    }
+
+    .program-actions .button,
+    .program-mobile-sticky a {
+      width: 100%;
+    }
+
+    .program-visual {
+      min-height: 25rem;
+      margin-inline: -0.625rem;
+      padding: var(--space-5);
+    }
+
+    .packet-cover {
+      min-height: 16rem;
+      padding: var(--space-5);
+    }
+
+    .packet-sheet {
+      position: static;
+      width: 100%;
+      margin-top: var(--space-3);
+    }
+
+    .program-facts-grid,
+    .program-tabs {
+      grid-template-columns: 1fr;
+    }
+
+    .program-fact {
+      border-left: 0;
+      border-top: 1px solid var(--color-soft-border);
+    }
+
+    .program-fact:first-child {
+      border-top: 0;
+    }
+
+    .program-section,
+    .program-about,
+    .program-inquiry-section,
+    .program-curriculum {
+      padding-block: var(--space-12);
+    }
+
+    .program-mobile-sticky {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 30;
+      display: block;
+      padding: var(--space-3);
+      background: var(--color-white);
+      box-shadow: 0 -0.75rem 1.875rem var(--color-shadow);
+    }
+
+    .program-mobile-sticky a {
+      min-height: 3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      background: var(--color-navy);
+      color: var(--color-white);
+      font-weight: 900;
+      text-decoration: none;
+    }
+  }
+</style>
