@@ -10,6 +10,11 @@
 - [x] Initialize local git repository and private GitHub repository.
 - [x] Add requested GitHub admin collaborators if GitHub accepts the accounts.
 - [x] Record final setup results and any blockers.
+- [x] Add competition-oriented planning docs.
+- [x] Add Hostinger-specific deployment plan.
+- [x] Add parallel-worker execution plan.
+- [x] Add tooling recommendations for Codex, Claude Code, Google Stitch, Figma, and supporting tools.
+- [x] Record lesson that AM is bypassed for this project.
 
 ## Project Goal
 
@@ -30,6 +35,7 @@ The site has four primary actions:
 - `https://NPOlawyers.com`
 - `https://mediumslateblue-caterpillar-718620.hostingersite.com/`
 - IRS, California Attorney General, BoardSource, National Council of Nonprofits, W3C/WCAG, and Google Search Central references.
+- Google Stitch, Figma MCP, Claude Code plugins/subagents, Codex configuration, Astro Hostinger deployment, Hostinger Git deployment, and Hostinger cache references.
 
 ## Content Strategy
 
@@ -165,7 +171,8 @@ The site must include a clear disclaimer: content is educational information, no
 Recommended stack for build phase:
 
 - Static-first site with a CMS-friendly content model.
-- If the current project has no framework yet, use Next.js or Astro. Astro is attractive for a content-heavy resource library because it is fast, simple, and Markdown/MDX-friendly. Next.js is a good choice if webinar integrations, richer search, or a future dashboard are likely.
+- Use Astro static output unless a server-side requirement is proven. Astro is the best fit for a Hostinger-hosted, content-heavy resource library because it is fast, simple, Markdown/MDX-friendly, and can deploy generated `dist/` files to `public_html`.
+- Use Next.js only if React app patterns are a hard requirement. If hosted statically, it must use static export and accept static-export limits. If SSR/API routes/auth/server actions are required, use Hostinger Node.js hosting or VPS as a separate decision.
 - Store articles, scenarios, and downloads as MDX/content collections.
 - Generate RSS, sitemap, metadata, OpenGraph images, and schema markup for articles.
 - Add client-side search only if needed after the first content batch; start with category/tag filters and server-rendered indexes.
@@ -280,12 +287,21 @@ Before calling the implementation done:
 - Local git repository initialized at `C:\CDX`.
 - Private GitHub repository created and pushed: `https://github.com/erewhonsgroup/CDX`.
 - Admin collaborator invitations were created for `VoteWood`, `auronpep`, and `JWoodMedia`.
-- AM status check-in failed because AM had no session matched to `C:\CDX`; continue normal project work unless AM is configured for this workspace later.
+- AM status check-in failed because AM had no session matched to `C:\CDX`. The user later clarified that AM can be bypassed for this project, so no further AM check-ins are required unless explicitly requested.
+
+## Added Planning Documents
+
+- `planning/DESIGN_IMPLEMENTATION_PLAN.md`
+- `planning/PARALLEL_WORK_PLAN.md`
+- `planning/HOSTINGER_DEPLOYMENT_PLAN.md`
+- `planning/TOOLING_RECOMMENDATIONS.md`
+- `planning/STITCH_PROMPTS.md`
+- `planning/COMPETITION_REVIEW_PACKAGE.md`
 
 ## Open Decisions
 
 - Final program/domain name.
 - Whether webinar registration is handled by embedded form, Calendly-style scheduling, Zoom registration, CRM form, or manual email.
 - Whether downloads are fully free or require optional email capture.
-- Target hosting and CMS preference.
+- CMS preference. Default recommendation is MDX content collections in Astro; use a CMS only if non-developers need direct publishing access.
 - Whether the training site should live on a subdomain of `NPOlawyers.com` or a separate branded domain.
