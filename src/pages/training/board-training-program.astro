@@ -49,14 +49,14 @@ const scenarios = [
 
 const relatedResources = [
   {
+    title: "Board Article Library",
+    body: "Plain-English articles on board duties, meetings, oversight, records, conflicts, and when legal help is needed.",
+    href: "/articles/",
+  },
+  {
     title: "Board Packet Lab",
     body: "A guided practice area for reviewing agenda decisions, missing documents, oversight questions, and minutes notes.",
     href: "/tools/board-packet-lab",
-  },
-  {
-    title: "Board Question Bank",
-    body: "Meeting-ready questions for budgets, audit, executive oversight, risk, minutes, and legal escalation.",
-    href: "/tools/question-bank",
   },
   {
     title: "California Board Rules",
@@ -166,6 +166,11 @@ const relatedResources = [
           The online field manual and downloadable files stay free. Webinars and in-person sessions are for boards that
           want a shared training experience, a retreat format, or a guided walk through real boardroom issues.
         </p>
+        <div class="program-promise-actions">
+          <a class="button secondary" href="/articles/" data-conversion-event="program_page_articles_click">
+            Read the Article Library
+          </a>
+        </div>
       </div>
       <div class="promise-stamp" aria-hidden="true">
         <span>Free</span>
@@ -186,18 +191,19 @@ const relatedResources = [
         <a class="button secondary" href="/tools/board-packet-lab">Open the Board Packet Lab</a>
       </div>
 
-      <div class="program-tabs">
-        <input id="tab-directors" name="program-tabs" type="radio" checked />
-        <label for="tab-directors">Directors</label>
-        <input id="tab-officers" name="program-tabs" type="radio" />
-        <label for="tab-officers">Chairs & Presidents</label>
-        <input id="tab-oversight" name="program-tabs" type="radio" />
-        <label for="tab-oversight">Money & Risk</label>
-        <input id="tab-meetings" name="program-tabs" type="radio" />
-        <label for="tab-meetings">Annual Meeting</label>
+      <fieldset class="program-tabs">
+        <legend class="program-tabs-legend">Choose a curriculum focus</legend>
+        <input id="tab-directors" name="program-tabs" type="radio" aria-controls="panel-directors" checked />
+        <label id="tab-label-directors" for="tab-directors">Directors</label>
+        <input id="tab-officers" name="program-tabs" type="radio" aria-controls="panel-officers" />
+        <label id="tab-label-officers" for="tab-officers">Chairs & Presidents</label>
+        <input id="tab-oversight" name="program-tabs" type="radio" aria-controls="panel-oversight" />
+        <label id="tab-label-oversight" for="tab-oversight">Money & Risk</label>
+        <input id="tab-meetings" name="program-tabs" type="radio" aria-controls="panel-meetings" />
+        <label id="tab-label-meetings" for="tab-meetings">Annual Meeting</label>
 
         <div class="tab-panels">
-          <article class="tab-panel panel-directors">
+          <article id="panel-directors" class="tab-panel panel-directors" role="region" aria-labelledby="tab-label-directors">
             <p class="tab-kicker">Director fundamentals</p>
             <ol>
               <li>What the board can do that individual directors cannot.</li>
@@ -206,7 +212,7 @@ const relatedResources = [
               <li>What questions belong in the meeting before the board approves action.</li>
             </ol>
           </article>
-          <article class="tab-panel panel-officers">
+          <article id="panel-officers" class="tab-panel panel-officers" role="region" aria-labelledby="tab-label-officers">
             <p class="tab-kicker">Officer and chair practice</p>
             <ol>
               <li>Build agendas that separate reports, decisions, consent items, and follow-up.</li>
@@ -215,7 +221,7 @@ const relatedResources = [
               <li>Use committees without losing board accountability.</li>
             </ol>
           </article>
-          <article class="tab-panel panel-oversight">
+          <article id="panel-oversight" class="tab-panel panel-oversight" role="region" aria-labelledby="tab-label-oversight">
             <p class="tab-kicker">Money, audit, and risk</p>
             <ol>
               <li>Review budgets, variances, reserves, and restricted funds without pretending to be staff.</li>
@@ -224,7 +230,7 @@ const relatedResources = [
               <li>Recognize when the board should pause and get legal advice.</li>
             </ol>
           </article>
-          <article class="tab-panel panel-meetings">
+          <article id="panel-meetings" class="tab-panel panel-meetings" role="region" aria-labelledby="tab-label-meetings">
             <p class="tab-kicker">Board rhythm</p>
             <ol>
               <li>Prepare for the annual meeting before officer elections and compliance questions become urgent.</li>
@@ -234,7 +240,7 @@ const relatedResources = [
             </ol>
           </article>
         </div>
-      </div>
+      </fieldset>
     </div>
   </section>
 
@@ -481,10 +487,18 @@ const relatedResources = [
     overflow-wrap: anywhere;
   }
 
-  .packet-label,
   .packet-sheet span,
   .tab-kicker {
-    color: var(--color-brass);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .packet-label {
+    color: #d8c76a;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 800;
@@ -654,6 +668,13 @@ const relatedResources = [
     line-height: 1.7;
   }
 
+  .program-promise-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
   .promise-stamp {
     width: 9rem;
     height: 9rem;
@@ -673,7 +694,7 @@ const relatedResources = [
   }
 
   .promise-stamp span {
-    color: var(--color-brass);
+    color: var(--color-ink);
     font-family: var(--font-mono);
     font-size: 0.74rem;
     font-weight: 900;
@@ -714,10 +735,41 @@ const relatedResources = [
     line-height: 1.7;
   }
 
+  .program-curriculum .eyebrow,
+  .program-legal-callout .eyebrow {
+    color: rgba(231, 225, 219, 0.88);
+  }
+
+  .program-curriculum .button.secondary {
+    border-color: rgba(231, 225, 219, 0.46);
+    background: rgba(231, 225, 219, 0.08);
+    color: var(--color-paper);
+  }
+
+  .program-curriculum .button.secondary:hover {
+    border-color: var(--color-paper);
+    background: rgba(231, 225, 219, 0.16);
+    color: var(--color-white);
+  }
+
   .program-tabs {
+    min-inline-size: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-2);
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .program-tabs-legend {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .program-tabs input {
@@ -754,7 +806,8 @@ const relatedResources = [
   #tab-officers:checked + label,
   #tab-oversight:checked + label,
   #tab-meetings:checked + label {
-    background: var(--color-brass);
+    border-color: var(--color-brass);
+    background: #6f5c1b;
     color: var(--color-white);
   }
 
@@ -1015,8 +1068,13 @@ const relatedResources = [
       z-index: 30;
       display: block;
       padding: var(--space-3);
+      padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
       background: var(--color-white);
       box-shadow: 0 -0.75rem 1.875rem var(--color-shadow);
+    }
+
+    :global(.site-footer) {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
     }
 
     .program-mobile-sticky a {

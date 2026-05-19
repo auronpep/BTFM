@@ -464,3 +464,21 @@ Before calling the implementation done:
 - Excluded `website-clones/**` from TypeScript/Astro checking and git tracking so clone reference artifacts do not create third-party build warnings or accidental commits.
 - Verification note: `npm run build` passed with 0 errors, 0 warnings, and 0 hints across 80 checked files; Astro generated 51 static pages. Local route smoke checks returned 200 for `/training/board-training-program/` and `/training/`; `/training/` contains the new program link; `dist/sitemap.xml` contains `/training/board-training-program/`.
 - Visual QA note: Browser plugin was not exposed and project Playwright is not installed, so screenshots were captured with temporary Playwright CLI using the system Chrome channel. Desktop 1440px and mobile 390px screenshots were reviewed; mobile clipping found in the first Chrome-headless pass was fixed by tightening hero copy, using deterministic headline line groups, and adding mobile wrapping rules.
+
+## Board Training Program Cross-Platform Debugging Pass
+
+- [x] Confirm the local live route loads through the browser QA workflow.
+- [x] Check desktop, tablet, and mobile screenshots for clipping, overlap, unreadable text, sticky CTA conflicts, and palette drift.
+- [x] Exercise the primary actions: read resources, program details, inquiry anchor, and NPO Lawyers referral.
+- [x] Exercise the tabbed curriculum control and verify visible state changes.
+- [x] Patch only issues reproduced by rendered QA or static audit.
+- [x] Run a fresh production build and route checks.
+- [x] Document results and push any code changes.
+
+### Board Training Program Cross-Platform Debugging Review
+
+- Added a direct `/articles/` path to the standalone program page so all four requested actions are visible from this page: article library, program overview, webinar/in-person inquiry, and `NPOlawyers.com`.
+- Fixed low-contrast dark-section buttons by adding page-scoped curriculum button colors and a footer-scoped secondary button override.
+- Improved curriculum control semantics by changing the visual tabs into a named radio fieldset with `aria-controls`, panel IDs, and region labels.
+- Fixed mobile sticky CTA overlap by adding safe-area-aware sticky padding and footer bottom breathing room.
+- Verification note: Browser QA loaded `/training/board-training-program/`, confirmed title/URL, no console warnings/errors, no horizontal overflow, article/webinar/in-person/inquiry/`NPOlawyers.com` links, curriculum tab state changes, footer secondary contrast, and mobile footer clearance. Contrast spot checks were 11.03:1 for light text on navy, 5.75:1 for the selected tab, 8.38:1 for the packet label, and 7.35:1 for tab kicker text. `npm run check`, `git diff --check`, and `npm run build` passed; Astro generated 51 static pages. Live route checks returned 200 for `/training/board-training-program/`, `/training/`, `/articles/`, `/training/webinars`, and `/training/in-person`; built HTML contains the four primary action links and sitemap includes `/training/board-training-program/`.
