@@ -417,6 +417,27 @@ Before calling the implementation done:
 - Mobile browser smoke check at 390px confirmed the mobile menu opens, desktop nav hides, and the palette is applied.
 - In-app browser screenshot capture still timed out in the browser backend, so visual evidence is via rendered computed styles and live browser state rather than a saved screenshot.
 
+## Hostinger Temporary Domain Deployment
+
+- [x] Update static site URL/canonical config to `https://powderblue-bat-208812.hostingersite.com/`.
+- [x] Run a fresh local production build.
+- [x] Verify SSH key access to `u211961595@191.96.56.130:65002` without printing secrets.
+- [x] Inspect the remote Hostinger directory layout and locate the correct `public_html`.
+- [x] Back up any existing remote `public_html` contents before upload.
+- [x] Upload the Astro `dist/` contents to the temporary domain.
+- [x] Verify deployed homepage, deep links, downloads, sitemap, robots, and RSS over HTTPS.
+- [x] Commit and push the deployment configuration/docs changes.
+
+### Hostinger Temporary Domain Deployment Notes
+
+- Fresh production build passed on 2026-05-19 with 0 Astro check errors, 0 warnings, and 50 static pages generated into `C:\CDX\dist`.
+- Key-only SSH now works with the dedicated deploy key at `C:\CDX\.ssh\cdx_hostinger_deploy_ed25519`; the original key was accepted by the server but could not complete non-interactive signing.
+- Remote web root confirmed as `/home/u211961595/domains/powderblue-bat-208812.hostingersite.com/public_html`.
+- Pre-existing WordPress files were backed up before replacement at `/home/u211961595/cdx-backups/powderblue-bat-208812.hostingersite.com/public_html-20260519-132357.tgz`.
+- Static Astro files were uploaded and extracted into the confirmed temporary-domain `public_html`.
+- Added `public/.htaccess` so Hostinger/Apache serves `404.html` for unknown static paths.
+- HTTPS smoke checks passed for `/`, `/next-meeting/`, `/articles/`, `/articles/board-is-supreme-you-are-not/`, `/tools/`, `/downloads/board-red-flags.md`, `/training/`, `/training/webinars/`, `/training/in-person/`, `/sitemap.xml`, `/robots.txt`, `/rss.xml`, and a custom 404 path.
+
 ### Integrated Local Live Prototype Review
 
 - Ran all 10 worker roles as subagents in waves, then integrated build blockers and missing navigation routes in the main workspace.

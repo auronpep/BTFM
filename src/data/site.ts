@@ -3,7 +3,7 @@ export const site = {
   productName: 'The Boardroom Field Manual',
   description:
     'Practical California nonprofit board training for directors preparing for meetings, budgets, audits, executive oversight, minutes, risk, and legal escalation.',
-  url: 'https://boardtrainingprinciples.org',
+  url: 'https://powderblue-bat-208812.hostingersite.com',
   publisher: 'California Center for Nonprofit Law',
   firmName: 'NPO Lawyers',
   firmUrl: 'https://NPOlawyers.com',
