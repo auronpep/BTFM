@@ -8,6 +8,8 @@ Recommended build direction: Astro static site, MDX content collections, restrai
 
 Competition framing: this proposal should win by being the easiest to build, easiest to maintain, and clearest to present to the boss. The visual design should be polished, but the real advantage is that the content system and worker plan can become a production website quickly.
 
+V2 direction: after reviewing `docs/BT_Plan_v2.md`, the primary launch concept should be sharper than a general resource library. Treat the site as `The Boardroom Field Manual` for working California nonprofit board members who already sit in board meetings and need help with budgets, audits, executive oversight, minutes, risk, and legal escalation.
+
 ## Primary Goals
 
 1. Help nonprofit board members understand what a board actually does.
@@ -17,6 +19,7 @@ Competition framing: this proposal should win by being the easiest to build, eas
 
 ## Audiences
 
+- Primary launch persona: working board members of established California nonprofits, especially organizations with meaningful revenue, paid staff, public filings, insurance, budgets, audits, and board accountability.
 - New nonprofit board members who do not know what their role requires.
 - Founders building a board for a new charity.
 - Board chairs trying to run cleaner meetings.
@@ -86,7 +89,7 @@ Gaps to correct:
 
 Recommended public positioning:
 
-> Practical board training for nonprofits that need to govern well.
+> A practical boardroom field manual for California nonprofit leaders who need to govern serious organizations without micromanaging them.
 
 Supporting idea:
 
@@ -111,12 +114,15 @@ Avoid:
 
 Primary navigation:
 
-- `Articles`
-- `Boards 101`
-- `Scenarios`
-- `Downloads`
+- `Next Meeting`
+- `Money & Audit`
+- `Executive Oversight`
+- `Risk & Safety`
+- `Minutes & Records`
+- `California Board Rules`
+- `Tools`
 - `Training`
-- `NPO Lawyers`
+- `Visit NPOlawyers.com`
 
 Page map:
 
@@ -145,6 +151,27 @@ Page map:
 - `/contact`
   General training inquiry.
 
+V2 route additions and replacements:
+
+- `/next-meeting`
+  Meeting-prep chooser for agenda items such as budget approval, audit/Form 990, executive report, compensation, conflicts, safety, bylaws, annual meeting, and difficult board issues.
+- `/working-board`
+  Primary learning path for established nonprofits with staff, revenue, audits, risk, public filings, and executive oversight.
+- `/starting-a-nonprofit`
+  Secondary path for founders, first boards, formation, first meetings, fiscal sponsorship, and tax exemption.
+- `/money-audit`
+  Budget, audit, finance, Form 990, internal controls, and audit committee material.
+- `/executive-oversight`
+  CEO/ED reports, delegation, board authority, executive evaluation, and trust-but-verify content.
+- `/risk-safety`
+  Insurance, safety, youth protection, personnel, compliance, donor restrictions, and risk review.
+- `/minutes-records`
+  Minutes, motions, board packets, records, bylaws, policies, and annual meetings.
+- `/california-board-rules`
+  California-specific rules and issue spotters, with source notes and attorney-review flags.
+- `/tools`
+  Board Packet Lab, Question Bank, Red Flag Library, Self-Assessment, and downloadable tools.
+
 ## Homepage Specification
 
 First viewport:
@@ -168,6 +195,17 @@ Homepage sections:
 4. Board training program summary.
 5. Latest articles.
 6. Firm trust footer with phone, disclaimer, and NPO Lawyers link.
+
+V2 homepage override:
+
+1. Lead with `Board service gets serious when the organization gets serious.`
+2. Primary CTA: `Prepare for Your Next Board Meeting`.
+3. Secondary CTA: `Open the $3M Board Member Guide`.
+4. Keep training and NPO Lawyers actions visible.
+5. Add a boardroom problem picker before generic article browsing.
+6. Add the three jobs of the board: Strategy, Safety, Audit.
+7. Feature tools before latest articles.
+8. Feature mature-board scenarios before beginner education.
 
 ## Visual System
 

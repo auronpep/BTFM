@@ -15,6 +15,7 @@
 - [x] Add parallel-worker execution plan.
 - [x] Add tooling recommendations for Codex, Claude Code, Google Stitch, Figma, and supporting tools.
 - [x] Record lesson that AM is bypassed for this project.
+- [x] Review `docs/BT_Plan_v2.md` and revise worker plan before implementation kickoff.
 
 ## Project Goal
 
@@ -36,6 +37,17 @@ The site has four primary actions:
 - `https://mediumslateblue-caterpillar-718620.hostingersite.com/`
 - IRS, California Attorney General, BoardSource, National Council of Nonprofits, W3C/WCAG, and Google Search Central references.
 - Google Stitch, Figma MCP, Claude Code plugins/subagents, Codex configuration, Astro Hostinger deployment, Hostinger Git deployment, and Hostinger cache references.
+- `docs/BT_Plan_v2.md`, which reframes the site as a boardroom field manual for working California nonprofit board members.
+
+## V2 Implementation Override
+
+Use `planning/PARALLEL_WORK_PLAN.md` and `planning/BT_PLAN_V2_WORKER_CHANGES.md` for implementation kickoff. Older sections in this task file remain useful background, but the build should now prioritize:
+
+- Boardroom field manual positioning.
+- Working-board persona before beginner/founder persona.
+- Situational navigation: Next Meeting, Money & Audit, Executive Oversight, Risk & Safety, Minutes & Records, California Board Rules, Tools, Training.
+- Board Packet Lab, Question Bank, Red Flag Library, Mature Board Self-Assessment, and meeting-ready article templates.
+- California-specific content with source checks and attorney-review flags.
 
 ## Content Strategy
 
@@ -297,6 +309,7 @@ Before calling the implementation done:
 - `planning/TOOLING_RECOMMENDATIONS.md`
 - `planning/STITCH_PROMPTS.md`
 - `planning/COMPETITION_REVIEW_PACKAGE.md`
+- `planning/BT_PLAN_V2_WORKER_CHANGES.md`
 
 ## Open Decisions
 

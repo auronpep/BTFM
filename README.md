@@ -8,6 +8,7 @@ The current project materials are in `docs/`.
 
 - `planning/DESIGN_IMPLEMENTATION_PLAN.md` - boss-ready design, content, UX, and implementation plan.
 - `planning/PARALLEL_WORK_PLAN.md` - worker split, branch ownership, merge order, and definition of done.
+- `planning/BT_PLAN_V2_WORKER_CHANGES.md` - review of the updated BT plan and worker changes before kickoff.
 - `planning/HOSTINGER_DEPLOYMENT_PLAN.md` - static-first Hostinger deployment plan.
 - `planning/TOOLING_RECOMMENDATIONS.md` - Codex, Claude Code, Google Stitch, Figma, Copilot, and connector recommendations.
 - `planning/STITCH_PROMPTS.md` - prompts for generating concept screens in Google Stitch.

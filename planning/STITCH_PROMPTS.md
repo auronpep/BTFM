@@ -13,7 +13,19 @@ Design a serious, warm, editorial website for a nonprofit board training resourc
 ## Homepage Concept Prompt
 
 ```text
-Create a desktop and mobile homepage for "Board Training Principles", a free nonprofit board training resource from California Center for Nonprofit Law. The first viewport should include the line "Practical training for nonprofit boards that need to govern well." Include four clear actions: Read Articles, Explore the Training Program, Register for a Webinar, Visit NPO Lawyers. Below the hero, include a featured governance scenario, a "New to a board? Start here" learning path, three downloadable templates, latest articles, and a training program callout. Use imagery related to board meetings, agendas, board books, or governance documents. Make the design editorial, credible, and easy to scan.
+Create a desktop and mobile homepage for "The Principles of Board Training", a free nonprofit board training resource from California Center for Nonprofit Law. The product concept is "The Boardroom Field Manual." The first viewport should say "Board service gets serious when the organization gets serious." The audience is working California nonprofit board members who are already reviewing budgets, reading executive reports, managing risk, and making decisions that need to hold up later. Include clear actions: Prepare for Your Next Board Meeting, Open the $3M Board Member Guide, Request Board Training, Register for a Webinar, Visit NPO Lawyers. Below the hero, include a boardroom problem picker, Strategy/Safety/Audit module, featured tools, featured scenarios, training CTA, and legal-help CTA. Use imagery related to board packets, agendas, minutes, budget reports, audit checklists, and governance documents.
+```
+
+## Next Meeting Prompt
+
+```text
+Create a "Prepare for Your Next Board Meeting" page for a nonprofit board training site. The page should let the user choose what is on the agenda: Budget approval, Audit or Form 990, Executive director report, Compensation, Conflict of interest, Insurance or safety, Bylaws or policy changes, Difficult board member issue, Annual meeting. Each card should preview what to read before the meeting, what to ask, what documents matter, what minutes should show, and when to call counsel. The design should feel like a boardroom field manual, not a blog.
+```
+
+## Tools Lab Prompt
+
+```text
+Create a tools landing page for a boardroom field manual. Include Board Packet Lab, Board Question Bank, Board Red Flags, Mature Board Self-Assessment, $3M Board Member Checklist, Board Packet Review Sheet, Audit Committee Readiness Checklist, Budget Deviation Worksheet, Minutes Quality Scorecard, Board Authority Map, and Annual Governance Calendar. Make the tools feel practical and high-status, like documents a serious board member would use before a meeting.
 ```
 
 ## Article Page Prompt
