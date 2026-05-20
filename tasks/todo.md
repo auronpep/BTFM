@@ -521,6 +521,37 @@ Before calling the implementation done:
 - Deferred recommendations: automated Hostinger deployment, GitHub Pages preview hosting, CodeQL for private repo if unavailable, and Copilot coding agent unless human PR review capacity exists.
 - Verification note: research used current GitHub Docs/GitHub Skills sources and local repo inspection. No build was required because this was a docs-only research task.
 
+## UI Anti-AI-Slop Research
+
+- [x] Inspect current deployed UI across homepage, training, article, tools, and California rules routes.
+- [x] Review current CSS/component patterns for visual repetition, typography, cards, imagery, and layout conventions.
+- [x] Research current UX/UI guidance on visual trust, hierarchy, accessibility, and AI-saturated design signals.
+- [x] Recommend concrete UI improvement direction for V2 polish.
+- [x] Document research results and verification notes.
+
+### UI Anti-AI-Slop Research Review
+
+- Added `planning/UI_ANTI_AI_SLOP_RESEARCH.md` with an audit and V2 polish direction.
+- Browser QA found the deployed pages load with no console warnings/errors, but the homepage has slight mobile horizontal overflow at a 390px-class viewport.
+- Key audited routes currently render with zero `<img>` / `<picture>` elements, so the site lacks concrete visual assets and relies heavily on typography, cards, gradients, and callouts.
+- Main UI risks: repeated oversized serif H1s, fallback-heavy font strategy, beige/brown one-note palette, crowded desktop nav, repeated `boardroom-card` grids, and too few visible authorship/provenance cues.
+- Recommended direction: make the board packet the central visual metaphor, add domain-specific document/agenda/budget/minutes visuals, reduce giant serif repetition, add semantic topic accents, replace some card grids with boardroom-native structures, and add a visual QA gate.
+- Verification note: docs-only research plus rendered browser inspection; no production code was changed.
+
+## UI-Based V2 Backlog Items
+
+- [x] Convert the UI anti-slop research into issue-ready UI-only backlog items.
+- [x] Prioritize immediate polish defects, core visual-system work, and distinctiveness/QA items.
+- [x] Exclude non-UI work such as CI, deployment automation, backend forms, and broad content expansion.
+
+### UI-Based V2 Backlog Review
+
+- Added `planning/UI_V2_BACKLOG_ITEMS.md` with 15 UI-only items.
+- P0 items: fix homepage mobile overflow, establish page-type H1 scale rules, and make font strategy intentional.
+- P1 items: create board-packet visual components, redesign homepage hero around a packet scene, redesign tools around document previews, redesign article/rule pages around evidence/source UI, reduce generic card grids, and add semantic topic accents.
+- P2 items: simplify desktop nav, add task-focused icons, add provenance/review metadata UI, create a visual asset pack, and add a UI design QA checklist.
+- Suggested first sprint: mobile overflow, H1 scale, font strategy, topic accents, first `AnnotatedPacket` / `AgendaPreview`, and homepage hero integration.
+
 ## Private GitHub Repo Setup and Push
 
 - [x] Confirm local repository root, current branch, and remote URL.
