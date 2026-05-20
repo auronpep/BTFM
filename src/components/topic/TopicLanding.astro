@@ -129,7 +129,8 @@ const resourceGroups = [
   .topic-hero__deck {
     max-width: 66ch;
     color: var(--color-muted-ink);
-    font-size: clamp(1.08rem, 2vw, 1.3rem);
+    font-size: var(--type-lead);
+    line-height: 1.65;
   }
 
   .topic-actions {
@@ -142,7 +143,7 @@ const resourceGroups = [
   .topic-note {
     border: 1px solid var(--color-soft-border);
     border-left: 0.35rem solid var(--color-teal);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     padding: var(--space-5);
     background: var(--color-white);
   }
@@ -182,7 +183,7 @@ const resourceGroups = [
   }
 
   .resource-group h3 {
-    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-size: var(--type-h3);
   }
 
   .resource-grid {

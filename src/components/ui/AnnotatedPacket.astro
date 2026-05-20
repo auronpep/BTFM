@@ -52,48 +52,48 @@ const notes = [
 <style>
   .annotated-packet {
     position: relative;
-    min-height: 34rem;
+    min-height: 31rem;
     display: grid;
-    grid-template-columns: minmax(12rem, 0.9fr) minmax(16rem, 1.1fr);
-    gap: var(--space-5);
+    grid-template-columns: minmax(12rem, 0.86fr) minmax(16rem, 1.14fr);
+    gap: var(--space-4);
     align-items: end;
     border-left: 0.35rem solid var(--color-records);
-    padding: var(--space-6);
+    padding: var(--space-5);
     background:
       linear-gradient(rgba(30, 42, 67, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(30, 42, 67, 0.08) 1px, transparent 1px),
       rgba(245, 240, 234, 0.74);
-    background-size: 2.6rem 2.6rem;
+    background-size: 2.35rem 2.35rem;
     box-shadow: inset 0 0 0 1px rgba(95, 75, 39, 0.12);
   }
 
   .annotated-packet__cover {
-    min-height: 21rem;
+    min-height: 18.5rem;
     display: grid;
     align-content: end;
-    border-radius: var(--radius-md);
-    padding: var(--space-6);
+    border-radius: var(--radius-sm);
+    padding: var(--space-5);
     background: var(--color-navy);
     color: var(--color-paper);
-    box-shadow: 0 1.4rem 3rem rgba(30, 42, 67, 0.24);
+    box-shadow: 0 1rem 2.4rem rgba(30, 42, 67, 0.22);
   }
 
   .annotated-packet__cover p {
     margin: 0 0 var(--space-3);
     color: #d8c76a;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
   .annotated-packet__cover h2 {
-    max-width: 9ch;
+    max-width: 10ch;
     margin: 0;
     color: var(--color-white);
-    font-size: 3.25rem;
-    line-height: 0.95;
+    font-size: 2.55rem;
+    line-height: 1.06;
   }
 
   .annotated-packet__cover span {
@@ -101,22 +101,23 @@ const notes = [
     display: block;
     margin-top: var(--space-4);
     color: rgba(231, 225, 219, 0.84);
-    line-height: 1.5;
+    font-size: 0.94rem;
+    line-height: 1.55;
   }
 
   .annotated-packet__agenda {
     position: relative;
     z-index: 2;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
   }
 
   .annotated-packet__notes {
     position: absolute;
-    right: var(--space-5);
+    left: var(--space-5);
     top: var(--space-5);
-    width: min(18rem, 42%);
+    width: min(18rem, 43%);
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
   .annotated-packet__notes p {
@@ -126,11 +127,12 @@ const notes = [
     align-items: start;
     margin: 0;
     border: 1px solid rgba(95, 75, 39, 0.2);
-    border-radius: var(--radius-md);
-    padding: var(--space-3);
-    background: rgba(245, 240, 234, 0.94);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(251, 248, 242, 0.94);
     color: var(--color-ink);
-    box-shadow: 0 0.65rem 1.4rem rgba(30, 42, 67, 0.12);
+    box-shadow: 0 0.4rem 1rem rgba(30, 42, 67, 0.1);
+    font-size: 0.78rem;
     font-weight: 800;
     line-height: 1.25;
   }
@@ -149,20 +151,20 @@ const notes = [
 
   .annotated-packet__tabs {
     position: absolute;
-    bottom: var(--space-5);
-    left: var(--space-6);
+    bottom: var(--space-4);
+    left: var(--space-5);
     display: flex;
     gap: var(--space-2);
   }
 
   .annotated-packet__tabs span {
     border: 1px solid rgba(95, 75, 39, 0.2);
-    border-radius: 999px;
+    border-radius: var(--radius-sm);
     padding: 0.35rem 0.65rem;
     background: rgba(245, 240, 234, 0.88);
     color: var(--color-ink);
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.64rem;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -185,16 +187,30 @@ const notes = [
     .annotated-packet {
       gap: var(--space-4);
       margin-inline: -0.625rem;
-      padding: var(--space-4);
+      padding: var(--space-3);
+    }
+
+    .annotated-packet__agenda,
+    .annotated-packet__notes,
+    .annotated-packet__tabs {
+      display: none;
     }
 
     .annotated-packet__cover {
-      min-height: 17rem;
-      padding: var(--space-5);
+      min-height: 8.5rem;
+      padding: var(--space-4);
     }
 
     .annotated-packet__cover h2 {
-      font-size: 2.45rem;
+      max-width: 12ch;
+      font-size: 1.35rem;
+      line-height: 1.15;
+    }
+
+    .annotated-packet__cover span {
+      max-width: 32ch;
+      margin-top: var(--space-3);
+      font-size: 0.82rem;
     }
   }
 </style>

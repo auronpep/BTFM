@@ -10,6 +10,7 @@ build/
 .next/
 .astro/
 website-clones/
+screenshots/
 
 # Local environment
 .env

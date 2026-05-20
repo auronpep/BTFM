@@ -1,11 +1,41 @@
 ---
 const problems = [
-  ["Budget approval", "Know what the board is actually authorizing before the vote."],
-  ["Audit or Form 990", "Prepare questions for the audit, tax return, and governance disclosures."],
-  ["Executive director report", "Move from listening to oversight without micromanaging."],
-  ["Conflict of interest", "Spot when loyalty, disclosure, and abstention need structure."],
-  ["Insurance/safety", "Treat safety systems as board risk, not staff housekeeping."],
-  ["Annual meeting", "Confirm required actions, elections, minutes, and records."],
+  {
+    title: "Budget approval",
+    label: "Money",
+    accent: "var(--color-teal)",
+    description: "Know what the board is actually authorizing before the vote.",
+  },
+  {
+    title: "Audit or Form 990",
+    label: "Audit",
+    accent: "var(--color-records)",
+    description: "Prepare questions for the audit, tax return, and governance disclosures.",
+  },
+  {
+    title: "Executive director report",
+    label: "Oversight",
+    accent: "var(--color-slate)",
+    description: "Move from listening to oversight without micromanaging.",
+  },
+  {
+    title: "Conflict of interest",
+    label: "Rules",
+    accent: "var(--color-rules)",
+    description: "Spot when loyalty, disclosure, and abstention need structure.",
+  },
+  {
+    title: "Insurance/safety",
+    label: "Risk",
+    accent: "var(--color-risk)",
+    description: "Treat safety systems as board risk, not staff housekeeping.",
+  },
+  {
+    title: "Annual meeting",
+    label: "Records",
+    accent: "var(--color-brass)",
+    description: "Confirm required actions, elections, minutes, and records.",
+  },
 ];
 ---
 
@@ -18,10 +48,18 @@ const problems = [
     </p>
   </div>
   <div class="problem-picker__grid">
-    {problems.map(([title, description]) => (
-      <a class="problem-picker__card" href={`/next-meeting/#${title.toLowerCase().replaceAll(" ", "-").replaceAll("/", "-")}`}>
-        <strong>{title}</strong>
-        <span>{description}</span>
+    {problems.map((problem, index) => (
+      <a
+        class="problem-picker__row"
+        href={`/next-meeting/#${problem.title.toLowerCase().replaceAll(" ", "-").replaceAll("/", "-")}`}
+        style={`--problem-accent: ${problem.accent}`}
+      >
+        <span class="problem-picker__number">{String(index + 1).padStart(2, "0")}</span>
+        <span class="problem-picker__body">
+          <strong>{problem.title}</strong>
+          <span>{problem.description}</span>
+        </span>
+        <em>{problem.label}</em>
       </a>
     ))}
   </div>
@@ -55,45 +93,70 @@ const problems = [
 
   .problem-picker__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.9rem;
+    gap: 1px;
+    background: rgba(86, 68, 36, 0.18);
   }
 
-  .problem-picker__card {
-    min-height: 9rem;
-    padding: 1.1rem;
-    border: 1px solid var(--color-soft-border);
+  .problem-picker__row {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: start;
+    min-height: 6.25rem;
+    padding: var(--space-4);
+    border-left: 0.26rem solid var(--problem-accent);
     color: var(--color-ink);
-    background: var(--color-paper);
+    background: var(--color-white);
     text-decoration: none;
   }
 
-  .problem-picker__card strong,
-  .problem-picker__card span {
+  .problem-picker__number {
+    color: var(--problem-accent);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+  }
+
+  .problem-picker__body,
+  .problem-picker__body strong,
+  .problem-picker__body span {
     display: block;
   }
 
-  .problem-picker__card strong {
+  .problem-picker__body strong {
     font-family: var(--font-sans);
     font-size: 1.08rem;
     font-weight: 800;
     line-height: 1.25;
   }
 
-  .problem-picker__card span {
-    margin-top: 0.65rem;
+  .problem-picker__body span {
+    margin-top: 0.45rem;
     color: var(--color-muted-ink);
     font-family: var(--font-sans);
     font-size: 0.96rem;
     line-height: 1.45;
   }
 
-  .problem-picker__card:hover {
-    border-color: var(--color-slate);
-    background: var(--color-white);
+  .problem-picker__row em {
+    border: 1px solid rgba(86, 68, 36, 0.18);
+    padding: 0.22rem 0.45rem;
+    color: var(--problem-accent);
+    background: rgba(251, 248, 242, 0.76);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  .problem-picker__card:focus-visible {
+  .problem-picker__row:hover {
+    background: rgba(251, 248, 242, 0.88);
+  }
+
+  .problem-picker__row:focus-visible {
     outline: 3px solid var(--color-brass);
     outline-offset: 3px;
   }
@@ -102,6 +165,15 @@ const problems = [
     .problem-picker,
     .problem-picker__grid {
       grid-template-columns: 1fr;
+    }
+
+    .problem-picker__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2);
+    }
+
+    .problem-picker__row em {
+      justify-self: start;
     }
   }
 </style>

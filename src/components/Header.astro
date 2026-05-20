@@ -1,13 +1,10 @@
 ---
 const navItems = [
-  { label: "Next Meeting", href: "/next-meeting" },
-  { label: "Money & Audit", href: "/money-audit" },
-  { label: "Executive Oversight", href: "/executive-oversight" },
-  { label: "Risk & Safety", href: "/risk-safety" },
-  { label: "Minutes & Records", href: "/minutes-records" },
-  { label: "California Board Rules", href: "/california-board-rules" },
+  { label: "Articles", href: "/articles" },
+  { label: "Board Rules", href: "/california-board-rules" },
   { label: "Tools", href: "/tools" },
-  { label: "Training", href: "/training" },
+  { label: "Board Training", href: "/training/board-training-program" },
+  { label: "Webinars", href: "/training/webinars" },
 ];
 ---
 
@@ -45,13 +42,14 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 0.25rem solid var(--color-brass);
+    border-bottom: 0.18rem solid var(--color-brass);
     background: var(--color-navy);
     color: var(--color-paper);
+    box-shadow: 0 0.35rem 1rem rgba(30, 42, 67, 0.16);
   }
 
   .header-inner {
-    min-height: 4.75rem;
+    min-height: 4.85rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -62,6 +60,7 @@ const navItems = [
     display: inline-flex;
     align-items: center;
     gap: var(--space-3);
+    min-width: 15rem;
     color: var(--color-paper);
     text-decoration: none;
   }
@@ -76,11 +75,13 @@ const navItems = [
     display: grid;
     place-items: center;
     border: 1px solid rgba(231, 225, 219, 0.35);
-    border-radius: var(--radius-sm);
+    border-radius: 0.18rem;
     background: var(--color-burgundy);
     color: var(--color-paper);
     font-family: var(--font-serif);
-    font-weight: 800;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
 
   .brand-name,
@@ -90,17 +91,17 @@ const navItems = [
 
   .brand-name {
     font-family: var(--font-serif);
-    font-size: 1.08rem;
-    font-weight: 800;
-    line-height: 1.1;
+    font-size: 1.02rem;
+    font-weight: 700;
+    line-height: 1.18;
   }
 
   .brand-subtitle {
     color: var(--color-brass);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -108,8 +109,8 @@ const navItems = [
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: clamp(0.55rem, 1vw, 1rem);
-    font-size: 0.88rem;
+    gap: clamp(0.7rem, 1.3vw, 1.35rem);
+    font-size: 0.86rem;
     font-weight: 800;
   }
 
@@ -117,17 +118,21 @@ const navItems = [
     min-height: 2.75rem;
     display: inline-flex;
     align-items: center;
-    border-radius: var(--radius-sm);
+    border-bottom: 0.12rem solid transparent;
     color: var(--color-paper);
     text-decoration: none;
   }
 
   .desktop-nav a:hover {
+    border-bottom-color: var(--color-brass);
     color: var(--color-brass);
   }
 
   .desktop-nav .nav-legal {
-    padding-inline: var(--space-3);
+    border: 1px solid rgba(231, 225, 219, 0.16);
+    border-bottom-color: rgba(231, 225, 219, 0.16);
+    border-radius: var(--radius-sm);
+    padding-inline: var(--space-4);
     background: var(--color-burgundy);
     color: var(--color-white);
   }
@@ -157,8 +162,8 @@ const navItems = [
       display: grid;
       place-items: center;
       gap: 0.22rem;
-      border: 1px solid var(--color-soft-border);
-      border-radius: var(--radius-md);
+      border: 1px solid rgba(231, 225, 219, 0.28);
+      border-radius: var(--radius-sm);
       background: var(--color-burgundy);
       cursor: pointer;
       list-style: none;
@@ -183,7 +188,7 @@ const navItems = [
       display: grid;
       gap: var(--space-1);
       border: 1px solid var(--color-soft-border);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
       padding: var(--space-2);
       background: var(--color-white);
       box-shadow: 0 1rem 2.5rem var(--color-shadow);
@@ -193,7 +198,7 @@ const navItems = [
       min-height: 2.75rem;
       display: flex;
       align-items: center;
-      border-radius: var(--radius-sm);
+      border-radius: 0.18rem;
       padding: var(--space-2) var(--space-3);
       color: var(--color-navy);
       font-weight: 800;

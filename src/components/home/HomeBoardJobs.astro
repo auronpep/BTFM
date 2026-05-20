@@ -17,21 +17,25 @@ const jobs = [
 
 <section class="board-jobs" aria-labelledby="board-jobs-title">
   <h2 id="board-jobs-title">The three jobs that make board service real.</h2>
-  <div class="board-jobs__list">
-    {jobs.map((job) => (
+  <ol class="board-jobs__list">
+    {jobs.map((job, index) => (
       <article class="board-jobs__item">
+        <span>{String(index + 1).padStart(2, "0")}</span>
         <h3>{job.title}</h3>
         <p>{job.text}</p>
       </article>
     ))}
-  </div>
+  </ol>
 </section>
 
 <style>
   .board-jobs {
     padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4.5rem);
     color: var(--color-white);
-    background: var(--color-navy);
+    background:
+      linear-gradient(90deg, rgba(216, 199, 106, 0.08) 1px, transparent 1px),
+      var(--color-navy);
+    background-size: 3rem 100%;
   }
 
   .board-jobs h2 {
@@ -48,26 +52,38 @@ const jobs = [
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
     margin-top: 2rem;
+    padding: 0;
     background: rgba(231, 225, 219, 0.26);
+    list-style: none;
   }
 
   .board-jobs__item {
-    min-height: 15rem;
-    padding: 1.35rem;
-    background: var(--color-navy);
+    min-height: 14rem;
+    padding: var(--space-5);
+    background: rgba(30, 42, 67, 0.94);
+  }
+
+  .board-jobs__item span {
+    display: block;
+    margin-bottom: var(--space-8);
+    color: #d8c76a;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
   }
 
   .board-jobs h3 {
     margin: 0;
-    color: #d8c76a;
+    color: var(--color-white);
     font-family: var(--font-serif);
-    font-size: 1.6rem;
+    font-size: 1.42rem;
     font-weight: 700;
     line-height: 1.1;
   }
 
   .board-jobs p {
-    margin: 1rem 0 0;
+    margin: var(--space-4) 0 0;
     color: rgba(245, 240, 234, 0.86);
     font-family: var(--font-sans);
     font-size: 1rem;

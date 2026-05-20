@@ -75,14 +75,14 @@ const statusLabels = {
 <style>
   .agenda-preview {
     border: 1px solid rgba(95, 75, 39, 0.22);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
     background:
       linear-gradient(rgba(95, 75, 39, 0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(95, 75, 39, 0.06) 1px, transparent 1px),
       var(--color-white);
     background-size: 2rem 2rem;
-    box-shadow: 0 1rem 2.5rem var(--color-shadow);
+    box-shadow: 0 0.75rem 2rem var(--color-shadow);
   }
 
   .agenda-preview__header {
@@ -91,7 +91,7 @@ const statusLabels = {
     align-items: start;
     justify-content: space-between;
     border-bottom: 1px solid var(--color-soft-border);
-    padding-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
   }
 
   .agenda-preview__header p,
@@ -102,7 +102,7 @@ const statusLabels = {
   .agenda-preview__header p {
     color: var(--color-muted-ink);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.66rem;
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -110,16 +110,17 @@ const statusLabels = {
 
   .agenda-preview__header h3 {
     margin-top: var(--space-1);
-    font-size: 1.45rem;
+    font-size: 1.2rem;
+    line-height: 1.2;
   }
 
   .agenda-preview__header span {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.2rem;
+    height: 2.2rem;
     display: grid;
     flex: 0 0 auto;
     place-items: center;
-    border-radius: var(--radius-sm);
+    border-radius: 0.18rem;
     background: var(--color-navy);
     color: var(--color-white);
     font-family: var(--font-serif);
@@ -128,8 +129,8 @@ const statusLabels = {
 
   .agenda-preview__items {
     display: grid;
-    gap: var(--space-3);
-    margin: var(--space-5) 0;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
     padding: 0;
     list-style: none;
   }
@@ -137,47 +138,48 @@ const statusLabels = {
   .agenda-preview__items li {
     display: grid;
     grid-template-columns: 2rem minmax(0, 1fr) auto;
-    gap: var(--space-3);
+    gap: var(--space-2);
     align-items: start;
     border-bottom: 1px solid rgba(95, 75, 39, 0.16);
-    padding-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
   }
 
   .agenda-preview__number {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 1.55rem;
+    height: 1.55rem;
     display: grid;
     place-items: center;
     border-radius: 50%;
     background: rgba(47, 98, 93, 0.13);
     color: var(--color-teal);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     font-weight: 800;
   }
 
   .agenda-preview strong {
     display: block;
     color: var(--color-ink);
-    font-weight: 900;
+    font-size: 0.92rem;
+    font-weight: 800;
     line-height: 1.2;
   }
 
   .agenda-preview__items p {
     margin: var(--space-1) 0 0;
     color: var(--color-muted-ink);
-    font-size: 0.96rem;
+    font-size: 0.84rem;
     line-height: 1.45;
   }
 
   .agenda-preview em {
     border: 1px solid var(--color-soft-border);
-    border-radius: 999px;
-    padding: 0.2rem 0.45rem;
+    border-radius: var(--radius-sm);
+    padding: 0.18rem 0.38rem;
     color: var(--color-ink);
     background: rgba(135, 114, 31, 0.12);
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-style: normal;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -190,7 +192,7 @@ const statusLabels = {
     padding: var(--space-3);
     background: rgba(135, 114, 31, 0.12);
     color: var(--color-ink);
-    font-size: 0.96rem;
+    font-size: 0.88rem;
     font-weight: 700;
     line-height: 1.45;
   }

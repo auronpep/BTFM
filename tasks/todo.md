@@ -595,3 +595,46 @@ Before calling the implementation done:
 - Deployed static build to Hostinger with backup `public_html-20260520031202.tgz`.
 - Live smoke checks returned HTTP 200 for `/`, `/training/board-training-program/`, `/articles/`, `/tools/`, `/california-board-rules/`, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
 - Live browser smoke confirmed the homepage packet scene, Newsreader H1, no overflow, no console warnings/errors, and program-page training inquiry/NPOlawyers.com links.
+
+## 25-Pass Critical Design Refinement Sprint
+
+- [x] Pass 01: Replace the chunky Newsreader/Source Sans direction with a calmer legal-editorial font pair.
+- [x] Pass 02: Rebalance global title/body type scale after the font change.
+- [x] Pass 03: Adjust global button styling so CTAs look deliberate and less template-like.
+- [x] Pass 04: Improve generic boardroom cards with a document/file affordance and tighter elevation.
+- [x] Pass 05: Simplify the desktop navigation around the four actual site actions.
+- [x] Pass 06: Refine the header brand lockup for legibility and authority.
+- [x] Pass 07: Tighten mobile navigation proportions and menu touch targets.
+- [x] Pass 08: Rebalance homepage hero grid, spacing, and first-viewport rhythm.
+- [x] Pass 09: Improve homepage H1 line breaks and visual weight.
+- [x] Pass 10: Make hero CTAs read as primary/secondary actions with stronger grouping.
+- [x] Pass 11: Replace pill-like process chips with a more board-packet-native cue.
+- [x] Pass 12: Refine the annotated packet scene proportions and shadow depth.
+- [x] Pass 13: Improve the agenda preview typography, spacing, and status labels.
+- [x] Pass 14: Improve mobile packet rendering so it does not feel like a clipped desktop artifact.
+- [x] Pass 15: Convert the homepage problem picker away from generic cards toward agenda-style rows.
+- [x] Pass 16: Add meaningful topic accents to problem picker entries.
+- [x] Pass 17: Rework the three board jobs section to feel like a structured governance model.
+- [x] Pass 18: Improve the resources section into document lists instead of plain article boxes.
+- [x] Pass 19: Strengthen the training band so it supports the webinar/in-person conversion path.
+- [x] Pass 20: Check article/tool/rule/program H1s after font change and adjust shared classes as needed.
+- [x] Pass 21: Polish footer CTA and footer visual balance.
+- [x] Pass 22: Run rendered desktop visual audit and fix obvious spacing/alignment issues.
+- [x] Pass 23: Run rendered mobile visual audit and fix overflow/wrapping issues.
+- [x] Pass 24: Run build, accessibility-oriented checks, and route-level browser QA.
+- [x] Pass 25: Deploy, live smoke test, commit, and push the completed refinement sprint.
+
+### 25-Pass Critical Design Refinement Review
+
+- Changed the site font direction from Newsreader / Source Sans 3 to Libre Baskerville / Libre Franklin for a calmer law-firm editorial tone.
+- Simplified the desktop header navigation to Articles, Board Rules, Tools, Board Training, Webinars, and NPOlawyers.com.
+- Reworked homepage hero spacing, CTA hierarchy, board-packet visual proportions, desktop process cue, and compact mobile packet rendering.
+- Converted homepage problem prompts from generic cards into agenda-style rows with semantic topic accents.
+- Reworked the three board jobs section, featured resources lists, training CTA band, global buttons, and boardroom cards.
+- Added `screenshots/` to `.gitignore` and recorded the visual evidence matrix in `tasks/evidence.md`.
+- Visual evidence contact sheet generated at `screenshots/2026-05-20-25-pass-refinement/index.html`.
+- Local route QA checked `/`, `/training/board-training-program/`, `/articles/`, `/tools/`, `/california-board-rules/`, and `/next-meeting/` at 1440x1000 and 390x844: zero horizontal overflow and zero console warnings/errors.
+- Local verification passed: `npm run build`, `git diff --check`, and old-font scan for Newsreader / Source Sans 3 / IBM Plex Mono / ui-sans-serif / Times New Roman.
+- Deployed static build to Hostinger with backup `public_html-20260520034446.tgz`.
+- Live smoke checks returned HTTP 200 for `/`, `/training/board-training-program/`, `/articles/`, `/tools/`, `/california-board-rules/`, `/next-meeting/`, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
+- Live browser smoke confirmed the Libre Baskerville H1, simplified navigation, packet scene, six problem rows, visible training band buttons, no overflow, no console warnings/errors, and program-page inquiry/NPOlawyers.com links.

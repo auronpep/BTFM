@@ -63,7 +63,8 @@ const { eyebrow = "Boardroom Field Manual", title, deck, actions = [] } = Astro.
   .tool-hero__deck {
     max-width: 64ch;
     color: var(--color-muted-ink);
-    font-size: clamp(1.08rem, 2vw, 1.3rem);
+    font-size: var(--type-lead);
+    line-height: 1.65;
   }
 
   .tool-hero__actions {
@@ -76,7 +77,7 @@ const { eyebrow = "Boardroom Field Manual", title, deck, actions = [] } = Astro.
   .tool-hero__note {
     border: 1px solid var(--color-soft-border);
     border-left: 0.35rem solid var(--color-burgundy);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     padding: var(--space-5);
     background: var(--color-white);
   }

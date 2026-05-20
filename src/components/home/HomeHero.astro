@@ -16,18 +16,25 @@ const primaryActions = [
       reports, executive oversight, risk, minutes, and decisions that need to hold up
       after the meeting ends.
     </p>
-    <ul class="home-hero__sequence" aria-label="Board meeting discipline">
-      <li>Read the packet</li>
-      <li>Ask the board question</li>
-      <li>Record the action</li>
-    </ul>
     <div class="home-hero__actions" aria-label="Primary actions">
       {primaryActions.map((action, index) => (
-        <a class:list={["home-hero__button", index === 0 && "home-hero__button--primary"]} href={action.href}>
+        <a
+          class:list={[
+            "button",
+            index === 1 && "secondary",
+            index === 2 && "legal",
+          ]}
+          href={action.href}
+        >
           {action.label}
         </a>
       ))}
     </div>
+    <ol class="home-hero__sequence" aria-label="Board meeting discipline">
+      <li><span>01</span><strong>Read the packet</strong></li>
+      <li><span>02</span><strong>Ask the board question</strong></li>
+      <li><span>03</span><strong>Record the action</strong></li>
+    </ol>
   </div>
   <div class="home-hero__packet">
     <AnnotatedPacket />
@@ -37,82 +44,75 @@ const primaryActions = [
 <style>
   .home-hero {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
-    gap: var(--space-12);
+    grid-template-columns: minmax(0, 0.86fr) minmax(23rem, 1.14fr);
+    gap: clamp(2.5rem, 5vw, 4rem);
     align-items: center;
-    padding: var(--space-16) clamp(1.25rem, 5vw, 4.5rem);
+    padding: clamp(3.75rem, 7vw, 5.75rem) clamp(1.25rem, 5vw, 4.5rem);
     color: var(--color-ink);
-    background: linear-gradient(135deg, rgba(245, 240, 234, 0.88), rgba(231, 225, 219, 0.98));
+    background:
+      linear-gradient(90deg, rgba(135, 114, 31, 0.08) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(251, 248, 242, 0.9), rgba(231, 225, 219, 0.98));
+    background-size: 3.2rem 100%, auto;
+  }
+
+  .home-hero__copy {
+    min-width: 0;
   }
 
   .home-hero h1 {
-    max-width: 14ch;
+    max-width: 13.75ch;
     margin: 0;
     color: var(--color-ink);
   }
 
   .home-hero__lead {
-    max-width: 44rem;
-    margin: 1.5rem 0 0;
+    max-width: 38rem;
+    margin: var(--space-5) 0 0;
     color: var(--color-muted-ink);
     font-family: var(--font-sans);
     font-size: var(--type-lead);
-    line-height: 1.62;
+    line-height: 1.7;
   }
 
   .home-hero__sequence {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: var(--space-5) 0 0;
     padding: 0;
     list-style: none;
+    background: rgba(86, 68, 36, 0.2);
   }
 
   .home-hero__sequence li {
-    border: 1px solid rgba(95, 75, 39, 0.2);
-    border-radius: 999px;
-    padding: 0.4rem 0.65rem;
-    background: rgba(245, 240, 234, 0.72);
+    display: grid;
+    gap: 0.18rem;
+    min-height: 3.7rem;
+    padding: 0.62rem 0.7rem;
+    background: rgba(251, 248, 242, 0.72);
     color: var(--color-ink);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  .home-hero__sequence span {
+    color: var(--color-brass);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .home-hero__sequence strong {
+    font: inherit;
   }
 
   .home-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem;
-    margin-top: 2rem;
-  }
-
-  .home-hero__button {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.85rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--color-ink);
-    color: var(--color-ink);
-    background: transparent;
-    text-decoration: none;
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    font-weight: 800;
-    line-height: 1.2;
-  }
-
-  .home-hero__button--primary {
-    color: var(--color-white);
-    background: var(--color-navy);
-    border-color: var(--color-navy);
-  }
-
-  .home-hero__button:focus-visible {
-    outline: 3px solid var(--color-brass);
-    outline-offset: 3px;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
   }
 
   .home-hero__packet {
@@ -122,22 +122,25 @@ const primaryActions = [
   @media (max-width: 760px) {
     .home-hero {
       grid-template-columns: 1fr;
-      gap: var(--space-10);
+      gap: var(--space-5);
       overflow-x: clip;
-      padding: var(--space-12) 1rem;
+      padding: var(--space-6) 1rem var(--space-5);
     }
 
     .home-hero h1 {
-      max-width: 13ch;
+      max-width: 14ch;
+    }
+
+    .home-hero__sequence {
+      display: none;
     }
 
     .home-hero__actions {
       display: grid;
     }
 
-    .home-hero__button {
-      justify-content: center;
-      text-align: center;
+    .home-hero__actions .button {
+      width: 100%;
     }
   }
 </style>

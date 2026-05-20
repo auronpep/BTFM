@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  --color-ink: #5f4b27;
+  --color-ink: #564424;
   --color-paper: #e7e1db;
   --color-navy: #1e2a43;
   --color-slate: #374157;
@@ -14,21 +14,21 @@
   --color-tools: #375c70;
   --color-training: #1e2a43;
   --color-fog: #d6d0ca;
-  --color-white: #f5f0ea;
-  --color-muted-ink: #7a6544;
-  --color-soft-border: rgba(95, 75, 39, 0.28);
-  --color-shadow: rgba(30, 42, 67, 0.16);
+  --color-white: #fbf8f2;
+  --color-muted-ink: #746342;
+  --color-soft-border: rgba(86, 68, 36, 0.24);
+  --color-shadow: rgba(30, 42, 67, 0.13);
 
-  --font-serif: "Newsreader", "Source Serif 4", Georgia, serif;
-  --font-sans: "Source Sans 3", "Inter", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --font-serif: "Libre Baskerville", Georgia, serif;
+  --font-sans: "Libre Franklin", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Libre Franklin", "Segoe UI", system-ui, sans-serif;
 
-  --type-display: 4.45rem;
-  --type-program: 4.15rem;
-  --type-h1: 3.55rem;
-  --type-h2: 2.65rem;
-  --type-h3: 1.75rem;
-  --type-lead: 1.2rem;
+  --type-display: 3.85rem;
+  --type-program: 3.65rem;
+  --type-h1: 3.2rem;
+  --type-h2: 2.35rem;
+  --type-h3: 1.55rem;
+  --type-lead: 1.16rem;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -64,7 +64,7 @@ body {
   margin: 0;
   min-width: 20rem;
   background:
-    linear-gradient(180deg, rgba(245, 240, 234, 0.54), rgba(231, 225, 219, 0) 22rem),
+    linear-gradient(180deg, rgba(251, 248, 242, 0.72), rgba(231, 225, 219, 0) 22rem),
     var(--color-paper);
   color: var(--color-ink);
 }
@@ -109,7 +109,7 @@ h4 {
   font-family: var(--font-serif);
   font-weight: 700;
   letter-spacing: 0;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 h1 {
@@ -126,19 +126,19 @@ h3 {
 
 .display-title {
   font-size: var(--type-display);
-  line-height: 0.94;
+  line-height: 1.03;
 }
 
 .program-title {
   font-size: var(--type-program);
-  line-height: 0.98;
+  line-height: 1.04;
 }
 
 .editorial-title,
 .tool-title,
 .topic-title {
   font-size: var(--type-h1);
-  line-height: 1.02;
+  line-height: 1.08;
 }
 
 p {
@@ -183,9 +183,9 @@ small {
 .kicker {
   color: var(--color-muted-ink);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -197,15 +197,18 @@ button.button {
   justify-content: center;
   gap: var(--space-2);
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  padding: 0.72rem 1.05rem;
   background: var(--color-slate);
   color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
   font-weight: 800;
   line-height: 1.1;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 0.45rem 1rem rgba(30, 42, 67, 0.08);
 }
 
 .button:hover {
@@ -215,8 +218,9 @@ button.button {
 
 .button.secondary {
   border-color: var(--color-soft-border);
-  background: transparent;
+  background: rgba(251, 248, 242, 0.52);
   color: var(--color-ink);
+  box-shadow: none;
 }
 
 .button.secondary:hover {
@@ -240,32 +244,43 @@ button.button {
 }
 
 .boardroom-card {
+  position: relative;
   border: 1px solid var(--color-soft-border);
-  border-top: 0.3rem solid var(--card-accent, var(--color-slate));
-  border-radius: var(--radius-md);
+  border-left: 0.28rem solid var(--card-accent, var(--color-slate));
+  border-radius: var(--radius-sm);
   padding: var(--space-5);
   background: var(--color-white);
-  box-shadow: 0 0.75rem 1.875rem var(--color-shadow);
+  box-shadow: 0 0.55rem 1.35rem var(--color-shadow);
+}
+
+.boardroom-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: var(--space-4);
+  width: 3.5rem;
+  height: 0.22rem;
+  background: var(--card-accent, var(--color-slate));
 }
 
 @media (max-width: 64rem) {
   :root {
-    --type-display: 3.55rem;
-    --type-program: 3.35rem;
-    --type-h1: 3rem;
-    --type-h2: 2.25rem;
-    --type-h3: 1.55rem;
+    --type-display: 3.05rem;
+    --type-program: 2.9rem;
+    --type-h1: 2.8rem;
+    --type-h2: 2.08rem;
+    --type-h3: 1.45rem;
   }
 }
 
 @media (max-width: 42rem) {
   :root {
-    --type-display: 2.85rem;
-    --type-program: 2.65rem;
-    --type-h1: 2.35rem;
-    --type-h2: 1.9rem;
-    --type-h3: 1.35rem;
-    --type-lead: 1.08rem;
+    --type-display: 2.08rem;
+    --type-program: 2.06rem;
+    --type-h1: 2.08rem;
+    --type-h2: 1.72rem;
+    --type-h3: 1.24rem;
+    --type-lead: 1.03rem;
   }
 }
 
@@ -280,9 +295,9 @@ button.button {
   margin-bottom: var(--space-3);
   color: var(--card-accent, var(--color-slate));
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
