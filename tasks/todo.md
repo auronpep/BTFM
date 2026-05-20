@@ -503,3 +503,29 @@ Before calling the implementation done:
 - HTTPS smoke checks returned 200 for `/`, `/training/board-training-program/`, `/training/`, `/articles/`, trailing-slash webinar and in-person routes, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`; a missing route returned 404.
 - Remote HTML checks confirmed `Read the Article Library`, `panel-meetings`, `aria-controls="panel-meetings"`, and sitemap inclusion for `/training/board-training-program/`.
 - In-app browser live check confirmed the deployed program page title, inquiry anchor, curriculum panel, article CTA, no horizontal overflow, and no console warnings/errors.
+
+## GitHub Tools Research for Enhanced Website V2
+
+- [x] Review current CDX implementation/planning context.
+- [x] Check available GitHub-related Codex skills and MCP tools.
+- [x] Research current GitHub platform capabilities relevant to a stronger V2 workflow.
+- [x] Recommend the minimum useful GitHub setup for enhanced V2 delivery.
+- [x] Document research results and verification notes.
+
+### GitHub Tools Research Review
+
+- Added `planning/GITHUB_V2_TOOLING_RESEARCH.md` with the recommended GitHub setup for an enhanced V2 workflow.
+- Current repo state: private `erewhonsgroup/CDX`, default branch `main`, authenticated `gh` access, no open issues, no open PRs, and no existing `.github/` workflow/template setup.
+- Recommended minimum setup: GitHub issue forms, PR template, CI workflow with `npm ci`, `npm run check`, `npm run build`, artifact upload, Dependabot, labels, GitHub Project board, and branch protection/ruleset after CI exists.
+- Recommended GitHub learning priorities: review pull requests, test with Actions, repository management, secure supply chain, secret scanning, and CodeQL if available.
+- Deferred recommendations: automated Hostinger deployment, GitHub Pages preview hosting, CodeQL for private repo if unavailable, and Copilot coding agent unless human PR review capacity exists.
+- Verification note: research used current GitHub Docs/GitHub Skills sources and local repo inspection. No build was required because this was a docs-only research task.
+
+## Private GitHub Repo Setup and Push
+
+- [x] Confirm local repository root, current branch, and remote URL.
+- [x] Verify `gh` authentication and private repository visibility.
+- [x] Inspect uncommitted files and confirm push scope.
+- [ ] Commit the GitHub tooling documentation changes.
+- [ ] Push the current branch to the private GitHub remote.
+- [ ] Verify the pushed branch and document final results.
