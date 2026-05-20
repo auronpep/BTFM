@@ -1,0 +1,463 @@
+import React, { useState } from 'react';
+import { useRouter } from '../components/Router';
+import { Layout } from '../components/Layout';
+import { 
+  AskThisCard, 
+  DoNotDoThisCard, 
+  MinutesShouldShowCard, 
+  CaliforniaNoteBadge 
+} from '../components/BoardroomCards';
+import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight } from 'lucide-react';
+
+interface AgendaItem {
+  id: string;
+  title: string;
+  category: string;
+  requiredFiles: string[];
+  statuteBadge?: { statute: string; text: string };
+  askScript: { question: string; rationale: string; targetRole?: string };
+  warning: { title: string; items: string[]; consequence?: string };
+  minutesMock: { agendaItem: string; mockMinutes: string; whyItMatters: string };
+}
+
+export const NextMeeting: React.FC = () => {
+  const { navigate } = useRouter();
+  const [expandedTopic, setExpandedTopic] = useState<string | null>('budget-approval');
+
+  // Database of 9 high-stakes agenda topics
+  const agendaTopics: AgendaItem[] = [
+    {
+      id: "budget-approval",
+      title: "1. Annual Program Budget Review and Approval",
+      category: "Finance",
+      requiredFiles: [
+        "Complete FY2027 Line-Item Draft Budget (excel & pdf)",
+        "Written Narrative Explaining the Ten Largest Deviations from previous year",
+        "3-Year Projected Program Enrollment & Cash Projections"
+      ],
+      statuteBadge: { statute: "CA Corp Code § 5239", text: "Duty of Care / Budget Limitation standards apply." },
+      askScript: {
+        question: "What are the ten biggest cost and revenue deviations from our current year's actual expenditures, and what is the narrative behind those variances?",
+        rationale: "Ensures the board understands where spending increases are occurring and why, validating the Duty of Care.",
+        targetRole: "the Chief Financial Officer"
+      },
+      warning: {
+        title: "The Retrospective Budget Approval",
+        items: [
+          "Do not allow the fiscal year to begin without an approved board budget.",
+          "Do not let the CEO adjust staff salaries beyond the total limits set in the budget.",
+          "Do not approve a vague cash-summary budget without detailed line-items."
+        ],
+        consequence: "Operating without an approved board budget means the officers are spending corporate funds without board authorization, which is a breach of corporate governance."
+      },
+      minutesMock: {
+        agendaItem: "Fiscal Year 2027 Budget Review and Adoption",
+        mockMinutes: "The CFO presented the complete line-item draft budget for FY2027. The Board reviewed the 10 largest budget deviations from the prior year, specifically the 12% increase in health benefit costs. Upon motion duly made and seconded, the FY2027 budget was adopted as presented, setting a legal operational expenditure limit of $3.2M.",
+        whyItMatters: "Proves that the board actively debated the budget line items and set a binding legal limit on spending."
+      }
+    },
+    {
+      id: "executive-compensation",
+      title: "2. CEO/ED Salary & Compensation Review",
+      category: "Legal & Fiduciary",
+      requiredFiles: [
+        "Executive Salary Survey Report for Northern/Southern California Nonprofits",
+        "Current CEO Employment Contract & Performance Reviews",
+        "Disinterested Director Recusal Resolution Form"
+      ],
+      statuteBadge: { statute: "IRC § 4958", text: "Satisfy Rebuttable Presumption of Reasonableness." },
+      askScript: {
+        question: "Does our proposed executive salary package stay within the 50th to 75th percentile of our compiled California compensation survey, and does the ED agree to step out during discussion?",
+        rationale: "Establishes compliance with the IRS safe harbor compensation standard, protecting board members from personal excise tax fines.",
+        targetRole: "the Board Chair"
+      },
+      warning: {
+        title: "Interested Voting on Payroll",
+        items: [
+          "Do not vote on the ED's salary with the ED or their relatives in the room.",
+          "Do not approve an executive bonus or salary raise without compiling written comparable market data.",
+          "Do not treat compensation as a casual discussion without a formal, voted resolution."
+        ],
+        consequence: "Failing to document comparable data results in immediate IRS reclassification of compensation as an 'Excess Benefit Transaction,' carrying personal excise fines up to 200%."
+      },
+      minutesMock: {
+        agendaItem: "Executive Compensation Approval",
+        mockMinutes: "The President (CEO) and her sister-in-law (Director) recused themselves from the meeting and physically left the room. The remaining three disinterested directors (constituting a quorum) reviewed Northern California Nonprofit Salary surveys for literacy programs. Based on this data, the board voted unanimously to approve a base salary of $72,000 for the CEO, effective immediately.",
+        whyItMatters: "Meticulously documents recusal and reliance on written comparable surveys, achieving full IRS safe harbor."
+      }
+    },
+    {
+      id: "conflict-of-interest",
+      title: "3. Annual Conflict Disclosure & Transactions Approval",
+      category: "Legal",
+      requiredFiles: [
+        "Written Conflict of Interest Policy (Signed by all Directors)",
+        "Annual Disclosure Statement Questionnaire",
+        "Bids for Contested Contractor Service Contracts"
+      ],
+      statuteBadge: { statute: "CA Corp Code § 5227", text: "Duty of Loyalty / 51% Independent Board rule." },
+      askScript: {
+        question: "Is there any business or personal relationship between our newly appointed software contractor and any director or officer on this board?",
+        rationale: "Identifies hidden self-dealing transactions, protecting directors from breaches of the Duty of Loyalty.",
+        targetRole: "the President"
+      },
+      warning: {
+        title: "Unvoted Self-Dealing Contracts",
+        items: [
+          "Do not approve a contract with a director's private business without a competitive bid process.",
+          "Do not allow the interested director to vote on or run the discussion of their contract.",
+          "Do not make loans of corporate funds to any director, officer, or key employee."
+        ],
+        consequence: "In California, loans to officers are strictly illegal, and unvoted conflict contracts are voidable by the AG, creating personal director liability."
+      },
+      minutesMock: {
+        agendaItem: "Approval of Software Contract Conflict Transaction",
+        mockMinutes: "Director Harris disclosed that his firm bids on the website development project. Harris recused himself and left the room during discussion. The board compared three independent bids and resolved that Harris's firm provided the best value at $12,000. The motion carried with Harris recused.",
+        whyItMatters: "Proves that the board compared competitive bids, negotiated in good faith, and voted disinterestedly."
+      }
+    },
+    {
+      id: "youth-screening",
+      title: "4. Physical Safety & Live Scan Screening Audits",
+      category: "Safety",
+      requiredFiles: [
+        "Live Scan Background Check Registry Report",
+        "Harassment and Abuse Prevention Policy Manual",
+        "Employee and Volunteer Onboarding Safety Log"
+      ],
+      statuteBadge: { statute: "CA Gov Code § 12580", text: "Physical Safety and Youth Protection requirements." },
+      askScript: {
+        question: "Are we 100% caught up on our background Live Scan checks for every staff member and volunteer, and are there any unscreened mentors working in programs?",
+        rationale: "Fulfills the Safety job of the board by demanding operational safety verification.",
+        targetRole: "the Executive Director"
+      },
+      warning: {
+        title: "Allowing Unscreened Volunteers",
+        items: [
+          "Do not let any staff or volunteer mentor work with youth before background checks clear.",
+          "Do not treat safety screening as a secondary administrative task that can backlog.",
+          "Do not allow youth mentors to drive program participants home alone in private vehicles."
+        ],
+        consequence: "Failing to enforce background checks results in personal corporate and civil exposure for directors under gross negligence if an abuse incident occurs."
+      },
+      minutesMock: {
+        agendaItem: "Quarterly Safety and Screening Compliance Report",
+        mockMinutes: "The Program Director presented the Live Scan screening log. The Board verified that all 18 volunteer mentors have successfully cleared background screening prior to participating in mentoring sessions. The Board accepted the report and directed that a safety audit occur quarterly.",
+        whyItMatters: "Formally records active board monitoring of youth safety compliance, defending against claims of negligent oversight."
+      }
+    },
+    {
+      id: "audit-committee",
+      title: "5. Standalone Audit Committee Establishment",
+      category: "Audit & Finance",
+      requiredFiles: [
+        "Independent Auditor Bid Proposals",
+        "Audit Committee Charter draft",
+        "Board Resolution establishing Standalone Audit Committee"
+      ],
+      statuteBadge: { statute: "CA Gov Code § 12586(e)", text: "Required standalone committee for $2M+ revenues." },
+      askScript: {
+        question: "Does our proposed Audit Committee contain zero staff members, zero officers, and no Treasurer, in accordance with the California Nonprofit Integrity Act?",
+        rationale: "Ensures the committee is structured with complete independent, disinterested oversight.",
+        targetRole: "the Board President"
+      },
+      warning: {
+        title: "Shared Finance and Audit Chairs",
+        items: [
+          "Do not allow the Treasurer to serve as the Audit Committee Chair.",
+          "Do not let the Executive Director or staff members serve as voting members on the Audit Committee.",
+          "Do not allow the Finance Committee to make up 50% or more of the Audit Committee seats."
+        ],
+        consequence: "Failing to isolate the Audit Committee from the Finance Committee is a direct violation of California law, leading to loss of corporate standing."
+      },
+      minutesMock: {
+        agendaItem: "Resolution of Standalone Audit Committee Establishment",
+        mockMinutes: "Pursuant to CA Government Code § 12586(e), the Board resolved to establish a standalone Audit Committee consisting of Director Martinez (Chair) and Director Smith. The board confirmed that neither member is an employee, officer, or member of the Finance Committee, and neither serves as Treasurer.",
+        whyItMatters: "Proves compliance with California's strict independent audit committee membership rules."
+      }
+    },
+    {
+      id: "si-100-renewal",
+      title: "6. Biennial Statement of Information (SI-100)",
+      category: "Legal & Registry",
+      requiredFiles: [
+        "Form SI-100 Statement of Information copy",
+        "Secretary of State filing receipt",
+        "Agent for Service of Process Verification"
+      ],
+      statuteBadge: { statute: "CA Corp Code § 6210", text: "Mandatory filing every two years." },
+      askScript: {
+        question: "Have we filed our Statement of Information with the Secretary of State this year, and is our Agent for Service of Process physical address current?",
+        rationale: "Ensures the corporation maintains active legal existence, avoiding default fines and suspensions.",
+        targetRole: "the Board Secretary"
+      },
+      warning: {
+        title: "Neglecting Biennial Filings",
+        items: [
+          "Do not let officers change (such as electing a new President) without updating Form SI-100 within 30 days.",
+          "Do not miss the biennial filing window (anniversary month of incorporation).",
+          "Do not use an unverified or outdated physical address for your Agent for Service of Process."
+        ],
+        consequence: "Failing to file results in an automatic, non-negotiable $250 penalty and immediate corporate suspension, rendering contracts unenforceable."
+      },
+      minutesMock: {
+        agendaItem: "Statement of Information Filing Review",
+        mockMinutes: "The Secretary presented the completed copy of Form SI-100 filed with the California Secretary of State on April 12, 2026, listing current corporate officers and Agent for Service of Process. The filing was approved for the corporate records binder.",
+        whyItMatters: "Establishes that the board actively tracked and verified its biennial Secretary of State filings."
+      }
+    },
+    {
+      id: "general-operations",
+      title: "7. General Executive Operations Review",
+      category: "Strategy & Oversight",
+      requiredFiles: [
+        "CEO Quarterly Narrative Progress Report",
+        "Key Performance Indicators (KPIs) Scorecard",
+        "Employee Grievance & Turnover Report Log"
+      ],
+      statuteBadge: { statute: "CA Corp Code § 5210", text: "Corporate affairs overseen by board." },
+      askScript: {
+        question: "Does the current operational progress report align with our approved strategic objectives, and do we have any pending personnel disputes?",
+        rationale: "Allows the board to review operations comprehensively without meddling in daily staff affairs.",
+        targetRole: "the President"
+      },
+      warning: {
+        title: "Meddling in Operational Management",
+        items: [
+          "Do not instruct program managers or staff directly between meetings.",
+          "Do not require the CEO to get board approval for minor expenditures under $5,000.",
+          "Do not ignore executive director burnout or heavy staff turnover logs."
+        ],
+        consequence: "Board meddling destroys employee morale and disrupts the chain of command, opening the corporation to labor and contract disputes."
+      },
+      minutesMock: {
+        agendaItem: "President's Quarterly Narrative Review",
+        mockMinutes: "The CEO presented the quarterly narrative report, highlighting progress on the shelter enrollment program. The Board discussed program metrics and verified alignment with strategic goals. Upon motion, the operational report was accepted as presented.",
+        whyItMatters: "Proves that the board was active in reviewing and accepting executive performance metrics."
+      }
+    },
+    {
+      id: "lease-review",
+      title: "8. Corporate Contract and Lease Commitments",
+      category: "Finance",
+      requiredFiles: [
+        "Main Office Lease Agreement Contract draft",
+        "Legal Counsel Contract Review Memo",
+        "Bylaws Signatory Authority Resolution"
+      ],
+      statuteBadge: { statute: "CA Corp Code § 5231", text: "Fiduciary care standard applies to major debt." },
+      askScript: {
+        question: "Has our legal counsel reviewed the indemnification and exit clauses in this lease, and do we have the cash reserves to cover the 3-year term?",
+        rationale: "Fulfills reasonable inquiry under the Duty of Care before signing long-term debt commitments.",
+        targetRole: "the Treasurer"
+      },
+      warning: {
+        title: "Signing Contracts Without Voted Authority",
+        items: [
+          "Do not let the CEO sign a lease or major contract without a specific board vote.",
+          "Do not agree to personal guarantees for corporate lease liabilities.",
+          "Do not skip reviewing the exit or termination clauses in multi-year agreements."
+        ],
+        consequence: "Directors face personal liability exposure if they sign leases on behalf of suspended corporations, or agree to personal debt guarantees."
+      },
+      minutesMock: {
+        agendaItem: "Office Lease Contract Authorization",
+        mockMinutes: "The Board Chair introduced the proposed 3-year lease contract for the main program office at $3,500/month. Relying on the written review of counsel, and confirming budget availability, the Board resolved to authorize the President to execute the lease.",
+        whyItMatters: "Sets a precise, voted boundary authorizing the President to act, proving active oversight of contracts."
+      }
+    },
+    {
+      id: "bylaws-update",
+      title: "9. Bylaws Audit and Board Policy Updates",
+      category: "Registry & Legal",
+      requiredFiles: [
+        "Current Corporate Bylaws Copy",
+        "Board Policy Manual (BPM) draft",
+        "Bylaws amendment resolution document"
+      ],
+      statuteBadge: { statute: "CA Gov Code § 12586", text: "Attorney General oversight of public benefit trusts." },
+      askScript: {
+        question: "When was the last time our bylaws were formally audited by a nonprofit attorney, and do they align with recent California registry changes?",
+        rationale: "Ensures the board operates with valid, enforceable legal regulations, protecting directors from internal disputes.",
+        targetRole: "the Board Chair"
+      },
+      warning: {
+        title: "Operating Under Obsolete Regulations",
+        items: [
+          "Do not operate under bylaws that are over 10 years old.",
+          "Do not allow the board to update bylaws without consulting qualified nonprofit counsel.",
+          "Do not ignore the requirement to file bylaws updates with the AG Registry."
+        ],
+        consequence: "Outdated bylaws often contain invalid quorum or voting structures, leading to corporate actions being declared void in court."
+      },
+      minutesMock: {
+        agendaItem: "Resolution of Corporate Bylaws Update",
+        mockMinutes: "The Nominating Committee presented the updated bylaws audited by California Center for Nonprofit Law. After review of the updated quorum structures, the Board voted unanimously to adopt the revised bylaws as presented, directing the Secretary to file them with the Registry.",
+        whyItMatters: "Proves that the board proactively audits and keeps its legal bylaws in sync with California state laws."
+      }
+    }
+  ];
+
+  const handleToggleTopic = (id: string) => {
+    setExpandedTopic(expandedTopic === id ? null : id);
+  };
+
+  return (
+    <Layout>
+      <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-10">
+          
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brass/10 border border-brass/30 text-brass rounded-full text-xs font-semibold uppercase tracking-wider">
+              <Calendar className="w-4 h-4" />
+              <span>Fiduciary Agenda Coordinator</span>
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
+              Prepare for Your Next Meeting
+            </h1>
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
+              Never enter a boardroom unprepared. Select from the 9 core high-stakes agenda topics below to access required study files, risk alerts, directors scripts, and mockup minutes.
+            </p>
+          </div>
+
+          {/* Agenda Topic Desk */}
+          <div className="space-y-6">
+            {agendaTopics.map((topic) => {
+              const isOpen = expandedTopic === topic.id;
+              return (
+                <div 
+                  key={topic.id}
+                  className={`bg-white rounded-xl shadow-sm border transition-premium overflow-hidden text-left ${
+                    isOpen ? 'border-brass shadow-md' : 'border-fog/85 hover:border-brass/40'
+                  }`}
+                >
+                  {/* Topic Title Bar (Interactive toggle trigger) */}
+                  <div 
+                    onClick={() => handleToggleTopic(topic.id)}
+                    className="p-5 flex items-center justify-between cursor-pointer select-none bg-paper/10 border-b border-fog/60 hover:bg-paper/30 transition-premium"
+                  >
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-extrabold text-slate-brand uppercase tracking-widest bg-white px-2 py-0.5 rounded shadow-sm border border-fog/50">
+                        {topic.category}
+                      </span>
+                      <h3 className="font-serif font-bold text-base sm:text-lg text-ink">
+                        {topic.title}
+                      </h3>
+                    </div>
+                    
+                    <div className="text-brass shrink-0 pl-4">
+                      {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                    </div>
+                  </div>
+
+                  {/* Expanded Content Workspace */}
+                  {isOpen && (
+                    <div className="p-6 sm:p-8 space-y-8 animate-fade-in bg-white border-t border-fog/25">
+                      
+                      {/* 1. Required Files Panel */}
+                      <div className="space-y-3">
+                        <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/55 flex items-center gap-1.5">
+                          <FileText className="w-4 h-4 text-brass" />
+                          <span>Required Study Materials (Distribute 5 days prior)</span>
+                        </h4>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {topic.requiredFiles.map((file, fIdx) => (
+                            <div key={fIdx} className="bg-paper/20 p-3.5 rounded-lg border border-fog/50 flex items-start gap-2.5">
+                              <CheckSquare className="w-4 h-4 text-brass mt-0.5 shrink-0" />
+                              <span className="text-xs text-ink/80 leading-relaxed font-sans font-medium">{file}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* California Code Badge */}
+                      {topic.statuteBadge && (
+                        <div className="text-left pt-2 border-t border-fog/30">
+                          <CaliforniaNoteBadge statute={topic.statuteBadge.statute} text={topic.statuteBadge.text} />
+                        </div>
+                      )}
+
+                      {/* 2. Rule & Script Questions (Left: Script, Right: Warning) */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start pt-4 border-t border-fog/40">
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-extrabold text-teal-brand uppercase tracking-widest block mb-1">Boardroom Script Question:</span>
+                          <AskThisCard 
+                            question={topic.askScript.question} 
+                            rationale={topic.askScript.rationale} 
+                            targetRole={topic.askScript.targetRole} 
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-extrabold text-copper uppercase tracking-widest block mb-1">Boardroom Risk Alert:</span>
+                          <DoNotDoThisCard 
+                            title={topic.warning.title} 
+                            items={topic.warning.items} 
+                            consequence={topic.warning.consequence} 
+                          />
+                        </div>
+                      </div>
+
+                      {/* 3. Defensive Minutes Mockup */}
+                      <div className="pt-4 border-t border-fog/40">
+                        <span className="text-[10px] font-extrabold text-slate-brand uppercase tracking-widest block mb-2">Clean Boardroom Record Mockup:</span>
+                        <MinutesShouldShowCard 
+                          agendaItem={topic.minutesMock.agendaItem} 
+                          mockMinutes={topic.minutesMock.mockMinutes} 
+                          whyItMatters={topic.minutesMock.whyItMatters} 
+                        />
+                      </div>
+
+                      {/* Printable Actions and Notes Footer */}
+                      <div className="pt-6 border-t border-fog/60 flex flex-col sm:flex-row gap-3 justify-end items-center">
+                        <button
+                          onClick={() => window.print()}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-paper hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog transition-premium cursor-pointer"
+                        >
+                          <Printer className="w-4 h-4" />
+                          <span>Print Topic Study Pack</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => navigate('tools')}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-5 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded transition-premium shadow cursor-pointer"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-brass" />
+                          <span>Open Governance Laboratories</span>
+                        </button>
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Consultation Reference */}
+          <div className="bg-brass/5 border border-brass/20 rounded-xl p-6 text-left flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="space-y-1">
+              <h4 className="font-serif font-bold text-base text-ink">Bylaws, conflicts, or delinquency issues pending on your agenda?</h4>
+              <p className="text-xs text-ink/70 leading-relaxed font-sans max-w-2xl">
+                Preparing for a high-stakes board meeting often requires direct attorney-client review to safeguard your officers from D&O liabilities. Get counsel from NPO Lawyers.
+              </p>
+            </div>
+            <a
+              href="https://NPOlawyers.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap"
+            >
+              <span>Consult NPO Lawyers</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </Layout>
+  );
+};
+export default NextMeeting;

@@ -1,0 +1,443 @@
+import React, { useState } from 'react';
+import { useRouter } from '../components/Router';
+import { Layout } from '../components/Layout';
+import { Award, CheckCircle, RefreshCw, ChevronRight, ChevronLeft, ShieldCheck, Printer, ExternalLink } from 'lucide-react';
+
+interface Question {
+  id: number;
+  text: string;
+  options: {
+    text: string;
+    points: number;
+    description: string;
+  }[];
+}
+
+const questions: Question[] = [
+  {
+    id: 1,
+    text: "Board Size and Independence",
+    options: [
+      { text: "Fewer than 5 directors, or mostly family members and business partners.", points: 1, description: "Highly vulnerable to IRS scrutiny; lacks independent oversight." },
+      { text: "5 or more directors, but some are related or have business relationships.", points: 3, description: "Partial independence but contains critical conflict-of-interest risks." },
+      { text: "5 or more completely unrelated, independent directors with diverse skills.", points: 5, description: "Meets independent governance gold standards. Active oversight." }
+    ]
+  },
+  {
+    id: 2,
+    text: "Pre-Meeting Packet Preparation",
+    options: [
+      { text: "Packets are handed out at the meeting, or we don't have packets.", points: 1, description: "Directors cannot exercise Duty of Care without advance reading time." },
+      { text: "Packets are emailed 1 to 2 days prior to the meeting.", points: 3, description: "Rushed review; directors frequently skip materials due to late delivery." },
+      { text: "Packets are distributed 5 to 7 days prior with written reports.", points: 5, description: "Enables thorough study and written preparation. Best-practice care." }
+    ]
+  },
+  {
+    id: 3,
+    text: "Meeting Time Allocation (40-40-20 Rule)",
+    options: [
+      { text: "The CEO or staff reads slides aloud; we listen passively for 90% of the meeting.", points: 1, description: "Ornamental board behavior. Zero active governance happening." },
+      { text: "We spend half the time listening to reports and half voting on motions.", points: 3, description: "Average oversight, but lacks focus on strategy and audit." },
+      { text: "80% of our meeting is spent on active inquiry and forward-looking strategy.", points: 5, description: "Fully operational 40-40-20 rule. Highly effective deliberation." }
+    ]
+  },
+  {
+    id: 4,
+    text: "Financial Statement Review",
+    options: [
+      { text: "We review a single-page cash summary, or we don't look at financials.", points: 1, description: "Severe risk of undetected deficits, fraud, or tax non-withholding." },
+      { text: "We receive balance sheets and income statements, but rarely discuss variances.", points: 3, description: "Basic compliance, but fails to check operational deviations." },
+      { text: "We audit Balance Sheets, Statement of Activities, and the 10 biggest budget deviations.", points: 5, description: "Robust audit and verification. Strong financial safety." }
+    ]
+  },
+  {
+    id: 5,
+    text: "Executive Compensation Approval",
+    options: [
+      { text: "The CEO/ED sets their own salary, or the board votes with the ED in the room.", points: 1, description: "Automatic excess benefit risk. Fines up to 200% under IRS Section 4958." },
+      { text: "The board votes on the salary but doesn't review independent comparability data.", points: 3, description: "Lacks IRS safe harbor protection. Vulnerable to audits." },
+      { text: "Approved by disinterested directors relying on written comparability surveys.", points: 5, description: "Satisfies the IRS Rebuttable Presumption. Safe harbor achieved." }
+    ]
+  },
+  {
+    id: 6,
+    text: "Boardroom Minutes and Records",
+    options: [
+      { text: "We don't keep minutes, or they are written like long personal transcripts.", points: 1, description: "High risk. Verbatim arguments are discoverable in lawsuits." },
+      { text: "Minutes are kept but are often vague or unapproved for several meetings.", points: 3, description: "Unreliable corporate record. Fails to document active diligence." },
+      { text: "Minutes record resolutions, general deliberation, and recused conflicts neutrally.", points: 5, description: "Clean, defensive records proving compliance and duty of care." }
+    ]
+  },
+  {
+    id: 7,
+    text: "Youth & Constituent Safety Screening",
+    options: [
+      { text: "We run programs for youth/volunteers but don't require Live Scan checks.", points: 1, description: "Catastrophic risk. Personal liability exposure for gross negligence." },
+      { text: "We require background checks but have a backlog of unscreened volunteers.", points: 3, description: "Policy exists but is un-enforced, creating severe liability loops." },
+      { text: "100% of staff and volunteers undergo background checks prior to service.", points: 5, description: "Fulfills physical safety mandate. Zero safety backlogs." }
+    ]
+  },
+  {
+    id: 8,
+    text: "Directors & Officers (D&O) Insurance",
+    options: [
+      { text: "We do not have D&O insurance, or we are not sure if we have it.", points: 1, description: "Direct personal asset exposure for every director on the board." },
+      { text: "We have general liability, but aren't sure of our D&O/EPLI exclusions.", points: 3, description: "Vulnerable to employment practice disputes (90% of board claims)." },
+      { text: "We maintain robust D&O insurance with custom employment practices riders.", points: 5, description: "Complete governance safety cushion. Directors fully protected." }
+    ]
+  },
+  {
+    id: 9,
+    text: "Conflict-of-Interest Handling",
+    options: [
+      { text: "We do transactions with directors' private businesses without formal votes.", points: 1, description: "Direct violation of the Duty of Loyalty. Suspect transactions." },
+      { text: "Conflicts are disclosed, but the interested directors remain in the room and vote.", points: 3, description: "Violates California Corporations Code. Transactions voidable." },
+      { text: "Conflicts disclosed; interested director recuses, leaves room, and disinterested vote occurs.", points: 5, description: "Fulfills Duty of Loyalty. Bulletproof record of disinterested voting." }
+    ]
+  },
+  {
+    id: 10,
+    text: "Bylaws and Policy Review",
+    options: [
+      { text: "Our bylaws are over 10 years old, or we have no Board Policy Manual.", points: 1, description: "Bylaws are obsolete. Operating without a legal guide book." },
+      { text: "We have bylaws and policies, but haven't reviewed them in over 3 years.", points: 3, description: "Out of sync with modern California regulatory changes." },
+      { text: "Bylaws and policy manuals are formally audited and updated every 2 years.", points: 5, description: "Maximum compliance readiness. Aligned with current statutory rules." }
+    ]
+  }
+];
+
+export const SelfAssessment: React.FC = () => {
+  const { navigate } = useRouter();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>({});
+  const [quizComplete, setQuizComplete] = useState(false);
+
+  const handleOptionSelect = (optionIndex: number) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [currentQuestionIndex]: optionIndex
+    });
+  };
+
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setQuizComplete(true);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleReset = () => {
+    setCurrentQuestionIndex(0);
+    setSelectedOptions({});
+    setQuizComplete(false);
+  };
+
+  const calculateTotalScore = () => {
+    return Object.entries(selectedOptions).reduce((sum, [qIdx, optIdx]) => {
+      return sum + questions[Number(qIdx)].options[optIdx].points;
+    }, 0);
+  };
+
+  const getMaturityLevel = (score: number) => {
+    if (score <= 15) {
+      return {
+        level: "Level 1: Attending & Trusting (Rubber Stamp Board)",
+        color: "text-burgundy border-burgundy bg-burgundy/5",
+        textBg: "bg-burgundy text-white",
+        desc: "Your board operates primarily on passive trust, rubber-stamping executive proposals with minimal inquiry or independent verification. This is an extremely high-risk legal posture. Directors face direct personal liability exposure for gross negligence, and the organization is highly vulnerable to IRS audits, embezzlement, or employment practices claims.",
+        priority: "IMMEDIATE EMERGENCY AUDIT",
+        recs: [
+          "Establish at least 5 independent, unrelated directors.",
+          "Procure standard Directors & Officers (D&O) insurance immediately.",
+          "Distribute detailed board packets at least 5 business days prior to meetings.",
+          "Mandate that interested directors recuse themselves from salary votes."
+        ],
+        referralReason: "Your Level 1 score indicates significant legal exposures. We recommend requesting an immediate Bylaws and Governance Audit with the California Center for Nonprofit Law to establish basic fiduciary compliance before a regulatory problem arises."
+      };
+    } else if (score <= 30) {
+      return {
+        level: "Level 2: Report-Receiving (Passive Compliance)",
+        color: "text-copper border-copper bg-copper/5",
+        textBg: "bg-copper text-white",
+        desc: "Your board is doing basic compliance work—you receive written packets, maintain general liability, and have some unrelated board members. However, you still function primarily as a report-receiving audience rather than an active governing body. You lack standing audit structures, independent compensation safeguards, and rigorous physical/financial verification systems.",
+        priority: "SYSTEM UPGRADE REQUIRED",
+        recs: [
+          "Transition meeting time away from slides and into active 40-40-20 deliberation.",
+          "Adopt the '10-largest deviations' rule for financial reviews rather than general summaries.",
+          "Create a formal Board Policy Manual to prevent directors from micromanaging staff.",
+          "Audit the screening background status of all youth-facing staff/volunteers."
+        ],
+        referralReason: "Your board is outgrowing its startup foundations but lacks the defensive structures of an established organization. Speak with CCNL regarding drafting a customized Board Policy Manual and setting up disinterested executive salary safe harbors."
+      };
+    } else if (score <= 42) {
+      return {
+        level: "Level 3: Active Oversight (The Governed Board)",
+        color: "text-slate-brand border-slate-brand bg-slate-brand/5",
+        textBg: "bg-slate-brand text-white",
+        desc: "Your board is highly effective and operates with serious governance discipline. You practice pre-meeting preparation, active financial oversight, and maintain excellent compliance screens. You are protecting the organization and shielding directors from major liabilities.",
+        priority: "POLISH & SOLIDIFY",
+        recs: [
+          "Formalize your Audit Committee by board resolution if revenues approach $2M.",
+          "Benchmark your executive salary using professional Northern/Southern California CPA surveys.",
+          "Conduct biennial reviews of your bylaws to ensure alignment with recent California changes.",
+          "Establish an annual board self-assessment rhythm."
+        ],
+        referralReason: "Your board is highly functional. To maintain this excellence and ensure bulletproof compliance with California's strict $2M audit rules or executive compensation standards, let the team at NPO Lawyers conduct a routine annual review of your minutes and filings."
+      };
+    } else {
+      return {
+        level: "Level 4: Institutional Stewardship (The Exemplar Board)",
+        color: "text-teal-brand border-teal-brand bg-teal-brand/5",
+        textBg: "bg-teal-brand text-white",
+        desc: "Congratulations. Your board operates at the absolute gold standard of institutional governance. You have a highly diverse, independent board, complete pre-meeting discipline, separate audit committees, robust comparability salary records, and clean defensive minutes. You serve as an exemplar of nonprofit stewardship.",
+        priority: "PRESERVE EXCELLENCE",
+        recs: [
+          "Mentor other local California boards on governance best-practices.",
+          "Incorporate a standing annual board calendar into your policy manuals.",
+          "Conduct a peer-review or external legal check on your bylaws every 3 years."
+        ],
+        referralReason: "Your board is exceptional. Ensure your high-level governance is perfectly integrated into your donor solicitation materials and grant proposals. NPO Lawyers can provide regulatory counsel as you navigate strategic growth, endowment building, or real estate acquisitions."
+      };
+    }
+  };
+
+  const isCurrentAnswered = selectedOptions[currentQuestionIndex] !== undefined;
+  const currentQuestion = questions[currentQuestionIndex];
+  const score = calculateTotalScore();
+  const assessment = getMaturityLevel(score);
+
+  return (
+    <Layout>
+      <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brass/10 border border-brass/30 text-brass rounded-full text-xs font-semibold uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5" />
+              <span>Interactive Governance Laboratory</span>
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
+              Mature Board Self-Assessment
+            </h1>
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
+              Evaluate your board against the strict fiduciary standards of California law and IRS 501(c)(3) guidelines. Complete this 10-question diagnostic to discover your maturity tier.
+            </p>
+          </div>
+
+          {/* QUIZ WORKSPACE */}
+          {!quizComplete ? (
+            <div className="bg-white rounded-xl shadow-md border border-fog p-6 sm:p-8 space-y-6">
+              {/* Progress and Question Count */}
+              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-ink/40 pb-4 border-b border-fog/60">
+                <span>Governance Area {currentQuestion.id} of {questions.length}</span>
+                <span className="text-brass">Progress: {Math.round((currentQuestion.id / questions.length) * 100)}%</span>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-fog h-2 rounded-full overflow-hidden">
+                <div 
+                  className="bg-brass h-full transition-premium" 
+                  style={{ width: `${(currentQuestion.id / questions.length) * 100}%` }}
+                />
+              </div>
+
+              {/* Question Statement */}
+              <div className="space-y-2">
+                <h3 className="font-serif text-xl sm:text-2xl text-slate-brand font-semibold leading-tight">
+                  {currentQuestion.text}
+                </h3>
+                <p className="text-xs text-ink/50 uppercase tracking-wider font-semibold">Select the statement that most closely describes your current board operations:</p>
+              </div>
+
+              {/* Options Grid */}
+              <div className="space-y-4">
+                {currentQuestion.options.map((opt, oIdx) => {
+                  const isSelected = selectedOptions[currentQuestionIndex] === oIdx;
+                  return (
+                    <div
+                      key={oIdx}
+                      onClick={() => handleOptionSelect(oIdx)}
+                      className={`cursor-pointer p-4 rounded-lg border text-left transition-premium flex items-start gap-4 ${
+                        isSelected
+                          ? 'border-brass bg-brass/5 shadow-inner'
+                          : 'border-fog bg-paper/20 hover:border-slate-brand/40 hover:bg-white'
+                      }`}
+                    >
+                      <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                        isSelected ? 'border-brass text-brass' : 'border-ink/20'
+                      }`}>
+                        {isSelected && <div className="w-2.5 h-2.5 bg-brass rounded-full" />}
+                      </div>
+                      <div className="space-y-1">
+                        <p className={`font-sans text-sm sm:text-base font-semibold leading-snug ${isSelected ? 'text-brass' : 'text-ink'}`}>
+                          {opt.text}
+                        </p>
+                        <p className="text-xs text-ink/60 leading-relaxed font-normal">
+                          {opt.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Nav Buttons */}
+              <div className="pt-6 border-t border-fog/60 flex justify-between items-center">
+                <button
+                  onClick={handlePrev}
+                  disabled={currentQuestionIndex === 0}
+                  className={`inline-flex items-center gap-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded border transition-premium ${
+                    currentQuestionIndex === 0
+                      ? 'border-fog text-ink/20 cursor-not-allowed'
+                      : 'border-fog text-ink/75 hover:bg-paper/30'
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </button>
+
+                <button
+                  onClick={handleNext}
+                  disabled={!isCurrentAnswered}
+                  className={`inline-flex items-center gap-1 px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-premium shadow cursor-pointer ${
+                    isCurrentAnswered
+                      ? 'bg-slate-brand text-white hover:bg-ink'
+                      : 'bg-fog text-ink/40 cursor-not-allowed'
+                  }`}
+                >
+                  <span>{currentQuestionIndex === questions.length - 1 ? "Get Diagnostic Results" : "Next Standard"}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* RESULTS PANEL */
+            <div className="space-y-8 animate-fade-in">
+              <div className="bg-white rounded-xl shadow-lg border border-fog overflow-hidden">
+                {/* Score Banner */}
+                <div className={`p-8 text-center border-b border-fog/60 space-y-4 ${assessment.color} border-t-8`}>
+                  <p className="text-xs font-bold tracking-widest uppercase">Diagnostic Maturity Tier</p>
+                  <h2 className="font-serif text-2xl sm:text-3xl font-extrabold tracking-wide leading-tight">
+                    {assessment.level}
+                  </h2>
+                  
+                  {/* Dynamic Circular Progress Representation */}
+                  <div className="flex justify-center py-4">
+                    <div className="relative flex items-center justify-center">
+                      <svg className="w-28 h-28 transform -rotate-90">
+                        <circle cx="56" cy="56" r="48" stroke="currentColor" strokeWidth="8" fill="transparent" className="opacity-10" />
+                        <circle 
+                          cx="56" 
+                          cy="56" 
+                          r="48" 
+                          stroke="currentColor" 
+                          strokeWidth="8" 
+                          fill="transparent" 
+                          strokeDasharray={2 * Math.PI * 48}
+                          strokeDashoffset={2 * Math.PI * 48 * (1 - score / 50)}
+                          className="transition-premium"
+                        />
+                      </svg>
+                      <div className="absolute flex flex-col items-center">
+                        <span className="font-sans font-black text-2xl text-ink">{score}</span>
+                        <span className="text-[9px] uppercase tracking-wider text-ink/40 font-bold">of 50 pts</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`inline-block px-3 py-1 rounded text-xs font-bold tracking-wider uppercase ${assessment.textBg}`}>
+                    Priority Action: {assessment.priority}
+                  </div>
+                </div>
+
+                <div className="p-6 sm:p-8 space-y-6">
+                  {/* Summary Text */}
+                  <div className="space-y-2">
+                    <h3 className="font-serif font-bold text-lg text-ink">Maturity Diagnostic</h3>
+                    <p className="font-sans text-sm sm:text-base text-ink/85 leading-relaxed">
+                      {assessment.desc}
+                    </p>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div className="pt-6 border-t border-fog/60 space-y-4">
+                    <h3 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50 flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-brass" />
+                      <span>Targeted Governance Action Plan</span>
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {assessment.recs.map((rec, rIdx) => (
+                        <div key={rIdx} className="flex items-start gap-3 bg-paper/20 p-4 rounded border border-fog/40">
+                          <CheckCircle className="w-4 h-4 text-brass mt-0.5 shrink-0" />
+                          <span className="text-xs sm:text-sm text-ink leading-relaxed font-medium">{rec}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Customized Referral Funnel */}
+                  <div className="pt-6 border-t border-fog/60">
+                    <div className="bg-burgundy/5 border border-burgundy/20 rounded-lg p-5 flex flex-col md:flex-row items-center justify-between gap-6">
+                      <div className="space-y-2 text-left">
+                        <h4 className="font-serif font-bold text-base text-burgundy">Legal Risk Evaluation Memo</h4>
+                        <p className="font-sans text-xs text-ink/80 leading-relaxed max-w-xl">
+                          {assessment.referralReason}
+                        </p>
+                      </div>
+                      <a
+                        href="https://NPOlawyers.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap shrink-0"
+                      >
+                        <span>Schedule Board Counsel Audit</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-brass" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Diagnostic Reset Button */}
+                  <div className="pt-6 border-t border-fog/60 flex flex-col sm:flex-row gap-3 justify-end">
+                    <button
+                      onClick={() => window.print()}
+                      className="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-paper hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog transition-premium cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4" />
+                      <span>Print Summary</span>
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="inline-flex items-center justify-center gap-1 px-6 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded transition-premium shadow cursor-pointer"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      <span>Retake Assessment</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Back to tools CTA */}
+              <div className="text-center">
+                <button
+                  onClick={() => navigate('tools')}
+                  className="text-xs font-bold uppercase tracking-widest text-slate-brand hover:text-brass transition-premium inline-flex items-center gap-1"
+                >
+                  <span>Explore Other Governance Tools & Worksheets</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </Layout>
+  );
+};
