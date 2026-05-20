@@ -526,6 +526,15 @@ Before calling the implementation done:
 - [x] Confirm local repository root, current branch, and remote URL.
 - [x] Verify `gh` authentication and private repository visibility.
 - [x] Inspect uncommitted files and confirm push scope.
-- [ ] Commit the GitHub tooling documentation changes.
-- [ ] Push the current branch to the private GitHub remote.
-- [ ] Verify the pushed branch and document final results.
+- [x] Commit the GitHub tooling documentation changes.
+- [x] Push the current branch to the private GitHub remote.
+- [x] Verify the pushed branch and document final results.
+
+### Private GitHub Repo Setup and Push Review
+
+- Confirmed `C:\CDX` is a Git repository on branch `codex/live-prototype-8120`.
+- Confirmed `origin` points to `https://github.com/erewhonsgroup/CDX.git`.
+- Confirmed `gh` is authenticated as `erewhonsgroup` with repository access.
+- Confirmed GitHub reports `erewhonsgroup/CDX` as `PRIVATE` with default branch `main`.
+- Committed and pushed the GitHub tooling documentation scope to `origin/codex/live-prototype-8120`.
+- Verification note: after the push, local `HEAD` and the remote branch both resolved to `8266abd0462076923fe2c2ffee72f832f91f75b6`; `git diff --cached --check` passed before committing. No build was run because the committed scope was documentation and task tracking only.
