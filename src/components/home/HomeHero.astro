@@ -1,4 +1,6 @@
 ---
+import AnnotatedPacket from "../ui/AnnotatedPacket.astro";
+
 const primaryActions = [
   { label: "Prepare for Your Next Board Meeting", href: "/next-meeting/" },
   { label: "Explore Board Training", href: "/training/" },
@@ -8,13 +10,17 @@ const primaryActions = [
 
 <section class="home-hero" aria-labelledby="home-title">
   <div class="home-hero__copy">
-    <p class="home-hero__source">The Principles of Board Training</p>
-    <h1 id="home-title">Board service gets serious when the organization gets serious.</h1>
+    <h1 id="home-title" class="display-title">Board service gets serious when the organization gets serious.</h1>
     <p class="home-hero__lead">
       A boardroom field manual for California nonprofit directors reviewing budgets,
       reports, executive oversight, risk, minutes, and decisions that need to hold up
       after the meeting ends.
     </p>
+    <ul class="home-hero__sequence" aria-label="Board meeting discipline">
+      <li>Read the packet</li>
+      <li>Ask the board question</li>
+      <li>Record the action</li>
+    </ul>
     <div class="home-hero__actions" aria-label="Primary actions">
       {primaryActions.map((action, index) => (
         <a class:list={["home-hero__button", index === 0 && "home-hero__button--primary"]} href={action.href}>
@@ -23,50 +29,57 @@ const primaryActions = [
       ))}
     </div>
   </div>
-  <div class="home-hero__brief" aria-label="Board meeting preparation snapshot">
-    <p class="home-hero__brief-title">$3M Board Member Guide</p>
-    <ol>
-      <li>Read the packet before the room.</li>
-      <li>Ask what changed from budget, plan, or prior vote.</li>
-      <li>Separate management updates from board decisions.</li>
-      <li>Make the minutes show the action, not the argument.</li>
-    </ol>
+  <div class="home-hero__packet">
+    <AnnotatedPacket />
   </div>
 </section>
 
 <style>
   .home-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
-    gap: clamp(2rem, 6vw, 5rem);
+    grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
+    gap: var(--space-12);
     align-items: center;
-    padding: clamp(4rem, 9vw, 7rem) clamp(1.25rem, 5vw, 4.5rem);
+    padding: var(--space-16) clamp(1.25rem, 5vw, 4.5rem);
     color: var(--color-ink);
-    background:
-      linear-gradient(135deg, rgba(231, 225, 219, 0.96), rgba(245, 240, 234, 0.88)),
-      radial-gradient(circle at 90% 15%, rgba(135, 114, 31, 0.2), transparent 34%);
-  }
-
-  .home-hero__source {
-    margin: 0 0 1rem;
-    color: var(--color-slate);
-    font: 700 0.86rem/1.2 ui-sans-serif, system-ui, sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, rgba(245, 240, 234, 0.88), rgba(231, 225, 219, 0.98));
   }
 
   .home-hero h1 {
-    max-width: 13ch;
+    max-width: 14ch;
     margin: 0;
-    font: 700 clamp(3rem, 7vw, 6.6rem)/0.94 Georgia, "Times New Roman", serif;
-    letter-spacing: 0;
+    color: var(--color-ink);
   }
 
   .home-hero__lead {
     max-width: 44rem;
     margin: 1.5rem 0 0;
     color: var(--color-muted-ink);
-    font: 400 clamp(1.08rem, 1.7vw, 1.3rem)/1.65 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: var(--type-lead);
+    line-height: 1.62;
+  }
+
+  .home-hero__sequence {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home-hero__sequence li {
+    border: 1px solid rgba(95, 75, 39, 0.2);
+    border-radius: 999px;
+    padding: 0.4rem 0.65rem;
+    background: rgba(245, 240, 234, 0.72);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .home-hero__actions {
@@ -85,7 +98,10 @@ const primaryActions = [
     color: var(--color-ink);
     background: transparent;
     text-decoration: none;
-    font: 700 0.95rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   .home-hero__button--primary {
@@ -99,36 +115,29 @@ const primaryActions = [
     outline-offset: 3px;
   }
 
-  .home-hero__brief {
-    border-left: 6px solid var(--color-brass);
-    padding: 1.5rem;
-    background: var(--color-white);
-    box-shadow: 0 1rem 3rem var(--color-shadow);
-  }
-
-  .home-hero__brief-title {
-    margin: 0 0 1rem;
-    font: 700 1.2rem/1.2 Georgia, "Times New Roman", serif;
-  }
-
-  .home-hero__brief ol {
-    display: grid;
-    gap: 0.8rem;
-    margin: 0;
-    padding-left: 1.2rem;
-    color: var(--color-muted-ink);
-    font: 500 1rem/1.45 ui-sans-serif, system-ui, sans-serif;
+  .home-hero__packet {
+    min-width: 0;
   }
 
   @media (max-width: 760px) {
     .home-hero {
       grid-template-columns: 1fr;
-      padding-top: 3rem;
+      gap: var(--space-10);
+      overflow-x: clip;
+      padding: var(--space-12) 1rem;
     }
 
     .home-hero h1 {
-      max-width: 11ch;
-      font-size: clamp(2.55rem, 14vw, 4rem);
+      max-width: 13ch;
+    }
+
+    .home-hero__actions {
+      display: grid;
+    }
+
+    .home-hero__button {
+      justify-content: center;
+      text-align: center;
     }
   }
 </style>

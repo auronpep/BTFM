@@ -29,7 +29,10 @@
   .prep-flow h2 {
     max-width: 16ch;
     margin: 0;
-    font: 700 clamp(2rem, 4vw, 3.2rem)/1.05 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.05;
   }
 
   .prep-flow__steps {
@@ -51,18 +54,26 @@
     place-items: center;
     color: var(--color-ink);
     background: var(--color-brass);
-    font: 800 0.9rem/1 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1;
   }
 
   .prep-flow h3 {
     margin: 1rem 0 0;
-    font: 700 1.25rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   .prep-flow p {
     margin: 0.65rem 0 0;
     color: rgba(245, 240, 234, 0.86);
-    font: 400 1rem/1.5 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   @media (max-width: 760px) {

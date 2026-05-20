@@ -43,14 +43,19 @@ const description =
     max-width: 21ch;
     margin: 0;
     color: var(--color-ink);
-    font: 700 clamp(1.8rem, 3.5vw, 2.8rem)/1.08 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.08;
   }
 
   .legal-cta p {
     max-width: 52rem;
     margin: 1rem 0 0;
     color: var(--color-muted-ink);
-    font: 400 1rem/1.6 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .legal-cta a {
@@ -61,7 +66,10 @@ const description =
     color: var(--color-white);
     background: var(--color-navy);
     text-decoration: none;
-    font: 700 0.95rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   @media (max-width: 720px) {

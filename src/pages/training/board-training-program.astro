@@ -78,7 +78,7 @@ const relatedResources = [
     <div class="container program-hero-grid">
       <div class="program-hero-copy">
         <p class="eyebrow">Program Level</p>
-        <h1>
+        <h1 class="program-title">
           <span>Board</span>
           <span>training</span>
           <span>for the next</span>
@@ -400,8 +400,7 @@ const relatedResources = [
   .program-hero-copy h1 {
     max-width: 11ch;
     color: var(--color-ink);
-    font-size: clamp(2.75rem, 6vw, 5.25rem);
-    line-height: 0.95;
+    line-height: 0.98;
     overflow-wrap: break-word;
   }
 
@@ -479,7 +478,7 @@ const relatedResources = [
   .packet-cover h2 {
     max-width: 9ch;
     color: var(--color-white);
-    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-size: var(--type-h2);
   }
 
   .packet-cover p {
@@ -986,7 +985,6 @@ const relatedResources = [
 
     .program-hero-copy h1 {
       max-width: 100%;
-      font-size: clamp(1.95rem, 8.7vw, 2.45rem);
       line-height: 0.98;
     }
 

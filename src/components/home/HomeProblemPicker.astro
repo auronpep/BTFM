@@ -39,13 +39,18 @@ const problems = [
   .problem-picker h2 {
     margin: 0;
     color: var(--color-ink);
-    font: 700 clamp(2rem, 4vw, 3.3rem)/1.02 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.02;
   }
 
   .problem-picker p {
     margin: 1rem 0 0;
     color: var(--color-muted-ink);
-    font: 400 1.05rem/1.6 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    line-height: 1.6;
   }
 
   .problem-picker__grid {
@@ -69,13 +74,18 @@ const problems = [
   }
 
   .problem-picker__card strong {
-    font: 700 1.08rem/1.25 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.25;
   }
 
   .problem-picker__card span {
     margin-top: 0.65rem;
     color: var(--color-muted-ink);
-    font: 400 0.96rem/1.45 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.96rem;
+    line-height: 1.45;
   }
 
   .problem-picker__card:hover {

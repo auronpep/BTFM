@@ -59,7 +59,7 @@ const agendaChoices = [
 
 <section class="meeting-picker" aria-labelledby="meeting-picker-title">
   <div class="meeting-picker__intro">
-    <h1 id="meeting-picker-title">Pick the problem on the next board agenda.</h1>
+    <h1 id="meeting-picker-title" class="editorial-title">Pick the problem on the next board agenda.</h1>
     <p>
       Choose the agenda item that is making the meeting serious. Each prompt is
       designed to help a director prepare before the packet becomes a vote.
@@ -114,15 +114,15 @@ const agendaChoices = [
   .meeting-picker h1 {
     max-width: 12ch;
     margin: 0;
-    font: 700 clamp(2.8rem, 6vw, 5.5rem)/0.96 Georgia, "Times New Roman", serif;
-    letter-spacing: 0;
   }
 
   .meeting-picker p {
     max-width: 38rem;
     margin: 1.25rem 0 0;
     color: var(--color-muted-ink);
-    font: 400 1.08rem/1.65 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.08rem;
+    line-height: 1.65;
   }
 
   .meeting-picker__grid {
@@ -143,7 +143,10 @@ const agendaChoices = [
   }
 
   .meeting-picker__choice span {
-    font: 700 1rem/1.25 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.25;
   }
 
   .meeting-picker__choice:hover {
@@ -164,7 +167,10 @@ const agendaChoices = [
   .meeting-guides h2 {
     margin: 0;
     color: var(--color-ink);
-    font: 700 clamp(2rem, 4vw, 3.3rem)/1.05 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.05;
   }
 
   .meeting-guides__list {
@@ -185,7 +191,10 @@ const agendaChoices = [
   .meeting-guide h3 {
     margin: 0;
     color: var(--color-ink);
-    font: 700 1.25rem/1.25 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.25;
   }
 
   .meeting-guide dl {
@@ -196,7 +205,10 @@ const agendaChoices = [
 
   .meeting-guide dt {
     color: var(--color-slate);
-    font: 800 0.78rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.2;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -205,7 +217,9 @@ const agendaChoices = [
   .meeting-guide__minutes {
     margin: 0.35rem 0 0;
     color: var(--color-muted-ink);
-    font: 400 1rem/1.5 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   .meeting-guide__minutes {

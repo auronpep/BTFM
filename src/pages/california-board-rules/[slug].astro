@@ -27,7 +27,7 @@ const slug = rule.id.replace(/\.mdx?$/, "");
         <div>
           <a class="rule-page__back" href="/california-board-rules/">California Board Rules</a>
           <p class="eyebrow">{rule.data.ruleType.replaceAll("-", " ")}</p>
-          <h1>{rule.data.title}</h1>
+          <h1 class="editorial-title">{rule.data.title}</h1>
           {rule.data.deck && <p class="rule-page__deck">{rule.data.deck}</p>}
         </div>
         <div class="rule-page__side">

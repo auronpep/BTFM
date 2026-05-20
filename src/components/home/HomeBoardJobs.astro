@@ -37,7 +37,10 @@ const jobs = [
   .board-jobs h2 {
     max-width: 15ch;
     margin: 0;
-    font: 700 clamp(2rem, 4vw, 3.4rem)/1.05 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.05;
   }
 
   .board-jobs__list {
@@ -56,14 +59,19 @@ const jobs = [
 
   .board-jobs h3 {
     margin: 0;
-    color: var(--color-brass);
-    font: 700 1.6rem/1.1 Georgia, "Times New Roman", serif;
+    color: #d8c76a;
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
   }
 
   .board-jobs p {
     margin: 1rem 0 0;
     color: rgba(245, 240, 234, 0.86);
-    font: 400 1rem/1.6 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   @media (max-width: 800px) {

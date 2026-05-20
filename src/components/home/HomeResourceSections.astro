@@ -70,14 +70,19 @@ const scenarios = [
   .training-band h2 {
     margin: 0;
     color: var(--color-ink);
-    font: 700 clamp(2rem, 4vw, 3.1rem)/1.05 Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: 1.05;
   }
 
   .resources__heading p,
   .training-band p {
     margin: 0;
     color: var(--color-muted-ink);
-    font: 400 1.05rem/1.6 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    line-height: 1.6;
   }
 
   .resources__columns {
@@ -95,7 +100,10 @@ const scenarios = [
 
   .resources h3 {
     margin: 0;
-    font: 700 1.25rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   .resources ul {
@@ -104,13 +112,19 @@ const scenarios = [
     margin: 1rem 0 1.25rem;
     padding-left: 1.2rem;
     color: var(--color-muted-ink);
-    font: 500 1rem/1.45 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.45;
   }
 
   .resources a,
   .training-band a {
     color: var(--color-slate);
-    font: 700 0.98rem/1.2 ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
   }
 
   .resources a:focus-visible,

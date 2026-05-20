@@ -569,3 +569,29 @@ Before calling the implementation done:
 - Confirmed GitHub reports `erewhonsgroup/CDX` as `PRIVATE` with default branch `main`.
 - Committed and pushed the GitHub tooling documentation scope to `origin/codex/live-prototype-8120`.
 - Verification note: local `HEAD` and the remote branch matched after each push verification; `git diff --cached --check` passed before each commit. No build was run because the committed scope was documentation and task tracking only.
+
+## V2 UI Polish Sprint
+
+- [x] Commit existing UI research/backlog docs separately.
+- [x] Write the approved implementation plan.
+- [x] Run pre-edit red checks for homepage mobile overflow and font inconsistency.
+- [x] Make font strategy intentional.
+- [x] Establish page-type H1 scale rules.
+- [x] Add semantic topic accents.
+- [x] Add first board-packet visual components.
+- [x] Replace homepage hero with a concrete board-packet scene.
+- [x] Run build, browser QA, screenshots, and deployment smoke checks.
+- [x] Commit, push, and deploy the sprint.
+
+### V2 UI Polish Sprint Review
+
+- Added an intentional typography system using Newsreader for editorial display, Source Sans 3 for body/UI, and IBM Plex Mono for labels.
+- Added shared page-type title classes so homepage, program, editorial, tool, and topic pages no longer all use the same oversized H1 treatment.
+- Added semantic accent tokens for risk, records, rules, tools, and training surfaces.
+- Added reusable `AgendaPreview` and `AnnotatedPacket` visual components and integrated the packet scene into the homepage hero.
+- Replaced hardcoded prototype font stacks in touched homepage, article, scenario, tool, topic, California rules, next-meeting, and program surfaces with shared font tokens.
+- Browser QA checked `/`, `/training/board-training-program/`, `/articles/`, `/tools/`, `/california-board-rules/`, and `/next-meeting/` at 390px and 1440px: no horizontal overflow and no console warnings/errors.
+- Local verification passed: `npm run check`, `npm run build`, and `git diff --check`.
+- Deployed static build to Hostinger with backup `public_html-20260520031202.tgz`.
+- Live smoke checks returned HTTP 200 for `/`, `/training/board-training-program/`, `/articles/`, `/tools/`, `/california-board-rules/`, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
+- Live browser smoke confirmed the homepage packet scene, Newsreader H1, no overflow, no console warnings/errors, and program-page training inquiry/NPOlawyers.com links.

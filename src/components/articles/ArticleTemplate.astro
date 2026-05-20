@@ -30,7 +30,7 @@ const useBeforeLabel = useBefore.map((item) => item.replaceAll('-', ' ')).join('
 <article class="manual-article">
   <header class="manual-article__header">
     <p class="eyebrow">{categoryLabel}</p>
-    <h1>{title}</h1>
+    <h1 class="editorial-title">{title}</h1>
     <p>{deck ?? description}</p>
     {attorneyReviewRequired && (
       <p class="review-note">Attorney review recommended before publication or board reliance.</p>

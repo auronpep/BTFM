@@ -1,0 +1,200 @@
+---
+import AgendaPreview from "./AgendaPreview.astro";
+
+interface Props {
+  heading?: string;
+  summary?: string;
+}
+
+const {
+  heading = "Strategy. Safety. Audit.",
+  summary = "Read the packet, find the board question, and leave a record that proves the board acted.",
+} = Astro.props;
+
+const notes = [
+  "What decision is actually before the board?",
+  "What document is missing?",
+  "What should the minutes prove?",
+];
+---
+
+<div class="annotated-packet" aria-label="Annotated board packet preview">
+  <div class="annotated-packet__cover">
+    <p>Board Packet</p>
+    <h2>{heading}</h2>
+    <span>{summary}</span>
+  </div>
+
+  <div class="annotated-packet__agenda">
+    <AgendaPreview
+      title="Next Meeting"
+      meta="Agenda review"
+      minutesNote="Decision trail: motion, vote, abstentions, and follow-up owner."
+    />
+  </div>
+
+  <div class="annotated-packet__notes" aria-label="Board packet margin notes">
+    {notes.map((note, index) => (
+      <p>
+        <span>{index + 1}</span>
+        {note}
+      </p>
+    ))}
+  </div>
+
+  <div class="annotated-packet__tabs" aria-hidden="true">
+    <span>Agenda</span>
+    <span>Budget</span>
+    <span>Minutes</span>
+  </div>
+</div>
+
+<style>
+  .annotated-packet {
+    position: relative;
+    min-height: 34rem;
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.9fr) minmax(16rem, 1.1fr);
+    gap: var(--space-5);
+    align-items: end;
+    border-left: 0.35rem solid var(--color-records);
+    padding: var(--space-6);
+    background:
+      linear-gradient(rgba(30, 42, 67, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 42, 67, 0.08) 1px, transparent 1px),
+      rgba(245, 240, 234, 0.74);
+    background-size: 2.6rem 2.6rem;
+    box-shadow: inset 0 0 0 1px rgba(95, 75, 39, 0.12);
+  }
+
+  .annotated-packet__cover {
+    min-height: 21rem;
+    display: grid;
+    align-content: end;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--color-navy);
+    color: var(--color-paper);
+    box-shadow: 0 1.4rem 3rem rgba(30, 42, 67, 0.24);
+  }
+
+  .annotated-packet__cover p {
+    margin: 0 0 var(--space-3);
+    color: #d8c76a;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .annotated-packet__cover h2 {
+    max-width: 9ch;
+    margin: 0;
+    color: var(--color-white);
+    font-size: 3.25rem;
+    line-height: 0.95;
+  }
+
+  .annotated-packet__cover span {
+    max-width: 30ch;
+    display: block;
+    margin-top: var(--space-4);
+    color: rgba(231, 225, 219, 0.84);
+    line-height: 1.5;
+  }
+
+  .annotated-packet__agenda {
+    position: relative;
+    z-index: 2;
+    margin-bottom: var(--space-4);
+  }
+
+  .annotated-packet__notes {
+    position: absolute;
+    right: var(--space-5);
+    top: var(--space-5);
+    width: min(18rem, 42%);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .annotated-packet__notes p {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: var(--space-2);
+    align-items: start;
+    margin: 0;
+    border: 1px solid rgba(95, 75, 39, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    background: rgba(245, 240, 234, 0.94);
+    color: var(--color-ink);
+    box-shadow: 0 0.65rem 1.4rem rgba(30, 42, 67, 0.12);
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .annotated-packet__notes span {
+    width: 1.35rem;
+    height: 1.35rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-records);
+    color: var(--color-white);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .annotated-packet__tabs {
+    position: absolute;
+    bottom: var(--space-5);
+    left: var(--space-6);
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .annotated-packet__tabs span {
+    border: 1px solid rgba(95, 75, 39, 0.2);
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    background: rgba(245, 240, 234, 0.88);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 58rem) {
+    .annotated-packet {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .annotated-packet__notes,
+    .annotated-packet__tabs {
+      position: static;
+      width: auto;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .annotated-packet {
+      gap: var(--space-4);
+      margin-inline: -0.625rem;
+      padding: var(--space-4);
+    }
+
+    .annotated-packet__cover {
+      min-height: 17rem;
+      padding: var(--space-5);
+    }
+
+    .annotated-packet__cover h2 {
+      font-size: 2.45rem;
+    }
+  }
+</style>
