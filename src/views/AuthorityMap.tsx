@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
@@ -19,8 +19,13 @@ interface ActionItem {
 export const AuthorityMap: React.FC = () => {
   const { navigate } = useRouter();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [assignments, setAssignments] = useState<Record<string, 'board' | 'committee' | 'ceo'>>({});
-  const [showResults, setShowResults] = useState(false);
+  const [assignments, setAssignments] = useState<Record<string, 'board' | 'committee' | 'ceo'>>(() => {
+    const saved = localStorage.getItem('cdx_authority_map_assignments');
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [showResults, setShowResults] = useState<boolean>(() => {
+    return localStorage.getItem('cdx_authority_map_show_results') === 'true';
+  });
 
   const items: ActionItem[] = [
     {
@@ -148,6 +153,10 @@ export const AuthorityMap: React.FC = () => {
     setAssignments({});
     setSelectedItemId(null);
     setShowResults(false);
+    localStorage.removeItem('cdx_authority_map_assignments');
+    localStorage.removeItem('cdx_authority_map_show_results');
+    localStorage.removeItem('cdx_authority_map_score');
+    localStorage.removeItem('cdx_authority_map_total');
   };
 
   const solveAll = () => {
@@ -157,10 +166,31 @@ export const AuthorityMap: React.FC = () => {
     });
     setAssignments(solved);
     setShowResults(true);
+    localStorage.setItem('cdx_authority_map_assignments', JSON.stringify(solved));
+    localStorage.setItem('cdx_authority_map_show_results', 'true');
   };
 
   const correctCount = calculateScore();
   const allAssigned = Object.keys(assignments).length === items.length;
+
+  useEffect(() => {
+    if (Object.keys(assignments).length > 0) {
+      localStorage.setItem('cdx_authority_map_assignments', JSON.stringify(assignments));
+    } else {
+      localStorage.removeItem('cdx_authority_map_assignments');
+    }
+  }, [assignments]);
+
+  useEffect(() => {
+    localStorage.setItem('cdx_authority_map_show_results', showResults.toString());
+    if (showResults) {
+      localStorage.setItem('cdx_authority_map_score', correctCount.toString());
+      localStorage.setItem('cdx_authority_map_total', items.length.toString());
+    } else {
+      localStorage.removeItem('cdx_authority_map_score');
+      localStorage.removeItem('cdx_authority_map_total');
+    }
+  }, [showResults, correctCount]);
 
   return (
     <Layout>
@@ -210,13 +240,20 @@ export const AuthorityMap: React.FC = () => {
                 Select any corporate action card from the unsorted deck below, then click one of the three category column buttons to assign it. Submit or show results to verify your placements.
               </p>
             </div>
-            {allAssigned && (
+            {!allAssigned ? (
+              <button
+                disabled
+                className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-premium shrink-0 bg-fog/80 text-ink/40 border border-fog/50 cursor-not-allowed select-none"
+              >
+                Audit Locked: Sort cards ({Object.keys(assignments).length}/12)
+              </button>
+            ) : (
               <button
                 onClick={() => setShowResults(!showResults)}
-                className={`px-5 py-2 text-xs font-bold uppercase tracking-wider rounded transition-premium shrink-0 ${
+                className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded transition-premium shrink-0 shadow-md ${
                   showResults 
-                    ? 'bg-brass text-ink' 
-                    : 'bg-teal-brand hover:bg-ink text-white shadow'
+                    ? 'bg-brass text-ink border border-brass/40 hover:bg-brass-light' 
+                    : 'bg-teal-brand hover:bg-ink text-white animate-pulse hover:animate-none'
                 }`}
               >
                 {showResults ? 'Hide Delegations Audit' : 'Verify Assignments & Explanations'}
@@ -319,8 +356,12 @@ export const AuthorityMap: React.FC = () => {
 
               <div className="p-4 space-y-3 flex-grow bg-paper/5">
                 {getGroupItems('board').length === 0 ? (
-                  <div className="py-12 text-center text-xs text-ink/30 italic">
-                    No items assigned to Board slot yet
+                  <div className="border-2 border-dashed border-fog rounded-xl p-6 bg-paper/10 text-center space-y-2 py-10 my-1 animate-fade-in">
+                    <Landmark className="text-brass/30 mx-auto w-10 h-10 stroke-[1.5]" />
+                    <p className="text-xs font-bold text-slate-brand uppercase tracking-wider">Receptive Board Slot</p>
+                    <p className="text-[11px] text-ink/60 leading-relaxed">
+                      Select an action from the deck above and assign it here.
+                    </p>
                   </div>
                 ) : (
                   getGroupItems('board').map((item) => {
@@ -394,8 +435,12 @@ export const AuthorityMap: React.FC = () => {
 
               <div className="p-4 space-y-3 flex-grow bg-paper/5">
                 {getGroupItems('committee').length === 0 ? (
-                  <div className="py-12 text-center text-xs text-ink/30 italic">
-                    No items assigned to Exec Committee yet
+                  <div className="border-2 border-dashed border-fog rounded-xl p-6 bg-paper/10 text-center space-y-2 py-10 my-1 animate-fade-in">
+                    <Shield className="text-brass/30 mx-auto w-10 h-10 stroke-[1.5]" />
+                    <p className="text-xs font-bold text-teal-brand uppercase tracking-wider">Receptive Committee Slot</p>
+                    <p className="text-[11px] text-ink/60 leading-relaxed">
+                      Select an action from the deck above and assign it here.
+                    </p>
                   </div>
                 ) : (
                   getGroupItems('committee').map((item) => {
@@ -469,8 +514,12 @@ export const AuthorityMap: React.FC = () => {
 
               <div className="p-4 space-y-3 flex-grow bg-paper/5">
                 {getGroupItems('ceo').length === 0 ? (
-                  <div className="py-12 text-center text-xs text-ink/30 italic">
-                    No items assigned to CEO slot yet
+                  <div className="border-2 border-dashed border-fog rounded-xl p-6 bg-paper/10 text-center space-y-2 py-10 my-1 animate-fade-in">
+                    <User className="text-brass/30 mx-auto w-10 h-10 stroke-[1.5]" />
+                    <p className="text-xs font-bold text-copper uppercase tracking-wider">Receptive CEO Slot</p>
+                    <p className="text-[11px] text-ink/60 leading-relaxed">
+                      Select an action from the deck above and assign it here.
+                    </p>
                   </div>
                 ) : (
                   getGroupItems('ceo').map((item) => {

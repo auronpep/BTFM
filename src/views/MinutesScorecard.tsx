@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
@@ -23,80 +23,82 @@ export const MinutesScorecard: React.FC = () => {
   const [showBadMinutes, setShowBadMinutes] = useState(false);
 
   // Criteria database
-  const [criteria, setCriteria] = useState<ScoringCriterion[]>([
-    {
-      id: 'presence',
-      category: 'procedural',
-      label: 'Accurate Attendance & Quorum Verified',
-      description: 'Record meeting date, time, location, names of directors present and absent, and verify that a legal quorum was established.',
-      whyMatters: 'If a regulatory audit challenges a board decision, the minutes must prove a quorum existed. Without a quorum, any board votes are legally void.',
-      statute: 'CA Corp Code § 5211',
-      checked: false
-    },
-    {
-      id: 'no-transcripts',
-      category: 'defensive',
-      label: 'Deliberations Recorded as "Actions & Decisions" (No Verbatim Transcripts)',
-      description: 'Completely exclude verbatim statements, word-for-word quotes, personal slurs, or detailed logs of disagreements. Document *decisions* and general topics of deliberation.',
-      whyMatters: 'Recording "who said what" creates immediate division and exposes individual directors to heavy subpoenas and discovery during litigation. Minutes are legal evidence, not a newsletter.',
-      statute: 'CA AG Best Practices',
-      checked: false
-    },
-    {
-      id: 'conflict-recusal',
-      category: 'substantive',
-      label: 'Conflict Disclosures & Executive Recusals Documented',
-      description: 'State any director conflicts, record that the interested party made disclosures, and explicitly note that they *exited the room* during discussion and the vote.',
-      whyMatters: 'To protect self-dealing contracts from being voided under California Section 5233, the minutes must prove the conflicted director was recused and absent for the vote.',
-      statute: 'CA Corp Code § 5233',
-      checked: false
-    },
-    {
-      id: 'comp-comparables',
-      category: 'substantive',
-      label: 'Executive Compensation Comparables Cited',
-      description: 'When approving salaries, document the specific independent comparability studies reviewed, the disinterested members present, and the board\'s final approved salary.',
-      whyMatters: 'The IRS requires this exact documentation in the minutes to grant the board "Rebuttable Presumption of Reasonableness," shielding directors from personal excise tax penalties.',
-      statute: 'IRC § 4958 / Safe Harbor',
-      checked: false
-    },
-    {
-      id: 'recuse-employee',
-      category: 'defensive',
-      label: 'Paid Employees Absent for Vote & Deliberations',
-      description: 'Ensure the Executive Director or other compensated staff are completely recused and absent during discussions regarding their own performance and pay.',
-      whyMatters: 'Failing to recuse paid executives invalidates IRS safe harbor structures and compromises the independent governance expected by the California Attorney General.',
-      statute: 'IRS Safe Harbor Guidelines',
-      checked: false
-    },
-    {
-      id: 'general-deliberation',
-      category: 'defensive',
-      label: 'Key Board Deliberations Summarized Generally',
-      description: 'Summarize discussions briefly, showing the board considered alternative risk options (e.g. "Directors discussed budget variances, evaluated the risk of expansion, and...").',
-      whyMatters: 'General summaries demonstrate that the board acted with due diligence (Duty of Care), fulfilling the Business Judgment Rule without detailing sensitive inner disputes.',
-      statute: 'CA Corp Code § 5231',
-      checked: false
-    },
-    {
-      id: 'tax-review',
-      category: 'substantive',
-      label: 'Annual IRS Form 990 Review Documented',
-      description: 'Formally record that the full Board of Directors received, reviewed, and approved the annual IRS Form 990 prior to filing.',
-      whyMatters: 'The IRS Form 990 asks directly if the board was provided a copy. Answering "Yes" and documenting the review process in minutes represents a major governance trust indicator.',
-      statute: 'IRS Form 990 Governance Check',
-      checked: false
-    },
-    {
-      id: 'official-signatures',
-      category: 'procedural',
-      label: 'Signed off by Board Secretary & Centralized Record keeping',
-      description: 'Bylaw mandates that final minutes must be formally typed, signed by the Board Secretary, and bound in a central corporate record book.',
-      whyMatters: 'Minutes are not official corporate documents until they are voted approved at the subsequent meeting and hand-signed by the Secretary.',
-      statute: 'CA Corp Code § 5215',
-      checked: false
-    }
-  ]);
+  const [criteria, setCriteria] = useState<ScoringCriterion[]>(() => {
+    const savedIds = localStorage.getItem('cdx_minutes_scorecard_checked_ids');
+    const checkedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
+    
+    const initialCriteria: Omit<ScoringCriterion, 'checked'>[] = [
+      {
+        id: 'presence',
+        category: 'procedural',
+        label: 'Accurate Attendance & Quorum Verified',
+        description: 'Record meeting date, time, location, names of directors present and absent, and verify that a legal quorum was established.',
+        whyMatters: 'If a regulatory audit challenges a board decision, the minutes must prove a quorum existed. Without a quorum, any board votes are legally void.',
+        statute: 'CA Corp Code § 5211'
+      },
+      {
+        id: 'no-transcripts',
+        category: 'defensive',
+        label: 'Deliberations Recorded as "Actions & Decisions" (No Verbatim Transcripts)',
+        description: 'Completely exclude verbatim statements, word-for-word quotes, personal slurs, or detailed logs of disagreements. Document *decisions* and general topics of deliberation.',
+        whyMatters: 'Recording "who said what" creates immediate division and exposes individual directors to heavy subpoenas and discovery during litigation. Minutes are legal evidence, not a newsletter.',
+        statute: 'CA AG Best Practices'
+      },
+      {
+        id: 'conflict-recusal',
+        category: 'substantive',
+        label: 'Conflict Disclosures & Executive Recusals Documented',
+        description: 'State any director conflicts, record that the interested party made disclosures, and explicitly note that they *exited the room* during discussion and the vote.',
+        whyMatters: 'To protect self-dealing contracts from being voided under California Section 5233, the minutes must prove the conflicted director was recused and absent for the vote.',
+        statute: 'CA Corp Code § 5233'
+      },
+      {
+        id: 'comp-comparables',
+        category: 'substantive',
+        label: 'Executive Compensation Comparables Cited',
+        description: 'When approving salaries, document the specific independent comparability studies reviewed, the disinterested members present, and the board\'s final approved salary.',
+        whyMatters: 'The IRS requires this exact documentation in the minutes to grant the board "Rebuttable Presumption of Reasonableness," shielding directors from personal excise tax penalties.',
+        statute: 'IRC § 4958 / Safe Harbor'
+      },
+      {
+        id: 'recuse-employee',
+        category: 'defensive',
+        label: 'Paid Employees Absent for Vote & Deliberations',
+        description: 'Ensure the Executive Director or other compensated staff are completely recused and absent during discussions regarding their own performance and pay.',
+        whyMatters: 'Failing to recuse paid executives invalidates IRS safe harbor structures and compromises the independent governance expected by the California Attorney General.',
+        statute: 'IRS Safe Harbor Guidelines'
+      },
+      {
+        id: 'general-deliberation',
+        category: 'defensive',
+        label: 'Key Board Deliberations Summarized Generally',
+        description: 'Summarize discussions briefly, showing the board considered alternative risk options (e.g. "Directors discussed budget variances, evaluated the risk of expansion, and...").',
+        whyMatters: 'General summaries demonstrate that the board acted with due diligence (Duty of Care), fulfilling the Business Judgment Rule without detailing sensitive inner disputes.',
+        statute: 'CA Corp Code § 5231'
+      },
+      {
+        id: 'tax-review',
+        category: 'substantive',
+        label: 'Annual IRS Form 990 Review Documented',
+        description: 'Formally record that the full Board of Directors received, reviewed, and approved the annual IRS Form 990 prior to filing.',
+        whyMatters: 'The IRS Form 990 asks directly if the board was provided a copy. Answering "Yes" and documenting the review process in minutes represents a major governance trust indicator.',
+        statute: 'IRS Form 990 Governance Check'
+      },
+      {
+        id: 'official-signatures',
+        category: 'procedural',
+        label: 'Signed off by Board Secretary & Centralized Record keeping',
+        description: 'Bylaw mandates that final minutes must be formally typed, signed by the Board Secretary, and bound in a central corporate record book.',
+        whyMatters: 'Minutes are not official corporate documents until they are voted approved at the subsequent meeting and hand-signed by the Secretary.',
+        statute: 'CA Corp Code § 5215'
+      }
+    ];
+
+    return initialCriteria.map(c => ({
+      ...c,
+      checked: checkedIds.includes(c.id)
+    })) as ScoringCriterion[];
+  });
 
   const toggleCriterion = (id: string) => {
     setCriteria(criteria.map(c => c.id === id ? { ...c, checked: !c.checked } : c));
@@ -141,6 +143,13 @@ export const MinutesScorecard: React.FC = () => {
     gradeLabel = 'Actionable Negligence Risk';
     gradeDesc = 'Dangerous. Your corporate minutes lack essential protections. Under audit, individual directors could be held personally liable for board actions due to insufficient record-keeping diligence.';
   }
+
+  useEffect(() => {
+    localStorage.setItem('cdx_minutes_scorecard_score', score.toString());
+    localStorage.setItem('cdx_minutes_scorecard_grade', grade);
+    const checkedIds = criteria.filter(c => c.checked).map(c => c.id);
+    localStorage.setItem('cdx_minutes_scorecard_checked_ids', JSON.stringify(checkedIds));
+  }, [score, grade, criteria]);
 
   // Horrific board minutes sample
   const horrificMinutesMock = `MINUTES OF THE BOARD MEETING - CDX CHARITY
@@ -306,7 +315,7 @@ Date Approved: ____________________`;
               <div className="bg-white rounded-xl border border-fog p-5 text-left space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
                   <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-copper flex items-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4" />
+                    <AlertTriangle className="w-4 h-4 text-copper animate-bounce" />
                     <span>Analyzing Litigious Minutes</span>
                   </h4>
                   <button
@@ -319,6 +328,20 @@ Date Approved: ____________________`;
                 <p className="text-xs text-ink/70 leading-relaxed">
                   Click below to view a mock draft of poorly written minutes. Compare it with the checkboxes on the right to see why it constitutes a litigation risk.
                 </p>
+                
+                <div className="pt-1">
+                  <button
+                    onClick={() => {
+                      setShowBadMinutes(true);
+                      resetAll();
+                    }}
+                    className="w-full inline-flex justify-center items-center gap-1.5 px-4 py-2.5 bg-burgundy/10 hover:bg-burgundy text-burgundy hover:text-white border border-burgundy/30 text-xs font-bold uppercase tracking-wider rounded transition-premium"
+                  >
+                    <span>Load & Score Bad Sample (Grade F)</span>
+                    <AlertTriangle className="w-4 h-4" />
+                  </button>
+                </div>
+
                 {showBadMinutes && (
                   <div className="space-y-3 mt-3 border-t border-fog pt-3 animate-fade-in">
                     <pre className="font-mono text-[10px] bg-copper/5 border border-copper/20 p-3 rounded text-ink/90 overflow-x-auto whitespace-pre-wrap leading-relaxed h-48 max-h-48 overflow-y-auto">
@@ -425,22 +448,35 @@ Date Approved: ____________________`;
                 </p>
               </div>
 
-              <button
-                onClick={copyToClipboard}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Copied to Clipboard!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4 text-brass" />
-                    <span>Copy Template Text</span>
-                  </>
-                )}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => {
+                    checkAll();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                >
+                  <span>Load & Score Safe Template (Grade A)</span>
+                  <FileCheck className="w-4 h-4 text-brass" />
+                </button>
+
+                <button
+                  onClick={copyToClipboard}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span>Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-brass" />
+                      <span>Copy Template Text</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="relative">

@@ -24,12 +24,26 @@ interface BudgetLine {
   scriptQuestion: string;
   scriptRationale: string;
   scriptTarget: string;
+  cfoInquiry: string[];
+  invoicesRequest: string[];
+  minutesShow: string;
 }
 
 export const BudgetWorksheet: React.FC = () => {
   const { navigate } = useRouter();
   const [selectedLineId, setSelectedLineId] = useState<string | null>(null);
   const [showVulnerabilities, setShowVulnerabilities] = useState(false);
+  const [auditedLines, setAuditedLines] = useState<string[]>(() => {
+    const saved = localStorage.getItem('cdx_budget_audited_lines');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const resetScan = () => {
+    setAuditedLines([]);
+    setSelectedLineId(null);
+    setShowVulnerabilities(false);
+    localStorage.removeItem('cdx_budget_audited_lines');
+  };
 
   // Budget database
   const budgetLines: Record<string, BudgetLine> = {
@@ -54,7 +68,18 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'IRS Excess Benefit Transactions and board safe harbors.',
       scriptQuestion: 'Did the board vote to authorize this $35,000 increase using formal local compensation comparability studies of peer California nonprofits, and are we recording that the executive was completely recused?',
       scriptRationale: 'Relying on three comparable salary studies and recusing the employee grants the board "rebuttable presumption of reasonableness," shielding directors from personal audit assessments.',
-      scriptTarget: 'Board President & Treasurer'
+      scriptTarget: 'Board President & Treasurer',
+      cfoInquiry: [
+        'Are we currently filing or preparing IRS Form 990 Schedule J for this position?',
+        'Can the Finance Department produce the exact three local comparability reports or IRS guidelines used to establish the compensation range?',
+        'Is there a formal signed conflict of interest recusal form for the Executive Director for the meeting during which this increase was discussed and voted upon?'
+      ],
+      invoicesRequest: [
+        'Compensation survey data or salary reports from 3 similar California budget-sized nonprofits.',
+        'Board meeting minutes containing the formal approval of compensation, detailing the comparability data and recusal.',
+        'Signed employment agreement amendment or offer letter signed by the Board President.'
+      ],
+      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRS Section 4958.'
     },
     'self-dealing': {
       id: 'self-dealing',
@@ -76,7 +101,18 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'California self-dealing standards and board approval steps.',
       scriptQuestion: 'Since this marketing vendor is owned by your spouse, this represents a conflict of interest. Did the board formally vote to approve this contract prior to signing, and were competing contractor bids reviewed?',
       scriptRationale: 'Conflicts must be disclosed, competed, and authorized solely by disinterested directors to remain valid under California corporations law.',
-      scriptTarget: 'Executive Director (CEO) & Board Secretary'
+      scriptTarget: 'Executive Director (CEO) & Board Secretary',
+      cfoInquiry: [
+        'When was this contract signed, and did the Executive Director sign it on behalf of the organization without board knowledge?',
+        'Were at least two other competitive proposals obtained from unrelated web development firms in California?',
+        'Did the Executive Director completely leave the room during the board discussion and vote?'
+      ],
+      invoicesRequest: [
+        'The written marketing vendor agreement detailing deliverables, hourly rates, and the spousal relationship.',
+        'At least 2 comparable independent bids/proposals from unrelated marketing firms.',
+        'Bylaws or procurement policies showing conflict of interest guidelines.'
+      ],
+      minutesShow: 'RESOLVED, that the disinterested members of the Board, having reviewed two competitive bids and finding the agreement with [Spousal Entity] to be of fair market value, highly advantageous, and in the best interest of the corporation, hereby approves the $15,000 agreement. The Executive Director was recused, did not participate in discussion, and abstained from voting in compliance with CA Corp Code § 5233.'
     },
     'payroll-tax': {
       id: 'payroll-tax',
@@ -98,7 +134,18 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'The 100% Trust Fund Recovery Penalty.',
       scriptQuestion: 'Are employee payroll withholding taxes currently being deposited on schedule, and can the Treasurer provide the board with direct, independent verification of tax receipts?',
       scriptRationale: 'Directors have an active duty to verify tax compliance. Trusting the executive\'s verbal assurance is legally insufficient when personal joint-and-several financial penalties are active under federal tax law.',
-      scriptTarget: 'Treasurer & Executive Director'
+      scriptTarget: 'Treasurer & Executive Director',
+      cfoInquiry: [
+        'What is the exact amount of unpaid federal tax Form 941 deposits and state DE-9 deposits?',
+        'Has the IRS or California EDD issued any notice of intent to levy or unpaid balance letters?',
+        'Are we currently prioritizing paying any vendors, landlords, or employee net wages over payroll taxes?'
+      ],
+      invoicesRequest: [
+        'Most recent IRS Form 941 and California EDD DE-9 filings.',
+        'EFTPS (Electronic Federal Tax Payment System) receipt confirmations for the last 3 pay periods.',
+        'All recent IRS and EDD billing notices or outstanding balance notices.'
+      ],
+      minutesShow: 'RESOLVED, that the Board of Directors directs the Treasurer and Executive Director to immediately pay all outstanding federal and state employee tax withholdings. The Board hereby mandates that no other operating expense or vendor payment be authorized if employee payroll tax withholdings remain unpaid, to preserve compliance and eliminate direct director personal liability under IRC § 6672.'
     },
     'restricted-funds': {
       id: 'restricted-funds',
@@ -120,7 +167,18 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'Supervision of Trustees and Charitable Trusts Act.',
       scriptQuestion: 'These funds were donor-restricted for student scholarships. Did the organization secure written consent from the original donors before diverting this $65,000 to cover general operating expenses?',
       scriptRationale: 'Without written donor consent or court permission under UPMIFA standards, restricted assets must remain separated. Financial hardship does not excuse a breach of charitable trust.',
-      scriptTarget: 'Treasurer & Finance Director'
+      scriptTarget: 'Treasurer & Finance Director',
+      cfoInquiry: [
+        'What donor agreements or grant letters cover the diverted $65,000 scholarship funds?',
+        'Did we receive written consent from the donor(s) authorizing the temporary or permanent diversion of these funds?',
+        'How is the scholarship fund currently tracked in our general ledger, and is it segregated or comingled?'
+      ],
+      invoicesRequest: [
+        'The original donor restriction agreement or grant agreement for the scholarship funds.',
+        'General Ledger reports showing the transfer from the scholarship account to the general operating account.',
+        'Bank statements for restricted accounts and copies of any written correspondence with the donor.'
+      ],
+      minutesShow: 'RESOLVED, that the Board of Directors directs the immediate transfer of $65,000 from the general operating cash account back into the donor-restricted scholarship account. The Board further mandates that no restricted funds are to be used for general operations, and that a formal written donor consent protocol must be initiated before any restricted asset is reallocated in the future.'
     },
     'luxury-travel': {
       id: 'luxury-travel',
@@ -142,7 +200,18 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'Duty of Care and standard of care requirements for nonprofit directors.',
       scriptQuestion: 'What specific business travel or executive retreats accounted for this $35,000 budget overrun, and why was this variance not flagged and pre-authorized by the Treasurer or the Finance Committee?',
       scriptRationale: 'Fiduciary care requires active budget tracking. Allowing large, unapproved discretionary travel budgets suggests a lack of active internal financial oversight and controls.',
-      scriptTarget: 'Treasurer & Executive Director'
+      scriptTarget: 'Treasurer & Executive Director',
+      cfoInquiry: [
+        'Does the organization possess detailed itemized receipts (not just credit card summaries) for this $45,000 travel expense?',
+        'Was a clear, written business purpose or attendee list documented for every retreat or meal?',
+        'Is there an active travel reimbursement or accountable plan policy in place?'
+      ],
+      invoicesRequest: [
+        'Complete itemized receipts and lodging invoices for the $45,000 travel expenses.',
+        'Written business expense reports showing the business purpose, dates, and names of all participants.',
+        'The board-approved Travel and Expense Reimbursement Policy.'
+      ],
+      minutesShow: 'RESOLVED, that the Board of Directors establishes a strict $5,000 ceiling on any single travel event and mandates that all executive travel expenses over $1,000 be pre-approved by the Treasurer. The Board hereby directs that reimbursement be denied for any travel or entertainment lacking itemized receipts and a detailed commercial business rationale in compliance with the CA Corp Code § 5231 Duty of Care.'
     },
     'lapsed-do': {
       id: 'lapsed-do',
@@ -164,12 +233,28 @@ export const BudgetWorksheet: React.FC = () => {
       statuteText: 'Mandatory insurance thresholds for volunteer director immunity protection.',
       scriptQuestion: 'Has our D&O liability policy actively lapsed, and can we immediately reinstate the policy to preserve statutory personal immunity under California law?',
       scriptRationale: 'Maintaining active D&O insurance represents the absolute baseline of personal asset protection for volunteer nonprofit directors.',
-      scriptTarget: 'Board President & Treasurer'
+      scriptTarget: 'Board President & Treasurer',
+      cfoInquiry: [
+        'Why did the D&O policy lapse, and was it due to an administrative oversight or lack of cash?',
+        'Has our insurance broker provided a reinstatement quote or an application for a new D&O policy?',
+        'Are there any pending, threatened, or active claims or lawsuits against any director or officer?'
+      ],
+      invoicesRequest: [
+        'The most recent lapsed D&O insurance policy declaration page.',
+        'Reinstatement invoice or new premium quotes from our insurance broker.',
+        'Most recent written notification of policy expiration or non-renewal.'
+      ],
+      minutesShow: 'RESOLVED, that the Board of Directors finds the lapse of the Director and Officer (D&O) liability insurance policy to represent an unacceptable exposure of the personal assets of the directors. The Treasurer is hereby authorized and directed to immediately fund the premium payment of $35,000 and reinstate the policy to preserve volunteer director immunity under CA Corp Code § 5047.5.'
     }
   };
 
   const handleLineClick = (lineId: string) => {
     setSelectedLineId(lineId);
+    if (!auditedLines.includes(lineId)) {
+      const updated = [...auditedLines, lineId];
+      setAuditedLines(updated);
+      localStorage.setItem('cdx_budget_audited_lines', JSON.stringify(updated));
+    }
   };
 
   const currentLine = selectedLineId ? budgetLines[selectedLineId] : null;
@@ -197,6 +282,12 @@ export const BudgetWorksheet: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-3 shrink-0">
+              <button
+                onClick={resetScan}
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded border border-rose-200 text-rose-700 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300 transition-premium"
+              >
+                Reset Scan
+              </button>
               <button
                 onClick={() => setShowVulnerabilities(!showVulnerabilities)}
                 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded border transition-premium ${
@@ -234,6 +325,55 @@ export const BudgetWorksheet: React.FC = () => {
                 <CaliforniaNoteBadge statute="CA AG Standard" text="Fiduciary Asset Control" className="scale-90 origin-right py-0.5" />
               </div>
 
+              {/* Audit Progress Scanner Banner */}
+              <div className="bg-paper/10 border-b border-fog/85 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  {/* Small Circular Progress Wheel */}
+                  <div className="relative flex items-center justify-center shrink-0">
+                    <svg className="w-10 h-10 transform -rotate-90">
+                      <circle cx="20" cy="20" r="16" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-fog" />
+                      <circle 
+                        cx="20" 
+                        cy="20" 
+                        r="16" 
+                        stroke="currentColor" 
+                        strokeWidth="3" 
+                        fill="transparent" 
+                        strokeDasharray={2 * Math.PI * 16}
+                        strokeDashoffset={2 * Math.PI * 16 * (1 - auditedLines.length / 6)}
+                        className="text-emerald-600 transition-all duration-500"
+                      />
+                    </svg>
+                    <span className="absolute text-[10px] font-mono font-bold text-ink">
+                      {auditedLines.length}/6
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-ink">
+                      Active Ledger Scanner
+                    </h4>
+                    <p className="text-[11px] text-ink/65 font-sans leading-tight">
+                      Scan the table below. Click each row to analyze potential vulnerabilities.
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Complete Badge / Scanning Status */}
+                <div className="shrink-0 flex items-center">
+                  {auditedLines.length === 6 ? (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-full text-[10px] font-bold uppercase tracking-wider animate-bounce shadow-sm">
+                      <CheckCircle className="w-3 h-3 text-emerald-600" />
+                      <span>✓ Audit Complete</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-brass/10 border border-brass/20 text-brass rounded-full text-[10px] font-bold uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brass animate-pulse" />
+                      <span>Scanner Engaged</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
               {/* Table Ledger wrapper */}
               <div className="overflow-x-auto flex-grow">
                 <table className="w-full text-left border-collapse text-xs">
@@ -252,62 +392,141 @@ export const BudgetWorksheet: React.FC = () => {
                       const isSelected = selectedLineId === line.id;
                       const hasAlert = line.status !== 'safe';
                       return (
-                        <tr
-                          key={line.id}
-                          onClick={() => handleLineClick(line.id)}
-                          className={`cursor-pointer transition-premium ${
-                            isSelected 
-                              ? 'bg-brass/15 hover:bg-brass/20 text-ink border-l-4 border-l-brass' 
-                              : showVulnerabilities && hasAlert
-                                ? 'bg-amber-100/50 hover:bg-amber-100/70 border-l-4 border-l-copper animate-pulse'
-                                : 'hover:bg-paper/30'
-                          }`}
-                        >
-                          <td className="py-4 px-5 font-semibold flex items-center gap-2">
-                            {hasAlert && (
-                              <AlertCircle className={`w-4 h-4 shrink-0 ${line.status === 'extreme' ? 'text-rose-700' : 'text-brass'}`} />
-                            )}
-                            <span>{line.category}</span>
-                          </td>
-                          <td className="py-4 px-3 text-right font-mono">${line.budgeted.toLocaleString()}</td>
-                          <td className="py-4 px-3 text-right font-mono font-bold">${line.actual.toLocaleString()}</td>
-                          <td className={`py-4 px-3 text-right font-mono font-bold ${line.variance > 0 ? 'text-rose-700' : 'text-emerald-700'}`}>
-                            {line.variance > 0 ? '+' : ''}${line.variance.toLocaleString()}
-                          </td>
-                          <td className="py-4 px-5 text-right font-mono">
-                            <span className={`px-2 py-0.5 rounded font-bold ${
-                              line.pct > 50 || line.pct < -50
-                                ? 'bg-rose-50 text-rose-700' 
-                                : 'bg-emerald-50 text-emerald-700'
-                            }`}>
-                              {line.pct > 0 ? '+' : ''}{line.pct}%
-                            </span>
-                          </td>
-                        </tr>
+                        <React.Fragment key={line.id}>
+                          <tr
+                            onClick={() => handleLineClick(line.id)}
+                            className={`cursor-pointer transition-premium group ${
+                              isSelected 
+                                ? 'bg-brass/15 hover:bg-brass/20 text-ink border-l-4 border-l-brass' 
+                                : showVulnerabilities && hasAlert
+                                  ? 'bg-amber-100/50 hover:bg-amber-100/70 border-l-4 border-l-copper animate-pulse'
+                                  : 'hover:bg-paper/30'
+                            }`}
+                          >
+                            <td className="py-4 px-5 font-semibold">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                {hasAlert && (
+                                  <AlertCircle className={`w-4 h-4 shrink-0 ${line.status === 'extreme' ? 'text-rose-700' : 'text-brass'}`} />
+                                )}
+                                <span className="font-serif font-bold text-ink text-sm sm:text-xs leading-tight">{line.category}</span>
+                                {auditedLines.includes(line.id) ? (
+                                  <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-50 border border-emerald-100 text-[9px] font-sans font-bold text-emerald-700 rounded uppercase tracking-wider">
+                                    <CheckCircle className="w-2.5 h-2.5 text-emerald-600 shrink-0" />
+                                    <span>Audited</span>
+                                  </span>
+                                ) : (
+                                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-brass/10 border border-brass/20 text-[9px] font-sans font-bold text-brass rounded uppercase tracking-wider">
+                                    <span>Scan Row →</span>
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-4 px-3 text-right font-mono">${line.budgeted.toLocaleString()}</td>
+                            <td className="py-4 px-3 text-right font-mono font-bold">${line.actual.toLocaleString()}</td>
+                            <td className={`py-4 px-3 text-right font-mono font-bold ${line.variance > 0 ? 'text-rose-700' : 'text-emerald-700'}`}>
+                              {line.variance > 0 ? '+' : ''}${line.variance.toLocaleString()}
+                            </td>
+                            <td className="py-4 px-5 text-right font-mono">
+                              <span className={`px-2 py-0.5 rounded font-bold ${
+                                line.pct > 50 || line.pct < -50
+                                  ? 'bg-rose-50 text-rose-700' 
+                                  : 'bg-emerald-50 text-emerald-700'
+                              }`}>
+                                {line.pct > 0 ? '+' : ''}{line.pct}%
+                              </span>
+                            </td>
+                          </tr>
+
+                          {/* COLLAPSIBLE ROW FOR ATTORNEY ANALYSIS DESK */}
+                          {isSelected && (
+                            <tr className="bg-paper/10 border-l-4 border-l-brass border-r border-b border-fog/80 animate-fade-in">
+                              <td colSpan={5} className="p-6">
+                                <div className="space-y-6">
+                                  {/* Section Header */}
+                                  <div className="flex items-center gap-2 border-b border-fog/80 pb-3">
+                                    <Scale className="w-4 h-4 text-brass" />
+                                    <span className="font-serif font-bold text-sm text-ink uppercase tracking-wide">
+                                      Inline Attorney Analysis Desk
+                                    </span>
+                                  </div>
+                                  
+                                  {/* Grid of the 3 columns */}
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                                    {/* Column 1: CFO Inquiry Protocol */}
+                                    <div className="space-y-3 bg-white p-4 rounded-xl border border-fog/60">
+                                      <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-slate-brand flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-brass" />
+                                        CFO Inquiry Protocol
+                                      </h4>
+                                      <ul className="space-y-2 list-none">
+                                        {line.cfoInquiry?.map((inq, iIdx) => (
+                                          <li key={iIdx} className="text-[11px] text-ink/80 leading-relaxed font-medium pl-3 border-l-2 border-slate-brand/40">
+                                            {inq}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+
+                                    {/* Column 2: Required Documentary Evidence */}
+                                    <div className="space-y-3 bg-white p-4 rounded-xl border border-fog/60">
+                                      <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-teal-brand flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-brass" />
+                                        Required Evidence
+                                      </h4>
+                                      <ul className="space-y-2 list-none">
+                                        {line.invoicesRequest?.map((doc, dIdx) => (
+                                          <li key={dIdx} className="text-[11px] text-ink/80 leading-relaxed font-medium pl-3 border-l-2 border-teal-brand/40">
+                                            {doc}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+
+                                    {/* Column 3: Defensive Meeting Minutes Record */}
+                                    <div className="space-y-3 bg-white p-4 rounded-xl border border-fog/60 flex flex-col justify-between">
+                                      <div>
+                                        <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-burgundy flex items-center gap-1.5 mb-3">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-brass" />
+                                          Minutes Resolution
+                                        </h4>
+                                        <div className="bg-paper/40 p-3 rounded-lg border border-fog text-[10px] font-mono text-ink/90 leading-normal max-h-[160px] overflow-y-auto whitespace-pre-wrap">
+                                          {line.minutesShow}
+                                        </div>
+                                      </div>
+                                      <div className="pt-3 border-t border-fog/40 text-[9px] text-ink/50 italic font-sans flex items-center gap-1">
+                                        <span>Draft Board Minutes Standard</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
                       );
                     })}
 
                     {/* Compliant Static rows for standard mapping */}
-                    <tr className="hover:bg-paper/20">
-                      <td className="py-4 px-5 font-semibold text-ink/70 flex items-center gap-2">
+                    <tr className="cursor-default select-none opacity-85 bg-transparent">
+                      <td className="py-4 px-5 font-semibold text-ink/60 flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                         <span>Office Lease & General Administration</span>
                       </td>
-                      <td className="py-4 px-3 text-right font-mono text-ink/60">$24,000</td>
-                      <td className="py-4 px-3 text-right font-mono font-bold text-ink/80">$23,800</td>
-                      <td className="py-4 px-3 text-right font-mono text-emerald-700 font-bold">-$200</td>
-                      <td className="py-4 px-5 text-right font-mono"><span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">-0.8%</span></td>
+                      <td className="py-4 px-3 text-right font-mono text-ink/50">$24,000</td>
+                      <td className="py-4 px-3 text-right font-mono font-bold text-ink/70">$23,800</td>
+                      <td className="py-4 px-3 text-right font-mono text-emerald-700/80 font-bold">-$200</td>
+                      <td className="py-4 px-5 text-right font-mono"><span className="px-2 py-0.5 rounded bg-emerald-50/70 text-emerald-700/80">-0.8%</span></td>
                     </tr>
 
-                    <tr className="hover:bg-paper/20">
-                      <td className="py-4 px-5 font-semibold text-ink/70 flex items-center gap-2">
+                    <tr className="cursor-default select-none opacity-85 bg-transparent">
+                      <td className="py-4 px-5 font-semibold text-ink/60 flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                         <span>Program Supplies & Field Materials</span>
                       </td>
-                      <td className="py-4 px-3 text-right font-mono text-ink/60">$45,000</td>
-                      <td className="py-4 px-3 text-right font-mono font-bold text-ink/80">$43,500</td>
-                      <td className="py-4 px-3 text-right font-mono text-emerald-700 font-bold">-$1,500</td>
-                      <td className="py-4 px-5 text-right font-mono"><span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">-3.3%</span></td>
+                      <td className="py-4 px-3 text-right font-mono text-ink/50">$45,000</td>
+                      <td className="py-4 px-3 text-right font-mono font-bold text-ink/70">$43,500</td>
+                      <td className="py-4 px-3 text-right font-mono text-emerald-700/80 font-bold">-$1,500</td>
+                      <td className="py-4 px-5 text-right font-mono"><span className="px-2 py-0.5 rounded bg-emerald-50/70 text-emerald-700/80">-3.3%</span></td>
                     </tr>
                   </tbody>
                 </table>

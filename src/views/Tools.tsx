@@ -1,10 +1,177 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, ArrowRight } from 'lucide-react';
 
 export const Tools: React.FC = () => {
   const { navigate } = useRouter();
+
+  const [labStates, setLabStates] = useState({
+    selfAssessment: { score: null as string | null, level: null as string | null },
+    boardPacket: { count: 0 },
+    minutesScorecard: { grade: null as string | null, score: null as string | null },
+    budgetWorksheet: { count: 0 },
+    authorityMap: { score: null as string | null, total: null as string | null, count: 0 }
+  });
+
+  useEffect(() => {
+    // 1. Self assessment
+    const selfScore = localStorage.getItem('cdx_self_assessment_score');
+    const selfLevel = localStorage.getItem('cdx_self_assessment_level');
+
+    // 2. Board packet
+    let packetCount = 0;
+    try {
+      const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+      if (packetSaved) {
+        packetCount = JSON.parse(packetSaved).length || 0;
+      }
+    } catch (e) {}
+
+    // 3. Minutes scorecard
+    const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade');
+    const minutesScore = localStorage.getItem('cdx_minutes_scorecard_score');
+
+    // 4. Budget worksheet
+    let budgetCount = 0;
+    try {
+      const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
+      if (budgetSaved) {
+        budgetCount = JSON.parse(budgetSaved).length || 0;
+      }
+    } catch (e) {}
+
+    // 5. Authority map
+    const authScore = localStorage.getItem('cdx_authority_map_score');
+    const authTotal = localStorage.getItem('cdx_authority_map_total');
+    let authCount = 0;
+    try {
+      const authSaved = localStorage.getItem('cdx_authority_map_assignments');
+      if (authSaved) {
+        authCount = Object.keys(JSON.parse(authSaved)).length || 0;
+      }
+    } catch (e) {}
+
+    setLabStates({
+      selfAssessment: { score: selfScore, level: selfLevel },
+      boardPacket: { count: packetCount },
+      minutesScorecard: { grade: minutesGrade, score: minutesScore },
+      budgetWorksheet: { count: budgetCount },
+      authorityMap: { score: authScore, total: authTotal, count: authCount }
+    });
+  }, []);
+
+  const renderBadge = (id: string) => {
+    switch (id) {
+      case 'self-assessment': {
+        const { score, level } = labStates.selfAssessment;
+        if (score) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-brass/10 border border-brass/30 text-brass rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Score: {score}/50 ({level})
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Not Assessed
+          </span>
+        );
+      }
+      case 'board-packet-lab': {
+        const { count } = labStates.boardPacket;
+        if (count === 9) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              ✓ Completed
+            </span>
+          );
+        } else if (count > 0) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-300 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Progress: {count}/9 Red Flags
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Not Started
+          </span>
+        );
+      }
+      case 'minutes-scorecard': {
+        const { grade, score } = labStates.minutesScorecard;
+        if (grade) {
+          let badgeColor = "bg-rose-50 border-rose-300 text-rose-700";
+          if (grade === 'A') badgeColor = "bg-teal-brand/10 border-teal-brand/30 text-teal-brand";
+          else if (grade === 'B') badgeColor = "bg-emerald-50 border-emerald-300 text-emerald-700";
+          else if (grade === 'C') badgeColor = "bg-brass/10 border-brass/30 text-brass";
+          else if (grade === 'D') badgeColor = "bg-copper/10 border-copper/30 text-copper";
+          
+          return (
+            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 border rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeColor}`}>
+              Grade: {grade} ({score}/8 Checks)
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Ungraded
+          </span>
+        );
+      }
+      case 'budget-worksheet': {
+        const { count } = labStates.budgetWorksheet;
+        if (count === 6) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              ✓ Audit Complete
+            </span>
+          );
+        } else if (count > 0) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-300 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Progress: {count}/6 Checked
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Not Scanned
+          </span>
+        );
+      }
+      case 'authority-map': {
+        const { score, total, count } = labStates.authorityMap;
+        if (score) {
+          const scoreNum = parseInt(score);
+          const badgeColor = scoreNum >= 10 
+            ? "bg-teal-brand/10 border-teal-brand/30 text-teal-brand"
+            : scoreNum >= 7 
+              ? "bg-emerald-50 border-emerald-300 text-emerald-700"
+              : "bg-amber-50 border-amber-300 text-amber-700";
+          return (
+            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 border rounded-full text-[10px] font-bold uppercase tracking-wider ${badgeColor}`}>
+              Score: {score}/{total} Correct
+            </span>
+          );
+        } else if (count > 0) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Progress: {count}/12 Sorted
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Not Sorted
+          </span>
+        );
+      }
+      default:
+        return null;
+    }
+  };
 
   const toolItems = [
     {
@@ -82,9 +249,15 @@ export const Tools: React.FC = () => {
                 className={`bg-white rounded-xl shadow-sm border border-fog overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-premium border-t-4 ${tool.themeColor} flex flex-col justify-between text-left`}
               >
                 <div className="p-6 space-y-4">
-                  {/* Tool icon */}
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center border border-fog/50 ${tool.themeColor.split(' ')[2]}`}>
-                    {tool.icon}
+                  <div className="flex items-start justify-between gap-3">
+                    {/* Tool icon */}
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center border border-fog/50 ${tool.themeColor.split(' ')[2]}`}>
+                      {tool.icon}
+                    </div>
+                    {/* Progress Badge */}
+                    <div className="pt-1 shrink-0">
+                      {renderBadge(tool.id)}
+                    </div>
                   </div>
 
                   <div className="space-y-1.5">
@@ -143,4 +316,5 @@ export const Tools: React.FC = () => {
     </Layout>
   );
 };
+
 export default Tools;

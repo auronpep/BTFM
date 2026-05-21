@@ -3,13 +3,30 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
-import { Search, ChevronRight, BookOpen, AlertTriangle, Filter } from 'lucide-react';
+import { Search, ChevronRight, BookOpen, AlertTriangle, Award } from 'lucide-react';
 
 export const Library: React.FC = () => {
   const { navigate, path } = useRouter();
   const [activeTab, setActiveTab] = useState<'articles' | 'scenarios'>('articles');
   const [searchQuery, setSearchQuery] = useState('');
   
+  // Mastery filter states
+  const [masteryFilter, setMasteryFilter] = useState<'all' | 'studied' | 'unstudied'>('all');
+  
+  // Local storage state
+  const [studiedList] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('board_mastery_progress');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  });
+
   // Map specific paths to initial categories
   const getInitialCategory = () => {
     if (path === 'money-audit') return 'Finance';
@@ -44,7 +61,13 @@ export const Library: React.FC = () => {
                           art.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           art.content.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || art.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    
+    const isStudied = studiedList.includes(art.slug);
+    const matchesMastery = masteryFilter === 'all' || 
+                           (masteryFilter === 'studied' && isStudied) || 
+                           (masteryFilter === 'unstudied' && !isStudied);
+                           
+    return matchesSearch && matchesCategory && matchesMastery;
   });
 
   const filteredScenarios = scenarios.filter(sc => {
@@ -59,13 +82,19 @@ export const Library: React.FC = () => {
                             (selectedCategory === 'Strategy' && sc.issueType === 'Chain of Command') ||
                             (selectedCategory === 'Strategy' && sc.issueType === 'Board Operations') ||
                             (selectedCategory === 'Startup' && sc.boardStage === 'Startup');
-    return matchesSearch && matchesCategory;
+                            
+    const isStudied = studiedList.includes(sc.slug);
+    const matchesMastery = masteryFilter === 'all' || 
+                           (masteryFilter === 'studied' && isStudied) || 
+                           (masteryFilter === 'unstudied' && !isStudied);
+                           
+    return matchesSearch && matchesCategory && matchesMastery;
   });
 
   return (
     <Layout>
       <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-8">
           
           {/* Header */}
           <div className="text-center space-y-3">
@@ -81,170 +110,279 @@ export const Library: React.FC = () => {
             </p>
           </div>
 
-          {/* Search & Filter Control Board */}
-          <div className="bg-white rounded-xl shadow-md border border-fog p-5 sm:p-6 space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search input */}
-              <div className="relative flex-grow">
-                <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-ink/40" />
-                <input
-                  type="text"
-                  placeholder="Search articles, legal rules, guidelines, facts, or actions..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-paper/25 border border-fog/80 focus:border-brass rounded-lg p-3 pl-10 text-sm font-sans focus:outline-none focus:ring-1 focus:ring-brass transition-premium"
-                />
-              </div>
+          {/* TWO-COLUMN EXECUTIVE LAYOUT */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* LEFT MAIN RAIL: ARTICLES OR SCENARIOS LIST GRID (col-span-8) */}
+            <main className="lg:col-span-8 space-y-6">
               
-              {/* Categories filters (horizontal scrollable on mobile) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 shrink-0">
-                <Filter className="w-4 h-4 text-ink/40 mr-1 hidden sm:block" />
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-premium whitespace-nowrap ${
-                      selectedCategory === cat
-                        ? 'bg-brass text-ink border border-brass'
-                        : 'bg-paper/35 text-ink/70 border border-fog/60 hover:text-ink hover:bg-fog/30'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+              {/* Toggle tabs for Masterclasses vs Scenarios */}
+              <div className="bg-white rounded-xl shadow-sm border border-fog flex p-1.5">
+                <button
+                  onClick={() => setActiveTab('articles')}
+                  className={`flex-1 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition-premium flex items-center justify-center gap-2 select-none cursor-pointer ${
+                    activeTab === 'articles'
+                      ? 'bg-brass text-ink shadow font-bold'
+                      : 'text-ink/60 hover:text-ink hover:bg-fog/20'
+                  }`}
+                >
+                  <BookOpen className="w-4.5 h-4.5" />
+                  <span>Masterclasses ({filteredArticles.length})</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('scenarios')}
+                  className={`flex-1 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition-premium flex items-center justify-center gap-2 select-none cursor-pointer ${
+                    activeTab === 'scenarios'
+                      ? 'bg-brass text-ink shadow font-bold'
+                      : 'text-ink/60 hover:text-ink hover:bg-fog/20'
+                  }`}
+                >
+                  <AlertTriangle className="w-4.5 h-4.5" />
+                  <span>Classroom Scenarios ({filteredScenarios.length})</span>
+                </button>
               </div>
-            </div>
 
-            {/* Toggle tabs for Masterclasses vs Scenarios */}
-            <div className="flex border-b border-fog/60">
-              <button
-                onClick={() => setActiveTab('articles')}
-                className={`py-3 px-6 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-premium flex items-center gap-2 ${
-                  activeTab === 'articles'
-                    ? 'border-brass text-brass'
-                    : 'border-transparent text-ink/50 hover:text-ink'
-                }`}
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Cornerstone Masterclasses ({filteredArticles.length})</span>
-              </button>
+              {/* Grid content based on tab selection */}
+              {activeTab === 'articles' ? (
+                filteredArticles.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {filteredArticles.map((art) => {
+                      const hasStudied = studiedList.includes(art.slug);
+                      return (
+                        <div
+                          key={art.slug}
+                          onClick={() => navigate(`article/${art.slug}`)}
+                          className={`bg-white rounded-xl shadow-sm border overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-premium text-left flex flex-col justify-between group ${
+                            hasStudied ? 'border-brass/50 bg-paper/5' : 'border-fog/80'
+                          }`}
+                        >
+                          <div className="p-6 space-y-4">
+                            <div className="flex items-center justify-between flex-wrap gap-2 text-[10px] font-extrabold uppercase tracking-wider">
+                              <span className="bg-paper border border-fog/80 px-2 py-0.5 rounded text-slate-brand">{art.category}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-ink/40">{art.readingTime} Min Read</span>
+                                {hasStudied && (
+                                  <span className="text-brass bg-brass/10 border border-brass/25 px-1.5 py-0.2 rounded text-[8px] font-black">
+                                    ✓ STUDIED
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-1.5">
+                              <h3 className="font-serif font-bold text-lg text-ink line-clamp-2 leading-snug group-hover:text-brass transition-premium">
+                                {art.title}
+                              </h3>
+                              <p className="font-sans text-xs text-ink/75 leading-relaxed line-clamp-3">
+                                {art.description}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="px-6 py-4 bg-paper/10 border-t border-fog/60 flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-brass uppercase bg-brass/10 border border-brass/20 px-2 py-0.5 rounded tracking-wider">
+                              {art.difficulty} Standard
+                            </span>
+                            <div className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium">
+                              <span>Study Guide</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl border border-fog p-12 text-center text-ink/50 space-y-3">
+                    <BookOpen className="w-12 h-12 mx-auto text-ink/20" />
+                    <p className="font-serif text-lg font-bold">No masterclasses found matching your filter</p>
+                    <p className="text-sm font-sans">Try expanding your search query or adjusting your filters in the sidebar.</p>
+                  </div>
+                )
+              ) : (
+                filteredScenarios.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    {filteredScenarios.map((sc) => {
+                      const hasStudied = studiedList.includes(sc.slug);
+                      return (
+                        <div
+                          key={sc.slug}
+                          onClick={() => navigate(`scenario/${sc.slug}`)}
+                          className={`bg-white rounded-xl shadow-sm border overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-premium p-6 flex flex-col justify-between group ${
+                            hasStudied ? 'border-brass/50 bg-paper/5' : 'border-fog'
+                          }`}
+                        >
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between flex-wrap gap-2">
+                              <span className="text-[10px] font-extrabold text-brass uppercase bg-brass/10 border border-brass/20 px-2 py-0.5 rounded tracking-wider">
+                                {sc.issueType}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-bold text-ink/40 uppercase tracking-widest bg-paper px-2 py-0.5 rounded border border-fog/40">{sc.boardStage} stage</span>
+                                {hasStudied && (
+                                  <span className="text-brass bg-brass/10 border border-brass/25 px-1.5 py-0.2 rounded text-[8px] font-black">
+                                    ✓ STUDIED
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <h3 className="font-serif font-bold text-lg sm:text-xl text-ink leading-snug group-hover:text-brass transition-premium">
+                                {sc.title}
+                              </h3>
+                              <p className="font-sans text-xs text-ink/75 leading-relaxed line-clamp-4">
+                                <strong className="text-ink font-bold block mb-1 font-sans text-xs">FACTS SUMMARY:</strong>
+                                {sc.facts}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="pt-4 mt-4 border-t border-fog/50 flex items-center justify-between text-xs font-bold text-slate-brand uppercase tracking-wider">
+                            <span className="text-brass font-medium text-[10px] uppercase">REBUTTABLE PRESUMPTION</span>
+                            <div className="inline-flex items-center gap-1 hover:text-brass transition-premium">
+                              <span>Inspect Case Study</span>
+                              <ChevronRight className="w-4 h-4" />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl border border-fog p-12 text-center text-ink/50 space-y-3">
+                    <AlertTriangle className="w-12 h-12 mx-auto text-ink/20" />
+                    <p className="font-serif text-lg font-bold">No classroom scenarios found matching your filter</p>
+                    <p className="text-sm font-sans">Try expanding your search query or adjusting your filters in the sidebar.</p>
+                  </div>
+                )
+              )}
+            </main>
+
+            {/* RIGHT SIDEBAR: CONTROLS & MONITOR DESK (col-span-4) */}
+            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
               
-              <button
-                onClick={() => setActiveTab('scenarios')}
-                className={`py-3 px-6 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-premium flex items-center gap-2 ${
-                  activeTab === 'scenarios'
-                    ? 'border-brass text-brass'
-                    : 'border-transparent text-ink/50 hover:text-ink'
-                }`}
-              >
-                <AlertTriangle className="w-4 h-4" />
-                <span>Classroom Scenarios ({filteredScenarios.length})</span>
-              </button>
-            </div>
+              {/* Search Widget */}
+              <div className="bg-white p-5 rounded-xl border border-fog shadow-sm text-left space-y-4">
+                <div className="space-y-1">
+                  <h4 className="font-serif font-bold text-base text-ink tracking-wide">Search Desk</h4>
+                  <p className="text-[10px] font-bold text-ink/40 uppercase tracking-widest">Instant Text Scan</p>
+                </div>
+                
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 w-4 h-4 text-ink/40" />
+                  <input
+                    type="text"
+                    placeholder="Scan keywords..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-paper/20 border border-fog hover:border-brass/50 focus:border-brass rounded-lg p-2.5 pl-9 text-xs font-sans focus:outline-none focus:ring-1 focus:ring-brass transition-premium"
+                  />
+                </div>
+              </div>
+
+              {/* Category Filter List */}
+              <div className="bg-white p-5 rounded-xl border border-fog shadow-sm text-left space-y-3">
+                <div className="space-y-1 pb-2 border-b border-fog/60">
+                  <h4 className="font-serif font-bold text-base text-ink tracking-wide">Governance Sectors</h4>
+                  <p className="text-[10px] font-bold text-ink/40 uppercase tracking-widest">Category-specific standards</p>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`w-full flex items-center justify-between p-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-premium cursor-pointer select-none border ${
+                        selectedCategory === cat
+                          ? 'bg-brass text-ink border-brass shadow-sm'
+                          : 'bg-paper/10 border-transparent hover:bg-paper/30 text-ink/75 hover:text-ink'
+                      }`}
+                    >
+                      <span>{cat} Standard</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fiduciary Mastery Progress Dashboard */}
+              <div className="bg-paper border border-brass/35 rounded-xl p-5 text-left space-y-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h4 className="font-serif font-bold text-base text-ink tracking-wide">Fiduciary Mastery</h4>
+                    <p className="text-[10px] text-ink/50 uppercase tracking-widest font-extrabold">Continuous Duty of Care</p>
+                  </div>
+                  <Award className="w-8 h-8 text-brass shrink-0 bg-brass/10 p-1.5 rounded-full border border-brass/20" />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs font-bold text-ink">
+                    <span>{studiedList.length} of 18 Complete</span>
+                    <span className="text-brass text-[10px] bg-brass/15 px-2 py-0.5 rounded border border-brass/25">
+                      {studiedList.length >= 15 ? 'Governing Director' : studiedList.length >= 8 ? 'Prudent Trustee' : 'Fiduciary Apprentice'}
+                    </span>
+                  </div>
+                  <div className="w-full bg-fog h-2 rounded-full overflow-hidden border border-brass/5">
+                    <div
+                      className="bg-brass h-full rounded-full transition-all duration-500"
+                      style={{ width: `${(studiedList.length / 18) * 100}%` }}
+                    />
+                  </div>
+                  <p className="text-[10px] text-ink/65 leading-relaxed font-sans">
+                    {studiedList.length > 0 
+                      ? "Great progress. Reviewing cases protects your personal assets and builds board compliance shields."
+                      : "Complete case studies and masterclass checklist tasks to earn 'Governing Director' status!"
+                    }
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-brass/15 space-y-2.5">
+                  <span className="text-[10px] font-bold text-ink/40 uppercase tracking-wider block">Filter by Study Status:</span>
+                  <div className="grid grid-cols-3 gap-1 bg-white p-1 rounded-lg border border-fog/80">
+                    <button
+                      onClick={() => setMasteryFilter('all')}
+                      className={`py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-center rounded transition-premium select-none cursor-pointer ${
+                        masteryFilter === 'all'
+                          ? 'bg-brass text-ink font-bold'
+                          : 'text-ink/60 hover:text-ink hover:bg-fog/20'
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setMasteryFilter('studied')}
+                      className={`py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-center rounded transition-premium select-none cursor-pointer ${
+                        masteryFilter === 'studied'
+                          ? 'bg-brass text-ink font-bold'
+                          : 'text-ink/60 hover:text-ink hover:bg-fog/20'
+                      }`}
+                    >
+                      Studied
+                    </button>
+                    <button
+                      onClick={() => setMasteryFilter('unstudied')}
+                      className={`py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-center rounded transition-premium select-none cursor-pointer ${
+                        masteryFilter === 'unstudied'
+                          ? 'bg-brass text-ink font-bold'
+                          : 'text-ink/60 hover:text-ink hover:bg-fog/20'
+                      }`}
+                    >
+                      To Study
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </aside>
           </div>
-
-          {/* Core Library Grid */}
-          {activeTab === 'articles' ? (
-            /* ARTICLES LIST */
-            filteredArticles.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredArticles.map((art) => (
-                  <div
-                    key={art.slug}
-                    onClick={() => navigate(`article/${art.slug}`)}
-                    className="bg-white rounded-xl shadow-sm border border-fog/80 overflow-hidden cursor-pointer hover:border-brass hover:shadow-md hover:-translate-y-0.5 transition-premium text-left flex flex-col justify-between"
-                  >
-                    <div className="p-6 space-y-4">
-                      {/* Meta Tags */}
-                      <div className="flex items-center justify-between flex-wrap gap-2 text-[10px] font-extrabold uppercase tracking-wider text-ink/40">
-                        <span className="bg-paper border border-fog/80 px-2 py-0.5 rounded text-slate-brand">{art.category}</span>
-                        <span>{art.readingTime} Min Read</span>
-                      </div>
-                      
-                      <div className="space-y-1.5">
-                        <h3 className="font-serif font-bold text-lg text-ink line-clamp-2 leading-snug group-hover:text-brass transition-premium">
-                          {art.title}
-                        </h3>
-                        <p className="font-sans text-xs text-ink/75 leading-relaxed line-clamp-3">
-                          {art.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Lower Card Bar */}
-                    <div className="px-6 py-4 bg-paper/10 border-t border-fog/60 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-brass uppercase bg-brass/10 border border-brass/20 px-2 py-0.5 rounded tracking-wider">
-                        {art.difficulty} Standard
-                      </span>
-                      <div className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium">
-                        <span>Study Guide</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white rounded-xl border border-fog p-12 text-center text-ink/50 space-y-3">
-                <BookOpen className="w-12 h-12 mx-auto text-ink/20" />
-                <p className="font-serif text-lg font-bold">No masterclasses found matching your filter</p>
-                <p className="text-sm font-sans">Try expanding your search query or adjusting category filters.</p>
-              </div>
-            )
-          ) : (
-            /* SCENARIOS LIST */
-            filteredScenarios.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                {filteredScenarios.map((sc) => (
-                  <div
-                    key={sc.slug}
-                    onClick={() => navigate(`scenario/${sc.slug}`)}
-                    className="bg-white rounded-xl shadow-sm border border-fog overflow-hidden cursor-pointer hover:border-brass hover:shadow-md hover:-translate-y-0.5 transition-premium p-6 flex flex-col justify-between"
-                  >
-                    <div className="space-y-4">
-                      {/* Meta Tags */}
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <span className="text-[10px] font-extrabold text-brass uppercase bg-brass/10 border border-brass/20 px-2 py-0.5 rounded tracking-wider">
-                          {sc.issueType}
-                        </span>
-                        <span className="text-[10px] font-bold text-ink/40 uppercase tracking-widest bg-paper px-2 py-0.5 rounded border border-fog/40">{sc.boardStage} stage</span>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <h3 className="font-serif font-bold text-lg sm:text-xl text-ink leading-snug">
-                          {sc.title}
-                        </h3>
-                        <p className="font-sans text-xs sm:text-sm text-ink/75 leading-relaxed line-clamp-4">
-                          <strong className="text-ink font-bold block mb-1">FACTS:</strong>
-                          {sc.facts}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 mt-4 border-t border-fog/50 flex items-center justify-between text-xs font-bold text-slate-brand uppercase tracking-wider">
-                      <span className="text-brass font-medium text-[10px] uppercase">Rebuttable Presumption</span>
-                      <div className="inline-flex items-center gap-1 hover:text-brass transition-premium">
-                        <span>Inspect Case Study</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white rounded-xl border border-fog p-12 text-center text-ink/50 space-y-3">
-                <AlertTriangle className="w-12 h-12 mx-auto text-ink/20" />
-                <p className="font-serif text-lg font-bold">No classroom scenarios found matching your filter</p>
-                <p className="text-sm font-sans">Try expanding your search query or adjusting category filters.</p>
-              </div>
-            )
-          )}
 
           {/* General reference Callout */}
           <div className="bg-brass/5 border border-brass/20 rounded-xl p-6 text-left flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="space-y-1">
               <h4 className="font-serif font-bold text-base text-ink">Need a customized bylaws or governance audit?</h4>
-              <p className="text-xs text-ink/70 leading-relaxed font-sans max-w-2xl">
+              <p className="text-xs text-ink/70 leading-relaxed font-sans max-w-2xl font-semibold">
                 The Attorney General's Registry of Charitable Trusts monitors charities strictly. If you have been delinquent, or your bylaws are outdated, consult the team at California Center for Nonprofit Law.
               </p>
             </div>

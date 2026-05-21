@@ -112,6 +112,75 @@ export const SelfAssessment: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>({});
   const [quizComplete, setQuizComplete] = useState(false);
 
+  const calculateCategoryScores = () => {
+    const categories = [
+      {
+        name: "Board Structure & Independence",
+        qIds: [1, 9], // 1-based IDs
+        maxPoints: 10,
+        color: "bg-burgundy",
+        textColor: "text-burgundy"
+      },
+      {
+        name: "Duty of Care & Operations",
+        qIds: [2, 3, 6, 10],
+        maxPoints: 20,
+        color: "bg-slate-brand",
+        textColor: "text-slate-brand"
+      },
+      {
+        name: "Financial Audit & Accountability",
+        qIds: [4, 5],
+        maxPoints: 10,
+        color: "bg-teal-brand",
+        textColor: "text-teal-brand"
+      },
+      {
+        name: "Risk Management & Constituent Safety",
+        qIds: [7, 8],
+        maxPoints: 10,
+        color: "bg-copper",
+        textColor: "text-copper"
+      }
+    ];
+
+    return categories.map(cat => {
+      let score = 0;
+      cat.qIds.forEach(id => {
+        const qIdx = id - 1; // 0-indexed question index
+        const optIdx = selectedOptions[qIdx];
+        if (optIdx !== undefined) {
+          score += questions[qIdx].options[optIdx].points;
+        }
+      });
+
+      const percent = Math.round((score / cat.maxPoints) * 100);
+      
+      // Rating
+      let rating = "";
+      let ratingColor = "";
+      const ratio = score / cat.maxPoints;
+      if (ratio <= 0.45) {
+        rating = "Critical Exposure";
+        ratingColor = "bg-burgundy/10 text-burgundy border-burgundy/30";
+      } else if (ratio <= 0.85) {
+        rating = "Basic Compliance";
+        ratingColor = "bg-copper/10 text-copper border-copper/30";
+      } else {
+        rating = "Gold Standard";
+        ratingColor = "bg-teal-brand/10 text-teal-brand border-teal-brand/30";
+      }
+
+      return {
+        ...cat,
+        score,
+        percent,
+        rating,
+        ratingColor
+      };
+    });
+  };
+
   const handleOptionSelect = (optionIndex: number) => {
     setSelectedOptions({
       ...selectedOptions,
@@ -124,6 +193,8 @@ export const SelfAssessment: React.FC = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setQuizComplete(true);
+      localStorage.setItem('cdx_self_assessment_score', score.toString());
+      localStorage.setItem('cdx_self_assessment_level', assessment.level.split(':')[0].trim());
     }
   };
 
@@ -364,6 +435,38 @@ export const SelfAssessment: React.FC = () => {
                     <p className="font-sans text-sm sm:text-base text-ink/85 leading-relaxed">
                       {assessment.desc}
                     </p>
+                  </div>
+
+                  {/* Fiduciary Competency Scorecard (Upgrade A) */}
+                  <div className="pt-6 border-t border-fog/60 space-y-4">
+                    <h3 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50 flex items-center gap-1.5">
+                      <Award className="w-4 h-4 text-brass" />
+                      <span>Fiduciary Competency Scorecard</span>
+                    </h3>
+                    
+                    <div className="space-y-4 text-left">
+                      {calculateCategoryScores().map((cat, idx) => (
+                        <div key={idx} className="space-y-1.5">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-semibold">
+                            <span className="font-serif font-bold text-ink text-xs leading-none">{cat.name}</span>
+                            <div className="flex items-center gap-2 font-sans">
+                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold border uppercase tracking-wider ${cat.ratingColor}`}>
+                                {cat.rating}
+                              </span>
+                              <span className="font-mono font-bold text-ink/70 shrink-0 w-12 text-right">
+                                {cat.score} / {cat.maxPoints} pts
+                              </span>
+                            </div>
+                          </div>
+                          <div className="w-full bg-fog h-2.5 rounded-full overflow-hidden border border-fog/40">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${cat.color}`}
+                              style={{ width: `${cat.percent}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Recommendations */}

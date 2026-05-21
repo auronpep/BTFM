@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { articles } from '../data/articles';
@@ -10,7 +10,8 @@ import {
   LegalEscalationCard, 
   CaliforniaNoteBadge 
 } from '../components/BoardroomCards';
-import { ArrowLeft, Clock, Award } from 'lucide-react';
+import { AudioNarrator } from '../components/AudioNarrator';
+import { ArrowLeft, Clock, Award, CheckSquare, Square } from 'lucide-react';
 
 // Simple Markdown to HTML parser for articles
 const renderMarkdown = (text: string) => {
@@ -38,7 +39,7 @@ const renderMarkdown = (text: string) => {
     if (cleaned.startsWith('* ')) {
       const items = cleaned.split('\n* ');
       return (
-        <ul key={idx} className="list-disc pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans">
+        <ul key={idx} className="list-disc pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
           {items.map((item, iIdx) => {
             let itemText = item.startsWith('* ') ? item.substring(2) : item;
             // Parse inline bold
@@ -62,7 +63,7 @@ const renderMarkdown = (text: string) => {
     if (cleaned.match(/^\d+\.\s/)) {
       const items = cleaned.split(/\n\d+\.\s/);
       return (
-        <ol key={idx} className="list-decimal pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans">
+        <ol key={idx} className="list-decimal pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
           {items.map((item, iIdx) => {
             let itemText = item.replace(/^\d+\.\s/, '');
             // Parse inline bold
@@ -108,6 +109,40 @@ export const ArticleReader: React.FC = () => {
 
   // Find article
   const article = articles.find((art) => art.slug === slug);
+
+  // Local storage mastery tracking state
+  const [isStudied, setIsStudied] = useState(() => {
+    try {
+      const stored = localStorage.getItem('board_mastery_progress');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) && parsed.includes(slug);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
+  });
+
+  const toggleStudied = () => {
+    try {
+      const stored = localStorage.getItem('board_mastery_progress');
+      let parsed = stored ? JSON.parse(stored) : [];
+      if (!Array.isArray(parsed)) parsed = [];
+
+      if (isStudied) {
+        parsed = parsed.filter((id: string) => id !== slug);
+      } else {
+        if (!parsed.includes(slug)) {
+          parsed.push(slug);
+        }
+      }
+      localStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
+      setIsStudied(!isStudied);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   if (!article) {
     return (
@@ -166,6 +201,27 @@ export const ArticleReader: React.FC = () => {
                 </div>
               </div>
 
+              {/* STUDY TRACKER CHECKBOX */}
+              <div className="pt-4 border-t border-fog/50 space-y-2">
+                <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">Study Verification:</span>
+                <button
+                  onClick={toggleStudied}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border text-left transition-premium cursor-pointer text-xs font-bold uppercase tracking-wider select-none bg-paper/20 hover:bg-white border-fog"
+                >
+                  {isStudied ? (
+                    <>
+                      <CheckSquare className="w-5 h-5 text-brass shrink-0" />
+                      <span className="text-brass">Marked as Studied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Square className="w-5 h-5 text-ink/20 shrink-0" />
+                      <span className="text-ink/60">Mark as Studied</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
               {/* In-article checklist callout */}
               {article.californiaThreshold && (
                 <div className="pt-4 border-t border-fog/50 space-y-2">
@@ -200,6 +256,11 @@ export const ArticleReader: React.FC = () => {
                 <p className="font-sans italic text-sm sm:text-base text-ink/65 leading-relaxed">
                   {article.description}
                 </p>
+              </div>
+
+              {/* PREMIUM AUDIO NARRATOR */}
+              <div className="py-2">
+                <AudioNarrator title={`Masterclass Tutorial: ${article.title}`} durationSeconds={article.readingTime * 45} />
               </div>
 
               {/* Problem/Challenge Box */}

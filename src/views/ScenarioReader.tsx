@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { scenarios } from '../data/scenarios';
 import { articles } from '../data/articles';
 import { LegalEscalationCard } from '../components/BoardroomCards';
-import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle } from 'lucide-react';
+import { AudioNarrator } from '../components/AudioNarrator';
+import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square } from 'lucide-react';
 
 export const ScenarioReader: React.FC = () => {
   const { queryParams, navigate } = useRouter();
@@ -12,6 +13,40 @@ export const ScenarioReader: React.FC = () => {
 
   // Find scenario
   const scenario = scenarios.find((sc) => sc.slug === slug);
+
+  // Local storage mastery tracking state
+  const [isStudied, setIsStudied] = useState(() => {
+    try {
+      const stored = localStorage.getItem('board_mastery_progress');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) && parsed.includes(slug);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
+  });
+
+  const toggleStudied = () => {
+    try {
+      const stored = localStorage.getItem('board_mastery_progress');
+      let parsed = stored ? JSON.parse(stored) : [];
+      if (!Array.isArray(parsed)) parsed = [];
+
+      if (isStudied) {
+        parsed = parsed.filter((id: string) => id !== slug);
+      } else {
+        if (!parsed.includes(slug)) {
+          parsed.push(slug);
+        }
+      }
+      localStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
+      setIsStudied(!isStudied);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   if (!scenario) {
     return (
@@ -66,13 +101,39 @@ export const ScenarioReader: React.FC = () => {
             </div>
 
             <div className="p-6 sm:p-8 space-y-8">
+              
+              {/* Audio Narrator & Study Tracker Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
+                <div className="md:col-span-8">
+                  <AudioNarrator title={`Classroom Case Review: ${scenario.title}`} durationSeconds={120} />
+                </div>
+                <div className="md:col-span-4 flex">
+                  <button
+                    onClick={toggleStudied}
+                    className="w-full flex items-center justify-center gap-3 p-4 rounded-xl border text-center transition-premium cursor-pointer text-xs font-bold uppercase tracking-wider select-none bg-paper/20 hover:bg-white border-brass/30"
+                  >
+                    {isStudied ? (
+                      <div className="flex flex-col items-center gap-1 justify-center">
+                        <CheckSquare className="w-6 h-6 text-brass" />
+                        <span className="text-brass font-bold">Marked as Reviewed</span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-1 justify-center">
+                        <Square className="w-6 h-6 text-ink/20" />
+                        <span className="text-ink/65 font-bold">Mark as Reviewed</span>
+                      </div>
+                    )}
+                  </button>
+                </div>
+              </div>
+
               {/* FACTS PANEL (Premium Editorial Layout) */}
               <div className="space-y-3">
-                <h3 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50 flex items-center gap-1.5">
+                <h3 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50 flex items-center gap-1.5 font-medium">
                   <Landmark className="w-4 h-4 text-brass" />
                   <span>The Classroom Facts</span>
                 </h3>
-                <p className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed bg-paper/20 p-5 rounded-lg border border-fog/50">
+                <p className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed bg-paper/20 p-5 rounded-lg border border-fog/50 font-medium">
                   {scenario.facts}
                 </p>
               </div>
@@ -83,7 +144,7 @@ export const ScenarioReader: React.FC = () => {
                   <AlertTriangle className="w-4 h-4 text-copper" />
                   <span>D&O Liability and Regulatory Risks</span>
                 </h3>
-                <p className="font-sans text-xs sm:text-sm text-ink/80 leading-relaxed">
+                <p className="font-sans text-xs sm:text-sm text-ink/80 leading-relaxed font-medium">
                   {scenario.risk}
                 </p>
               </div>
@@ -112,7 +173,7 @@ export const ScenarioReader: React.FC = () => {
                         <div className="bg-brass text-ink font-sans font-extrabold text-[10px] w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                           {idx + 1}
                         </div>
-                        <span className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed font-medium">
+                        <span className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed font-semibold">
                           {cleanStep.substring(cleanedActionHeading(cleanStep))}
                         </span>
                       </div>
@@ -132,7 +193,7 @@ export const ScenarioReader: React.FC = () => {
                 </div>
                 <button
                   onClick={() => navigate('training')}
-                  className="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                  className="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer text-center"
                 >
                   Register For Webinar
                 </button>

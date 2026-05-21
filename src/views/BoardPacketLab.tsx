@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
-  ShieldAlert, AlertCircle, HelpCircle, ArrowRight, BookOpen 
+  ShieldAlert, AlertCircle, HelpCircle, ArrowRight, BookOpen, CheckCircle 
 } from 'lucide-react';
 import { 
   DoNotDoThisCard, AskThisCard, LegalEscalationCard, CaliforniaNoteBadge 
@@ -26,8 +26,7 @@ interface RedFlagItem {
 export const BoardPacketLab: React.FC = () => {
   const { navigate } = useRouter();
   const [activeTab, setActiveTab] = useState<'agenda' | 'ceo' | 'financials' | 'budget' | 'audit'>('agenda');
-  const [selectedFlagId, setSelectedFlagId] = useState<string | null>(null);
-  const [showSolutions, setShowShowSolutions] = useState(false);
+
 
   // Database of all clickable elements and their regulatory alerts
   const redFlagsDb: Record<string, RedFlagItem> = {
@@ -196,11 +195,218 @@ export const BoardPacketLab: React.FC = () => {
     }
   };
 
-  const handleFlagClick = (flagId: string) => {
-    setSelectedFlagId(flagId);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [showSolutions, setShowSolutions] = useState(false);
+  const [uncoveredFlags, setUncoveredFlags] = useState<string[]>(() => {
+    const saved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [auditedCompliant, setAuditedCompliant] = useState<string[]>(() => {
+    const saved = localStorage.getItem('cdx_board_packet_audited_compliant');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const resetSimulation = () => {
+    setUncoveredFlags([]);
+    setAuditedCompliant([]);
+    setSelectedItemId(null);
+    setShowSolutions(false);
+    localStorage.removeItem('cdx_board_packet_uncovered_flags');
+    localStorage.removeItem('cdx_board_packet_audited_compliant');
   };
 
-  const currentFlag = selectedFlagId ? redFlagsDb[selectedFlagId] : null;
+  const tabFlags: Record<string, string[]> = {
+    agenda: ['agenda-comp', 'agenda-bylaws'],
+    ceo: ['ceo-bridge', 'ceo-spouse'],
+    financials: ['fin-restricted', 'fin-payroll'],
+    budget: ['budget-travel', 'budget-consult'],
+    audit: ['audit-controls']
+  };
+
+  const compliantDb: Record<string, { id: string; title: string; description: string; complianceNote: string; }> = {
+    'agenda-call': {
+      id: 'agenda-call',
+      title: 'I. Call to Order & Welcome',
+      description: 'Recording attendance, verifying a quorum, and formally approving previous minutes are standard practices.',
+      complianceNote: 'A timely Call to Order, verifying quorum under California Corporations Code § 5211, and approving past minutes establishes a legal, transparent record of the board\'s meeting.'
+    },
+    'agenda-reports': {
+      id: 'agenda-reports',
+      title: 'III. Program Impact Reports',
+      description: 'Reviewing program performance satisfies the Fiduciary Duty of Care.',
+      complianceNote: 'Regular review of impact statistics against corporate missions represents active, healthy oversight, proving that charitable assets are directly applied to public benefit.'
+    },
+    'agenda-welfare': {
+      id: 'agenda-welfare',
+      title: 'V. General Good & Welfare & Adjournment',
+      description: 'Formal adjournment sets clear legal boundaries for corporate actions.',
+      complianceNote: 'Adjourning the meeting formally and recording the time ensures that any post-meeting remarks are outside of formal corporate proceedings and do not bind the entity.'
+    },
+    'ceo-outreach': {
+      id: 'ceo-outreach',
+      title: 'CEO Outreach Operations Briefing',
+      description: 'Receiving executive updates is a crucial element of the board\'s Duty of Care.',
+      complianceNote: 'Active listening to operational metrics allows the board to maintain reasonable oversight of executive functions, satisfying their supervisory mandate.'
+    },
+    'fin-donations': {
+      id: 'fin-donations',
+      title: 'Revenue Audit: Individual Donations',
+      description: 'Broad public support prevents reclassification as a private foundation.',
+      complianceNote: 'Fostering public donations helps maintain a positive outcome under the IRS Public Support Test, ensuring the organization preserves its public charity status.'
+    },
+    'fin-restricted-grant': {
+      id: 'fin-restricted-grant',
+      title: 'Revenue Audit: Restricted Grants',
+      description: 'Standard receipt of dedicated program funds.',
+      complianceNote: 'Scholarship or program-restricted grant receipts are standard, provided the accounting system maintains segmented ledger columns to enforce donor intent.'
+    },
+    'fin-payables': {
+      id: 'fin-payables',
+      title: 'Accounts Payable Ledger',
+      description: 'Normal vendor payables management.',
+      complianceNote: 'Deferred trade payables are standard cash management tools. As long as payroll withholdings are not co-mingled or delayed, AP is standard.'
+    },
+    'budget-program': {
+      id: 'budget-program',
+      title: 'Program Delivery Costs',
+      description: 'Aligning operating budgets directly with programs satisfies efficiency rules.',
+      complianceNote: 'Allocating the majority of funds (above 65%) directly to program services is highly praised by the CA Attorney General and major charity oversight bureaus.'
+    },
+    'budget-lease': {
+      id: 'budget-lease',
+      title: 'Office Lease & Utilities Overhead',
+      description: 'Standard administrative overhead cost tracking.',
+      complianceNote: 'Overhead lease obligations are fully compliant support costs, assuming agreements are executed at arm\'s length and authorized in the annual budget.'
+    },
+    'budget-insurance': {
+      id: 'budget-insurance',
+      title: 'Commercial Liability Insurance Policies',
+      description: 'Fiduciary Duty of Care requires adequate asset shielding.',
+      complianceNote: 'Maintaining robust general liability coverage is the foundational block of risk management, shielding corporate assets from physical and operational claims.'
+    },
+    'audit-reconciliation': {
+      id: 'audit-reconciliation',
+      title: 'Internal Audit: Weekly Reconciliations',
+      description: 'Robust internal bookkeeping controls.',
+      complianceNote: 'Weekly cross-system reconciliation between donor CRM ledgers and bank accounting logs represents an excellent internal control that prevents leaks.'
+    }
+  };
+
+  const handleItemClick = (itemId: string) => {
+    setSelectedItemId(itemId);
+    // If it's a red flag, track it in uncoveredFlags
+    if (itemId in redFlagsDb && !uncoveredFlags.includes(itemId)) {
+      const updated = [...uncoveredFlags, itemId];
+      setUncoveredFlags(updated);
+      localStorage.setItem('cdx_board_packet_uncovered_flags', JSON.stringify(updated));
+    }
+    // If it's a compliant item, track it in auditedCompliant
+    if (itemId in compliantDb && !auditedCompliant.includes(itemId)) {
+      const updated = [...auditedCompliant, itemId];
+      setAuditedCompliant(updated);
+      localStorage.setItem('cdx_board_packet_audited_compliant', JSON.stringify(updated));
+    }
+  };
+
+  const isRedFlag = selectedItemId ? (selectedItemId in redFlagsDb) : false;
+  const isCompliant = selectedItemId ? (selectedItemId in compliantDb) : false;
+  const currentFlag = isRedFlag ? redFlagsDb[selectedItemId!] : null;
+  const currentCompliant = isCompliant ? compliantDb[selectedItemId!] : null;
+
+
+  const renderAuditPin = (itemId: string, isRed: boolean) => {
+    const isSelected = selectedItemId === itemId;
+    const isUncovered = isRed ? uncoveredFlags.includes(itemId) : auditedCompliant.includes(itemId);
+    return (
+      <div 
+        onClick={(e) => {
+          e.stopPropagation();
+          handleItemClick(itemId);
+        }}
+        className={`absolute -left-11 top-1/2 -translate-y-1/2 w-6.5 h-6.5 rounded-full border flex items-center justify-center cursor-pointer transition-premium z-20 ${
+          isSelected
+            ? isRed
+              ? 'bg-rose-500 border-rose-600 text-white shadow shadow-rose-200 ring-2 ring-rose-500/20'
+              : 'bg-emerald-500 border-emerald-600 text-white shadow shadow-emerald-200 ring-2 ring-emerald-500/20'
+            : isRed && (isUncovered || showSolutions)
+              ? 'bg-amber-100 border-amber-300 text-amber-700 hover:bg-amber-200'
+              : !isRed && isUncovered
+                ? 'bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100'
+                : 'bg-white border-brass/50 text-brass animate-pulse ring-4 ring-brass/10 hover:border-brass hover:bg-brass/5'
+        }`}
+        title={isRed ? "Audit Target: Analyze for regulatory risks" : "Audit Target: Analyze for compliance"}
+      >
+        {isSelected ? (
+          isRed ? (
+            <AlertCircle className="w-3.5 h-3.5" />
+          ) : (
+            <CheckCircle className="w-3.5 h-3.5" />
+          )
+        ) : isRed && (isUncovered || showSolutions) ? (
+          <AlertCircle className="w-3.5 h-3.5" />
+        ) : !isRed && isUncovered ? (
+          <CheckCircle className="w-3.5 h-3.5" />
+        ) : (
+          <span className="text-[10px] font-sans font-extrabold text-brass">?</span>
+        )}
+      </div>
+    );
+  };
+
+  const renderPageTracker = (tab: 'agenda' | 'ceo' | 'financials' | 'budget' | 'audit') => {
+    const flags = tabFlags[tab];
+    const uncovered = flags.filter(f => uncoveredFlags.includes(f)).length;
+    const total = flags.length;
+    const isComplete = uncovered === total;
+
+    return (
+      <div className="my-4 bg-paper/50 border border-fog/85 rounded-xl p-3 flex items-center justify-between text-xs font-semibold text-ink">
+        <div className="flex items-center gap-2.5">
+          <div className="relative flex items-center justify-center shrink-0">
+            <svg className="w-8 h-8 transform -rotate-90">
+              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2" fill="transparent" className="text-slate-100" />
+              <circle 
+                cx="16" 
+                cy="16" 
+                r="13" 
+                stroke="currentColor" 
+                strokeWidth="2.5" 
+                fill="transparent" 
+                strokeDasharray={2 * Math.PI * 13}
+                strokeDashoffset={2 * Math.PI * 13 * (1 - (total > 0 ? uncovered / total : 1))}
+                className={`${isComplete ? 'text-emerald-600' : 'text-brass'} transition-premium`}
+              />
+            </svg>
+            <span className="absolute text-[9px] font-sans font-black">
+              {uncovered}/{total}
+            </span>
+          </div>
+          <div>
+            <p className="font-sans font-bold text-ink leading-tight">
+              {isComplete ? 'Fiduciary Audit Complete!' : 'Scan page for governance risks'}
+            </p>
+            <p className="text-[10px] text-ink/50 font-normal leading-tight">
+              {isComplete ? 'All critical regulatory vulnerabilities identified.' : `${total - uncovered} remaining risk to uncover.`}
+            </p>
+          </div>
+        </div>
+        
+        <div>
+          {isComplete ? (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[9px] font-bold uppercase tracking-wider">
+              <CheckCircle className="w-3 h-3 animate-bounce" />
+              <span>Page Audited</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-brass/15 text-brass border border-brass/35 rounded-full text-[9px] font-bold uppercase tracking-wider animate-pulse">
+              <ShieldAlert className="w-3 h-3" />
+              <span>Scanning...</span>
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <Layout>
@@ -224,26 +430,48 @@ export const BoardPacketLab: React.FC = () => {
               </p>
             </div>
             
-            <div className="flex items-center gap-3 shrink-0">
-              <button
-                onClick={() => setShowShowSolutions(!showSolutions)}
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded border transition-premium ${
-                  showSolutions 
-                    ? 'bg-brass text-ink border-brass shadow' 
-                    : 'bg-white text-ink/80 border-fog hover:border-brass hover:text-brass'
-                }`}
-              >
-                {showSolutions ? 'Hide Answer Highlights' : 'Reveal Red-Flag Answers'}
-              </button>
-              <a
-                href="https://NPOlawyers.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5"
-              >
-                <span>Consult Counsel</span>
-                <ShieldAlert className="w-3.5 h-3.5 text-brass" />
-              </a>
+            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-3 shrink-0">
+              {/* Overall progress meter */}
+              <div className="flex items-center gap-2 bg-white px-4 py-2 border border-fog rounded-lg shadow-sm">
+                <div className="text-right">
+                  <span className="text-[9px] font-bold text-ink/40 uppercase tracking-wider block">Lab Progress</span>
+                  <span className="text-xs font-extrabold text-brass">{uncoveredFlags.length} of 9 Uncovered</span>
+                </div>
+                <div className="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden border border-slate-200">
+                  <div 
+                    className="bg-brass h-full transition-premium" 
+                    style={{ width: `${(uncoveredFlags.length / 9) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={resetSimulation}
+                  className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded border border-rose-200 text-rose-700 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300 transition-premium"
+                >
+                  Reset Simulation
+                </button>
+                <button
+                  onClick={() => setShowSolutions(!showSolutions)}
+                  className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded border transition-premium ${
+                    showSolutions 
+                      ? 'bg-brass text-ink border-brass shadow' 
+                      : 'bg-white text-ink/80 border-fog hover:border-brass hover:text-brass'
+                  }`}
+                >
+                  {showSolutions ? 'Hide Answer Highlights' : 'Reveal Red-Flag Answers'}
+                </button>
+                <a
+                  href="https://NPOlawyers.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5"
+                >
+                  <span>Consult Counsel</span>
+                  <ShieldAlert className="w-3.5 h-3.5 text-brass" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -261,26 +489,33 @@ export const BoardPacketLab: React.FC = () => {
 
               {/* Document Header Tab Row */}
               <div className="bg-fog/60 border-b border-fog/80 flex flex-wrap gap-1 px-8 pt-4">
-                {(['agenda', 'ceo', 'financials', 'budget', 'audit'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => {
-                      setActiveTab(tab);
-                      setSelectedFlagId(null);
-                    }}
-                    className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-t-lg border-t-2 transition-premium ${
-                      activeTab === tab
-                        ? 'bg-white border-brass text-brass shadow-sm font-extrabold'
-                        : 'text-ink/60 border-transparent hover:text-ink hover:bg-white/40'
-                    }`}
-                  >
-                    {tab === 'agenda' && '1. Meeting Agenda'}
-                    {tab === 'ceo' && '2. CEO Report'}
-                    {tab === 'financials' && '3. Financial Statement'}
-                    {tab === 'budget' && '4. Operating Budget'}
-                    {tab === 'audit' && '5. Audit Finding'}
-                  </button>
-                ))}
+                {(['agenda', 'ceo', 'financials', 'budget', 'audit'] as const).map((tab) => {
+                  const flags = tabFlags[tab];
+                  const uncovered = flags.filter(f => uncoveredFlags.includes(f)).length;
+                  const total = flags.length;
+                  const isComplete = uncovered === total;
+                  return (
+                    <button
+                      key={tab}
+                      onClick={() => {
+                        setActiveTab(tab);
+                        setSelectedItemId(null);
+                      }}
+                      className={`px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-t-lg border-t-2 transition-premium flex items-center gap-1.5 ${
+                        activeTab === tab
+                          ? 'bg-white border-brass text-brass shadow-sm font-extrabold'
+                          : 'text-ink/60 border-transparent hover:text-ink hover:bg-white/40'
+                      }`}
+                    >
+                      {tab === 'agenda' && `1. Agenda (${uncovered}/${total})`}
+                      {tab === 'ceo' && `2. CEO Report (${uncovered}/${total})`}
+                      {tab === 'financials' && `3. Financials (${uncovered}/${total})`}
+                      {tab === 'budget' && `4. Budget (${uncovered}/${total})`}
+                      {tab === 'audit' && `5. Audit Finding (${uncovered}/${total})`}
+                      {isComplete && <span className="text-emerald-600 font-extrabold animate-pulse">✓</span>}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Document Body Sheet */}
@@ -295,10 +530,21 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/50 mt-1">Date: May 25, 2026 | Time: 6:00 PM PST</p>
                     </div>
 
+                    {renderPageTracker('agenda')}
+
                     <div className="space-y-4">
                       <p className="font-bold text-xs uppercase tracking-widest text-ink/40 border-b border-fog/50 pb-1">Order of Business</p>
                       
-                      <div className="flex gap-4 items-start py-2">
+                      {/* Compliant Section I */}
+                      <div 
+                        onClick={() => handleItemClick('agenda-call')}
+                        className={`relative flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'agenda-call'
+                            ? 'bg-emerald-50/70 border-emerald-200 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('agenda-call', false)}
                         <span className="font-serif font-bold text-sm text-ink/40">6:00 PM</span>
                         <div>
                           <h4 className="font-bold text-sm text-ink">I. Call to Order & Welcome</h4>
@@ -308,20 +554,21 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 1: Comp package */}
                       <div 
-                        onClick={() => handleFlagClick('agenda-comp')}
-                        className={`flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
-                          selectedFlagId === 'agenda-comp'
+                        onClick={() => handleItemClick('agenda-comp')}
+                        className={`relative flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'agenda-comp'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30'
                             : showSolutions 
                               ? 'bg-amber-100/80 border-amber-300 animate-pulse'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('agenda-comp', true)}
                         <span className="font-serif font-bold text-sm text-ink/40">6:15 PM</span>
                         <div className="flex-grow">
-                          <h4 className={`font-bold text-sm leading-tight flex items-center gap-1.5 ${showSolutions || selectedFlagId === 'agenda-comp' ? 'text-brass font-extrabold' : 'text-ink'}`}>
+                          <h4 className={`font-bold text-sm leading-tight flex items-center gap-1.5 ${showSolutions || selectedItemId === 'agenda-comp' ? 'text-brass font-extrabold' : 'text-ink'}`}>
                             II. Executive Compensation Review & Approval
-                            {(showSolutions || selectedFlagId === 'agenda-comp') && <AlertCircle className="w-4 h-4 shrink-0 text-brass" />}
+                            {(showSolutions || selectedItemId === 'agenda-comp') && <AlertCircle className="w-4 h-4 shrink-0 text-brass" />}
                           </h4>
                           <p className="text-xs text-ink/60 mt-0.5">
                             Review and approve the Executive Director's compensation package for FY 2026-2027. (Presentation by the Executive Director).
@@ -329,7 +576,16 @@ export const BoardPacketLab: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-4 items-start py-2">
+                      {/* Compliant Section III */}
+                      <div 
+                        onClick={() => handleItemClick('agenda-reports')}
+                        className={`relative flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'agenda-reports'
+                            ? 'bg-emerald-50/70 border-emerald-200 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('agenda-reports', false)}
                         <span className="font-serif font-bold text-sm text-ink/40">6:45 PM</span>
                         <div>
                           <h4 className="font-bold text-sm text-ink">III. Program Impact Reports</h4>
@@ -339,20 +595,21 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 2: Bylaw updates */}
                       <div 
-                        onClick={() => handleFlagClick('agenda-bylaws')}
-                        className={`flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
-                          selectedFlagId === 'agenda-bylaws'
+                        onClick={() => handleItemClick('agenda-bylaws')}
+                        className={`relative flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'agenda-bylaws'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30'
                             : showSolutions 
                               ? 'bg-amber-100/80 border-amber-300 animate-pulse'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('agenda-bylaws', true)}
                         <span className="font-serif font-bold text-sm text-ink/40">7:15 PM</span>
                         <div className="flex-grow">
-                          <h4 className={`font-bold text-sm leading-tight flex items-center gap-1.5 ${showSolutions || selectedFlagId === 'agenda-bylaws' ? 'text-brass font-extrabold' : 'text-ink'}`}>
+                          <h4 className={`font-bold text-sm leading-tight flex items-center gap-1.5 ${showSolutions || selectedItemId === 'agenda-bylaws' ? 'text-brass font-extrabold' : 'text-ink'}`}>
                             IV. Bylaw Amendment Approvals (Voice vote scheduled)
-                            {(showSolutions || selectedFlagId === 'agenda-bylaws') && <AlertCircle className="w-4 h-4 shrink-0 text-brass" />}
+                            {(showSolutions || selectedItemId === 'agenda-bylaws') && <AlertCircle className="w-4 h-4 shrink-0 text-brass" />}
                           </h4>
                           <p className="text-xs text-ink/60 mt-0.5">
                             Vote to adopt the fully updated 2026 Organizational Bylaws. Copies of the final text will be distributed by hand at the meeting.
@@ -360,7 +617,16 @@ export const BoardPacketLab: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-4 items-start py-2">
+                      {/* Compliant Section V */}
+                      <div 
+                        onClick={() => handleItemClick('agenda-welfare')}
+                        className={`relative flex gap-4 items-start p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'agenda-welfare'
+                            ? 'bg-emerald-50/70 border-emerald-200 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('agenda-welfare', false)}
                         <span className="font-serif font-bold text-sm text-ink/40">7:45 PM</span>
                         <div>
                           <h4 className="font-bold text-sm text-ink">V. General Good & Welfare & Adjournment</h4>
@@ -380,26 +646,41 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/50 mt-1">Submitted by: Executive Director | Q2 2026</p>
                     </div>
 
-                    <div className="space-y-4 font-serif text-sm text-ink/80 italic leading-relaxed">
-                      <p>
-                        "Esteemed members of the Board, I am proud to report that Q2 has seen unprecedented growth in our direct outreach programs. Donor engagement metrics are trending upward, and our staff has worked tirelessly to execute our strategic benchmarks."
-                      </p>
+                    {renderPageTracker('ceo')}
+
+                    <div className="space-y-4">
+                      {/* Compliant CEO Report Intro */}
+                      <div 
+                        onClick={() => handleItemClick('ceo-outreach')}
+                        className={`relative p-3 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'ceo-outreach'
+                            ? 'bg-emerald-50/70 border-emerald-200 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('ceo-outreach', false)}
+                        <span className="font-bold text-xs block text-emerald-800 uppercase tracking-wider mb-1 font-sans">Executive Narrative Summary</span>
+                        <p className="font-serif italic text-sm text-ink/80 leading-relaxed">
+                          "Esteemed members of the Board, I am proud to report that Q2 has seen unprecedented growth in our direct outreach programs. Donor engagement metrics are trending upward, and our staff has worked tirelessly to execute our strategic benchmarks."
+                        </p>
+                      </div>
 
                       <p className="font-sans font-bold text-xs uppercase tracking-widest text-ink/40 border-b border-fog/50 pb-1 not-italic mt-6">Financial & Contract Operations</p>
 
                       {/* Clickable Area 3: Personal credit card bridge loan */}
                       <div 
-                        onClick={() => handleFlagClick('ceo-bridge')}
-                        className={`p-3 rounded-lg border cursor-pointer font-sans not-italic transition-premium ${
-                          selectedFlagId === 'ceo-bridge'
+                        onClick={() => handleItemClick('ceo-bridge')}
+                        className={`relative p-3 rounded-lg border cursor-pointer font-sans not-italic transition-premium ${
+                          selectedItemId === 'ceo-bridge'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30'
                             : showSolutions 
                               ? 'bg-amber-100/80 border-amber-300 animate-pulse'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('ceo-bridge', true)}
                         <div className="flex items-start gap-2.5">
-                          {(showSolutions || selectedFlagId === 'ceo-bridge') && <AlertCircle className="w-4 h-4 shrink-0 text-brass mt-0.5" />}
+                          {(showSolutions || selectedItemId === 'ceo-bridge') && <AlertCircle className="w-4 h-4 shrink-0 text-brass mt-0.5" />}
                           <div>
                             <span className="font-bold text-xs block text-brass uppercase tracking-wider mb-1">Treasury Action Note</span>
                             <p className="text-xs text-ink/80 leading-relaxed font-serif italic">
@@ -411,17 +692,18 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 4: Contract with spouse */}
                       <div 
-                        onClick={() => handleFlagClick('ceo-spouse')}
-                        className={`p-3 rounded-lg border cursor-pointer font-sans not-italic transition-premium ${
-                          selectedFlagId === 'ceo-spouse'
+                        onClick={() => handleItemClick('ceo-spouse')}
+                        className={`relative p-3 rounded-lg border cursor-pointer font-sans not-italic transition-premium ${
+                          selectedItemId === 'ceo-spouse'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30'
                             : showSolutions 
                               ? 'bg-amber-100/80 border-amber-300 animate-pulse'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('ceo-spouse', true)}
                         <div className="flex items-start gap-2.5">
-                          {(showSolutions || selectedFlagId === 'ceo-spouse') && <AlertCircle className="w-4 h-4 shrink-0 text-brass mt-0.5" />}
+                          {(showSolutions || selectedItemId === 'ceo-spouse') && <AlertCircle className="w-4 h-4 shrink-0 text-brass mt-0.5" />}
                           <div>
                             <span className="font-bold text-xs block text-brass uppercase tracking-wider mb-1">Vendor Action Note</span>
                             <p className="text-xs text-ink/80 leading-relaxed font-serif italic">
@@ -443,6 +725,8 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/50 mt-1">For Six Months Ending April 30, 2026</p>
                     </div>
 
+                    {renderPageTracker('financials')}
+
                     <div className="space-y-4 font-mono text-[11px] leading-relaxed">
                       <div className="grid grid-cols-6 border-b border-fog pb-1 text-ink/60 font-sans uppercase font-bold text-[9px] tracking-wider">
                         <span className="col-span-3">Revenue & Transfers</span>
@@ -451,14 +735,32 @@ export const BoardPacketLab: React.FC = () => {
                         <span className="col-span-1 text-right">Total</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant Row: Individual Donations */}
+                      <div 
+                        onClick={() => handleItemClick('fin-donations')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'fin-donations'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('fin-donations', false)}
                         <span className="col-span-3 font-sans font-medium">Individual Donations</span>
                         <span className="col-span-1 text-right">$45,000</span>
                         <span className="col-span-1 text-right">$0</span>
                         <span className="col-span-1 text-right">$45,000</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant Row: Restricted Scholarship Grant */}
+                      <div 
+                        onClick={() => handleItemClick('fin-restricted-grant')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'fin-restricted-grant'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('fin-restricted-grant', false)}
                         <span className="col-span-3 font-sans font-medium">Restricted Scholarship Grant</span>
                         <span className="col-span-1 text-right">$0</span>
                         <span className="col-span-1 text-right">$85,000</span>
@@ -467,18 +769,19 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 5: Restricted Assets Reallocated */}
                       <div 
-                        onClick={() => handleFlagClick('fin-restricted')}
-                        className={`grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
-                          selectedFlagId === 'fin-restricted'
+                        onClick={() => handleItemClick('fin-restricted')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'fin-restricted'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30 text-brass'
                             : showSolutions 
                               ? 'bg-amber-100 border-amber-300 text-ink'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
-                        <span className="col-span-3 font-sans font-bold flex items-center gap-1">
+                        {renderAuditPin('fin-restricted', true)}
+                        <span className="col-span-3 font-sans font-bold flex items-center gap-1 text-left">
                           ↳ Net Restricted Assets Redeployed to Core Ops
-                          {(showSolutions || selectedFlagId === 'fin-restricted') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
+                          {(showSolutions || selectedItemId === 'fin-restricted') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
                         </span>
                         <span className="col-span-1 text-right text-emerald-700 font-bold">+$65,000</span>
                         <span className="col-span-1 text-right text-rose-700 font-bold">-$65,000</span>
@@ -492,7 +795,16 @@ export const BoardPacketLab: React.FC = () => {
                         <span className="col-span-1 text-right">Balance</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant AP Row */}
+                      <div 
+                        onClick={() => handleItemClick('fin-payables')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'fin-payables'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('fin-payables', false)}
                         <span className="col-span-3 font-sans font-medium">Accounts Payable (Vendors)</span>
                         <span className="col-span-1 text-right">$12,400</span>
                         <span className="col-span-1 text-right">$4,500</span>
@@ -501,18 +813,19 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 6: Payroll Tax Withholdings */}
                       <div 
-                        onClick={() => handleFlagClick('fin-payroll')}
-                        className={`grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
-                          selectedFlagId === 'fin-payroll'
+                        onClick={() => handleItemClick('fin-payroll')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'fin-payroll'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30 text-brass'
                             : showSolutions 
                               ? 'bg-amber-100 border-amber-300 text-ink'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
-                        <span className="col-span-3 font-sans font-bold flex items-center gap-1">
+                        {renderAuditPin('fin-payroll', true)}
+                        <span className="col-span-3 font-sans font-bold flex items-center gap-1 text-left">
                           Employee Payroll Withholding Liabilities (Quarterly)
-                          {(showSolutions || selectedFlagId === 'fin-payroll') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
+                          {(showSolutions || selectedItemId === 'fin-payroll') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
                         </span>
                         <span className="col-span-1 text-right font-bold text-emerald-700">$0</span>
                         <span className="col-span-1 text-right text-rose-700 font-bold">+$18,000</span>
@@ -535,6 +848,8 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/50 mt-1">For Fiscal Year Period Ending April 30, 2026</p>
                     </div>
 
+                    {renderPageTracker('budget')}
+
                     <div className="space-y-4 font-mono text-[11px] leading-relaxed">
                       <div className="grid grid-cols-6 border-b border-fog pb-1 text-ink/60 font-sans uppercase font-bold text-[9px] tracking-wider">
                         <span className="col-span-3">Expenditure Ledger Line</span>
@@ -543,7 +858,16 @@ export const BoardPacketLab: React.FC = () => {
                         <span className="col-span-1 text-right">Variance</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant Row: Program Delivery */}
+                      <div 
+                        onClick={() => handleItemClick('budget-program')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'budget-program'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('budget-program', false)}
                         <span className="col-span-3 font-sans font-medium">Program Delivery Direct Costs</span>
                         <span className="col-span-1 text-right">$120,000</span>
                         <span className="col-span-1 text-right">$115,000</span>
@@ -552,25 +876,35 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 7: Travel overrun */}
                       <div 
-                        onClick={() => handleFlagClick('budget-travel')}
-                        className={`grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
-                          selectedFlagId === 'budget-travel'
+                        onClick={() => handleItemClick('budget-travel')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'budget-travel'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30 text-brass'
                             : showSolutions 
                               ? 'bg-amber-100 border-amber-300 text-ink'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('budget-travel', true)}
                         <span className="col-span-3 font-sans font-bold flex items-center gap-1 text-left">
                           Executive Director Discretionary Travel & Retreats
-                          {(showSolutions || selectedFlagId === 'budget-travel') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
+                          {(showSolutions || selectedItemId === 'budget-travel') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
                         </span>
                         <span className="col-span-1 text-right font-medium">$10,000</span>
                         <span className="col-span-1 text-right font-bold">$45,000</span>
                         <span className="col-span-1 text-right font-bold text-rose-700">+$35,000</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant Row: Office Lease */}
+                      <div 
+                        onClick={() => handleItemClick('budget-lease')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'budget-lease'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('budget-lease', false)}
                         <span className="col-span-3 font-sans font-medium">Office Lease & Utilities</span>
                         <span className="col-span-1 text-right">$24,000</span>
                         <span className="col-span-1 text-right">$23,800</span>
@@ -579,25 +913,35 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 8: Consultant board member */}
                       <div 
-                        onClick={() => handleFlagClick('budget-consult')}
-                        className={`grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
-                          selectedFlagId === 'budget-consult'
+                        onClick={() => handleItemClick('budget-consult')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'budget-consult'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30 text-brass'
                             : showSolutions 
                               ? 'bg-amber-100 border-amber-300 text-ink'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('budget-consult', true)}
                         <span className="col-span-3 font-sans font-bold flex items-center gap-1 text-left">
                           Professional Consulting Fees (Board Member John Doe)
-                          {(showSolutions || selectedFlagId === 'budget-consult') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
+                          {(showSolutions || selectedItemId === 'budget-consult') && <AlertCircle className="w-3.5 h-3.5 text-brass" />}
                         </span>
                         <span className="col-span-1 text-right font-medium">$5,000</span>
                         <span className="col-span-1 text-right font-bold">$28,000</span>
                         <span className="col-span-1 text-right font-bold text-rose-700">+$23,000</span>
                       </div>
 
-                      <div className="grid grid-cols-6">
+                      {/* Compliant Row: Insurance */}
+                      <div 
+                        onClick={() => handleItemClick('budget-insurance')}
+                        className={`relative grid grid-cols-6 p-2 rounded cursor-pointer transition-premium -mx-2 border ${
+                          selectedItemId === 'budget-insurance'
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-905 shadow-sm ring-1 ring-emerald-200'
+                            : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
+                        }`}
+                      >
+                        {renderAuditPin('budget-insurance', false)}
                         <span className="col-span-3 font-sans font-medium">Liability Insurance Policies</span>
                         <span className="col-span-1 text-right">$4,500</span>
                         <span className="col-span-1 text-right">$4,500</span>
@@ -616,6 +960,8 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/50 mt-1">Prepared by: Independent CPA Advisor | Q1 Audit Notes</p>
                     </div>
 
+                    {renderPageTracker('audit')}
+
                     <div className="space-y-4">
                       <p className="font-bold text-xs uppercase tracking-widest text-ink/40 border-b border-fog/50 pb-1">Operational Observations</p>
                       
@@ -627,17 +973,18 @@ export const BoardPacketLab: React.FC = () => {
 
                       {/* Clickable Area 9: Check signature controls */}
                       <div 
-                        onClick={() => handleFlagClick('audit-controls')}
-                        className={`p-4 rounded-lg border cursor-pointer font-sans transition-premium ${
-                          selectedFlagId === 'audit-controls'
+                        onClick={() => handleItemClick('audit-controls')}
+                        className={`relative p-4 rounded-lg border cursor-pointer font-sans transition-premium ${
+                          selectedItemId === 'audit-controls'
                             ? 'bg-brass/10 border-brass shadow-sm ring-1 ring-brass/30'
                             : showSolutions 
                               ? 'bg-amber-100/80 border-amber-300 animate-pulse'
-                              : 'hover:bg-paper border-transparent'
+                              : 'border-fog bg-white/40 border-l-4 border-l-slate-300 hover:border-l-brass hover:border-brass/40 hover:bg-brass/5 hover:shadow-sm'
                         }`}
                       >
+                        {renderAuditPin('audit-controls', true)}
                         <div className="flex gap-3 items-start">
-                          {(showSolutions || selectedFlagId === 'audit-controls') && <AlertCircle className="w-5 h-5 text-brass shrink-0 mt-0.5" />}
+                          {(showSolutions || selectedItemId === 'audit-controls') && <AlertCircle className="w-5 h-5 text-brass shrink-0 mt-0.5" />}
                           <div>
                             <span className="font-bold text-xs uppercase tracking-wider text-rose-800 block mb-1">Internal Audit Finding #1</span>
                             <p className="font-sans font-bold text-sm text-ink leading-snug">
@@ -650,12 +997,23 @@ export const BoardPacketLab: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="bg-emerald-50 text-emerald-800 p-4 rounded-lg border border-emerald-200/50 space-y-1">
-                        <span className="font-bold text-xs uppercase tracking-wider block text-emerald-800">Internal Audit Finding #2 (Satisfactory)</span>
-                        <p className="font-sans font-bold text-sm leading-snug">Donor Database Reconciliation</p>
-                        <p className="text-xs text-emerald-800/80 font-serif italic">
-                          "Individual donor receipts are successfully reconciled on a weekly schedule. The donor software ledger directly maps into general bookkeeping ledgers with proper audits."
-                        </p>
+                      {/* Compliant Row: Database reconciliation */}
+                      <div 
+                        onClick={() => handleItemClick('audit-reconciliation')}
+                        className={`relative bg-emerald-50 text-emerald-800 p-4 rounded-lg border cursor-pointer transition-premium ${
+                          selectedItemId === 'audit-reconciliation'
+                            ? 'border-emerald-500 bg-emerald-100/60 ring-1 ring-emerald-500/20'
+                            : 'border-emerald-200/50 hover:bg-emerald-100/30'
+                        }`}
+                      >
+                        {renderAuditPin('audit-reconciliation', false)}
+                        <div className="space-y-1">
+                          <span className="font-bold text-xs uppercase tracking-wider block text-emerald-850">Internal Audit Finding #2 (Satisfactory)</span>
+                          <p className="font-sans font-bold text-sm leading-snug text-emerald-900">Donor Database Reconciliation</p>
+                          <p className="text-xs text-emerald-800/80 font-serif italic">
+                            "Individual donor receipts are successfully reconciled on a weekly schedule. The donor software ledger directly maps into general bookkeeping ledgers with proper audits."
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -676,7 +1034,7 @@ export const BoardPacketLab: React.FC = () => {
             {/* Right Hand: The Audit Panel (5 Cols) */}
             <div className="lg:col-span-5 space-y-6">
               
-              {!currentFlag ? (
+              {!selectedItemId ? (
                 /* Unselected State Placeholder */
                 <div className="bg-white rounded-2xl border border-fog p-8 text-center min-h-[450px] flex flex-col justify-center items-center space-y-4">
                   <div className="bg-paper text-brass p-4 rounded-full border border-brass/30 animate-pulse">
@@ -688,17 +1046,63 @@ export const BoardPacketLab: React.FC = () => {
                   <p className="text-xs sm:text-sm text-ink/70 max-w-sm leading-relaxed">
                     Choose one of the document tabs on the left, then click on any highlighted financial, procedural, or operations section to run an instant fiduciary compliance check.
                   </p>
+                  <p className="text-[11px] text-brass font-bold uppercase tracking-wider">
+                    Or click the target pins [ ? ] in the margins!
+                  </p>
                   {showSolutions ? null : (
                     <button
-                      onClick={() => setShowShowSolutions(true)}
+                      onClick={() => setShowSolutions(true)}
                       className="mt-2 text-xs font-bold text-slate-brand hover:text-brass uppercase tracking-wider underline transition-premium"
                     >
                       Or, reveal all answers across the packet
                     </button>
                   )}
                 </div>
+              ) : isCompliant ? (
+                /* Compliant Section Audit Drawer */
+                <div className="space-y-6 animate-fade-in text-left">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 space-y-4 shadow-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-bold tracking-widest text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded uppercase">
+                        Fiduciary: Compliant
+                      </span>
+                      <span className="text-[9px] font-bold text-emerald-700/60 uppercase">
+                        Section Healthy
+                      </span>
+                    </div>
+                    <h3 className="font-serif font-bold text-xl text-emerald-900 leading-tight">
+                      {currentCompliant?.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-emerald-850 font-sans font-medium leading-relaxed">
+                      {currentCompliant?.description}
+                    </p>
+                    <div className="bg-white/80 p-4 rounded-lg border border-emerald-100 text-xs text-ink/80 leading-relaxed space-y-1">
+                      <strong className="text-emerald-800 uppercase tracking-wider text-[9px] block">Attorney Auditor Commentary</strong>
+                      <p className="font-sans font-normal">{currentCompliant?.complianceNote}</p>
+                    </div>
+                  </div>
+                  
+                  {/* General educational encouragement */}
+                  <div className="bg-white border border-fog rounded-xl p-5 space-y-3">
+                    <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-slate-brand">
+                      Continuous Fiduciary Practice
+                    </h4>
+                    <p className="text-xs text-ink/80 leading-relaxed">
+                      Healthy board habits are the ultimate defense against legal liabilities. Use this standard as a blueprint across all future boardroom documentation.
+                    </p>
+                    <a
+                      href="https://NPOlawyers.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider"
+                    >
+                      <span>Visit NPOlawyers.com</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
               ) : (
-                /* Active Audit State */
+                /* Active Audit State for Red Flags */
                 <div className="space-y-6 animate-fade-in text-left">
                   
                   {/* Summary Header */}
@@ -707,33 +1111,39 @@ export const BoardPacketLab: React.FC = () => {
                       <span className="text-[10px] font-bold tracking-widest text-ink/40 uppercase">
                         Lab Audit Detail
                       </span>
-                      <CaliforniaNoteBadge 
-                        statute={currentFlag.statute} 
-                        text={currentFlag.statuteText} 
-                        className="scale-90 origin-right"
-                      />
+                      {currentFlag && (
+                        <CaliforniaNoteBadge 
+                          statute={currentFlag.statute} 
+                          text={currentFlag.statuteText} 
+                          className="scale-90 origin-right"
+                        />
+                      )}
                     </div>
                     <h3 className="font-serif font-bold text-xl text-ink leading-tight">
-                      {currentFlag.title}
+                      {currentFlag?.title}
                     </h3>
                   </div>
 
                   {/* Fiduciary Red Flags (DoNotDoThisCard) */}
-                  <DoNotDoThisCard 
-                    title={currentFlag.flagTitle} 
-                    items={currentFlag.redFlags}
-                    consequence={currentFlag.consequence}
-                  />
+                  {currentFlag && (
+                    <DoNotDoThisCard 
+                      title={currentFlag.flagTitle} 
+                      items={currentFlag.redFlags}
+                      consequence={currentFlag.consequence}
+                    />
+                  )}
 
                   {/* Director Question Script (AskThisCard) */}
-                  <AskThisCard 
-                    question={currentFlag.scriptQuestion} 
-                    rationale={currentFlag.scriptRationale} 
-                    targetRole={currentFlag.scriptTarget}
-                  />
+                  {currentFlag && (
+                    <AskThisCard 
+                      question={currentFlag.scriptQuestion} 
+                      rationale={currentFlag.scriptRationale} 
+                      targetRole={currentFlag.scriptTarget}
+                    />
+                  )}
 
                   {/* Legal Escalation Referrals (LegalEscalationCard) */}
-                  {currentFlag.isSevere ? (
+                  {currentFlag?.isSevere ? (
                     <LegalEscalationCard 
                       trigger="California Fiduciary Risk Alert" 
                       explanation={`This finding represents a direct violation of regulatory law. Proceeding without certified legal restructuring can trigger severe state penalties, personal director audit assessments, or loss of tax exemption. We recommend obtaining a bylaws or procedures audit from independent legal counsel.`} 
@@ -778,4 +1188,5 @@ export const BoardPacketLab: React.FC = () => {
     </Layout>
   );
 };
+
 export default BoardPacketLab;
