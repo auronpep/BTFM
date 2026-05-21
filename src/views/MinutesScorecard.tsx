@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckSquare, Square, AlertTriangle, Copy, Check,
-  FileText, FileCheck, ExternalLink
+  FileText, FileCheck, ExternalLink, Sparkles
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -21,6 +21,120 @@ export const MinutesScorecard: React.FC = () => {
   const { navigate } = useRouter();
   const [copied, setCopied] = useState(false);
   const [showBadMinutes, setShowBadMinutes] = useState(false);
+  const [copiedSandbox, setCopiedSandbox] = useState(false);
+
+  const [resolutionState, setResolutionState] = useState(() => {
+    const saved = localStorage.getItem('cdx_minutes_resolution_builder');
+    return saved ? JSON.parse(saved) : {
+      organizationName: 'CDX Charity Initiatives',
+      secretaryName: 'Sarah Jenkins',
+      presidentName: 'John Doe',
+      meetingDate: '2026-05-15',
+      resolutionType: 'compensation',
+      salaryAmount: '120,000',
+      comparableRegion: 'Southern California',
+      vendorName: 'Beacon Tech Solutions',
+      conflictDirector: 'Mary Smith',
+      conflictNature: 'Owner of 35% equity in Beacon Tech Solutions',
+      contractAmount: '18,500',
+      donorName: 'The Annenberg Trust',
+      restrictedAmount: '50,000',
+      restrictionPurpose: 'Bylaws Compliance Training Initiative'
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cdx_minutes_resolution_builder', JSON.stringify(resolutionState));
+  }, [resolutionState]);
+
+  const compileResolutionText = () => {
+    const {
+      organizationName, secretaryName, presidentName, meetingDate, resolutionType,
+      salaryAmount, comparableRegion, vendorName, conflictDirector, conflictNature,
+      contractAmount, donorName, restrictedAmount, restrictionPurpose
+    } = resolutionState;
+
+    if (resolutionType === 'compensation') {
+      return `BOARD RESOLUTION OF ${organizationName.toUpperCase()}
+CONCERNING EXECUTIVE COMPENSATION REASONABILITY (IRC § 4958 SAFE HARBOR)
+
+WHEREAS, the Board of Directors of ${organizationName} (the "Corporation") has reviewed the performance and proposed annual compensation package for the Executive Director; and
+
+WHEREAS, the Board desires to establish the Executive Director's annual salary for the upcoming fiscal year in a manner that complies with the "Rebuttable Presumption of Reasonableness" safe harbor guidelines set forth under Internal Revenue Code Section 4958 and Treasury Regulation Section 53.4958-6;
+
+NOW, THEREFORE, BE IT RESOLVED:
+
+1. RECUSAL: It is hereby recorded that the Executive Director was fully recused from all board discussions, deliberations, and votes regarding their proposed compensation, and formally exited the meeting room prior to any debate or vote.
+
+2. INDEPENDENT COMPARABLES: The Board Treasurer presented and the Board reviewed independent salary comparability data from a comprehensive salary study of peer California nonprofit organizations of similar budget size ($500,000 to $2,500,000) and geographic scope (the ${comparableRegion} region). This data demonstrated that the median annual compensation for executive directors of comparable organizations ranges from $95,000 to $135,000.
+
+3. APPROVAL AND BASIS: Based on its review of the independent comparability data, the disinterested directors of the Board hereby approve an annual salary of $${salaryAmount} for the Executive Director, finding this amount to be fair, reasonable, and in the best interests of the Corporation.
+
+4. WRITTEN RECORD: This resolution and the accompanying minutes shall serve as the contemporaneous written record of the Board's determination in accordance with IRS Safe Harbor requirements.
+
+Dated: ${meetingDate}
+Certified by:
+
+___________________________
+${secretaryName}, Board Secretary`;
+    }
+
+    if (resolutionType === 'self_dealing') {
+      return `BOARD RESOLUTION OF ${organizationName.toUpperCase()}
+APPROVING TRANSACTION INVOLVING CONFLICTED DIRECTOR (CA CORP CODE § 5233)
+
+WHEREAS, the Corporation proposes to enter into a contract with ${vendorName} for certain services, with a total financial commitment of $${contractAmount}; and
+
+WHEREAS, Board member ${conflictDirector} has disclosed a material financial conflict of interest in connection with this transaction due to being ${conflictNature}; and
+
+WHEREAS, under California Corporations Code Section 5233, the Board must review and approve self-dealing contracts in good faith, with disinterested directors verifying that the transaction is fair and reasonable and that a more advantageous arrangement could not have been obtained with reasonable effort;
+
+NOW, THEREFORE, BE IT RESOLVED:
+
+1. FULL DISCLOSURE: The Board notes that ${conflictDirector} made full disclosure of their interest to the Board, and such disclosure has been recorded in the corporate files.
+
+2. RECUSAL: ${conflictDirector} recused themselves from all deliberations and votes regarding this matter, and exited the room prior to any discussion or vote. A quorum of disinterested directors remained.
+
+3. FAIRNESS AND ALTERNATIVES: The disinterested directors have reviewed comparable bids and proposals from other vendors and have determined that the Corporation could not, with reasonable effort, obtain a more advantageous arrangement under the circumstances. The transaction with ${vendorName} is fair, reasonable, and in the best interests of the Corporation.
+
+4. APPROVAL: The disinterested directors of the Board hereby approve the contract with ${vendorName} for $${contractAmount} and authorize the Board President ${presidentName} to execute the agreement on behalf of the Corporation.
+
+Dated: ${meetingDate}
+Certified by:
+
+___________________________
+${secretaryName}, Board Secretary`;
+    }
+
+    return `BOARD RESOLUTION OF ${organizationName.toUpperCase()}
+ESTABLISHING TEMPORARY RESTRICTION OF FUNDS (DONOR INTENT PRESERVATION)
+
+WHEREAS, the Corporation received a generous contribution in the amount of $${restrictedAmount} from ${donorName}; and
+
+WHEREAS, the donor has expressed the specific intent and restriction that these funds be utilized solely for the purpose of ${restrictionPurpose}; and
+
+WHEREAS, the Board of Directors of ${organizationName} is committed to upholding its fiduciary duty to protect and preserve donor-restricted assets in compliance with California's Uniform Prudent Management of Institutional Funds Act (UPMIFA);
+
+NOW, THEREFORE, BE IT RESOLVED:
+
+1. RESTRICTION ESTABLISHED: The Board hereby directs the Treasurer and executive staff to segregate the $${restrictedAmount} contribution from general operating accounts and establish a dedicated, temporarily restricted ledger account for ${donorName} restricted funds.
+
+2. EXPENDITURE CONTROLS: The Board declares that these funds shall be expended solely for ${restrictionPurpose} in accordance with the donor's expressed intent, and no portion of these restricted funds shall be redirected to satisfy general corporate liabilities or general operating overhead.
+
+3. REPORTING: The Treasurer shall present a quarterly restricted-fund variance report to the Board detailing all disbursements made from this account until the restriction is fully satisfied.
+
+Dated: ${meetingDate}
+Certified by:
+
+___________________________
+${secretaryName}, Board Secretary`;
+  };
+
+  const copySandboxToClipboard = () => {
+    navigator.clipboard.writeText(compileResolutionText());
+    setCopiedSandbox(true);
+    setTimeout(() => setCopiedSandbox(false), 2000);
+  };
 
   // Criteria database
   const [criteria, setCriteria] = useState<ScoringCriterion[]>(() => {
@@ -485,6 +599,219 @@ Date Approved: ____________________`;
               </pre>
               <div className="absolute bottom-4 right-4 bg-white/95 px-3 py-1.5 rounded-lg text-[10px] text-ink/50 border border-fog/50 font-sans shadow pointer-events-none uppercase tracking-wider font-semibold">
                 Scroll to view template
+              </div>
+            </div>
+          </div>
+
+          {/* Minutes Resolution Draft Sandbox */}
+          <div id="resolution-sandbox" className="bg-amber-50/25 rounded-2xl border border-amber-900/15 p-6 sm:p-8 space-y-6 text-left shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-amber-900/10 pb-4">
+              <div className="space-y-1">
+                <h3 className="font-serif text-xl font-bold text-ink flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-brass" />
+                  <span>Minutes Resolution Draft Assistant</span>
+                </h3>
+                <p className="text-xs text-ink/60">
+                  Input meeting details to dynamically compile a robust, legally protective board resolution for corporate records.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={copySandboxToClipboard}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-brass hover:bg-ink text-ink hover:text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                >
+                  {copiedSandbox ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-800" />
+                      <span>Resolution Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Copy Draft Resolution</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Form parameters */}
+              <div className="lg:col-span-5 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Resolution Type</label>
+                  <select
+                    value={resolutionState.resolutionType}
+                    onChange={(e) => setResolutionState({ ...resolutionState, resolutionType: e.target.value })}
+                    className="w-full bg-white border border-fog hover:border-brass focus:border-brass rounded px-3 py-2 text-xs font-medium text-ink focus:outline-none transition-premium cursor-pointer"
+                  >
+                    <option value="compensation">Executive Salary Reasonableness (IRC § 4958)</option>
+                    <option value="self_dealing">Self-Dealing Contract Approval (CA Corp § 5233)</option>
+                    <option value="donor_restriction">General Fund Temporary Restriction</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Organization Name</label>
+                    <input
+                      type="text"
+                      value={resolutionState.organizationName}
+                      onChange={(e) => setResolutionState({ ...resolutionState, organizationName: e.target.value })}
+                      className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Meeting Date</label>
+                    <input
+                      type="date"
+                      value={resolutionState.meetingDate}
+                      onChange={(e) => setResolutionState({ ...resolutionState, meetingDate: e.target.value })}
+                      className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Secretary Name</label>
+                    <input
+                      type="text"
+                      value={resolutionState.secretaryName}
+                      onChange={(e) => setResolutionState({ ...resolutionState, secretaryName: e.target.value })}
+                      className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Board President Name</label>
+                    <input
+                      type="text"
+                      value={resolutionState.presidentName}
+                      onChange={(e) => setResolutionState({ ...resolutionState, presidentName: e.target.value })}
+                      className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                    />
+                  </div>
+                </div>
+
+                {resolutionState.resolutionType === 'compensation' && (
+                  <div className="grid grid-cols-2 gap-4 border-t border-fog pt-3 mt-2 animate-fade-in">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Annual Salary ($)</label>
+                      <input
+                        type="text"
+                        value={resolutionState.salaryAmount}
+                        onChange={(e) => setResolutionState({ ...resolutionState, salaryAmount: e.target.value })}
+                        className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Comparable Region</label>
+                      <input
+                        type="text"
+                        value={resolutionState.comparableRegion}
+                        onChange={(e) => setResolutionState({ ...resolutionState, comparableRegion: e.target.value })}
+                        className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {resolutionState.resolutionType === 'self_dealing' && (
+                  <div className="border-t border-fog pt-3 mt-2 space-y-3 animate-fade-in">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Conflicted Director</label>
+                        <input
+                          type="text"
+                          value={resolutionState.conflictDirector}
+                          onChange={(e) => setResolutionState({ ...resolutionState, conflictDirector: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Vendor Name</label>
+                        <input
+                          type="text"
+                          value={resolutionState.vendorName}
+                          onChange={(e) => setResolutionState({ ...resolutionState, vendorName: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Contract Value ($)</label>
+                        <input
+                          type="text"
+                          value={resolutionState.contractAmount}
+                          onChange={(e) => setResolutionState({ ...resolutionState, contractAmount: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Nature of Conflict</label>
+                        <input
+                          type="text"
+                          value={resolutionState.conflictNature}
+                          onChange={(e) => setResolutionState({ ...resolutionState, conflictNature: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                          placeholder="e.g. Spouse is owner"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {resolutionState.resolutionType === 'donor_restriction' && (
+                  <div className="border-t border-fog pt-3 mt-2 space-y-3 animate-fade-in">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Donor Name</label>
+                        <input
+                          type="text"
+                          value={resolutionState.donorName}
+                          onChange={(e) => setResolutionState({ ...resolutionState, donorName: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Amount ($)</label>
+                        <input
+                          type="text"
+                          value={resolutionState.restrictedAmount}
+                          onChange={(e) => setResolutionState({ ...resolutionState, restrictedAmount: e.target.value })}
+                          className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Purpose</label>
+                      <input
+                        type="text"
+                        value={resolutionState.restrictionPurpose}
+                        onChange={(e) => setResolutionState({ ...resolutionState, restrictionPurpose: e.target.value })}
+                        className="w-full bg-white border border-fog rounded px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-brass transition-premium"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-brass/5 border border-brass/10 p-3.5 rounded-lg text-[11px] text-ink/80 leading-relaxed font-sans mt-4">
+                  <strong>Corporate Law Note:</strong> Once compiled, copy and paste this resolution directly into your meeting minutes. California Corp Code § 5215 confirms that certified copies of minutes are prima facie evidence of meeting proceedings.
+                </div>
+              </div>
+
+              {/* Dynamic code blocks */}
+              <div className="lg:col-span-7 flex flex-col">
+                <div className="relative flex-grow flex flex-col min-h-[350px]">
+                  <pre className="flex-grow font-mono text-[10.5px] bg-white border border-fog p-5 rounded-xl text-ink overflow-y-auto leading-relaxed shadow-inner whitespace-pre-wrap select-all max-h-[460px]">
+                    {compileResolutionText()}
+                  </pre>
+                  <div className="absolute top-3 right-3 bg-paper px-2 py-0.5 border border-fog text-[9px] font-extrabold text-brass uppercase tracking-widest rounded shadow-sm">
+                    Live Draft Preview
+                  </div>
+                </div>
               </div>
             </div>
           </div>
