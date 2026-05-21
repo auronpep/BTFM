@@ -176,9 +176,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { label: 'Next Meeting', target: 'next-meeting', bg: 'hover:border-slate-brand' },
     { label: 'Money & Audit', target: 'money-audit', bg: 'hover:border-teal-brand' },
     { label: 'Executive Oversight', target: 'executive-oversight', bg: 'hover:border-slate-brand' },
-    { label: 'Risk & Safety', target: 'risk-safety', bg: 'hover:border-copper' },
     { label: 'Minutes & Records', target: 'minutes-records', bg: 'hover:border-slate-brand' },
-    { label: 'California Board Rules', target: 'california-board-rules', bg: 'hover:border-brass' },
+    { label: 'California Rules', target: 'california-board-rules', bg: 'hover:border-brass' },
     { label: 'Tools', target: 'tools', bg: 'hover:border-teal-brand' },
     { label: 'Training', target: 'training', bg: 'hover:border-brass' },
     { label: 'Boards 101', target: 'boards-101', bg: 'hover:border-brass' },
@@ -241,28 +240,28 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Main Sticky Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-fog/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-4">
           <div className="flex items-center justify-between h-20">
             {/* Logo Brand Area (Editorial Corinthian Column Aesthetics) */}
             <div 
               onClick={() => handleNavClick('home')} 
-              className="flex items-center gap-3 cursor-pointer group py-2"
+              className="flex items-center gap-1.5 xl:gap-3 cursor-pointer group py-2"
             >
-              <div className="bg-ink hover:bg-slate-brand text-brass p-2.5 rounded-lg border border-brass/30 transition-premium shadow-md">
-                <Landmark className="w-6 h-6" />
+              <div className="bg-ink hover:bg-slate-brand text-brass p-1.5 xl:p-2.5 rounded-lg border border-brass/30 transition-premium shadow-md shrink-0">
+                <Landmark className="w-4 h-4 sm:w-5 h-5 xl:w-6 h-6" />
               </div>
               <div className="flex flex-col select-none">
-                <span className="font-serif italic text-base sm:text-lg text-slate-brand font-semibold leading-tight tracking-wide group-hover:text-ink transition-premium">
+                <span className="font-serif italic text-xs sm:text-sm xl:text-base text-slate-brand font-semibold leading-tight tracking-wide group-hover:text-ink transition-premium">
                   The Principles of
                 </span>
-                <span className="font-sans font-extrabold text-sm sm:text-base text-brass tracking-[0.18em] uppercase leading-none mt-0.5">
+                <span className="font-sans font-extrabold text-[10px] sm:text-xs xl:text-sm text-brass tracking-[0.12em] xl:tracking-[0.18em] uppercase leading-none mt-0.5 whitespace-nowrap">
                   BOARD TRAINING
                 </span>
               </div>
             </div>
 
             {/* Desktop Full Navigation */}
-            <nav className="hidden lg:flex items-center gap-1.5">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5">
               {navItems.map((item) => {
                 const active = isActive(item.target);
                 const isTools = item.target === 'tools';
@@ -277,7 +276,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     >
                       <button
                         onClick={() => handleNavClick(item.target)}
-                        className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-1 relative ${
+                        className={`px-1.5 xl:px-2.5 py-1.5 text-[10.5px] xl:text-[11px] font-bold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-0.5 relative ${
                           active 
                             ? 'border-brass text-brass bg-paper/50 font-bold' 
                             : 'text-ink/75 hover:text-ink hover:bg-fog/30'
@@ -285,10 +284,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       >
                         <span>{item.label}</span>
                         {toolsState === 'in-progress' && (
-                          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse inline-block" title="Laboratory in progress" />
+                          <span className="w-1 h-1 bg-amber-500 rounded-full animate-pulse inline-block" title="Laboratory in progress" />
                         )}
                         {toolsState === 'completed' && (
-                          <span className="text-[10px] text-teal-brand font-bold inline-block" title="All Laboratories Completed">✓</span>
+                          <span className="text-[9px] text-teal-brand font-bold inline-block" title="All Laboratories Completed">✓</span>
                         )}
                       </button>
                       
@@ -348,7 +347,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <button
                     key={item.target}
                     onClick={() => handleNavClick(item.target)}
-                    className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-1 relative ${
+                    className={`px-1.5 xl:px-2.5 py-1.5 text-[10.5px] xl:text-[11px] font-bold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-1 relative ${
                       active 
                         ? 'border-brass text-brass bg-paper/50 font-bold' 
                         : 'text-ink/75 hover:text-ink hover:bg-fog/30'
@@ -361,20 +360,20 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-ink/75 hover:text-brass transition-premium rounded flex items-center gap-1 cursor-pointer"
+                className="p-1 xl:p-2 text-ink/75 hover:text-brass transition-premium rounded flex items-center gap-0.5 cursor-pointer"
                 title="Search (Ctrl+K or /)"
               >
-                <Search className="w-4 h-4 text-ink/70 hover:text-brass" />
-                <span className="text-[9px] font-sans font-bold text-ink/30 bg-fog px-1 py-0.5 rounded border border-fog-dark/10">⌘K</span>
+                <Search className="w-3.5 h-3.5 text-ink/70 hover:text-brass" />
+                <span className="hidden xl:inline-block text-[9px] font-sans font-bold text-ink/30 bg-fog px-1 py-0.5 rounded border border-fog-dark/10">⌘K</span>
               </button>
               
-              <div className="h-6 w-[1px] bg-fog/80 mx-2" />
+              <div className="h-6 w-[1px] bg-fog/80 mx-1 xl:mx-1.5" />
               
               <a
                 href="https://NPOlawyers.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                className="inline-flex items-center gap-1 px-2.5 xl:px-4 py-2 bg-slate-brand hover:bg-ink text-white text-[10px] xl:text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
               >
                 <span>NPO Lawyers</span>
                 <ExternalLink className="w-3 h-3 text-brass" />

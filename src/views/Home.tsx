@@ -104,26 +104,6 @@ export const Home: React.FC = () => {
 
   return (
     <Layout>
-      {/* 1. Live Webinar Alert Ribbon */}
-      <div className="bg-burgundy text-paper border-b border-brass/30 py-3.5 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden group">
-        <div className="absolute inset-0 bg-white/[0.03] pointer-events-none bg-[radial-gradient(#C29A4A_1px,transparent_1px)] [background-size:12px_12px]" />
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-2 relative z-10 text-xs font-bold tracking-wide">
-          <span className="inline-flex items-center gap-1.5 bg-brass/25 text-brass px-3 py-0.5 rounded-full border border-brass/30 animate-pulse shrink-0">
-            <span className="w-1.5 h-1.5 bg-brass rounded-full" />
-            <span>LIVE WEBINAR ALIGNMENT</span>
-          </span>
-          <span className="text-white text-center sm:text-left leading-relaxed">
-            California $2M Independent Audit & Audit Committee Mandate — July 15, 2026.
-          </span>
-          <button 
-            onClick={() => navigate('training')} 
-            className="text-brass hover:text-white underline inline-flex items-center gap-1 uppercase tracking-wider text-[10px] cursor-pointer focus:outline-none ml-1 shrink-0 font-extrabold"
-          >
-            <span>Register Seats ➜</span>
-          </button>
-        </div>
-      </div>
-
       {/* 2. Hero Section: Premium Courtroom/Editorial Aesthetics */}
       <section className="relative overflow-hidden bg-ink text-paper py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-brass/30">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#C29A4A_1px,transparent_1px)] [background-size:16px_16px]" />
