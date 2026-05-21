@@ -7,7 +7,7 @@ import {
   MinutesShouldShowCard, 
   CaliforniaNoteBadge 
 } from '../components/BoardroomCards';
-import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight, Activity, RefreshCw, AlertCircle, Square } from 'lucide-react';
+import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight, Activity, RefreshCw, AlertCircle, Square, Download, Clock, Sparkles } from 'lucide-react';
 
 interface AgendaItem {
   id: string;
@@ -23,6 +23,136 @@ interface AgendaItem {
 export const NextMeeting: React.FC = () => {
   const { navigate } = useRouter();
   const [expandedTopic, setExpandedTopic] = useState<string | null>('budget-approval');
+
+  // Meeting date state loaded from/saved to local storage
+  const [meetingDate, setMeetingDate] = useState(() => {
+    return localStorage.getItem('cdx_meeting_reminder_date') || '';
+  });
+
+  const handleMeetingDateChange = (dateVal: string) => {
+    setMeetingDate(dateVal);
+    localStorage.setItem('cdx_meeting_reminder_date', dateVal);
+  };
+
+  const getCalculatedDeadlines = (dateStr: string) => {
+    if (!dateStr) return null;
+    // Force user's local timeline by appending T00:00:00
+    const meetDate = new Date(dateStr + 'T00:00:00');
+    
+    // 10 days notice
+    const noticeDate = new Date(meetDate);
+    noticeDate.setDate(meetDate.getDate() - 10);
+    
+    // 5 days board packet delivery
+    const packetDate = new Date(meetDate);
+    packetDate.setDate(meetDate.getDate() - 5);
+    
+    // 3 days financial final audit
+    const financialDate = new Date(meetDate);
+    financialDate.setDate(meetDate.getDate() - 3);
+
+    return {
+      meeting: meetDate,
+      notice: noticeDate,
+      packet: packetDate,
+      financial: financialDate
+    };
+  };
+
+  const deadlines = getCalculatedDeadlines(meetingDate);
+
+  const formatDateFriendly = (d: Date) => {
+    return d.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  const handleDownloadTimelineICS = () => {
+    const dls = getCalculatedDeadlines(meetingDate);
+    if (!dls) return;
+
+    const formatDateICS = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}${month}${day}T090000`; // 9:00 AM local
+    };
+
+    const formatEndICS = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}${month}${day}T100000`; // 10:00 AM local
+    };
+
+    const createEvent = (start: Date, end: Date, summary: string, description: string) => {
+      return [
+        'BEGIN:VEVENT',
+        `UID:${Date.now()}-${Math.random().toString(36).substr(2, 9)}@cdxboardroom.org`,
+        `DTSTAMP:${formatDateICS(new Date())}Z`,
+        `DTSTART;TZID=America/Los_Angeles:${formatDateICS(start)}`,
+        `DTEND;TZID=America/Los_Angeles:${formatEndICS(end)}`,
+        `SUMMARY:CDX: ${summary}`,
+        `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
+        'BEGIN:VALARM',
+        'TRIGGER:-PT12H', // 12-hour reminder
+        'ACTION:DISPLAY',
+        `DESCRIPTION:Reminder: ${summary}`,
+        'END:VALARM',
+        'END:VEVENT'
+      ].join('\r\n');
+    };
+
+    const calHeader = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//CDX Boardroom//Timeline Planner//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH'
+    ].join('\r\n');
+
+    const calFooter = 'END:VCALENDAR';
+
+    const events = [
+      createEvent(
+        dls.notice, 
+        dls.notice, 
+        'Statutory 10-Day Board Meeting Notice Deadline', 
+        'California Corporations Code mandates that formal board meeting notice must be transmitted to all active directors at least 10 days in advance of the meeting date. Ensure you have sent the agenda and notice of physical/digital location via email or letter.'
+      ),
+      createEvent(
+        dls.packet, 
+        dls.packet, 
+        '5-Day Board Packet Delivery Target (Duty of Care)', 
+        'To fulfill California Duty of Care standards, a complete board packet (prior minutes, executive summaries, draft budget, and financial comparisons) should be in the hands of directors at least 5 days in advance, allowing for reasonable pre-meeting study.'
+      ),
+      createEvent(
+        dls.financial, 
+        dls.financial, 
+        '3-Day Financial & Deviation Report Final Audit', 
+        'Target deadline for the Treasurer/CFO to finalize the budget deviation spreadsheets, ensuring all material expenditure changes have written narrative explanations before the board votes.'
+      ),
+      createEvent(
+        dls.meeting, 
+        dls.meeting, 
+        'Official CDX Board Meeting & Resolutions Vote', 
+        'Formal Board Meeting. Review budget approvals, executive compensation reasonableness, and conflict disclosures. Ensure all independent recusals are meticulously recorded in the final minutes.'
+      )
+    ].join('\r\n');
+
+    const icsContent = `${calHeader}\r\n${events}\r\n${calFooter}`;
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `cdx_board_meeting_timeline_${meetingDate}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Agenda Sliders State (40-40-20 Rule)
   const [sliders, setSliders] = useState(() => {
@@ -429,6 +559,139 @@ export const NextMeeting: React.FC = () => {
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
               Never enter a boardroom unprepared. Select from the 9 core high-stakes agenda topics below to access required study files, risk alerts, directors scripts, and mockup minutes.
             </p>
+          </div>
+
+          {/* Meeting Advance-Timeline Planner & ICS Generator (Enhancement 2) */}
+          <div className="bg-white rounded-xl border border-brass/30 p-6 sm:p-8 shadow-sm space-y-6 text-left relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-brass/5 rounded-full -mr-8 -mt-8 pointer-events-none"></div>
+            
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 text-xs text-brass font-bold uppercase tracking-wider">
+                <Clock className="w-4 h-4 text-brass" />
+                <span>Regulatory Meeting Timeline Planner</span>
+              </div>
+              <h2 className="font-serif text-xl sm:text-2xl text-ink font-bold tracking-tight">
+                Calculate & Export Statutory Notice Milestones
+              </h2>
+              <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                The California Corporations Code and fiduciary Duty of Care require key items (notices, board packets, financial statements) to be compiled and delivered strictly in advance. Input your upcoming meeting date below to establish your boardroom deadline compliance roadmap.
+              </p>
+            </div>
+
+            {/* Date Input Selector */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 bg-paper/20 p-4 rounded-lg border border-fog/50">
+              <div className="w-full sm:w-auto flex-1 space-y-1">
+                <label htmlFor="meeting-date-input" className="block text-[10px] font-extrabold uppercase tracking-widest text-ink/60">
+                  Select Scheduled Meeting Date
+                </label>
+                <input
+                  id="meeting-date-input"
+                  type="date"
+                  value={meetingDate}
+                  onChange={(e) => handleMeetingDateChange(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-fog hover:border-brass focus:border-brass focus:outline-none rounded text-sm text-ink font-bold transition-premium"
+                />
+              </div>
+              
+              {deadlines && (
+                <button
+                  onClick={handleDownloadTimelineICS}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-ink hover:bg-brass text-white hover:text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium shadow cursor-pointer self-end"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Compliance Calendar (.ics)</span>
+                </button>
+              )}
+            </div>
+
+            {/* Dynamic Timeline Render */}
+            {deadlines ? (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                  {/* Timeline Bar (desktop only) */}
+                  <div className="hidden md:block absolute top-[18px] left-8 right-8 h-[2px] bg-fog/60 z-0"></div>
+                  
+                  {/* Node 1: Notice (10 Days) */}
+                  <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+                    <div className="w-9 h-9 rounded-full bg-burgundy/10 border-2 border-burgundy flex items-center justify-center text-burgundy font-black text-xs shadow-sm">
+                      -10
+                    </div>
+                    <div>
+                      <span className="block text-[9px] font-black text-burgundy uppercase tracking-wider">Statutory Notice</span>
+                      <strong className="block text-xs font-bold text-ink font-sans mt-0.5">
+                        {formatDateFriendly(deadlines.notice)}
+                      </strong>
+                      <p className="text-[10px] text-ink/65 leading-relaxed mt-1 font-medium font-sans">
+                        CA Corp Code § 5015 minimum. Formal written notice & agenda must reach all directors.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Node 2: Packet Delivery (5 Days) */}
+                  <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+                    <div className="w-9 h-9 rounded-full bg-teal-brand/10 border-2 border-teal-brand flex items-center justify-center text-teal-brand font-black text-xs shadow-sm">
+                      -5
+                    </div>
+                    <div>
+                      <span className="block text-[9px] font-black text-teal-brand uppercase tracking-wider">Packet Delivery</span>
+                      <strong className="block text-xs font-bold text-ink font-sans mt-0.5">
+                        {formatDateFriendly(deadlines.packet)}
+                      </strong>
+                      <p className="text-[10px] text-ink/65 leading-relaxed mt-1 font-medium font-sans">
+                        Duty of Care standard. Distribute the complete package to allow meaningful review.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Node 3: Financial Final (3 Days) */}
+                  <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+                    <div className="w-9 h-9 rounded-full bg-slate-brand/10 border-2 border-slate-brand flex items-center justify-center text-slate-brand font-black text-xs shadow-sm">
+                      -3
+                    </div>
+                    <div>
+                      <span className="block text-[9px] font-black text-slate-brand uppercase tracking-wider">Audit Cutoff</span>
+                      <strong className="block text-xs font-bold text-ink font-sans mt-0.5">
+                        {formatDateFriendly(deadlines.financial)}
+                      </strong>
+                      <p className="text-[10px] text-ink/65 leading-relaxed mt-1 font-medium font-sans">
+                        Freeze budget spreadsheets. CFO prepares written notes on the top 10 deviations.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Node 4: Target Meeting Date */}
+                  <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+                    <div className="w-9 h-9 rounded-full bg-brass/10 border-2 border-brass flex items-center justify-center text-brass font-black text-xs shadow-sm">
+                      0
+                    </div>
+                    <div>
+                      <span className="block text-[9px] font-black text-brass uppercase tracking-wider">Meeting Day</span>
+                      <strong className="block text-xs font-bold text-ink font-sans mt-0.5">
+                        {formatDateFriendly(deadlines.meeting)}
+                      </strong>
+                      <p className="text-[10px] text-ink/65 leading-relaxed mt-1 font-medium font-sans">
+                        Conduct resolutions voting, document recusals, and establish safe harbors.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-lg flex gap-3 text-xs leading-relaxed font-sans font-medium text-emerald-800">
+                  <Sparkles className="w-5 h-5 shrink-0 text-emerald-600 mt-0.5" />
+                  <div className="space-y-1">
+                    <span className="font-extrabold uppercase tracking-wide text-[9px] text-emerald-700 block">Fiduciary Timeline Initialized:</span>
+                    <p>Exporting this schedule to your calendar will lock in automatic notification reminders 12 hours before each statutory milestone, ensuring absolute administrative compliance.</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-8 border border-dashed border-fog rounded-lg text-center bg-paper/10">
+                <Clock className="w-8 h-8 text-ink/30 mx-auto mb-2" />
+                <p className="text-xs text-ink/60 font-sans font-semibold">
+                  No date selected. Choose your next meeting date above to compute CA statutory thresholds.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Agenda Balancer Component (Enhancement 2) */}

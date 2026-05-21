@@ -3,7 +3,7 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { 
   Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, 
-  ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion
+  ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion, CheckSquare
 } from 'lucide-react';
 
 interface ScriptTemplate {
@@ -21,6 +21,93 @@ interface ScriptTemplate {
   }[];
 }
 
+const form990Questions = [
+  {
+    id: 'independent_majority',
+    line: 'Line 1b',
+    question: "Is a majority of your voting board members independent (not paid, not related to staff)?",
+    optimal: 'yes',
+    guidance: "The IRS requires disclosure of independent votes. A non-independent majority raises severe self-dealing and intermediate sanction risks.",
+  },
+  {
+    id: 'family_relationships',
+    line: 'Line 2',
+    question: "Did any directors or officers share family or business relationships with other directors or officers?",
+    optimal: 'no',
+    guidance: "Family/business pairings are disclosable and can erode independent quorum compliance. Best practice is to avoid dual family seats.",
+  },
+  {
+    id: 'delegation_management',
+    line: 'Line 3',
+    question: "Did you delegate management control over corporate duties to an external management company?",
+    optimal: 'no',
+    guidance: "External management agreements require rigorous disinterested review and signed contracts to prevent unconstitutional delegation of powers.",
+  },
+  {
+    id: 'bylaws_changes',
+    line: 'Line 4',
+    question: "Were any significant amendments made to your Bylaws or Articles of Incorporation this tax year?",
+    optimal: 'no',
+    guidance: "Significant amendments must be reported to the IRS on Form 990. Verify that changes were certified by Secretary resolution.",
+  },
+  {
+    id: 'asset_diversion',
+    line: 'Line 5',
+    question: "Was there any significant diversion of assets (theft, fraud, unauthorized loans, or embezzlement)?",
+    optimal: 'no',
+    guidance: "A 'Yes' requires public disclosure on Form 990. Immediate legal escalation to specialized counsel is required to protect exempt status.",
+  },
+  {
+    id: 'minutes_recorded',
+    line: 'Line 8a & 8b',
+    question: "Did your board contemporaneously document all meetings and committee votes with written minutes?",
+    optimal: 'yes',
+    guidance: "Contemporaneous means before the next meeting or within 60 days. Failing to record minutes invalidates actions and violates CA law.",
+  },
+  {
+    id: 'pre_filing_review',
+    line: 'Line 11a',
+    question: "Was a complete copy of the Form 990 provided to all board directors prior to filing with the IRS?",
+    optimal: 'yes',
+    guidance: "A director-reviewed Form 990 demonstrates compliance with the Duty of Care. An unreviewed filing increases audit liability.",
+  },
+  {
+    id: 'written_coi',
+    line: 'Line 12a',
+    question: "Does your organization maintain a written Conflict of Interest (COI) policy?",
+    optimal: 'yes',
+    guidance: "A written COI policy is critical to establish a Safe Harbor. Charity evaluators penalize organizations lacking a written policy.",
+  },
+  {
+    id: 'annual_disclosure',
+    line: 'Line 12b',
+    question: "Are all directors and officers required to sign a COI disclosure statement annually?",
+    optimal: 'yes',
+    guidance: "Annual signed disclosures verify active monitoring of potential transactional conflicts or self-dealing arrangements.",
+  },
+  {
+    id: 'coi_enforcement',
+    line: 'Line 12c',
+    question: "Does the organization actively monitor and enforce compliance with its Conflict of Interest policy?",
+    optimal: 'yes',
+    guidance: "Review must include recusing interested parties. Failure to enforce voids CA self-dealing protections.",
+  },
+  {
+    id: 'whistleblower_policy',
+    line: 'Line 13',
+    question: "Do you have an active, written Whistleblower Protection policy?",
+    optimal: 'yes',
+    guidance: "Under Sarbanes-Oxley, document destruction and whistleblower retaliation are criminal offenses. California Labor Code § 1102.5 mandates protection.",
+  },
+  {
+    id: 'retention_policy',
+    line: 'Line 14',
+    question: "Do you have an active, written Document Retention & Destruction policy?",
+    optimal: 'yes',
+    guidance: "Prevents early destruction of financial documents. Standardizes document shredding protocols, proving non-obstruction of audits.",
+  }
+];
+
 export const Tools: React.FC = () => {
   const { navigate } = useRouter();
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -28,6 +115,32 @@ export const Tools: React.FC = () => {
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [userOrgName, setUserOrganizationName] = useState('Our Charitable Board');
   const [copySuccess, setCopySuccess] = useState(false);
+
+  // State for Form 990 Review Wizard (Enhancement 9)
+  const [isForm990WizardOpen, setIsForm990WizardOpen] = useState(false);
+  const [form990ActiveIndex, setForm990ActiveIndex] = useState(0);
+  const [form990Answers, setForm990Answers] = useState<Record<string, 'yes' | 'no' | null>>(() => {
+    try {
+      const saved = localStorage.getItem('cdx_form_990_answers');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const handleAnswerForm990 = (qId: string, value: 'yes' | 'no') => {
+    const updated = { ...form990Answers, [qId]: value };
+    setForm990Answers(updated);
+    localStorage.setItem('cdx_form_990_answers', JSON.stringify(updated));
+  };
+
+  const handleResetForm990 = () => {
+    if (window.confirm("Reset all Form 990 answers?")) {
+      setForm990Answers({});
+      setForm990ActiveIndex(0);
+      localStorage.removeItem('cdx_form_990_answers');
+    }
+  };
 
   // Script Sandbox states
   const [selectedScriptId, setSelectedScriptId] = useState('ed-comp');
@@ -197,7 +310,8 @@ export const Tools: React.FC = () => {
       'board_mastery_progress',
       'webinar_registrations',
       'inperson_inquiries',
-      'cdx_script_builder_completed'
+      'cdx_script_builder_completed',
+      'cdx_form_990_answers'
     ];
     keysToRemove.forEach(k => localStorage.removeItem(k));
     
@@ -216,6 +330,8 @@ export const Tools: React.FC = () => {
       authorityMap: { score: null, total: null, count: 0 },
       scriptBuilder: { completed: false }
     });
+    setForm990Answers({});
+    setForm990ActiveIndex(0);
     
     setIsResetModalOpen(false);
   };
@@ -534,6 +650,27 @@ export const Tools: React.FC = () => {
           </span>
         );
       }
+      case 'form-990-wizard': {
+        const answeredCount = Object.keys(form990Answers).filter(k => form990Answers[k] !== undefined && form990Answers[k] !== null).length;
+        if (answeredCount === 12) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              ✓ Wizard Complete
+            </span>
+          );
+        } else if (answeredCount > 0) {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-300 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Answers: {answeredCount}/12
+            </span>
+          );
+        }
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Not Started
+          </span>
+        );
+      }
       default:
         return null;
     }
@@ -593,6 +730,15 @@ export const Tools: React.FC = () => {
       themeColor: 'border-t-burgundy hover:border-burgundy text-burgundy bg-burgundy/10',
       description: "Interactive cross-examination script compiler. Choose a governance failure and an officer target to build compliant, legally rigorous scripts for board inquiries.",
       cta: "Build Script"
+    },
+    {
+      id: 'form-990-wizard',
+      title: "IRS Form 990 Review Wizard",
+      path: '', // Handled via modal trigger
+      icon: <CheckSquare className="w-6 h-6" />,
+      themeColor: 'border-t-teal-brand hover:border-teal-brand text-teal-brand bg-teal-brand/10',
+      description: "A 12-question interactive diagnostic covering Part VI of the IRS Form 990. Ensures your board answers YES to critical conflict and whistleblower questions.",
+      cta: "Launch Wizard"
     }
   ];
 
@@ -660,6 +806,8 @@ export const Tools: React.FC = () => {
                 onClick={() => {
                   if (tool.id === 'script-builder') {
                     setIsScriptSandboxOpen(true);
+                  } else if (tool.id === 'form-990-wizard') {
+                    setIsForm990WizardOpen(true);
                   } else {
                     navigate(tool.path);
                   }
@@ -923,6 +1071,393 @@ export const Tools: React.FC = () => {
                 <span>Print Certificate</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* IRS Form 990 Review Wizard Modal (Enhancement 9) */}
+      {isForm990WizardOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-ink/50 backdrop-blur-sm" onClick={() => setIsForm990WizardOpen(false)} />
+          
+          <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full border border-fog p-6 sm:p-8 text-left space-y-6 flex flex-col max-h-[90vh] overflow-y-auto font-sans">
+            {/* Modal Header */}
+            <div className="flex justify-between items-start border-b border-fog/40 pb-4 shrink-0">
+              <div>
+                <div className="flex items-center gap-1.5 text-teal-brand mb-1">
+                  <CheckSquare className="w-4 h-4 text-teal-brand" />
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider font-sans">
+                    Governance Lab #7 — IRS Part VI Wizard
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-ink">
+                  IRS Form 990 Board Review Wizard
+                </h3>
+              </div>
+              <button onClick={() => setIsForm990WizardOpen(false)} className="text-ink/40 hover:text-ink cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Questions Progress Grid */}
+            <div className="flex flex-wrap gap-2 justify-center border-b border-fog/20 pb-4 shrink-0">
+              {form990Questions.map((q, idx) => {
+                const answer = form990Answers[q.id];
+                const isActive = form990ActiveIndex === idx;
+                let btnClass = "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-500";
+                if (answer) {
+                  btnClass = answer === q.optimal 
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-700 font-bold"
+                    : "bg-rose-50 border-rose-300 text-rose-700 font-bold";
+                }
+                if (isActive) {
+                  btnClass += " ring-2 ring-brass ring-offset-1";
+                }
+                return (
+                  <button
+                    key={q.id}
+                    onClick={() => setForm990ActiveIndex(idx)}
+                    className={`w-8 h-8 rounded-full border text-xs font-bold transition-all flex items-center justify-center cursor-pointer ${btnClass}`}
+                    title={`${q.line}: ${q.question}`}
+                  >
+                    {idx + 1}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Split Content Pane */}
+            {Object.keys(form990Answers).filter(k => form990Answers[k] !== undefined && form990Answers[k] !== null).length === 12 ? (
+              <div className="space-y-6">
+                {/* Completed Memo Display */}
+                <div className="bg-emerald-50/50 border border-emerald-200 p-4 rounded-lg flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <h4 className="font-serif font-bold text-ink">IRS Form 990 Review Completed!</h4>
+                    <p className="text-xs text-ink/70 font-sans">
+                      All 12 critical corporate governance questions under Part VI have been assessed. Below, you can review the generated Due Diligence Memorandum, customize your board details, and print a hard copy for your corporate binder.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Parchment Styled Report Memo */}
+                <div className="border-8 double border-brass/35 p-6 sm:p-8 bg-white text-ink rounded shadow-lg font-serif space-y-6 max-w-2xl mx-auto relative">
+                  {/* Watermark/Seal style logo */}
+                  <div className="absolute top-4 right-4 text-[10px] font-sans font-bold text-brass border border-brass/40 px-2 py-1 rounded select-none opacity-45 uppercase tracking-wider">
+                    Fiduciary Approved
+                  </div>
+
+                  <div className="text-center space-y-2 border-b border-brass/30 pb-4">
+                    <span className="font-sans text-[11px] font-extrabold uppercase tracking-widest text-brass block">
+                      California Boardroom Initiative
+                    </span>
+                    <h4 className="text-2xl font-bold tracking-wide text-ink">
+                      BOARD GOVERNANCE COMPLIANCE MEMORANDUM
+                    </h4>
+                    <p className="text-xs font-sans italic text-ink/55">
+                      Executed in Connection with California Corporations Code & IRS Part VI Standards
+                    </p>
+                  </div>
+
+                  {/* Fields for custom details */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans border-b border-brass/25 pb-4">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Nonprofit Board Name</label>
+                      <input 
+                        type="text"
+                        value={userOrgName}
+                        onChange={(e) => setUserOrganizationName(e.target.value)}
+                        className="w-full font-bold border border-fog/40 p-2 rounded focus:ring-1 focus:ring-brass focus:outline-none bg-paper/5 text-ink"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Audit Conducted On</label>
+                      <input 
+                        type="text"
+                        defaultValue={new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        className="w-full font-bold border border-fog/40 p-2 rounded bg-paper/5 focus:outline-none text-ink cursor-default"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  {/* Summary Scores */}
+                  <div className="space-y-3 font-sans">
+                    <div className="flex justify-between items-center bg-paper/10 p-3 rounded border border-fog/50">
+                      <span className="text-xs font-bold text-ink uppercase tracking-wide">Fiduciary Compliance Score:</span>
+                      <span className="text-sm font-extrabold text-teal-brand">
+                        {form990Questions.filter(q => form990Answers[q.id] === q.optimal).length} / 12 Compliant Responses
+                      </span>
+                    </div>
+
+                    {/* Show Red Flag Summary if any answers are non-optimal */}
+                    {form990Questions.some(q => form990Answers[q.id] !== q.optimal) ? (
+                      <div className="p-4 bg-rose-50 border border-rose-200 rounded text-left space-y-2">
+                        <span className="text-rose-800 text-[10px] font-extrabold uppercase tracking-widest block font-sans">
+                          ⚠ ACTIVE GOVERNANCE DISCLOSURE ALERTS:
+                        </span>
+                        <ul className="list-disc pl-5 text-xs text-ink/80 space-y-1 font-sans">
+                          {form990Questions.filter(q => form990Answers[q.id] !== q.optimal).map(q => (
+                            <li key={q.id}>
+                              <strong>{q.line} ({q.question.replace(/\?$/, '')}):</strong> Answering {form990Answers[q.id]?.toUpperCase()} deviates from IRS best-practices. {q.guidance}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="pt-2 border-t border-rose-200/50 text-[11px] font-medium text-ink/75 leading-relaxed font-sans">
+                          These non-compliant configurations will be visible on your public IRS Form 990, inviting regulatory audits and potential D&O policy escalations. We recommend immediate engagement with the California Center for Nonprofit Law (<a href="https://NPOlawyers.com" target="_blank" rel="noopener noreferrer" className="text-burgundy font-bold underline">NPOlawyers.com</a>) to update your board policies prior to filing.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-4 bg-emerald-50 border border-emerald-200 rounded text-left flex items-start gap-2.5">
+                        <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                        <div className="space-y-1">
+                          <span className="text-emerald-800 text-[10px] font-extrabold uppercase tracking-widest block font-sans">
+                            100% GOVERNANCE COMPLIANT:
+                          </span>
+                          <p className="text-xs text-ink/75 leading-relaxed font-sans">
+                            Your policies and structures are perfectly configured to meet IRS Form 990 Part VI due-diligence standards. This ensures high marks from public charity navigators and satisfies D&O underwriter standards.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Memorandum Resolution Text */}
+                  <div className="space-y-2 text-ink/80 text-xs leading-relaxed italic text-left border-l-2 border-brass pl-4 font-serif">
+                    <p>
+                      <strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits non-profit policies and structural quorums to ensure directors protect public charity assets; and
+                    </p>
+                    <p>
+                      <strong>WHEREAS</strong>, the Board of Directors of <strong>{userOrgName || '[Organization Name]'}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;
+                    </p>
+                    <p>
+                      <strong>NOW, THEREFORE, BE IT RESOLVED</strong>, that this Board hereby endorses this Governance Memorandum, commits to resolving any flagged non-compliances, and directs the Secretary to append this document to the permanent corporate record.
+                    </p>
+                  </div>
+
+                  {/* Signatures */}
+                  <div className="pt-10 flex flex-col sm:flex-row justify-between gap-8 text-xs font-sans">
+                    <div className="space-y-1 text-center sm:text-left">
+                      <div className="h-8 border-b border-brass/50 w-48 mx-auto sm:mx-0" />
+                      <p className="font-bold text-ink">Board President</p>
+                      <p className="text-[10px] text-ink/50">For {userOrgName}</p>
+                    </div>
+                    <div className="space-y-1 text-center sm:text-left">
+                      <div className="h-8 border-b border-brass/50 w-48 mx-auto sm:mx-0" />
+                      <p className="font-bold text-ink">Board Secretary</p>
+                      <p className="text-[10px] text-ink/50">Contemporaneously Recorded</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Print and Reset Buttons */}
+                <div className="flex gap-3 justify-center max-w-sm mx-auto font-sans pb-4">
+                  <button
+                    onClick={handleResetForm990}
+                    className="w-full py-2.5 bg-paper/20 hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog/50 transition-premium cursor-pointer"
+                  >
+                    Reset & Retake
+                  </button>
+                  <button
+                    onClick={() => {
+                      const printWindow = window.open('', '_blank');
+                      if (!printWindow) return;
+                      const reportHtml = `
+                        <html>
+                          <head>
+                            <title>Form 990 Board Review Memorandum</title>
+                            <style>
+                              body { font-family: 'Times New Roman', serif; padding: 50px; color: #1a1a1a; line-height: 1.6; }
+                              .double-border { border: 15px double #a47e3c; padding: 40px; background: #fff; max-width: 800px; margin: 0 auto; }
+                              h2 { text-align: center; font-size: 24px; text-transform: uppercase; margin-bottom: 5px; }
+                              .subtitle { text-align: center; font-size: 13px; font-style: italic; color: #555; margin-bottom: 30px; }
+                              .meta { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 15px; font-family: sans-serif; }
+                              .resolutions { margin-bottom: 40px; font-style: italic; }
+                              .resolutions p { margin-bottom: 15px; text-align: justify; }
+                              .signatures { display: flex; justify-content: space-between; margin-top: 50px; font-family: sans-serif; }
+                              .sig-line { width: 250px; border-top: 1px solid #1a1a1a; text-align: center; padding-top: 5px; margin-top: 40px; }
+                              .compliance-summary { background: #f9f9f6; border: 1px solid #ddd; padding: 15px; margin-bottom: 30px; font-family: sans-serif; font-size: 13px; }
+                              .compliance-summary h4 { margin-top: 0; text-transform: uppercase; font-size: 12px; color: #c0392b; }
+                              .compliance-summary ul { padding-left: 20px; margin-bottom: 0; }
+                            </style>
+                          </head>
+                          <body>
+                            <div class="double-border">
+                              <div style="text-align: center; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #a47e3c; font-family: sans-serif; text-transform: uppercase;">California Boardroom Initiative</div>
+                              <h2>Governance Memorandum</h2>
+                              <div class="subtitle">Execution Record under California Corporations Code & IRS Part VI Standards</div>
+                              
+                              <div class="meta">
+                                <div><strong>Nonprofit Entity:</strong> ${userOrgName}</div>
+                                <div><strong>Review Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                              </div>
+
+                              <div class="compliance-summary">
+                                <strong>Fiduciary Compliance Score:</strong> ${form990Questions.filter(q => form990Answers[q.id] === q.optimal).length} of 12 Compliant Answers<br/>
+                                ${form990Questions.some(q => form990Answers[q.id] !== q.optimal) ? `
+                                  <h4 style="margin-top:10px;">Flagged Governance Disclosures:</h4>
+                                  <ul>
+                                    ${form990Questions.filter(q => form990Answers[q.id] !== q.optimal).map(q => `
+                                      <li><strong>${q.line}:</strong> Answering ${form990Answers[q.id]?.toUpperCase()} is non-optimal. ${q.guidance}</li>
+                                    `).join('')}
+                                  </ul>
+                                ` : '<p style="color:green; font-weight:bold; margin-top:10px;">100% governance compliant configuration.</p>'}
+                              </div>
+
+                              <div class="resolutions">
+                                <p><strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits non-profit policies and structural quorums to ensure directors protect public charity assets; and</p>
+                                <p><strong>WHEREAS</strong>, the Board of Directors of <strong>${userOrgName}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;</p>
+                                <p><strong>NOW, THEREFORE, BE IT RESOLVED</strong>, that this Board hereby endorses this Governance Memorandum, commits to resolving any flagged non-compliances, and directs the Secretary to append this document to the permanent corporate record.</p>
+                              </div>
+
+                              <div class="signatures">
+                                <div class="sig-line">
+                                  <strong>Board President</strong><br/>
+                                  For the Corporation
+                                </div>
+                                <div class="sig-line">
+                                  <strong>Board Secretary</strong><br/>
+                                  Contemporaneously Attested
+                                </div>
+                              </div>
+                            </div>
+                          </body>
+                        </html>
+                      `;
+                      printWindow.document.write(reportHtml);
+                      printWindow.document.close();
+                      printWindow.print();
+                    }}
+                    className="w-full py-2.5 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer shadow-md inline-flex justify-center items-center gap-1.5"
+                  >
+                    <Printer className="w-4 h-4" />
+                    <span>Print Record</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Left: Question Box */}
+                <div className="md:col-span-2 space-y-6">
+                  <div className="bg-paper/10 border border-fog/50 p-6 rounded-lg space-y-6 flex flex-col justify-between min-h-[300px]">
+                    <div className="space-y-4">
+                      {/* Q Ref */}
+                      <div className="flex justify-between items-center border-b border-fog/30 pb-2">
+                        <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest font-sans">
+                          Question {form990ActiveIndex + 1} of 12
+                        </span>
+                        <span className="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-sans">
+                          IRS Reference: {form990Questions[form990ActiveIndex].line}
+                        </span>
+                      </div>
+
+                      {/* Question Text */}
+                      <p className="font-serif text-lg sm:text-xl font-bold text-ink italic leading-relaxed">
+                        "{form990Questions[form990ActiveIndex].question}"
+                      </p>
+                    </div>
+
+                    {/* YES/NO buttons */}
+                    <div className="space-y-3 shrink-0 pt-4">
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => handleAnswerForm990(form990Questions[form990ActiveIndex].id, 'yes')}
+                          className={`w-full py-3.5 rounded-lg border font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                            form990Answers[form990Questions[form990ActiveIndex].id] === 'yes'
+                              ? 'bg-emerald-50 border-emerald-500 text-emerald-700 ring-2 ring-emerald-500/20'
+                              : 'bg-white border-fog hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <Check className="w-4 h-4" />
+                          <span>YES</span>
+                        </button>
+                        <button
+                          onClick={() => handleAnswerForm990(form990Questions[form990ActiveIndex].id, 'no')}
+                          className={`w-full py-3.5 rounded-lg border font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                            form990Answers[form990Questions[form990ActiveIndex].id] === 'no'
+                              ? 'bg-rose-50 border-rose-500 text-rose-700 ring-2 ring-rose-500/20'
+                              : 'bg-white border-fog hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <X className="w-4 h-4" />
+                          <span>NO</span>
+                        </button>
+                      </div>
+
+                      {/* Prev/Next buttons */}
+                      <div className="flex justify-between pt-2">
+                        <button
+                          disabled={form990ActiveIndex === 0}
+                          onClick={() => setForm990ActiveIndex(prev => prev - 1)}
+                          className="px-4 py-2 border border-fog/60 hover:border-ink rounded text-xs font-bold text-slate-brand disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer uppercase tracking-wider"
+                        >
+                          Prev
+                        </button>
+                        <button
+                          disabled={form990ActiveIndex === 11}
+                          onClick={() => setForm990ActiveIndex(prev => prev + 1)}
+                          className="px-4 py-2 border border-fog/60 hover:border-ink rounded text-xs font-bold text-slate-brand disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer uppercase tracking-wider"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Lawyer Guidance */}
+                <div className="bg-paper/20 border border-fog/40 p-6 rounded-lg space-y-4 text-left">
+                  <div className="flex items-center gap-1.5 text-ink/40 border-b border-fog/30 pb-2">
+                    <Scale className="w-4 h-4 text-ink/40" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest font-sans">
+                      Attorney Guidance
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                    {form990Questions[form990ActiveIndex].guidance}
+                  </p>
+
+                  <div className="pt-4 border-t border-fog/30 space-y-2 font-sans">
+                    <span className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">
+                      Target IRS Configuration:
+                    </span>
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 border text-[10px] font-extrabold uppercase tracking-wider rounded ${
+                      form990Questions[form990ActiveIndex].optimal === 'yes'
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                        : 'bg-rose-50 border-rose-300 text-rose-700'
+                    }`}>
+                      Optimal Response: {form990Questions[form990ActiveIndex].optimal.toUpperCase()}
+                    </span>
+
+                    {/* Active Question Compliance state message */}
+                    <div className="pt-2">
+                      <span className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block mb-1">
+                        Your Compliance State:
+                      </span>
+                      {form990Answers[form990Questions[form990ActiveIndex].id] ? (
+                        form990Answers[form990Questions[form990ActiveIndex].id] === form990Questions[form990ActiveIndex].optimal ? (
+                          <div className="text-xs text-emerald-800 font-bold bg-emerald-50 border border-emerald-200/50 p-2.5 rounded">
+                            ✓ Safe Harbor Compliant
+                          </div>
+                        ) : (
+                          <div className="text-xs text-rose-800 font-bold bg-rose-50 border border-rose-200/50 p-2.5 rounded space-y-1">
+                            <div>⚠ High Audit Exposure!</div>
+                            <p className="text-[10px] font-normal text-ink/80 leading-relaxed font-sans">
+                              Answering non-optimally raises flags on IRS schedules. Consider consulting specialized legal counsel to adopt standard safe harbors.
+                            </p>
+                          </div>
+                        )
+                      ) : (
+                        <div className="text-xs text-ink/50 italic bg-slate-50 border border-slate-200/30 p-2.5 rounded">
+                          Unanswered... select YES or NO to evaluate.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

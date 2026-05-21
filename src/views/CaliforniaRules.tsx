@@ -4,10 +4,158 @@ import { Layout } from '../components/Layout';
 import { californiaRules } from '../data/californiaRules';
 import type { CaliforniaRule } from '../data/californiaRules';
 import { CaliforniaNoteBadge, LegalEscalationCard } from '../components/BoardroomCards';
-import { CheckSquare, Square, Landmark, ChevronRight, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { CheckSquare, Square, Landmark, ChevronRight, ShieldCheck, AlertTriangle, Terminal, Search, Loader2, Copy, Check, ShieldAlert, FileText } from 'lucide-react';
 
 export const CaliforniaRules: React.FC = () => {
   const { navigate } = useRouter();
+
+  // State for Registry Finder Widget (Enhancement 4)
+  const [registryQuery, setRegistryQuery] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_registry_scanner_cache');
+      return saved ? JSON.parse(saved).query : '';
+    } catch {
+      return '';
+    }
+  });
+
+  const [scanResult, setScanResult] = useState<'active' | 'delinquent' | 'suspended' | null>(() => {
+    try {
+      const saved = localStorage.getItem('cdx_registry_scanner_cache');
+      return saved ? JSON.parse(saved).status : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanLogs, setScanLogs] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<'active' | 'delinquent' | 'suspended'>('delinquent'); // Default to delinquent
+
+  const runRegistryScan = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!registryQuery.trim()) return;
+
+    setIsScanning(true);
+    setScanLogs([]);
+    setScanResult(null);
+
+    const logs = [
+      "Initializing secure state database handshake...",
+      "Searching California Secretary of State (SOS) BizFile Database...",
+      "Cross-referencing Franchise Tax Board (FTB) tax-exempt status...",
+      "Querying Attorney General Registry of Charitable Trusts (CT)...",
+      "Scanning annual Form RRF-1 & CT-TR-1 filing history...",
+      "Scan complete. Status resolved."
+    ];
+
+    let currentLogIndex = 0;
+    
+    const interval = setInterval(() => {
+      if (currentLogIndex < logs.length) {
+        setScanLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${logs[currentLogIndex]}`]);
+        currentLogIndex++;
+      } else {
+        clearInterval(interval);
+        setIsScanning(false);
+        setScanResult(activeTab);
+        localStorage.setItem('cdx_registry_scanner_cache', JSON.stringify({
+          query: registryQuery,
+          status: activeTab
+        }));
+      }
+    }, 250);
+  };
+
+  // State for Bylaws Health Analyzer (Enhancement 5)
+  const [bylawChecks, setBylawChecks] = useState<boolean[]>(() => {
+    try {
+      const stored = localStorage.getItem('cdx_bylaws_audit_checked');
+      return stored ? JSON.parse(stored) : Array(10).fill(false);
+    } catch {
+      return Array(10).fill(false);
+    }
+  });
+
+  const handleToggleBylawCheck = (idx: number) => {
+    const next = [...bylawChecks];
+    next[idx] = !next[idx];
+    setBylawChecks(next);
+    localStorage.setItem('cdx_bylaws_audit_checked', JSON.stringify(next));
+  };
+
+  const bylawScore = Math.round((bylawChecks.filter(Boolean).length / 10) * 100);
+
+  const [copiedScript, setCopiedScript] = useState<number | null>(null);
+
+  const handleCopyScript = (text: string, id: number) => {
+    navigator.clipboard.writeText(text);
+    setCopiedScript(id);
+    setTimeout(() => setCopiedScript(null), 2000);
+  };
+
+  const BYLAW_ITEMS = [
+    {
+      id: 1,
+      clause: "Electronic Voting Default Authorization",
+      rule: "Votes via email require unanimous written consent unless the bylaws explicitly authorize structured electronic transmission under strict board definitions.",
+      code: "CA Corp Code § 20 & § 5079"
+    },
+    {
+      id: 2,
+      clause: "Executive Committee Delegation Limits",
+      rule: "Executive committees are strictly prohibited from filling vacancies, amending bylaws, or approving transactions involving conflicts of interest.",
+      code: "CA Corp Code § 5212"
+    },
+    {
+      id: 3,
+      clause: "Strict Statutory Ban on Proxy Voting",
+      rule: "Directors cannot vote by proxy in public benefit corporations. Any bylaw clause or action permitting a proxy is legally void.",
+      code: "CA Corp Code § 5211(c)"
+    },
+    {
+      id: 4,
+      clause: "Director Term Limits",
+      rule: "Terms cannot exceed 3 years if there are voting members. If no voting members, terms cannot exceed 6 years.",
+      code: "CA Corp Code § 5220"
+    },
+    {
+      id: 5,
+      clause: "Officer Role Separation (President vs. CFO & Secretary)",
+      rule: "The same person cannot serve concurrently as President/CEO and Secretary, or President/CEO and Treasurer/CFO.",
+      code: "CA Corp Code § 5213(a)"
+    },
+    {
+      id: 6,
+      clause: "Interested Director 49% Limit",
+      rule: "No more than 49% of the directors serving may be 'interested persons' (defined as employees, contractors, or their relatives).",
+      code: "CA Corp Code § 5227"
+    },
+    {
+      id: 7,
+      clause: "Special Meeting Statutory Notice Requirements",
+      rule: "Special meetings require at least 48 hours notice if delivered personally or electronically, or 4 days if by first-class mail.",
+      code: "CA Corp Code § 5211(a)(2)"
+    },
+    {
+      id: 8,
+      clause: "Quorum Floor Protection",
+      rule: "Quorum cannot be set lower than one-fifth of the directors, or two directors, whichever is larger.",
+      code: "CA Corp Code § 5211(a)(7)"
+    },
+    {
+      id: 9,
+      clause: "Explicit Indemnification Clauses",
+      rule: "The bylaws must explicitly authorize the corporation to purchase D&O insurance and indemnify directors for legal expenses incurred in non-fiduciary cases.",
+      code: "CA Corp Code § 5238"
+    },
+    {
+      id: 10,
+      clause: "Compensation Review Committee Mandate",
+      rule: "If paying officers, the board or an independent committee must explicitly review and authorize CEO/CFO compensation for reasonableness.",
+      code: "CA Corp Code § 12586(g)"
+    }
+  ];
 
   // State for D&O estimator (Enhancement 2)
   const [budget, setBudget] = useState(() => {
@@ -340,6 +488,422 @@ export const CaliforniaRules: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Enhancement 4: State Registry Status Finder Widget */}
+          <div className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left p-6 space-y-6">
+            <div className="space-y-1">
+              <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20 inline-block">
+                Regulatory Registry Console
+              </span>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-ink tracking-wide">
+                Charitable Trust Registry Verification Console
+              </h3>
+              <p className="text-xs text-ink/70 font-sans max-w-2xl leading-relaxed">
+                Simulate an official Attorney General Registry and Secretary of State lookup. Choose a test outcome tab, input an organization name or Corporate ID, and run the scan to see the exact state-mandated playbooks.
+              </p>
+            </div>
+
+            {/* Outcome Simulator Tabs */}
+            <div className="flex border-b border-fog text-xs font-bold uppercase tracking-wider overflow-x-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('active');
+                  if (scanResult) setScanResult('active');
+                }}
+                className={`py-2 px-4 border-b-2 transition-premium -mb-[2px] whitespace-nowrap ${
+                  activeTab === 'active'
+                    ? 'border-teal-brand text-teal-brand bg-teal-brand/5'
+                    : 'border-transparent text-ink/40 hover:text-ink/80'
+                }`}
+              >
+                Simulate Active Stance
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('delinquent');
+                  if (scanResult) setScanResult('delinquent');
+                }}
+                className={`py-2 px-4 border-b-2 transition-premium -mb-[2px] whitespace-nowrap ${
+                  activeTab === 'delinquent'
+                    ? 'border-brass text-brass bg-brass/5'
+                    : 'border-transparent text-ink/40 hover:text-ink/80'
+                }`}
+              >
+                Simulate Delinquent Stance (Missing RRF-1)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('suspended');
+                  if (scanResult) setScanResult('suspended');
+                }}
+                className={`py-2 px-4 border-b-2 transition-premium -mb-[2px] whitespace-nowrap ${
+                  activeTab === 'suspended'
+                    ? 'border-burgundy text-burgundy bg-burgundy/5'
+                    : 'border-transparent text-ink/40 hover:text-ink/80'
+                }`}
+              >
+                Simulate Suspended Stance (FTB/SOS)
+              </button>
+            </div>
+
+            <form onSubmit={runRegistryScan} className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="relative flex-grow">
+                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-ink/40">
+                    <Search className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Enter Organization Name or 7-Digit California Entity Number..."
+                    value={registryQuery}
+                    onChange={(e) => setRegistryQuery(e.target.value)}
+                    disabled={isScanning}
+                    className="w-full pl-9 pr-4 py-2.5 text-xs border border-fog rounded-lg bg-paper/10 text-ink focus:outline-none focus:border-brass/50 disabled:opacity-50"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isScanning || !registryQuery.trim()}
+                  className="px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-premium disabled:opacity-50 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
+                >
+                  {isScanning ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-brass" />
+                      <span>Scanning...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Terminal className="w-3.5 h-3.5 text-brass" />
+                      <span>Run Registry Scan</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+
+            {/* Console Log Screen */}
+            {(isScanning || scanLogs.length > 0) && (
+              <div className="bg-[#0C101B] rounded-lg p-4 font-mono text-[10px] sm:text-xs text-emerald-400 border border-teal-500/20 shadow-inner h-44 overflow-y-auto space-y-1.5 text-left select-none">
+                {scanLogs.map((log, idx) => (
+                  <div key={idx} className="leading-relaxed whitespace-pre-wrap animate-fadeIn">
+                    {log}
+                  </div>
+                ))}
+                {isScanning && (
+                  <div className="flex items-center gap-1.5 text-brass animate-pulse">
+                    <span>&gt; Querying Registry Server...</span>
+                    <span className="w-1.5 h-3.5 bg-brass inline-block animate-blink" />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Diagnostic Playbook Output */}
+            {scanResult && !isScanning && (
+              <div className="animate-fadeIn border border-fog rounded-lg p-5 bg-paper/10 space-y-4">
+                {scanResult === 'active' && (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-teal-500/10 text-teal-600 rounded-full shrink-0 mt-0.5">
+                        <ShieldCheck className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-1 text-left">
+                        <span className="text-[10px] font-extrabold text-teal-600 uppercase tracking-wider block">Registry Stance: CURRENT & SECURE</span>
+                        <h4 className="font-serif font-black text-lg text-ink">Compliance Verification Succeeded</h4>
+                        <p className="text-xs text-ink/75 leading-relaxed">
+                          The mock query confirms that <strong>"{registryQuery}"</strong> is fully <strong>ACTIVE</strong> with the California Registry of Charitable Trusts (CT) and <strong>CURRENT</strong> with the Secretary of State (SOS). No late penalties or administrative blocks exist.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-teal-500/5 border border-teal-500/20 rounded p-3 text-xs leading-relaxed text-teal-800 space-y-1.5 text-left">
+                      <p className="font-bold">✓ Standard Maintenance Protocol:</p>
+                      <ul className="list-disc pl-4 space-y-1 text-teal-900/90">
+                        <li>File Form RRF-1 within 4 months and 15 days after the close of your fiscal year.</li>
+                        <li>Ensure Form CT-TR-1 is compiled if annual gross revenue is under $50,000 (if over, full Form 990 serves).</li>
+                        <li>File the Statement of Information (SI-100) biennially with the SOS.</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {scanResult === 'delinquent' && (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-brass/15 text-brass rounded-full shrink-0 mt-0.5">
+                        <AlertTriangle className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-1 text-left">
+                        <span className="text-[10px] font-extrabold text-brass uppercase tracking-wider block">Registry Stance: DELINQUENT</span>
+                        <h4 className="font-serif font-black text-lg text-ink">Administrative Non-Compliance Detected</h4>
+                        <p className="text-xs text-ink/75 leading-relaxed font-semibold">
+                          The mock query resolves <strong>"{registryQuery}"</strong> with status <strong>DELINQUENT</strong>. The Attorney General CT Registry shows missing annual Form RRF-1 or failure to report financial records. Late fees are accumulating.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-brass/10 border border-brass/30 rounded p-4 text-xs leading-relaxed text-amber-900 space-y-2 text-left">
+                      <p className="font-bold flex items-center gap-1 text-burgundy">
+                        <span>⚠️ Delinquency Fiduciary Fallout:</span>
+                      </p>
+                      <ul className="list-disc pl-4 space-y-1.5 font-medium text-ink/90">
+                        <li><strong>Loss of Exemption:</strong> The Franchise Tax Board (FTB) automatically revokes tax exemption if delinquency is unresolved.</li>
+                        <li><strong>Solicitation Ban:</strong> Directors are personally prohibited from soliciting charitable donations or spending restricted assets during delinquency.</li>
+                        <li><strong>Late Fees:</strong> Accumulated state penalties cannot be paid from charitable funds; directors can be held personally liable for them.</li>
+                      </ul>
+                      <div className="pt-2 border-t border-brass/30 flex flex-wrap gap-2">
+                        <a
+                          href="https://oag.ca.gov/charities/forms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 bg-brass/20 text-ink text-[10px] font-bold uppercase tracking-wider rounded border border-brass/30 hover:bg-brass/30 transition-premium"
+                        >
+                          Download CA Form RRF-1
+                        </a>
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 bg-burgundy text-white text-[10px] font-bold uppercase tracking-wider rounded hover:bg-ink transition-premium text-center"
+                        >
+                          Request Delinquency Cure Counsel
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {scanResult === 'suspended' && (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-burgundy/10 text-burgundy rounded-full shrink-0 mt-0.5">
+                        <AlertTriangle className="w-6 h-6 animate-pulse" />
+                      </div>
+                      <div className="space-y-1 text-left">
+                        <span className="text-[10px] font-extrabold text-burgundy uppercase tracking-wider block">Registry Stance: SUSPENDED / REVOKED</span>
+                        <h4 className="font-serif font-black text-lg text-burgundy">Critical Statutory Breach</h4>
+                        <p className="text-xs text-ink/75 leading-relaxed font-semibold">
+                          The mock query resolves <strong>"{registryQuery}"</strong> as <strong>SUSPENDED</strong>. The Secretary of State and Franchise Tax Board have revoked corporate privileges.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-burgundy/5 border border-burgundy/25 rounded p-4 text-xs leading-relaxed text-burgundy space-y-2.5 text-left">
+                      <p className="font-bold text-burgundy flex items-center gap-1.5">
+                        <span>🚨 IMMEDIATE FIDUCIARY CRISIS:</span>
+                      </p>
+                      <p className="text-ink/90 font-medium">
+                        A suspended corporation <strong>cannot legally contract</strong>, prosecute or defend any lawsuit, or protect its corporate name. Directors signing agreements or operating programs during suspension face <strong>personal joint-and-several liability</strong>.
+                      </p>
+                      <div className="bg-white/60 p-2.5 rounded border border-burgundy/10 space-y-1 text-ink/80">
+                        <p className="font-bold text-[10px] uppercase tracking-wider">Required Revivor Protocol:</p>
+                        <ol className="list-decimal pl-4 space-y-1 text-[11px] leading-relaxed">
+                          <li>Submit all back-filings and RRF-1 forms to the Attorney General.</li>
+                          <li>Secure a "Franchise Tax Board Revivor Letter."</li>
+                          <li>File a petition for revivor with the Secretary of State.</li>
+                        </ol>
+                      </div>
+                      <div className="pt-2 border-t border-burgundy/20 flex justify-end">
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy text-white text-xs font-bold uppercase tracking-wider rounded hover:bg-ink transition-premium shadow"
+                        >
+                          <span>Request Priority Corporate Revivor Petition</span>
+                          <ChevronRight className="w-3.5 h-3.5 text-brass" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Enhancement 5: Bylaws Clause-by-Clause Health Analyzer */}
+          <div className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left p-6 space-y-6">
+            <div className="space-y-1">
+              <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20 inline-block">
+                Bylaws Integrity Laboratory
+              </span>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-ink tracking-wide">
+                Bylaws Clause-by-Clause Health Analyzer
+              </h3>
+              <p className="text-xs text-ink/77 font-sans max-w-2xl leading-relaxed">
+                Check off each statutory requirement that is currently defined and satisfied in your organization's formal bylaws to calculate your live <strong>Bylaws Integrity Score</strong>.
+              </p>
+            </div>
+
+            {/* Scoreboard Bar */}
+            <div className="bg-paper/30 p-5 rounded-lg border border-fog/80 flex flex-col md:flex-row justify-between md:items-center gap-4">
+              <div className="space-y-1.5 flex-grow">
+                <span className="text-[10px] uppercase tracking-wider font-extrabold text-ink/40">Integrity Score</span>
+                <div className="flex items-center gap-3">
+                  <span className={`font-serif font-black text-3xl ${
+                    bylawScore < 80 ? 'text-burgundy' : (bylawScore < 100 ? 'text-brass' : 'text-teal-brand')
+                  }`}>
+                    {bylawScore}%
+                  </span>
+                  <div className="w-full bg-fog h-3 rounded-full overflow-hidden">
+                    <div className={`h-full transition-premium ${
+                      bylawScore < 80 ? 'bg-burgundy' : (bylawScore < 100 ? 'bg-brass' : 'bg-teal-brand')
+                    }`} style={{ width: `${bylawScore}%` }} />
+                  </div>
+                </div>
+              </div>
+              <div className="shrink-0 text-left md:text-right font-sans">
+                <span className="text-[10px] font-bold text-ink/40 uppercase tracking-widest block">Audit Status</span>
+                <span className={`font-serif font-black text-sm block mt-0.5 ${
+                  bylawScore < 80 ? 'text-burgundy' : (bylawScore < 100 ? 'text-brass' : 'text-teal-brand')
+                }`}>
+                  {bylawScore < 80 
+                    ? "Severe Exposure" 
+                    : bylawScore < 100 
+                      ? "Statutory Warnings" 
+                      : "Statutory Masterclass"
+                  }
+                </span>
+              </div>
+            </div>
+
+            {/* Dynamic Status Callout Alert Box */}
+            <div className="animate-fadeIn">
+              {bylawScore < 80 ? (
+                <div className="p-4 bg-burgundy/5 border border-burgundy/20 rounded-lg text-xs leading-relaxed text-burgundy space-y-1">
+                  <p className="font-bold flex items-center gap-1.5">
+                    <ShieldAlert className="w-4 h-4 animate-bounce" />
+                    <span>🚨 CRITICAL FIDUCIARY EXPOSURE DETECTED</span>
+                  </p>
+                  <p className="font-medium text-ink/90 font-semibold">
+                    A bylaws score under 80% indicates major structural gaps under California nonprofit law. Outdated clauses or missing bans (e.g. allowing proxies or omitting electronic definitions) can <strong>void board votes</strong> and trigger <strong>personal joint-and-several liability</strong> under California Corporations Code § 5239.
+                  </p>
+                </div>
+              ) : bylawScore < 100 ? (
+                <div className="p-4 bg-brass/10 border border-brass/30 rounded-lg text-xs leading-relaxed text-amber-900 space-y-1">
+                  <p className="font-bold flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-brass" />
+                    <span>⚠️ MODERATE STATUTORY RISK</span>
+                  </p>
+                  <p className="font-medium text-ink/90 font-semibold">
+                    Your bylaws satisfy major statutory parameters, but the remaining unchecked clauses represent active compliance gaps. During leadership friction or state audits, these omissions can challenge board authorizations.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-4 bg-teal-brand/10 border border-teal-brand/30 rounded-lg text-xs leading-relaxed text-teal-850 space-y-1">
+                  <p className="font-bold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-teal-brand animate-pulse" />
+                    <span>💎 STATUTORY MASTERCLASS COMPLIANCE</span>
+                  </p>
+                  <p className="font-medium text-teal-950 font-semibold">
+                    Excellent. Your bylaws explicitly incorporate all 10 critical California Corporations Code governance constraints. Keep a physical signed copy in your minute book and run an attorney review every 3 years.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* 10-Point Checklist */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {BYLAW_ITEMS.map((item, idx) => {
+                const isChecked = bylawChecks[idx];
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => handleToggleBylawCheck(idx)}
+                    className={`cursor-pointer p-4 rounded-lg border transition-premium flex items-start gap-3 select-none text-left h-full ${
+                      isChecked
+                        ? 'border-teal-brand/30 bg-teal-brand/5 shadow-inner'
+                        : 'border-fog bg-white hover:border-brass/30'
+                    }`}
+                  >
+                    <div className={`mt-0.5 shrink-0 transition-premium ${isChecked ? 'text-teal-brand' : 'text-ink/20'}`}>
+                      {isChecked ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
+                    </div>
+                    <div className="space-y-1 flex-grow">
+                      <div className="flex justify-between items-start flex-wrap gap-x-2">
+                        <span className={`font-serif text-sm font-bold ${isChecked ? 'text-teal-brand' : 'text-ink'}`}>
+                          {item.clause}
+                        </span>
+                        <span className="text-[8px] font-extrabold text-brass bg-brass/10 px-1.5 py-0.5 rounded whitespace-nowrap mt-0.5">
+                          {item.code}
+                        </span>
+                      </div>
+                      <p className={`font-sans text-xs leading-relaxed ${isChecked ? 'text-teal-900/80' : 'text-ink/65'}`}>
+                        {item.rule}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Deliberation Verbal Boardroom Scripts */}
+            <div className="bg-paper/30 p-5 rounded-lg border border-fog space-y-4">
+              <div className="space-y-1">
+                <h4 className="font-serif font-bold text-sm text-ink flex items-center gap-1.5">
+                  <FileText className="w-4 h-4 text-brass" />
+                  <span>Verbal Boardroom Action Scripts</span>
+                </h4>
+                <p className="text-[10px] text-ink/40 uppercase tracking-widest font-semibold">
+                  Copy and read these scripts in your next board meeting to legally authorize bylaws corrections:
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-3.5 bg-white rounded border border-fog/80 flex flex-col justify-between h-full space-y-3">
+                  <p className="font-sans text-xs italic text-ink/80 leading-relaxed text-left">
+                    "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under the California Corporations Code. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting."
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyScript(
+                      "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under the California Corporations Code. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting.",
+                      1
+                    )}
+                    className="w-full py-1.5 bg-brass/10 hover:bg-brass/20 text-brass text-[10px] font-bold uppercase tracking-wider rounded border border-brass/20 transition-premium flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    {copiedScript === 1 ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-teal-brand" />
+                        <span className="text-teal-brand">Copied to Clipboard!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-brass" />
+                        <span>Copy Resolution Script</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="p-3.5 bg-white rounded border border-fog/80 flex flex-col justify-between h-full space-y-3">
+                  <p className="font-sans text-xs italic text-ink/80 leading-relaxed text-left">
+                    "Under California Corporations Code Section 5213, our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State."
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyScript(
+                      "Under California Corporations Code Section 5213, our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State.",
+                      2
+                    )}
+                    className="w-full py-1.5 bg-brass/10 hover:bg-brass/20 text-brass text-[10px] font-bold uppercase tracking-wider rounded border border-brass/20 transition-premium flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    {copiedScript === 2 ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-teal-brand" />
+                        <span className="text-teal-brand">Copied to Clipboard!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-brass" />
+                        <span>Copy Officer Separation Script</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Interactive D&O Liability Slider & Coverage Estimator (Enhancement 2) */}

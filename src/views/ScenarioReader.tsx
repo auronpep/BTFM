@@ -5,14 +5,242 @@ import { scenarios } from '../data/scenarios';
 import { articles } from '../data/articles';
 import { LegalEscalationCard } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
-import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle, Sparkles } from 'lucide-react';
+
+// React-safe glossary parser (Enhancement 6)
+const parseTextWithGlossary = (text: string): React.ReactNode[] => {
+  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires)/gi;
+  const parts = text.split(regex);
+  return parts.map((part, i) => {
+    const lower = part.toLowerCase();
+    let termId = '';
+    if (lower === 'self-dealing') termId = 'self-dealing';
+    else if (lower === 'rebuttable presumption') termId = 'rebuttable-presumption';
+    else if (lower === 'donor intent') termId = 'donor-intent';
+    else if (lower === 'duty of care') termId = 'duty-of-care';
+    else if (lower === 'duty of loyalty') termId = 'duty-of-loyalty';
+    else if (lower === 'quorum') termId = 'quorum';
+    else if (lower === 'interested director' || lower === 'interested person') termId = 'interested-director';
+    else if (lower === 'ultra vires') termId = 'ultra-vires';
+
+    if (termId) {
+      return (
+        <span 
+          key={i} 
+          className="glossary-term cursor-help border-b border-dotted border-brass/80 text-ink hover:text-brass transition-all font-semibold inline duration-150"
+          data-term={termId}
+          title="Click to open Fiduciary Glossary definition"
+        >
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+};
+
+interface SimOption {
+  text: string;
+  grade: 'A' | 'C' | 'F';
+  riskLevel: number; // 0 to 100
+  color: string;
+  meterColor: string;
+  commentary: string;
+}
+
+const simulationData: Record<string, SimOption[]> = {
+  "founder-salary-conflict": [
+    {
+      text: "Option A: Approve the $95,000 salary immediately as requested to support the founder's survival.",
+      grade: 'F',
+      riskLevel: 100,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "CRITICAL BREACH. Approving the salary with the founder, her spouse, and sister-in-law voting, and without written compensation comparable surveys, is an automatic Excess Benefit Transaction under IRC § 4958. Both the founder and voting board members face immediate, personal IRS excise tax penalties."
+    },
+    {
+      text: "Option B: Hold a quick vote with the founder stepped out, but approve without formal northern/southern California salary surveys.",
+      grade: 'C',
+      riskLevel: 50,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "SUB-OPTIMAL & RISK-PRONE. While having the founder step out helps, approving without establishing a Rebuttable Presumption via documented market comparability studies still leaves the board wide open. If audited, the IRS will place the burden of proof on you to justify the salary."
+    },
+    {
+      text: "Option C: Recuse the founder and family, compile independent market comparability surveys, hold a disinterested vote, and record meticulous minutes.",
+      grade: 'A',
+      riskLevel: 5,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "FULL LEGAL PROTECTION. This meets the IRC § 4958 Rebuttable Presumption standard. The conflict is neutralized, and the board is legally shielded by relying on written market surveys of similar California literacy programs."
+    }
+  ],
+  "director-micromanaging-staff": [
+    {
+      text: "Option A: Allow Jenkins to continue directing staff to maximize his retired executive volunteer help.",
+      grade: 'F',
+      riskLevel: 90,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "OPERATIONAL HAVOC. An individual director has zero executive authority. Allowing direct instruction to staff destroys the ED's authority, causes severe scheduling and labor issues, and exposes the board to labor disputes and lawsuits."
+    },
+    {
+      text: "Option B: Talk to Jenkins casually and ask him to be a bit more subtle when talking to staff.",
+      grade: 'C',
+      riskLevel: 45,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "INEFFECTIVE boundary setting. Casual conversations do not change systemic behavior or formalize corporate authority. A clear, written delegation policy is required to bind individual board members."
+    },
+    {
+      text: "Option C: The Board President meets with Jenkins to state the statutory chain of command, updates the Board Policy Manual, and holds a full board re-orientation.",
+      grade: 'A',
+      riskLevel: 5,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "EXCELLENT GOVERNANCE. This formally separates collective board oversight (setting policies) from individual staff management. It shields the board and staff from operational conflicts and labor risks."
+    }
+  ],
+  "treasurer-vague-financials": [
+    {
+      text: "Option A: Accept the single-page cash report because the board trusts the Treasurer's fifteen years of experience.",
+      grade: 'F',
+      riskLevel: 95,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "GROSS NEGLIGENCE. Relying on trust alone is a direct breach of the Duty of Care. If funds are embezzled or a cash crisis strikes, individual directors can be held personally liable for failing to perform basic oversight and reasonable inquiry."
+    },
+    {
+      text: "Option B: Ask the Treasurer to print a few more pages of details next quarter if it's not too much trouble.",
+      grade: 'C',
+      riskLevel: 50,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "WEAK INQUIRY. Asking politely without passing a formal resolution leaves the board without systemic safety. Full statements (P&L, Balance Sheet, Budget-to-Actuals) are legal duties, not optional favors."
+    },
+    {
+      text: "Option C: Pass a board resolution establishing a standalone Audit Committee, mandate monthly detailed Board Books, and implement the 10-Largest-Deviations rule.",
+      grade: 'A',
+      riskLevel: 5,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "PRISTINE STEWARDSHIP. Establishing a separate Audit Committee complies with California law (required at $2M+ gross revenues). Requiring timely detailed financials and deviation reports shields the board under the Business Judgment Rule."
+    }
+  ],
+  "missing-receipts-variance": [
+    {
+      text: "Option A: Take the ED's word that the $18,000 credit card expenses were for donor outreach and approve them.",
+      grade: 'F',
+      riskLevel: 100,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "SEVERE AG EXPOSURE. Approving unsubstantiated charges is a breach of trust and a misdemeanor under CA law. The IRS can classify these as automatic taxable income to the ED, and the AG may investigate the board for failure to protect assets."
+    },
+    {
+      text: "Option B: Ask the ED to look for the receipts again and tell him to be more careful in the future.",
+      grade: 'C',
+      riskLevel: 60,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "DEFICIENT INQUIRY. Failing to suspend the card or demand immediate reimbursement is passive oversight. If the ED continues this behavior, the board is complicit in the eyes of regulators."
+    },
+    {
+      text: "Option C: Engage independent legal counsel, suspend the credit card, issue a 14-day formal demand, and reclassify unproven charges as taxable income.",
+      grade: 'A',
+      riskLevel: 2,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "IMPECCABLE DEFENSIVE ACTION. Engaging legal counsel protects the board's fiduciary status. Forcing reimbursement or W-2 reclassification of unproven charges immunizes the board from AG and IRS compliance violations."
+    }
+  ],
+  "donor-restricted-gift-crisis": [
+    {
+      text: "Option A: Pretend the land restriction was always in place and scramble to cover general expenses from other funds.",
+      grade: 'F',
+      riskLevel: 95,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "ILLEGAL MIXING. Changing records retroactively or misallocating operating capital violates donor intent. Spending restricted donor capital on unauthorized expenses is a breach of charitable trust under UPMIFA, leading to AG audits."
+    },
+    {
+      text: "Option B: Politely ask the donor to overlook the spent funds and hope they don't demand an escrow statement.",
+      grade: 'C',
+      riskLevel: 55,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "RISK-PRONE COMPROMISE. Hope is not a compliance strategy. If the donor is dissatisfied and reports the board to the AG, an investigation is virtually guaranteed, even if the original intent was unrestricted."
+    },
+    {
+      text: "Option C: Verify original unconditional letter, consult counsel, transparently brief the donor, and implement a formal Gift Acceptance Policy.",
+      grade: 'A',
+      riskLevel: 5,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "SECURE & ETHICAL. Reviewing original documentation determines the legal reality. Communicating transparently and establishing clear Gift Acceptance agreements prevents donor disputes and shields the board under California law."
+    }
+  ],
+  "youth-safety-compliance-failure": [
+    {
+      text: "Option A: Keep programs running as-is and ask the coordinator to catch up on screenings over the next month.",
+      grade: 'F',
+      riskLevel: 100,
+      color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
+      meterColor: "bg-burgundy",
+      commentary: "GROSS NEGLIGENCE. Allowing unscreened volunteers to work with youth is a catastrophic risk. If an abuse event occurs, directors face devastating personal, civil, and criminal liability for neglecting safety guidelines."
+    },
+    {
+      text: "Option B: Tell the mentor who drove the youth alone to not do it again, but don't pause any program.",
+      grade: 'C',
+      riskLevel: 50,
+      color: "border-brass/40 bg-brass/5 text-ink/80",
+      meterColor: "bg-brass",
+      commentary: "INSUFFICIENT OVERSIGHT. Ignoring the volunteer screening backlog because 'it's an administrative hassle' does not mitigate liability. One warning to a single mentor does not fix a systemic screening failure."
+    },
+    {
+      text: "Option C: Suspend the mentor, halt operations for any unscreened volunteer, run an emergency 72-hour Live Scan blitz, and establish a Board Safety Committee.",
+      grade: 'A',
+      riskLevel: 1,
+      color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
+      meterColor: "bg-emerald-500",
+      commentary: "OUTSTANDING FIDUCIARY DEFENSE. Halting unscreened programs immediately and executing an emergency safety blitz preserves youth protection. Creating a standing board oversight committee satisfies California's strict Duty of Care standards."
+    }
+  ]
+};
 
 export const ScenarioReader: React.FC = () => {
   const { queryParams, navigate } = useRouter();
-  const slug = queryParams.id;
+  const slug = queryParams.id || '';
 
   // Find scenario
   const scenario = scenarios.find((sc) => sc.slug === slug);
+
+  // Simulation Option State
+  const [selectedOption, setSelectedOption] = useState<number | null>(() => {
+    try {
+      const saved = localStorage.getItem('cdx_scenario_sim_decisions');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object' && typeof parsed[slug] === 'number') {
+          return parsed[slug];
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  });
+
+  const handleSelectOption = (idx: number) => {
+    setSelectedOption(idx);
+    try {
+      const saved = localStorage.getItem('cdx_scenario_sim_decisions');
+      const parsed = saved ? JSON.parse(saved) : {};
+      parsed[slug] = idx;
+      localStorage.setItem('cdx_scenario_sim_decisions', JSON.stringify(parsed));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
     try {
@@ -152,7 +380,7 @@ export const ScenarioReader: React.FC = () => {
                   <span>The Classroom Facts</span>
                 </h3>
                 <p className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed bg-paper/20 p-5 rounded-lg border border-fog/50 font-medium">
-                  {scenario.facts}
+                  {parseTextWithGlossary(scenario.facts)}
                 </p>
               </div>
 
@@ -163,7 +391,7 @@ export const ScenarioReader: React.FC = () => {
                   <span>D&O Liability and Regulatory Risks</span>
                 </h3>
                 <p className="font-sans text-xs sm:text-sm text-ink/80 leading-relaxed font-medium">
-                  {scenario.risk}
+                  {parseTextWithGlossary(scenario.risk)}
                 </p>
               </div>
 
@@ -174,6 +402,102 @@ export const ScenarioReader: React.FC = () => {
                   "{scenario.boardQuestion}"
                 </p>
               </div>
+
+              {/* Interactive Scenario Decision Simulator (Enhancement 3) */}
+              {simulationData[slug] && (
+                <div className="bg-white rounded-xl border border-brass/30 p-6 sm:p-8 shadow-sm space-y-6 text-left relative overflow-hidden">
+                  <div className="space-y-1.5">
+                    <div className="inline-flex items-center gap-1.5 text-xs text-brass font-bold uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4 text-brass" />
+                      <span>Fiduciary Classroom Simulator</span>
+                    </div>
+                    <h2 className="font-serif text-xl sm:text-2xl text-ink font-bold tracking-tight">
+                      Test Your Fiduciary Judgment
+                    </h2>
+                    <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                      Nonprofit directors face serious, personal joint-and-several liabilities if they make hasty decisions on conflicts of interest, finances, or compliance. Select an action path below to see how it impacts your **Director Liability Meter**.
+                    </p>
+                  </div>
+
+                  {/* Options List */}
+                  <div className="space-y-3">
+                    {simulationData[slug].map((option, idx) => {
+                      const isSelected = selectedOption === idx;
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => handleSelectOption(idx)}
+                          className={`w-full text-left p-4 rounded-lg border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                            isSelected
+                              ? 'border-brass bg-brass/5 ring-1 ring-brass/30 shadow-md'
+                              : 'border-fog bg-white hover:border-brass/40 hover:bg-paper/5'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
+                            isSelected ? 'border-brass text-brass bg-brass/10' : 'border-ink/20'
+                          }`}>
+                            {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-brass"></div>}
+                          </div>
+                          <span className={`text-xs sm:text-sm font-sans font-semibold leading-relaxed ${
+                            isSelected ? 'text-ink font-bold' : 'text-ink/80'
+                          }`}>
+                            {option.text}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Director Liability Meter Gauge */}
+                  {selectedOption !== null ? (
+                    <div className="space-y-4 pt-4 border-t border-fog/50 animate-fade-in">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-black text-ink/50 uppercase tracking-widest block font-sans">
+                            Director Personal Liability Gauge
+                          </span>
+                          <span className="text-xs font-bold font-sans text-ink">
+                            Current Choice: <span className="font-serif font-black italic">{simulationData[slug][selectedOption].grade === 'A' ? 'Safe Compliance (Grade A)' : simulationData[slug][selectedOption].grade === 'C' ? 'Vulnerable / Alert (Grade C)' : 'Extreme Exposure (Grade F)'}</span>
+                          </span>
+                        </div>
+
+                        {/* Visual Gauge */}
+                        <div className="w-full sm:w-48 space-y-1.5">
+                          <div className="flex justify-between text-[9px] font-extrabold text-ink/40 uppercase tracking-wider font-sans">
+                            <span>Safe</span>
+                            <span>Critical Risk</span>
+                          </div>
+                          <div className="h-3 bg-fog rounded-full overflow-hidden relative border border-fog/40 shadow-inner">
+                            <div
+                              className={`h-full transition-all duration-700 ease-out-back ${simulationData[slug][selectedOption].meterColor}`}
+                              style={{ width: `${simulationData[slug][selectedOption].riskLevel}%` }}
+                            ></div>
+                          </div>
+                          <div className="text-right text-[10px] font-black text-ink/65 font-sans">
+                            {simulationData[slug][selectedOption].riskLevel}% Personal Exposure
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Advisory Commentary */}
+                      <div className={`p-4 rounded-lg border flex gap-3 text-xs leading-relaxed font-sans font-medium ${simulationData[slug][selectedOption].color}`}>
+                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                        <div className="space-y-1">
+                          <span className="font-black uppercase tracking-wide text-[10px] block">Attorney Case Evaluation:</span>
+                          <p className="leading-relaxed font-medium">{parseTextWithGlossary(simulationData[slug][selectedOption].commentary)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-5 border border-dashed border-fog rounded-lg text-center bg-paper/5">
+                      <AlertTriangle className="w-6 h-6 text-ink/20 mx-auto mb-1" />
+                      <p className="text-xs text-ink/50 font-sans font-semibold">
+                        Select one of the three action options above to activate the Director Liability Gauge.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* RECOMMENDED BOARD ACTIONS (Checklist Steps) */}
               <div className="space-y-4">

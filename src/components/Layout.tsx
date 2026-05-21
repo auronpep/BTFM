@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from './Router';
-import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap, Search } from 'lucide-react';
+import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap, Search, Scale, BookOpen, AlertCircle } from 'lucide-react';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
 
@@ -17,6 +17,14 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Search state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Fiduciary Glossary states (Enhancement 6)
+  const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
+  const [activeTermId, setActiveTermId] = useState<string | null>(null);
+
+  // Countdown ribbon state (Enhancement 10)
+  const [countdownStr, setCountdownStr] = useState('');
+  const [seats, setSeats] = useState(3);
 
   const [labStates, setLabStates] = useState({
     self: { started: false, completed: false, text: 'Not Started' },
@@ -108,6 +116,62 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Global glossary click handler (Enhancement 6)
+  useEffect(() => {
+    const handleGlossaryClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const glossaryEl = target.closest('.glossary-term') as HTMLElement;
+      if (glossaryEl) {
+        e.preventDefault();
+        const termId = glossaryEl.getAttribute('data-term');
+        if (termId) {
+          setActiveTermId(termId);
+          setIsGlossaryOpen(true);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleGlossaryClick);
+    return () => document.removeEventListener('click', handleGlossaryClick);
+  }, []);
+
+  // Ticking countdown timer & seat counter (Enhancement 10)
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const mins = now.getMinutes();
+      const secs = now.getSeconds();
+      
+      const blockLength = 15 * 60; // 15-minute block
+      const elapsed = (mins % 15) * 60 + secs;
+      const remaining = blockLength - elapsed;
+      
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      
+      // Determine remaining seats based on remaining time
+      const computedSeats = Math.max(2, Math.min(8, Math.floor(2 + (remaining / blockLength) * 6)));
+      
+      setCountdownStr(`${m}m ${s < 10 ? '0' : ''}${s}s`);
+      setSeats(computedSeats);
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Navigation click handler with custom scroll action for ribbon banner
+  const handleRibbonClick = () => {
+    navigate('training');
+    setTimeout(() => {
+      const el = document.getElementById('webinar-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 150);
+  };
+
   // Situational/Topic Navigation configuration
   const navItems = [
     { label: 'Next Meeting', target: 'next-meeting', bg: 'hover:border-slate-brand' },
@@ -134,6 +198,29 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-paper text-ink selection:bg-brass selection:text-ink font-sans transition-premium antialiased">
+      {/* Webinar Seat Tracker Countdown Ribbon Banner (Enhancement 10) */}
+      <div 
+        onClick={handleRibbonClick}
+        className="bg-gradient-to-r from-burgundy via-ink to-burgundy text-white text-center py-2.5 px-4 text-xs font-semibold relative cursor-pointer hover:opacity-95 transition-all select-none border-b border-brass/30 z-[60] group flex items-center justify-center gap-2 animate-pulse-slow"
+        title="Click to reserve your webinar seat"
+      >
+        <span className="relative flex h-2 w-2 mr-1">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span className="font-sans">
+          ⚡ <strong className="text-brass font-bold">LIVE BOARDROOM BRIEFING:</strong> Next California Fiduciary Webinar starts soon! Only <strong className="text-brass bg-brass/10 px-1.5 py-0.5 rounded border border-brass/20 font-bold">{seats} seats</strong> remaining.
+        </span>
+        <span className="hidden md:inline-block text-paper/70 px-1">|</span>
+        <span className="font-sans font-medium text-paper/90">
+          Registration closing in <span className="font-mono text-brass font-bold">{countdownStr}</span>
+        </span>
+        <span className="ml-2 underline text-brass group-hover:text-white transition-premium inline-flex items-center gap-0.5 text-[11px] uppercase tracking-wider font-bold">
+          <span>Secure Your Seat</span>
+          <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+        </span>
+      </div>
+
       {/* Upper Micro-Trust Header Banner */}
       <div className="bg-ink text-paper py-1.5 px-4 text-xs tracking-wider border-b border-brass/20">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1">
@@ -609,6 +696,228 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       )}
+
+      {/* Global Fiduciary Glossary Drawer (Enhancement 6) */}
+      {isGlossaryOpen && (
+        <div className="fixed inset-0 z-[100] overflow-hidden animate-fade-in">
+          {/* Backdrop overlay */}
+          <div 
+            className="absolute inset-0 bg-ink/50 backdrop-blur-sm transition-opacity duration-300"
+            onClick={() => setIsGlossaryOpen(false)}
+          />
+
+          {/* Slideout panel */}
+          <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-md sm:max-w-lg bg-paper border-l-2 border-brass flex flex-col h-full shadow-2xl relative animate-slide-in">
+              {/* Header */}
+              <div className="bg-ink text-paper p-6 border-b border-brass/20 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass block mb-1">
+                    California Boardroom Glossary
+                  </span>
+                  <h3 className="font-serif italic font-bold text-xl sm:text-2xl text-white">
+                    Fiduciary Definitions
+                  </h3>
+                </div>
+                <button 
+                  onClick={() => setIsGlossaryOpen(false)}
+                  className="p-2 text-paper/70 hover:text-white hover:bg-white/10 rounded-full transition-premium cursor-pointer"
+                  aria-label="Close glossary"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Body Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {activeTermId && glossaryData[activeTermId] ? (() => {
+                  const term = glossaryData[activeTermId];
+                  return (
+                    <div className="space-y-6 text-left">
+                      <div className="pb-4 border-b-4 border-double border-brass/25">
+                        <h4 className="font-serif font-bold text-2xl text-slate-brand">
+                          {term.term}
+                        </h4>
+                      </div>
+
+                      {/* Statutory Authority */}
+                      <div className="bg-white border border-brass/25 rounded-xl p-5 space-y-3 shadow-sm relative overflow-hidden">
+                        <div className="absolute top-0 right-0 bg-brass/15 text-brass px-3 py-1 rounded-bl-lg font-sans font-bold text-[9px] uppercase tracking-wider">
+                          Statute Check
+                        </div>
+                        <div className="flex items-center gap-1.5 text-brass">
+                          <Scale className="w-4 h-4 shrink-0" />
+                          <span className="text-[10px] font-extrabold uppercase tracking-widest">
+                            Statutory Authority
+                          </span>
+                        </div>
+                        <p className="text-xs font-bold text-ink bg-paper/50 px-2 py-1 rounded border border-fog inline-block font-mono">
+                          {term.statute}
+                        </p>
+                        <p className="text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
+                          {term.definition}
+                        </p>
+                      </div>
+
+                      {/* Fiduciary Liability & Risk */}
+                      <div className="bg-rose-50/50 border border-rose-300/40 rounded-xl p-5 space-y-2.5 shadow-sm">
+                        <div className="flex items-center gap-1.5 text-rose-700">
+                          <AlertCircle className="w-4 h-4 shrink-0" />
+                          <span className="text-[10px] font-extrabold uppercase tracking-widest">
+                            Fiduciary Liability & Risk
+                          </span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-rose-900 leading-relaxed font-sans font-semibold">
+                          {term.consequences}
+                        </p>
+                      </div>
+
+                      {/* Practice Lab Link */}
+                      {term.laboratoryLink && (
+                        <div className="bg-teal-500/5 border border-teal-500/20 rounded-xl p-5 space-y-3 shadow-sm">
+                          <div className="flex items-center gap-1.5 text-teal-700">
+                            <BookOpen className="w-4 h-4 shrink-0 animate-pulse" />
+                            <span className="text-[10px] font-extrabold uppercase tracking-widest">
+                              Practice in Laboratory
+                            </span>
+                          </div>
+                          <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                            Apply this concept interactively in the <strong className="text-teal-700 font-bold">{term.laboratoryName}</strong> to practice compliance scanning under California law.
+                          </p>
+                          <button
+                            onClick={() => {
+                              handleNavClick(term.laboratoryLink!);
+                              setIsGlossaryOpen(false);
+                            }}
+                            className="w-full inline-flex justify-center items-center gap-1.5 py-2.5 px-4 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow hover:shadow-md transition-premium cursor-pointer font-sans"
+                          >
+                            <span>Open Interactive Lab ➜</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Professional Counsel Referral */}
+                      <div className="bg-burgundy/5 border-l-4 border-burgundy p-5 rounded-r-xl space-y-3 shadow-sm text-left">
+                        <div className="flex items-center gap-1.5 text-burgundy">
+                          <ShieldCheck className="w-4.5 h-4.5 shrink-0 text-brass text-brass" />
+                          <span className="text-[9px] font-extrabold uppercase tracking-widest">
+                            Privileged Boardroom Protection
+                          </span>
+                        </div>
+                        <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                          Fiduciary guidelines under California law are strict. If your board has an active conflict of interest, spousal contracts, or registry issues, protect your directors under direct attorney-client privilege.
+                        </p>
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full inline-flex justify-center items-center gap-1.5 py-2.5 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans text-center"
+                        >
+                          <span>Consult Myron Steeves (NPOlawyers) ➜</span>
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })() : (
+                  <div className="text-center py-20">
+                    <p className="text-sm font-medium text-ink/50">Select a glossary term to inspect statutory guidelines.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="bg-paper border-t border-fog p-4 text-center text-[10px] text-ink/40">
+                <span>The Principles of Board Training • California Center for Nonprofit Law</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+};
+
+interface GlossaryItem {
+  id: string;
+  term: string;
+  definition: string;
+  statute: string;
+  consequences: string;
+  laboratoryLink: string | null;
+  laboratoryName: string | null;
+}
+
+const glossaryData: Record<string, GlossaryItem> = {
+  'self-dealing': {
+    id: 'self-dealing',
+    term: 'Self-Dealing Transactions',
+    definition: 'Under California law, any transaction where a director or officer has a material financial interest is defined as a self-dealing transaction. Bypassing strict board approvals or spousal competitive bidding rules is a direct statutory violation.',
+    statute: 'California Corporations Code § 5233',
+    consequences: 'The contract can be completely voided. The interested director is subject to direct corporate restitution demands and must return all profits or unauthorized payments to the charity with interest.',
+    laboratoryLink: 'tools/board-packet-lab',
+    laboratoryName: 'Board Packet Discovery Lab'
+  },
+  'rebuttable-presumption': {
+    id: 'rebuttable-presumption',
+    term: 'Rebuttable Presumption of Reasonableness',
+    definition: 'A safe harbor mechanism established by the IRS that shifts the burden of proof to the IRS regarding executive compensation. To qualify, boards must: (1) use disinterested, independent directors, (2) review external market comparability data, and (3) record contemporaneously written board minutes within 60 days.',
+    statute: 'Internal Revenue Code (IRC) § 4958',
+    consequences: 'If the presumption is not established, the IRS can levy catastrophic "Intermediate Sanctions" excise tax penalties: 25% to 200% on the executive, and 10% on the approving board members individually.',
+    laboratoryLink: 'tools/minutes-scorecard',
+    laboratoryName: 'Minutes Quality Scorecard'
+  },
+  'donor-intent': {
+    id: 'donor-intent',
+    term: 'Donor Intent & Restricted Assets',
+    definition: 'Governs the management and spending of charitable endowments and restricted donations. Boards must strictly adhere to the specific written purposes designated by the donor in the gift agreement.',
+    statute: 'Uniform Prudent Management of Institutional Funds Act (UPMIFA) - CA Probate Code §§ 18501-18510',
+    consequences: 'Diverting restricted donor capital to cover general operations represents an illegal mixing of assets and a breach of public trust. The California Attorney General holds supervisory power to freeze assets, demand restitution, and remove directors.',
+    laboratoryLink: 'tools/budget-worksheet',
+    laboratoryName: 'Operating Budget Audit Worksheet'
+  },
+  'duty-of-care': {
+    id: 'duty-of-care',
+    term: 'Duty of Care',
+    definition: 'Requires directors to perform their duties in good faith, in a manner they believe to be in the best interest of the corporation, and with the care that an ordinarily prudent person in a like position would use under similar circumstances.',
+    statute: 'California Corporations Code § 5231',
+    consequences: 'Passive directors who "rubber-stamp" executives, skip meetings, or fail to read board packets and financial reports lose their statutory business judgment shield. This exposes them to direct personal civil liability for corporate losses or financial failure.',
+    laboratoryLink: 'tools/self-assessment',
+    laboratoryName: 'Mature Board Self-Assessment'
+  },
+  'duty-of-loyalty': {
+    id: 'duty-of-loyalty',
+    term: 'Duty of Loyalty',
+    definition: 'Requires directors to act in undivided good faith and prioritize the nonprofit\'s charitable mission above any personal, professional, or third-party financial gain. Directors are strictly prohibited from usurping corporate opportunities for themselves.',
+    statute: 'California Corporations Code § 5231',
+    consequences: 'Breaching the Duty of Loyalty voids volunteer director civil immunities. A director can be sued in civil court by other directors or the Attorney General to restore any ill-gotten corporate benefits.',
+    laboratoryLink: 'tools/authority-map',
+    laboratoryName: 'Board Authority Delegation Map'
+  },
+  'quorum': {
+    id: 'quorum',
+    term: 'Board Quorum Requirements',
+    definition: 'The statutory minimum number of directors who must be present in person or via video conference to legally transact corporate business. Under California law, a quorum is generally a majority of authorized directors unless bylaws state otherwise.',
+    statute: 'California Corporations Code § 5211(a)(7)',
+    consequences: 'Any vote or resolution passed without an active legal quorum present is completely invalid and legally non-binding. This can void contracts, lines of credit, or officer elections, exposing the board to major litigation.',
+    laboratoryLink: 'next-meeting',
+    laboratoryName: 'Meeting Advance Timeline Planner'
+  },
+  'interested-director': {
+    id: 'interested-director',
+    term: 'Interested Director Rule (49% Cap)',
+    definition: 'A unique California statute dictating that not more than 49% of the board of directors can be "interested persons"—meaning anyone compensated by the charity for services (such as the CEO or staff) or their relatives.',
+    statute: 'California Corporations Code § 5227',
+    consequences: 'Operating a board with an interested majority (e.g. founder, husband, and daughter on a 4-person board) is a major structural violation. All board actions can be declared void, and the corporation risks immediate dissolution by the CA Secretary of State.',
+    laboratoryLink: 'california-board-rules',
+    laboratoryName: 'California Board Rules Center'
+  },
+  'ultra-vires': {
+    id: 'ultra-vires',
+    term: 'Ultra Vires (Exceeding Powers)',
+    definition: 'Corporate actions or expenditures that fall outside the legal purposes, powers, or delegation boundaries defined in the nonprofit\'s Articles of Incorporation, Bylaws, or Board Authority policies.',
+    statute: 'California Corporations Code § 5141',
+    consequences: 'While ultra vires acts are generally binding on third parties, the Attorney General or directors can sue to enjoin the unauthorized activities, and individual directors can be held personally liable for spending charity assets on non-exempt activities.',
+    laboratoryLink: 'tools/authority-map',
+    laboratoryName: 'Board Authority Delegation Map'
+  }
 };

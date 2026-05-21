@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckSquare, Square, AlertTriangle, Copy, Check,
-  FileText, FileCheck, ExternalLink, Sparkles
+  FileText, FileCheck, ExternalLink, Sparkles, Terminal
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -22,6 +22,128 @@ export const MinutesScorecard: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [showBadMinutes, setShowBadMinutes] = useState(false);
   const [copiedSandbox, setCopiedSandbox] = useState(false);
+
+  // State for Minutes Sandbox Correction (Enhancement 7)
+  const [sandboxText, setSandboxText] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_minutes_correction_draft');
+      return saved || horrificMinutesMock;
+    } catch {
+      return horrificMinutesMock;
+    }
+  });
+
+  const [sandboxCopied, setSandboxCopied] = useState(false);
+
+  const handleSandboxChange = (text: string) => {
+    setSandboxText(text);
+    localStorage.setItem('cdx_minutes_correction_draft', text);
+  };
+
+  const handleResetSandbox = () => {
+    if (window.confirm("Reset sandbox text back to the non-compliant Grade F draft?")) {
+      setSandboxText(horrificMinutesMock);
+      localStorage.setItem('cdx_minutes_correction_draft', horrificMinutesMock);
+    }
+  };
+
+  const handleLoadPerfectSandbox = () => {
+    const perfectSample = `MINUTES OF A MEETING OF THE BOARD OF DIRECTORS OF CDX CHARITY INITIATIVES
+Date: May 15, 2026
+Location: Office Conference Room
+
+The board meeting convened at 6:00 PM with a legal quorum present. John Doe presided, and Secretary Sarah Jenkins recorded minutes.
+
+I. EXECUTIVE COMPENSATION REASONABLENESS RESOLUTION (IRC § 4958)
+The board reviewed proposed compensation for the Executive Director. The interested director was fully recused and exited the meeting room prior to deliberations.
+
+The board reviewed independent salary comparability survey data of peer California nonprofits. Based on this market data, the independent and disinterested directors voted to approve a reasonable salary resolution of $120,000, determining the amount is fair and justified.
+
+II. INTERESTED PARTY TRANSACTION DISCLOSURE (CA CORP CODE § 5233)
+The Board reviewed a proposal to contract with Beacon Tech Solutions. Director Mary Smith disclosed their material financial interest and was fully recused from discussions and the vote.
+
+The disinterested board reviewed competitive bids and determined a more advantageous arrangement was not reasonably obtainable. The contract was approved by resolution as fair and reasonable.
+
+Respectfully submitted,
+Sarah Jenkins, Board Secretary`;
+    setSandboxText(perfectSample);
+    localStorage.setItem('cdx_minutes_correction_draft', perfectSample);
+  };
+
+  const handleCopySandbox = () => {
+    navigator.clipboard.writeText(sandboxText);
+    setSandboxCopied(true);
+    setTimeout(() => setSandboxCopied(false), 2000);
+  };
+
+  const sandboxChecks = [
+    {
+      id: 'quorum',
+      label: 'Quorum & Attendance Verified',
+      pattern: /quorum|present|attendance/i,
+      desc: 'Verify a legal quorum is present and attendance is documented.'
+    },
+    {
+      id: 'recusal',
+      label: 'Conflicted Party Recusal / Exit',
+      pattern: /recus|abstain|exited|exit/i,
+      desc: 'Verify that conflicted directors or paid staff exited the room during the vote.'
+    },
+    {
+      id: 'comparables',
+      pattern: /comparable|survey|peer|stud/i,
+      label: 'Independent Comparables Reviewed',
+      desc: 'Reference peer group studies or salary survey data for executive pay.'
+    },
+    {
+      id: 'disinterested',
+      pattern: /disinterested|independent|unanimous/i,
+      label: 'Disinterested Board Majority',
+      desc: 'Confirm the decision is made solely by independent, disinterested directors.'
+    },
+    {
+      id: 'reasonableness',
+      pattern: /reasonable|fair|justified|basis/i,
+      label: 'Reasonableness / Fairness Basis',
+      desc: 'Explicitly state the board found the price or compensation to be fair and reasonable.'
+    },
+    {
+      id: 'resolution',
+      pattern: /resolution|resolved|voted|approve/i,
+      label: 'Formal Approved Resolution',
+      desc: 'Record decisions as formal approved board actions or resolutions.'
+    },
+    {
+      id: 'secretary',
+      pattern: /submitted|certified|secretary|sign/i,
+      label: 'Official Sign-off Certification',
+      desc: 'Include formal Secretary sign-off or certification language.'
+    }
+  ];
+
+  const matchedSandboxCount = sandboxChecks.filter(check => check.pattern.test(sandboxText)).length;
+  const sandboxPct = Math.round((matchedSandboxCount / sandboxChecks.length) * 100);
+
+  let sandboxGrade = 'F';
+  let sandboxGradeColor = 'text-burgundy bg-burgundy/5 border-burgundy/30';
+  let sandboxGradeTitle = 'Grade F: High Risk Exposure';
+  if (matchedSandboxCount === sandboxChecks.length) {
+    sandboxGrade = 'A';
+    sandboxGradeColor = 'text-teal-brand bg-teal-brand/5 border-teal-brand/30';
+    sandboxGradeTitle = 'Grade A: Courtroom Defensive Standard';
+  } else if (matchedSandboxCount >= 5) {
+    sandboxGrade = 'B';
+    sandboxGradeColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    sandboxGradeTitle = 'Grade B: Protected Records';
+  } else if (matchedSandboxCount >= 3) {
+    sandboxGrade = 'C';
+    sandboxGradeColor = 'text-brass bg-brass/5 border-brass/30';
+    sandboxGradeTitle = 'Grade C: Vulnerable Records';
+  } else if (matchedSandboxCount >= 1) {
+    sandboxGrade = 'D';
+    sandboxGradeColor = 'text-copper bg-copper/5 border-copper/30';
+    sandboxGradeTitle = 'Grade D: Administrative Negligence';
+  }
 
   const [resolutionState, setResolutionState] = useState(() => {
     const saved = localStorage.getItem('cdx_minutes_resolution_builder');
@@ -812,6 +934,184 @@ Date Approved: ____________________`;
                     Live Draft Preview
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Minutes Correction Sandbox (Enhancement 7) */}
+          <div className="bg-white rounded-2xl border border-fog p-6 sm:p-8 space-y-6 text-left shadow-sm mt-8 relative overflow-hidden">
+            {/* Elegant watermarked background logo or gradient */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-brass/5 to-transparent rounded-full -mr-20 -mt-20 pointer-events-none" />
+
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-fog pb-4 relative z-10">
+              <div className="space-y-1">
+                <h3 className="font-serif text-xl font-bold text-ink flex items-center gap-2">
+                  <Terminal className="w-5 h-5 text-brass" />
+                  <span>Minutes Correction Sandbox & Audit Simulator</span>
+                </h3>
+                <p className="text-xs text-ink/60">
+                  Edit the live board minutes draft below. The compliance engine will analyze your edits in real time to assign a grade.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={handleLoadPerfectSandbox}
+                  className="px-3 py-1.5 bg-teal-brand/10 hover:bg-teal-brand/20 text-teal-brand text-[11px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer"
+                >
+                  Load Perfect Sample (Grade A)
+                </button>
+                <button
+                  onClick={handleResetSandbox}
+                  className="px-3 py-1.5 bg-burgundy/10 hover:bg-burgundy/20 text-burgundy text-[11px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer"
+                >
+                  Load Non-Compliant Draft (Grade F)
+                </button>
+                <button
+                  onClick={handleCopySandbox}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brass hover:bg-ink text-ink hover:text-white text-[11px] font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                >
+                  {sandboxCopied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Draft</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Main Interactive Work Area */}
+            <div className="grid lg:grid-cols-12 gap-8 relative z-10">
+              {/* Textarea Area */}
+              <div className="lg:col-span-7 flex flex-col space-y-3">
+                <div className="relative flex-grow">
+                  <textarea
+                    value={sandboxText}
+                    onChange={(e) => handleSandboxChange(e.target.value)}
+                    rows={16}
+                    className="w-full font-mono text-xs bg-paper border border-fog/80 focus:border-brass rounded-xl p-5 text-ink leading-relaxed shadow-inner outline-none transition-premium resize-none"
+                    placeholder="Type or paste your minutes draft here..."
+                  />
+
+                  {/* Certified Seal Badge when Grade A */}
+                  {sandboxGrade === 'A' && (
+                    <div className="absolute bottom-4 right-4 animate-bounce flex items-center gap-2 bg-gradient-to-r from-brass to-amber-600 text-white px-3 py-1.5 rounded-full shadow-lg border border-white/20">
+                      <FileCheck className="w-4 h-4" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Certified Courtroom Grade</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center text-[10px] text-ink/50 uppercase tracking-widest font-extrabold px-1">
+                  <span>Character Count: {sandboxText.length}</span>
+                  <span>Interactive Compliance Feedback Engine</span>
+                </div>
+              </div>
+
+              {/* Live Real-Time Compliance Scorecard Area */}
+              <div className="lg:col-span-5 flex flex-col space-y-5 bg-paper/30 border border-fog/50 rounded-xl p-5 sm:p-6 shadow-sm">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-ink/50 block">Audit Score</span>
+                    <span className="text-xs font-mono font-bold text-ink/75">{matchedSandboxCount} of {sandboxChecks.length} Criteria Passed</span>
+                  </div>
+
+                  {/* Dynamic Progress Bar */}
+                  <div className="h-2 w-full bg-fog/40 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-brass to-teal-brand transition-all duration-500 ease-out"
+                      style={{ width: `${sandboxPct}%` }}
+                    />
+                  </div>
+
+                  {/* Large Grade Badge Display */}
+                  <div className={`p-4 rounded-xl border text-center transition-premium ${sandboxGradeColor}`}>
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest opacity-60">Calculated Security Level</div>
+                    <div className="text-4xl font-serif font-black my-1.5">{sandboxGrade}</div>
+                    <div className="text-xs font-bold">{sandboxGradeTitle}</div>
+                  </div>
+                </div>
+
+                {/* Checklist List */}
+                <div className="space-y-3 flex-grow">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/50 block border-b border-fog pb-1">Required Legal Elements</span>
+                  
+                  <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
+                    {sandboxChecks.map((check) => {
+                      const isMatched = check.pattern.test(sandboxText);
+                      return (
+                        <div 
+                          key={check.id}
+                          className={`flex items-start gap-2.5 p-2 rounded-lg text-left transition-premium border ${
+                            isMatched 
+                              ? 'bg-emerald-500/5 border-emerald-500/10 text-ink' 
+                              : 'bg-burgundy/5 border-burgundy/10 text-ink/80'
+                          }`}
+                        >
+                          <div className="mt-0.5">
+                            {isMatched ? (
+                              <Check className="w-4 h-4 text-emerald-600" />
+                            ) : (
+                              <AlertTriangle className="w-4 h-4 text-burgundy" />
+                            )}
+                          </div>
+                          <div className="space-y-0.5">
+                            <div className="text-xs font-bold flex items-center gap-1.5">
+                              <span>{check.label}</span>
+                              {isMatched ? (
+                                <span className="text-[8px] bg-emerald-500/10 text-emerald-700 px-1 py-0.2 rounded font-extrabold uppercase tracking-wider">Passed</span>
+                              ) : (
+                                <span className="text-[8px] bg-burgundy/10 text-burgundy px-1 py-0.2 rounded font-extrabold uppercase tracking-wider">Missing</span>
+                              )}
+                            </div>
+                            <p className="text-[10px] text-ink/50 leading-normal">
+                              {check.desc}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Conversion Trigger Banner */}
+                {sandboxGrade !== 'A' ? (
+                  <div className="p-3 bg-brass/5 border border-brass/10 rounded-lg text-left">
+                    <p className="text-[10px] text-ink/70 leading-normal mb-1.5">
+                      <strong>Audit Advisory:</strong> Your minutes record is missing key procedural shields. Under CA Corp Code, inaccurate minutes expose directors to self-dealing and personal tax penalties.
+                    </p>
+                    <a
+                      href="https://NPOlawyers.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-brass hover:text-ink uppercase tracking-wider"
+                    >
+                      <span>Obtain Professional Bylaws Vetting</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-teal-brand/5 border border-teal-brand/10 rounded-lg text-left">
+                    <p className="text-[10px] text-ink/70 leading-normal mb-1.5">
+                      <strong>Defense Complete:</strong> You have implemented a top-tier corporate defensive shield. Congratulations on protecting your board! Keep this template secure or have our firm audit your full corporate book.
+                    </p>
+                    <a
+                      href="https://NPOlawyers.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-teal-brand hover:text-ink uppercase tracking-wider"
+                    >
+                      <span>Request Corporate Book Audit</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

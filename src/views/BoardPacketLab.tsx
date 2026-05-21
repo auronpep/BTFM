@@ -198,6 +198,14 @@ export const BoardPacketLab: React.FC = () => {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showSolutions, setShowSolutions] = useState(false);
   const [isScannerDrawerOpen, setIsScannerDrawerOpen] = useState(false);
+  const [showSuccessSeal, setShowSuccessSeal] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_packet_audited_seal');
+      return saved === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [uncoveredFlags, setUncoveredFlags] = useState<string[]>(() => {
     const saved = localStorage.getItem('cdx_board_packet_uncovered_flags');
     return saved ? JSON.parse(saved) : [];
@@ -212,8 +220,10 @@ export const BoardPacketLab: React.FC = () => {
     setAuditedCompliant([]);
     setSelectedItemId(null);
     setShowSolutions(false);
+    setShowSuccessSeal(false);
     localStorage.removeItem('cdx_board_packet_uncovered_flags');
     localStorage.removeItem('cdx_board_packet_audited_compliant');
+    localStorage.removeItem('cdx_packet_audited_seal');
   };
 
   const tabFlags: Record<string, string[]> = {
@@ -300,6 +310,10 @@ export const BoardPacketLab: React.FC = () => {
       const updated = [...uncoveredFlags, itemId];
       setUncoveredFlags(updated);
       localStorage.setItem('cdx_board_packet_uncovered_flags', JSON.stringify(updated));
+      if (updated.length === 9) {
+        setShowSuccessSeal(true);
+        localStorage.setItem('cdx_packet_audited_seal', 'true');
+      }
     }
     // If it's a compliant item, track it in auditedCompliant
     if (itemId in compliantDb && !auditedCompliant.includes(itemId)) {
@@ -1037,6 +1051,99 @@ export const BoardPacketLab: React.FC = () => {
                 </span>
                 <span className="font-serif italic font-bold">The Principles of Board Training</span>
               </div>
+
+              {/* Wax Seal Overlay (Enhancement 8) */}
+              {showSuccessSeal && uncoveredFlags.length === 9 && (
+                <div className="absolute inset-0 bg-white/75 backdrop-blur-[2px] flex flex-col justify-center items-center z-30 p-6 sm:p-8 animate-fade-in text-center">
+                  <div className="relative cursor-pointer transition-transform duration-500 hover:scale-105 mb-4" onClick={() => setShowSuccessSeal(false)}>
+                    {/* Glowing golden circle background */}
+                    <div className="absolute inset-0 bg-brass/20 rounded-full blur-2xl animate-pulse" />
+                    
+                    {/* SVG Wax Seal */}
+                    <svg className="w-52 h-56 drop-shadow-2xl relative z-10" style={{ transformOrigin: 'center', animation: 'spin 40s linear infinite' }} viewBox="0 0 200 200">
+                      <defs>
+                        <path id="sealTextPath" d="M 100, 100 m -65, 0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0" />
+                        <filter id="wax3d">
+                          <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+                          <feSpecularLighting in="blur" surfaceScale="5" specularConstant="1" specularExponent="20" lightingColor="#ffffff" result="light">
+                            <fePointLight x="-100" y="-100" z="150" />
+                          </feSpecularLighting>
+                          <feComposite in="light" in2="SourceAlpha" operator="in" result="specOut" />
+                          <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+                        </filter>
+                      </defs>
+                      
+                      {/* Wax Base circle (organic slightly bumpy edge) */}
+                      <path 
+                        d="M100 15 C150 12 185 50 185 100 C185 150 148 188 100 185 C52 182 15 148 15 100 C15 52 50 18 100 15 Z" 
+                        fill="#1b4d4c" 
+                        filter="url(#wax3d)" 
+                      />
+                      
+                      {/* Inner gold concentric accent */}
+                      <circle cx="100" cy="100" r="72" fill="none" stroke="#cca43b" strokeWidth="2" strokeDasharray="6 3" />
+                      <circle cx="100" cy="100" r="58" fill="none" stroke="#cca43b" strokeWidth="1" />
+
+                      {/* Rotational Text */}
+                      <text className="fill-brass text-[10.5px] tracking-[4px] uppercase font-serif font-bold">
+                        <textPath href="#sealTextPath" startOffset="0%">
+                          * CDX CORPORATE BOARDROOM AUDIT COMPLETED *
+                        </textPath>
+                      </text>
+
+                      {/* Seal Inner Logo/Insignia */}
+                      <g transform="translate(68, 68) scale(0.65)">
+                        {/* Corinthian Column In Seal */}
+                        <path 
+                          d="M40,75 L60,75 L60,15 L40,15 Z M25,15 L75,15 L75,8 L25,8 Z M30,75 L70,75 L75,90 L25,90 Z M50,15 L50,75 M35,15 L35,75 M65,15 L65,75" 
+                          stroke="#cca43b" 
+                          strokeWidth="4" 
+                          fill="none" 
+                          strokeLinecap="round"
+                        />
+                      </g>
+                    </svg>
+                  </div>
+
+                  <div className="max-w-md space-y-4 z-20">
+                    <span className="text-[9px] font-extrabold text-brass uppercase tracking-[0.3em] bg-brass/10 px-3 py-1.5 rounded-full border border-brass/20 inline-block">
+                      Oversight Safeguards Certified
+                    </span>
+                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-ink leading-tight">
+                      Audit Discovery Defenses Verified!
+                    </h3>
+                    <p className="text-xs text-ink/75 leading-relaxed">
+                      You have identified all <strong>9 corporate risks</strong>, compliance vulnerabilities, and missing board policies hidden in this packet. Your boardroom vigilance is verified to standard.
+                    </p>
+                    <div className="bg-paper p-4 rounded-xl border border-fog/80 text-left space-y-2 shadow-inner">
+                      <p className="text-[11px] font-bold text-ink flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-brand" />
+                        Next Professional Action Recommended:
+                      </p>
+                      <p className="text-[11px] text-ink/65 leading-relaxed">
+                        To cement these protections for your California entity, request a formal attorney review of your current Bylaws and Corporate Book. Our firm specializing in nonprofit law will evaluate your complete record suite.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row justify-center gap-2.5 pt-2">
+                      <a 
+                        href="https://NPOlawyers.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-2.5 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-md transition-premium text-center"
+                      >
+                        Request Attorney Audit at NPOlawyers.com
+                      </a>
+                      <button
+                        onClick={() => setShowSuccessSeal(false)}
+                        className="px-4 py-2.5 bg-paper hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded-lg border border-fog transition-premium cursor-pointer"
+                      >
+                        Dismiss Overlay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Hand: The Audit Panel (5 Cols) */}

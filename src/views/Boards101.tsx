@@ -19,6 +19,38 @@ import {
   RotateCw
 } from 'lucide-react';
 
+// React-safe glossary parser (Enhancement 6)
+const parseTextWithGlossary = (text: string): React.ReactNode[] => {
+  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires)/gi;
+  const parts = text.split(regex);
+  return parts.map((part, i) => {
+    const lower = part.toLowerCase();
+    let termId = '';
+    if (lower === 'self-dealing') termId = 'self-dealing';
+    else if (lower === 'rebuttable presumption') termId = 'rebuttable-presumption';
+    else if (lower === 'donor intent') termId = 'donor-intent';
+    else if (lower === 'duty of care') termId = 'duty-of-care';
+    else if (lower === 'duty of loyalty') termId = 'duty-of-loyalty';
+    else if (lower === 'quorum') termId = 'quorum';
+    else if (lower === 'interested director' || lower === 'interested person') termId = 'interested-director';
+    else if (lower === 'ultra vires') termId = 'ultra-vires';
+
+    if (termId) {
+      return (
+        <span 
+          key={i} 
+          className="glossary-term cursor-help border-b border-dotted border-brass/80 text-ink hover:text-brass transition-all font-semibold inline duration-150"
+          data-term={termId}
+          title="Click to open Fiduciary Glossary definition"
+        >
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+};
+
 export const Boards101: React.FC = () => {
   // Form States
   const [orgName, setOrgName] = useState('');
@@ -184,13 +216,13 @@ export const Boards101: React.FC = () => {
                   <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
                     <h4 className="font-serif font-bold text-sm text-slate-brand">1. The Duty of Loyalty</h4>
                     <p className="text-xs text-ink/70 leading-relaxed">
-                      Caring about the nonprofit organization more than yourself when conflicts or business opportunities arise. Personal interests must never infect board votes.
+                      {parseTextWithGlossary("Caring about the nonprofit organization more than yourself when conflicts or business opportunities arise. Personal interests must never infect board votes.")}
                     </p>
                   </div>
                   <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
                     <h4 className="font-serif font-bold text-sm text-slate-brand">2. The Duty of Care</h4>
                     <p className="text-xs text-ink/70 leading-relaxed">
-                      Making decisions based on reasonable diligence, regular meeting attendance, and robust inquiry. Fiduciaries must actively investigate what they do not understand.
+                      {parseTextWithGlossary("Making decisions based on reasonable diligence, regular meeting attendance, and robust inquiry. Fiduciaries must actively investigate what they do not understand.")}
                     </p>
                   </div>
                 </div>
@@ -301,7 +333,7 @@ export const Boards101: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
-                  Listen to exclusive legal masterclasses detailing statutory Duty of Care and Duty of Loyalty compliance strategies under California law.
+                  {parseTextWithGlossary("Listen to exclusive legal masterclasses detailing statutory Duty of Care and Duty of Loyalty compliance strategies under California law.")}
                 </p>
 
                 {/* Simulated Audio Player Box */}
