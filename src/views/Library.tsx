@@ -3,7 +3,7 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
-import { Search, ChevronRight, BookOpen, AlertTriangle, Award, Star, CheckSquare, Square, Check, Trash2 } from 'lucide-react';
+import { Search, ChevronRight, BookOpen, AlertTriangle, Award, Star, CheckSquare, Square, Trash2 } from 'lucide-react';
 
 export const Library: React.FC = () => {
   const { navigate, path } = useRouter();
