@@ -7,7 +7,7 @@ import {
   MinutesShouldShowCard, 
   CaliforniaNoteBadge 
 } from '../components/BoardroomCards';
-import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight, Activity, RefreshCw, AlertCircle, Square } from 'lucide-react';
 
 interface AgendaItem {
   id: string;
@@ -23,6 +23,116 @@ interface AgendaItem {
 export const NextMeeting: React.FC = () => {
   const { navigate } = useRouter();
   const [expandedTopic, setExpandedTopic] = useState<string | null>('budget-approval');
+
+  // Agenda Sliders State (40-40-20 Rule)
+  const [sliders, setSliders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_agenda_sliders_allocation');
+      return saved ? JSON.parse(saved) : { routine: 40, strategy: 40, risk: 20 };
+    } catch (e) {
+      return { routine: 40, strategy: 40, risk: 20 };
+    }
+  });
+
+  // Checklist State for Required Files
+  const [checkedFiles, setCheckedFiles] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('cdx_next_meeting_checked_files');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  const handleSliderChange = (key: 'routine' | 'strategy' | 'risk', newVal: number) => {
+    setSliders(prev => {
+      const currentVal = prev[key];
+      if (newVal === currentVal) return prev;
+
+      // Ensure boundary [0, 100]
+      const val = Math.max(0, Math.min(100, newVal));
+
+      const otherKeys = (['routine', 'strategy', 'risk'] as const).filter(k => k !== key);
+      const k1 = otherKeys[0];
+      const k2 = otherKeys[1];
+
+      const v1 = prev[k1];
+      const v2 = prev[k2];
+
+      const remaining = 100 - val;
+      let newV1 = 0;
+      let newV2 = 0;
+
+      if (v1 + v2 > 0) {
+        newV1 = Math.round((v1 / (v1 + v2)) * remaining);
+        newV2 = remaining - newV1;
+      } else {
+        newV1 = Math.round(remaining / 2);
+        newV2 = remaining - newV1;
+      }
+
+      const next = {
+        [key]: val,
+        [k1]: newV1,
+        [k2]: newV2
+      } as typeof prev;
+
+      localStorage.setItem('cdx_agenda_sliders_allocation', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleToggleFile = (topicId: string, file: string) => {
+    setCheckedFiles(prev => {
+      const key = `${topicId}-${file}`;
+      const next = {
+        ...prev,
+        [key]: !prev[key]
+      };
+      localStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleResetTopicChecklist = (topicId: string, files: string[]) => {
+    setCheckedFiles(prev => {
+      const next = { ...prev };
+      files.forEach(file => {
+        delete next[`${topicId}-${file}`];
+      });
+      localStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Compute grading
+  const getAgendaGrade = () => {
+    const { routine, strategy, risk } = sliders;
+    if (strategy >= 35 && risk >= 15 && routine <= 45) {
+      return {
+        grade: 'A',
+        color: 'border-emerald-500 bg-emerald-50/50 text-emerald-800',
+        badge: 'bg-emerald-600 text-white',
+        text: 'EXCELLENT BALANCE. Your board is allocating prime brainpower to strategic and risk management oversight, satisfying California\'s Duty of Care standards and safe harbor expectations.'
+      };
+    } else if (routine > 55) {
+      return {
+        grade: 'F',
+        color: 'border-burgundy/40 bg-burgundy/5 text-burgundy',
+        badge: 'bg-burgundy text-white',
+        text: 'WARNING: REPORT OVERLOAD. More than 55% of the meeting is wasted on retrospective officer reports. This leaves your board unshielded from hidden regulatory violations and breaches of Duty of Care.'
+      };
+    } else {
+      return {
+        grade: 'C',
+        color: 'border-brass bg-brass/5 text-ink/80',
+        badge: 'bg-brass text-ink font-bold',
+        text: 'SUB-OPTIMAL BALANCE. Too much focus is placed on routine reports rather than forward-looking strategy or compliance audits. Try shifting at least 40% to strategy and 20% to risk.'
+      };
+    }
+  };
+
+  const grading = getAgendaGrade();
 
   // Database of 9 high-stakes agenda topics
   const agendaTopics: AgendaItem[] = [
@@ -321,6 +431,104 @@ export const NextMeeting: React.FC = () => {
             </p>
           </div>
 
+          {/* Agenda Balancer Component (Enhancement 2) */}
+          <div className="bg-white rounded-xl border border-fog p-6 sm:p-8 shadow-sm space-y-6 text-left">
+            <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between border-b border-fog/60 pb-5">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="inline-flex items-center gap-1.5 text-xs text-brass font-bold uppercase tracking-wider">
+                  <Activity className="w-4 h-4" />
+                  <span>The 40-40-20 Rule Agenda Balancer</span>
+                </div>
+                <h2 className="font-serif text-xl sm:text-2xl text-ink font-bold tracking-tight">
+                  Optimize Your Boardroom Time Allocation
+                </h2>
+                <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                  Expert nonprofit attorneys recommend spending no more than **40% of meetings on routine reports**, allocating at least **40% to forward-looking strategy**, and dedicating at least **20% to active regulatory and compliance risk audits**. Drag the sliders to grade your scheduled agenda.
+                </p>
+              </div>
+
+              {/* Dynamic Grade Stamp */}
+              <div className={`shrink-0 border-2 rounded-xl p-4 flex flex-col items-center justify-center w-36 h-36 ${grading.color} shadow-sm animate-fade-in`}>
+                <span className="text-[10px] font-black uppercase tracking-widest text-ink/50 font-sans">Agenda Grade</span>
+                <span className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-black shadow-sm ${grading.badge} mt-1.5`}>
+                  {grading.grade}
+                </span>
+                <span className="text-[9px] font-bold text-center mt-2 font-sans">
+                  {sliders.routine}% / {sliders.strategy}% / {sliders.risk}%
+                </span>
+              </div>
+            </div>
+
+            {/* Sliders Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+              {/* Routine Reports */}
+              <div className="space-y-2 bg-paper/20 p-4 rounded-lg border border-fog/40">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-ink/70 uppercase tracking-wider font-sans">1. Routine Reports</span>
+                  <span className="font-serif font-black text-slate-brand text-sm">{sliders.routine}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliders.routine}
+                  onChange={(e) => handleSliderChange('routine', parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-fog rounded-lg appearance-none cursor-pointer accent-slate-brand"
+                />
+                <p className="text-[10px] text-ink/50 leading-normal font-medium font-sans">
+                  CEO progress, treasurer ledger summaries, previous minutes. Limit to prevent brain fatigue.
+                </p>
+              </div>
+
+              {/* Strategy & Planning */}
+              <div className="space-y-2 bg-paper/20 p-4 rounded-lg border border-fog/40">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-ink/70 uppercase tracking-wider font-sans">2. Strategic Planning</span>
+                  <span className="font-serif font-black text-teal-brand text-sm">{sliders.strategy}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliders.strategy}
+                  onChange={(e) => handleSliderChange('strategy', parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-fog rounded-lg appearance-none cursor-pointer accent-teal-brand"
+                />
+                <p className="text-[10px] text-ink/50 leading-normal font-medium font-sans">
+                  Forward goals, business metrics, spousal bidding reviews, community outcomes. Target 40%+.
+                </p>
+              </div>
+
+              {/* Risk & Compliance Audit */}
+              <div className="space-y-2 bg-paper/20 p-4 rounded-lg border border-fog/40">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-ink/70 uppercase tracking-wider font-sans">3. Risk & Compliance</span>
+                  <span className="font-serif font-black text-burgundy text-sm">{sliders.risk}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliders.risk}
+                  onChange={(e) => handleSliderChange('risk', parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-fog rounded-lg appearance-none cursor-pointer accent-burgundy"
+                />
+                <p className="text-[10px] text-ink/50 leading-normal font-medium font-sans">
+                  IRS compensation safe harbors, Live Scan youth audits, Statement of Information. Target 20%+.
+                </p>
+              </div>
+            </div>
+
+            {/* Balancer Legal Counseling Callout */}
+            <div className={`p-4 rounded-lg border flex gap-3 text-xs leading-relaxed font-sans font-medium ${grading.color}`}>
+              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-ink/65" />
+              <div className="space-y-1">
+                <span className="font-bold text-ink uppercase tracking-wide text-[10px] block">Attorney Advisory:</span>
+                <p className="text-xs leading-relaxed text-ink/80">{grading.text}</p>
+              </div>
+            </div>
+          </div>
+
           {/* Agenda Topic Desk */}
           <div className="space-y-6">
             {agendaTopics.map((topic) => {
@@ -338,15 +546,36 @@ export const NextMeeting: React.FC = () => {
                     className="p-5 flex items-center justify-between cursor-pointer select-none bg-paper/10 border-b border-fog/60 hover:bg-paper/30 transition-premium"
                   >
                     <div className="space-y-1">
-                      <span className="text-[9px] font-extrabold text-slate-brand uppercase tracking-widest bg-white px-2 py-0.5 rounded shadow-sm border border-fog/50">
-                        {topic.category}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-extrabold text-slate-brand uppercase tracking-widest bg-white px-2 py-0.5 rounded shadow-sm border border-fog/50">
+                          {topic.category}
+                        </span>
+                        {/* Topic Progress Badge */}
+                        {(() => {
+                          const files = topic.requiredFiles;
+                          const checkedCount = files.filter(f => !!checkedFiles[`${topic.id}-${f}`]).length;
+                          if (checkedCount === files.length) {
+                            return (
+                              <span className="text-[8px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded shadow-sm">
+                                READY FOR MEETING
+                              </span>
+                            );
+                          } else if (checkedCount > 0) {
+                            return (
+                              <span className="text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded shadow-sm">
+                                PREP {checkedCount}/{files.length}
+                              </span>
+                            );
+                          }
+                          return null;
+                        })()}
+                      </div>
                       <h3 className="font-serif font-bold text-base sm:text-lg text-ink">
                         {topic.title}
                       </h3>
                     </div>
                     
-                    <div className="text-brass shrink-0 pl-4">
+                    <div className="text-brass shrink-0 pl-4 flex items-center gap-3">
                       {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                     </div>
                   </div>
@@ -356,19 +585,56 @@ export const NextMeeting: React.FC = () => {
                     <div className="p-6 sm:p-8 space-y-8 animate-fade-in bg-white border-t border-fog/25">
                       
                       {/* 1. Required Files Panel */}
-                      <div className="space-y-3">
-                        <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/55 flex items-center gap-1.5">
-                          <FileText className="w-4 h-4 text-brass" />
-                          <span>Required Study Materials (Distribute 5 days prior)</span>
-                        </h4>
+                      <div className="space-y-3 text-left">
+                        <div className="flex items-center justify-between border-b border-fog/40 pb-2">
+                          <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/55 flex items-center gap-1.5">
+                            <FileText className="w-4 h-4 text-brass" />
+                            <span>Required Study Materials (Distribute 5 days prior)</span>
+                          </h4>
+                          
+                          {/* Reset Checklist for this topic */}
+                          {topic.requiredFiles.some(f => !!checkedFiles[`${topic.id}-${f}`]) && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleResetTopicChecklist(topic.id, topic.requiredFiles);
+                              }}
+                              className="text-[10px] font-extrabold text-burgundy hover:underline flex items-center gap-1 cursor-pointer"
+                            >
+                              <RefreshCw className="w-2.5 h-2.5" />
+                              <span>RESET PREP</span>
+                            </button>
+                          )}
+                        </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {topic.requiredFiles.map((file, fIdx) => (
-                            <div key={fIdx} className="bg-paper/20 p-3.5 rounded-lg border border-fog/50 flex items-start gap-2.5">
-                              <CheckSquare className="w-4 h-4 text-brass mt-0.5 shrink-0" />
-                              <span className="text-xs text-ink/80 leading-relaxed font-sans font-medium">{file}</span>
-                            </div>
-                          ))}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                          {topic.requiredFiles.map((file, fIdx) => {
+                            const isChecked = !!checkedFiles[`${topic.id}-${file}`];
+                            return (
+                              <button
+                                key={fIdx}
+                                onClick={() => handleToggleFile(topic.id, file)}
+                                className={`p-3.5 rounded-lg border flex items-start gap-2.5 text-left transition-premium cursor-pointer ${
+                                  isChecked 
+                                    ? 'bg-fog/10 border-fog/45 opacity-65' 
+                                    : 'bg-paper/25 border-fog/50 hover:border-brass/40 hover:bg-paper/45 shadow-sm'
+                                }`}
+                              >
+                                <div className="shrink-0 mt-0.5">
+                                  {isChecked ? (
+                                    <CheckSquare className="w-4 h-4 text-emerald-600" />
+                                  ) : (
+                                    <Square className="w-4 h-4 text-brass/70" />
+                                  )}
+                                </div>
+                                <span className={`text-xs leading-relaxed font-sans font-medium ${
+                                  isChecked ? 'line-through text-ink/40 font-normal' : 'text-ink/85'
+                                }`}>
+                                  {file}
+                                </span>
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
 

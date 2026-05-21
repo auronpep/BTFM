@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { 
   Clock, 
@@ -12,7 +12,13 @@ import {
   Building, 
   Calendar, 
   Award, 
-  AlertCircle
+  AlertCircle,
+  Play,
+  Pause,
+  Volume2,
+  RotateCw,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 export const Boards101: React.FC = () => {
@@ -25,6 +31,95 @@ export const Boards101: React.FC = () => {
   const [customConcerns, setCustomConcerns] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
+
+  // Audio Lecture Desk States (Enhancement 6)
+  const [playingLecture, setPlayingLecture] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // 3-Minute Bylaws Quiz States (Enhancement 4)
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
+  const [quizSubmitted, setQuizSubmitted] = useState(() => {
+    try {
+      return localStorage.getItem('cdx_bylaws_quick_check') !== null;
+    } catch (e) {
+      return false;
+    }
+  });
+  const [quizScore, setQuizScore] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_bylaws_quick_check');
+      return saved ? parseInt(saved) : 0;
+    } catch (e) {
+      return 0;
+    }
+  });
+
+  const handleLectureToggle = (id: string) => {
+    if (playingLecture === id) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setPlayingLecture(id);
+      setIsPlaying(true);
+    }
+  };
+
+  const handleQuizAnswer = (qIdx: number, val: string) => {
+    if (quizSubmitted) return;
+    setQuizAnswers(prev => ({
+      ...prev,
+      [qIdx]: val
+    }));
+  };
+
+  const handleQuizSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (Object.keys(quizAnswers).length < 3) return;
+
+    let score = 0;
+    if (quizAnswers[1] === 'B') score++;
+    if (quizAnswers[2] === 'C') score++;
+    if (quizAnswers[3] === 'B') score++;
+
+    try {
+      localStorage.setItem('cdx_bylaws_quick_check', score.toString());
+    } catch (e) {}
+
+    setQuizScore(score);
+    setQuizSubmitted(true);
+  };
+
+  const handleResetQuiz = () => {
+    try {
+      localStorage.removeItem('cdx_bylaws_quick_check');
+    } catch (e) {}
+    setQuizAnswers({});
+    setQuizScore(0);
+    setQuizSubmitted(false);
+  };
+
+  const lectures = [
+    {
+      id: 'lecture-1',
+      title: '1. The Safe Harbor of Care: Proving Reasonableness',
+      duration: '12 min',
+      instructor: 'Myron Steeves, J.D.',
+      description: 'How to establish reasonable inquiry, review independent reports, and document deliberations to gain California safe harbor protection.'
+    },
+    {
+      id: 'lecture-2',
+      title: '2. Disinterested Quorums: Avoiding California Penalties',
+      duration: '15 min',
+      instructor: 'Myron Steeves, J.D.',
+      description: 'A masterclass on CA Corp Code § 5227, the 51% Independent Board rule, and protecting volunteer directors from self-dealing contracts.'
+    },
+    {
+      id: 'lecture-3',
+      title: '3. The Legal Minutes Shield: What to Show and What to Hide',
+      duration: '10 min',
+      instructor: 'Myron Steeves, J.D.',
+      description: 'Best practices for recording dissent, board executive sessions, and formatting legal minutes for potential litigation discovery.'
+    }
+  ];
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,6 +275,114 @@ export const Boards101: React.FC = () => {
                 </div>
               </div>
 
+              {/* Dean's Audio Lecture Desk (Enhancement 6) */}
+              <div className="bg-white rounded-xl border border-fog p-6 sm:p-8 shadow-sm space-y-5 text-left relative overflow-hidden">
+                <style>{`
+                  @keyframes wave-bounce {
+                    0%, 100% { height: 4px; }
+                    50% { height: 28px; }
+                  }
+                  .wave-bar-1 { animation: wave-bounce 0.8s ease-in-out infinite; }
+                  .wave-bar-2 { animation: wave-bounce 1.1s ease-in-out infinite; animation-delay: 0.15s; }
+                  .wave-bar-3 { animation: wave-bounce 0.9s ease-in-out infinite; animation-delay: 0.3s; }
+                  .wave-bar-4 { animation: wave-bounce 1.3s ease-in-out infinite; animation-delay: 0.05s; }
+                  .wave-bar-5 { animation: wave-bounce 1.0s ease-in-out infinite; animation-delay: 0.25s; }
+                  .wave-bar-6 { animation: wave-bounce 1.2s ease-in-out infinite; animation-delay: 0.1s; }
+                `}</style>
+                
+                <div className="absolute top-0 right-0 w-24 h-24 bg-brass/5 rounded-bl-full pointer-events-none" />
+                
+                <div className="flex items-center justify-between border-b border-fog/60 pb-3">
+                  <h3 className="font-serif text-xl text-ink font-bold tracking-tight flex items-center gap-2">
+                    <Volume2 className="w-5 h-5 text-brass" />
+                    Dean's Audio Lecture Desk
+                  </h3>
+                  <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20">
+                    Myron Steeves Audio Masterclass
+                  </span>
+                </div>
+
+                <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
+                  Listen to exclusive legal masterclasses detailing statutory Duty of Care and Duty of Loyalty compliance strategies under California law.
+                </p>
+
+                {/* Simulated Audio Player Box */}
+                {playingLecture && (
+                  <div className="bg-ink text-paper rounded-xl p-4 flex items-center justify-between gap-4 border border-brass/30 shadow-inner animate-fade-in">
+                    <div className="space-y-1.5 text-left min-w-0">
+                      <span className="text-[8px] font-bold uppercase tracking-widest text-brass block">
+                        {isPlaying ? '▶ NOW STREAMING FIduciary LESSON' : '❚❚ AUDIO PAUSED'}
+                      </span>
+                      <h4 className="font-serif font-bold text-xs text-white truncate">
+                        {lectures.find(l => l.id === playingLecture)?.title.substring(3)}
+                      </h4>
+                      <p className="text-[9px] text-paper/60 font-sans font-medium">
+                        Instructor: Myron Steeves, J.D. • {lectures.find(l => l.id === playingLecture)?.duration} Lecture
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4 shrink-0">
+                      {/* Audio Pulse Bars */}
+                      <div className="flex items-end gap-0.5 h-8 w-12 justify-center">
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-1' : 'h-1'}`} />
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-2' : 'h-1'}`} />
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-3' : 'h-1'}`} />
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-4' : 'h-1'}`} />
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-5' : 'h-1'}`} />
+                        <div className={`w-1 bg-brass rounded-t ${isPlaying ? 'wave-bar-6' : 'h-1'}`} />
+                      </div>
+
+                      <button
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className="w-9 h-9 rounded-full bg-brass hover:bg-white text-ink flex items-center justify-center shadow-md transition-premium cursor-pointer"
+                      >
+                        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 pl-0.5" />}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Lectures List */}
+                <div className="space-y-3 pt-2">
+                  {lectures.map((lec) => {
+                    const isCurrent = playingLecture === lec.id;
+                    return (
+                      <div 
+                        key={lec.id}
+                        className={`p-3.5 rounded-lg border transition-premium text-left flex items-start justify-between gap-4 ${
+                          isCurrent 
+                            ? 'border-brass bg-brass/5 shadow-sm' 
+                            : 'border-fog hover:border-brass/30 bg-paper/10 hover:bg-paper/30'
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-serif font-black text-xs text-ink">{lec.title}</span>
+                            <span className="text-[8px] font-bold uppercase tracking-wider text-ink/40 bg-fog px-1.5 py-0.5 rounded">
+                              {lec.duration}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-ink/65 leading-relaxed font-sans font-medium">
+                            {lec.description}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => handleLectureToggle(lec.id)}
+                          className={`p-1.5 rounded-md border shrink-0 transition-premium cursor-pointer ${
+                            isCurrent && isPlaying
+                              ? 'bg-burgundy border-burgundy text-white hover:bg-ink hover:border-ink'
+                              : 'bg-white border-fog/80 hover:border-brass/65 text-brass hover:text-ink'
+                          }`}
+                        >
+                          {isCurrent && isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 pl-0.5" />}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
             </div>
 
             {/* Interactive Booking Sidebar Form (lg:col-span-5) */}
@@ -326,6 +529,224 @@ export const Boards101: React.FC = () => {
               )}
             </div>
 
+          </div>
+
+          </div>
+
+          {/* 3-Minute Bylaws Health-Check Quick Quiz (Enhancement 4) */}
+          <div className="bg-white rounded-xl border border-fog p-6 sm:p-8 shadow-sm text-left space-y-6">
+            <div className="flex justify-between items-start gap-4 border-b border-fog/60 pb-4">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 text-xs text-brass font-bold uppercase tracking-wider">
+                  <Activity className="w-4 h-4 animate-pulse" />
+                  <span>Interactive Fiduciary Checkup</span>
+                </div>
+                <h3 className="font-serif text-xl sm:text-2xl text-ink font-bold tracking-tight">
+                  3-Minute Bylaws Health-Check
+                </h3>
+                <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium max-w-xl">
+                  Are your corporate bylaws protecting your board, or exposing directors to personal statutory liability? Complete this quick 3-question diagnostic to audit your governance hygiene.
+                </p>
+              </div>
+
+              {quizSubmitted && (
+                <button
+                  onClick={handleResetQuiz}
+                  className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-burgundy border border-burgundy/25 rounded bg-burgundy/5 px-2.5 py-1.5 hover:bg-burgundy hover:text-white transition-premium cursor-pointer"
+                >
+                  <RotateCw className="w-3 h-3" />
+                  <span>Retake Audit</span>
+                </button>
+              )}
+            </div>
+
+            {!quizSubmitted ? (
+              <form onSubmit={handleQuizSubmit} className="space-y-6 font-sans">
+                {/* Q1 */}
+                <div className="space-y-3 text-left">
+                  <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
+                    <span className="text-brass">Q1:</span>
+                    <span>What percentage of your California board can be "interested" (i.e. paid employees, the CEO, or their direct relatives on payroll) under CA Corp Code § 5227?</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { key: 'A', text: 'Up to 100% can be paid employees.' },
+                      { key: 'B', text: 'Strictly less than 49% (meaning at least 51% must be independent and unrelated).' },
+                      { key: 'C', text: 'No more than 80% can be on the payroll.' }
+                    ].map(opt => (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => handleQuizAnswer(1, opt.key)}
+                        className={`p-3.5 text-xs text-left rounded-lg border flex gap-3 transition-premium cursor-pointer ${
+                          quizAnswers[1] === opt.key
+                            ? 'border-brass bg-brass/5 font-bold shadow-sm'
+                            : 'border-fog/70 hover:border-brass/35 bg-paper/5 hover:bg-paper/20'
+                        }`}
+                      >
+                        <span className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                          quizAnswers[1] === opt.key ? 'bg-brass text-ink border-brass font-bold' : 'border-fog text-ink/40'
+                        }`}>
+                          {opt.key}
+                        </span>
+                        <span className="text-ink/80 leading-normal">{opt.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q2 */}
+                <div className="space-y-3 text-left border-t border-fog/40 pt-4">
+                  <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
+                    <span className="text-brass">Q2:</span>
+                    <span>When reviewing or voting on executive compensation under IRS § 4958 comparable standards, does the CEO participate?</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { key: 'A', text: 'Yes, the CEO runs the meeting and votes.' },
+                      { key: 'B', text: 'Yes, the CEO participates in discussion but recuses from voting.' },
+                      { key: 'C', text: 'No, the CEO and all payroll-interested directors must physically leave the room during both debate and voting.' }
+                    ].map(opt => (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => handleQuizAnswer(2, opt.key)}
+                        className={`p-3.5 text-xs text-left rounded-lg border flex gap-3 transition-premium cursor-pointer ${
+                          quizAnswers[2] === opt.key
+                            ? 'border-brass bg-brass/5 font-bold shadow-sm'
+                            : 'border-fog/70 hover:border-brass/35 bg-paper/5 hover:bg-paper/20'
+                        }`}
+                      >
+                        <span className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                          quizAnswers[2] === opt.key ? 'bg-brass text-ink border-brass font-bold' : 'border-fog text-ink/40'
+                        }`}>
+                          {opt.key}
+                        </span>
+                        <span className="text-ink/80 leading-normal">{opt.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q3 */}
+                <div className="space-y-3 text-left border-t border-fog/40 pt-4">
+                  <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
+                    <span className="text-brass">Q3:</span>
+                    <span>How often are California directors required to sign a written Conflict of Interest disclosure questionnaire?</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { key: 'A', text: 'Once, when they initially join the board.' },
+                      { key: 'B', text: 'Formally every year (typically at the annual meeting).' },
+                      { key: 'C', text: 'Only if an active, direct conflict arises.' }
+                    ].map(opt => (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => handleQuizAnswer(3, opt.key)}
+                        className={`p-3.5 text-xs text-left rounded-lg border flex gap-3 transition-premium cursor-pointer ${
+                          quizAnswers[3] === opt.key
+                            ? 'border-brass bg-brass/5 font-bold shadow-sm'
+                            : 'border-fog/70 hover:border-brass/35 bg-paper/5 hover:bg-paper/20'
+                        }`}
+                      >
+                        <span className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                          quizAnswers[3] === opt.key ? 'bg-brass text-ink border-brass font-bold' : 'border-fog text-ink/40'
+                        }`}>
+                          {opt.key}
+                        </span>
+                        <span className="text-ink/80 leading-normal">{opt.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-fog/50 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={Object.keys(quizAnswers).length < 3}
+                    className="px-6 py-3 bg-brass hover:bg-ink text-ink hover:text-white disabled:bg-fog disabled:text-ink/30 disabled:border-transparent text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Calculate Compliance score
+                  </button>
+                </div>
+              </form>
+            ) : (
+              /* Graded Outcome State */
+              <div className="space-y-6 animate-fade-in font-sans">
+                {/* Result Banners */}
+                {quizScore === 3 ? (
+                  <div className="border border-emerald-500 bg-emerald-50/50 p-6 rounded-xl space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-800 font-extrabold uppercase text-xs tracking-wider">
+                      <ShieldCheck className="w-5 h-5" />
+                      <span>Grade A — Fully Safe Harbor Aligned</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-emerald-900 leading-relaxed font-sans font-medium">
+                      Congratulations! Your understanding of California board requirements is flawless. You answered **3 out of 3** questions correctly. Your board is positioned with a strong regulatory shield, satisfying quorums and executive compensation rules.
+                    </p>
+                    <p className="text-xs text-emerald-800 leading-relaxed max-w-2xl font-medium pt-1">
+                      To maintain this level of fiduciary hygiene, we recommend downloading our **Defensive Minutes Template** and **Annual Compliance Calendar** from our library.
+                    </p>
+                  </div>
+                ) : quizScore === 2 ? (
+                  <div className="border border-brass bg-brass/5 p-6 rounded-xl space-y-4">
+                    <div className="flex items-center gap-2 text-brass font-extrabold uppercase text-xs tracking-wider">
+                      <AlertTriangle className="w-5 h-5 text-brass" />
+                      <span>Grade C — Compliance Gaps Identified</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
+                      You answered **2 out of 3** questions correctly. While you understand some core fiduciary parameters, critical compliance gaps exist. Obsolete quorum provisions (allowing paid employees to control votes) or bad recusal procedures are the leading causes of California Attorney General corporate registry suspensions.
+                    </p>
+                    
+                    {/* Legal Consultation Escalation */}
+                    <div className="bg-burgundy/5 border-l-4 border-burgundy p-4 rounded-r-lg space-y-2">
+                      <h4 className="font-serif font-bold text-xs text-ink">Bylaws Deficiencies Create Volunteer Liability Exposure</h4>
+                      <p className="text-xs text-ink/75 leading-relaxed">
+                        In California, volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional **Bylaws and Board Governance Audit** with California Center for Nonprofit Law.
+                      </p>
+                      <div className="pt-1">
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider py-1.5 px-3 rounded shadow transition-premium"
+                        >
+                          <span>Request Privileged Bylaws Audit ➜</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="border border-burgundy/30 bg-burgundy/5 p-6 rounded-xl space-y-4">
+                    <div className="flex items-center gap-2 text-burgundy font-extrabold uppercase text-xs tracking-wider">
+                      <AlertCircle className="w-5 h-5" />
+                      <span>Grade F — Severe Regulatory Exposure</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-burgundy leading-relaxed font-sans font-medium">
+                      Critical Risk Warning! You answered **{quizScore} out of 3** questions correctly. Your board is likely operating under dangerous procedural deficiencies regarding CA Corp Code § 5227 or IRS excess benefit penalties. Unvoted self-dealing contract approvals or staff voting control can void corporate actions and trigger immediate IRS excise penalties up to 200%.
+                    </p>
+
+                    {/* Legal Consultation Escalation */}
+                    <div className="bg-burgundy border-l-4 border-brass p-4 rounded-r-lg space-y-2.5 text-paper">
+                      <h4 className="font-serif font-bold text-xs text-white">Privileged Board Governance Intervention Required</h4>
+                      <p className="text-xs text-paper/85 leading-relaxed font-medium">
+                        Operating under outdated, un-audited bylaws strips directors of legal shields and subjects officers to personal liability. Secure a direct legal evaluation with Myron Steeves, J.D. and CCNL under professional attorney-client privilege.
+                      </p>
+                      <div className="pt-1">
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 bg-brass text-ink font-sans font-black text-[10px] uppercase tracking-wider py-2 px-4.5 rounded shadow hover:bg-white hover:text-ink transition-premium"
+                        >
+                          <span>Consult Attorney Privately ➜</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Core Support / Disclaimers Row */}
