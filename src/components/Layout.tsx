@@ -11,7 +11,6 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { path, navigate } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toolsState, setToolsState] = useState<'none' | 'in-progress' | 'completed'>('none');
   const [isToolsHovered, setIsToolsHovered] = useState(false);
   
   // Search state
@@ -26,71 +25,71 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [countdownStr, setCountdownStr] = useState('');
   const [seats, setSeats] = useState(3);
 
-  const [labStates, setLabStates] = useState({
+  // Derive toolsState and labStates synchronously on render (removes useEffect and state variables)
+  let toolsState: 'none' | 'in-progress' | 'completed' = 'none';
+  let labStates = {
     self: { started: false, completed: false, text: 'Not Started' },
     packet: { started: false, completed: false, count: 0, text: 'Not Started' },
     minutes: { started: false, completed: false, text: 'Not Started' },
     budget: { started: false, completed: false, count: 0, text: 'Not Started' },
     authority: { started: false, completed: false, text: 'Not Started' }
-  });
+  };
 
-  useEffect(() => {
-    try {
-      const selfAssessment = localStorage.getItem('cdx_self_assessment_score') !== null;
-      
-      let packetCount = 0;
-      const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
-      if (packetSaved) {
-        packetCount = JSON.parse(packetSaved).length || 0;
-      }
-      
-      const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade') !== null;
-      
-      let budgetCount = 0;
-      const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
-      if (budgetSaved) {
-        budgetCount = JSON.parse(budgetSaved).length || 0;
-      }
-      
-      let authCount = 0;
-      const authSaved = localStorage.getItem('cdx_authority_map_assignments');
-      if (authSaved) {
-        authCount = Object.keys(JSON.parse(authSaved)).length || 0;
-      }
-      
-      const completedSelf = selfAssessment;
-      const completedPacket = packetCount === 9;
-      const completedMinutes = minutesGrade;
-      const completedBudget = budgetCount === 6;
-      const completedAuth = localStorage.getItem('cdx_authority_map_score') !== null;
-
-      const anyIncompleteAndStarted = 
-        (packetCount > 0 && packetCount < 9) || 
-        (budgetCount > 0 && budgetCount < 6) || 
-        (authCount > 0 && !completedAuth);
-        
-      const anyCompleted = completedSelf || completedPacket || completedMinutes || completedBudget || completedAuth;
-      const allCompleted = completedSelf && completedPacket && completedMinutes && completedBudget && completedAuth;
-
-      if (allCompleted) {
-        setToolsState('completed');
-      } else if (anyCompleted || anyIncompleteAndStarted) {
-        setToolsState('in-progress');
-      } else {
-        setToolsState('none');
-      }
-
-      setLabStates({
-        self: { started: completedSelf, completed: completedSelf, text: completedSelf ? 'Completed ✓' : 'Not Started' },
-        packet: { started: packetCount > 0, completed: completedPacket, count: packetCount, text: completedPacket ? 'Completed ✓' : (packetCount > 0 ? `In Progress (${packetCount}/9)` : 'Not Started') },
-        minutes: { started: completedMinutes, completed: completedMinutes, text: completedMinutes ? 'Completed ✓' : 'Not Started' },
-        budget: { started: budgetCount > 0, completed: completedBudget, count: budgetCount, text: completedBudget ? 'Completed ✓' : (budgetCount > 0 ? `In Progress (${budgetCount}/6)` : 'Not Started') },
-        authority: { started: authCount > 0 || completedAuth, completed: completedAuth, text: completedAuth ? 'Completed ✓' : (authCount > 0 ? 'In Progress' : 'Not Started') }
-      });
-    } catch (e) {
-      console.error(e);
+  try {
+    const selfAssessment = localStorage.getItem('cdx_self_assessment_score') !== null;
+    
+    let packetCount = 0;
+    const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+    if (packetSaved) {
+      packetCount = JSON.parse(packetSaved).length || 0;
     }
-  }, [path]);
+    
+    const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade') !== null;
+    
+    let budgetCount = 0;
+    const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
+    if (budgetSaved) {
+      budgetCount = JSON.parse(budgetSaved).length || 0;
+    }
+    
+    let authCount = 0;
+    const authSaved = localStorage.getItem('cdx_authority_map_assignments');
+    if (authSaved) {
+      authCount = Object.keys(JSON.parse(authSaved)).length || 0;
+    }
+    
+    const completedSelf = selfAssessment;
+    const completedPacket = packetCount === 9;
+    const completedMinutes = minutesGrade;
+    const completedBudget = budgetCount === 6;
+    const completedAuth = localStorage.getItem('cdx_authority_map_score') !== null;
+
+    const anyIncompleteAndStarted = 
+      (packetCount > 0 && packetCount < 9) || 
+      (budgetCount > 0 && budgetCount < 6) || 
+      (authCount > 0 && !completedAuth);
+      
+    const anyCompleted = completedSelf || completedPacket || completedMinutes || completedBudget || completedAuth;
+    const allCompleted = completedSelf && completedPacket && completedMinutes && completedBudget && completedAuth;
+
+    if (allCompleted) {
+      toolsState = 'completed';
+    } else if (anyCompleted || anyIncompleteAndStarted) {
+      toolsState = 'in-progress';
+    } else {
+      toolsState = 'none';
+    }
+
+    labStates = {
+      self: { started: completedSelf, completed: completedSelf, text: completedSelf ? 'Completed ✓' : 'Not Started' },
+      packet: { started: packetCount > 0, completed: completedPacket, count: packetCount, text: completedPacket ? 'Completed ✓' : (packetCount > 0 ? `In Progress (${packetCount}/9)` : 'Not Started') },
+      minutes: { started: completedMinutes, completed: completedMinutes, text: completedMinutes ? 'Completed ✓' : 'Not Started' },
+      budget: { started: budgetCount > 0, completed: completedBudget, count: budgetCount, text: completedBudget ? 'Completed ✓' : (budgetCount > 0 ? `In Progress (${budgetCount}/6)` : 'Not Started') },
+      authority: { started: authCount > 0 || completedAuth, completed: completedAuth, text: completedAuth ? 'Completed ✓' : (authCount > 0 ? 'In Progress' : 'Not Started') }
+    };
+  } catch {
+    // ignore
+  }
 
   // Global search keyboard trigger
   useEffect(() => {

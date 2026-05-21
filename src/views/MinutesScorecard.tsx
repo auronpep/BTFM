@@ -17,6 +17,69 @@ interface ScoringCriterion {
   checked: boolean;
 }
 
+// Horrific board minutes sample
+const horrificMinutesMock = `MINUTES OF THE BOARD MEETING - CDX CHARITY
+May 15, 2026
+
+Meeting was called to order late around 6:25 PM by President John. We met in the back room of John's downtown diner.
+Present: John, Mary, Sarah, and Bob. John asked Bob if he was still drinking, and Mary joked about the budget. 
+
+Bob argued for two hours that the budget was too tight. Mary yelled at Bob, calling him "a blind accountant who doesn't understand marketing." Mary stated that she wanted to hire her sister's web firm for $15,000, and Bob called John a "corrupt dictator" for supporting Mary. Mary said Bob's accusations were defamatory and John threatened to sue Bob personally if he kept arguing.
+
+John proposed we double Mary's salary as CEO to $145,000 to reward her hard work. Bob voted No, saying it was double market rate and we had no money. John called Bob a "defeatist" and held a voice vote. John, Mary, and Sarah voted YES. Bob voted NO. Mary was happy and thanked the board. Bob slammed his folder and walked out of the meeting, calling the whole board a fraud.
+
+We then approved Mary's husband's catering contract. John said Mary's husband makes the best tacos in Orange County so we didn't need other bids. Mary voted YES.
+
+Meeting closed around 9:00 PM. John bought everyone beers.
+Minutes written by Mary.`;
+
+// Courtroom safe minutes template
+const defensiveMinutesTemplate = `MINUTES OF A REGULAR MEETING OF THE BOARD OF DIRECTORS
+OF [ORGANIZATION NAME], A CALIFORNIA NONPROFIT BENEFIT CORPORATION
+
+A regular meeting of the Board of Directors of the Corporation was held on [Date], at [Time] PST, at [Location / Videoconference link]. 
+
+DIRECTORS PRESENT:
+1. [Director Name], Board President
+2. [Director Name], Treasurer
+3. [Director Name], Secretary
+4. [Director Name]
+
+DIRECTORS ABSENT:
+1. [Director Name]
+
+OTHERS PRESENT:
+1. [Executive Director Name], Executive Director (Recused during salary discussions)
+2. [CPA Name], Guest Legal Counsel / CPA
+
+I. CALL TO ORDER & WELCOME
+The meeting was called to order at [Time] PST by [President Name]. The Board Secretary verified that a quorum of independent, disinterested directors was present, and the meeting proceeded to official business.
+
+II. APPROVAL OF PAST MINUTES
+Upon motion duly made, seconded, and unanimously carried, the Board approved the minutes of the regular meeting held on [Previous Date], as presented.
+
+III. CONFLICT OF INTEREST DISCLOSURE & RECUSAL (CONTRACT APPROVAL)
+The Board President raised the matter of the proposed software contract with [Vendor Entity Name]. Board member [Director Name] disclosed a material financial conflict of interest due to [Nature of Conflict]. 
+
+[Conflicted Director Name] recused themselves from the deliberations and formally exited the room. A quorum of disinterested directors remained. Following general deliberations, review of competitive vendor bids, and upon a motion duly made and seconded, the disinterested directors voted [Unanimously / or specify vote count] to approve the contract, noting that the transaction was fair, reasonable, and in the best interests of the Corporation. [Conflicted Director Name] returned to the room following the vote.
+
+IV. EXECUTIVE COMPENSATION REVIEW & SAFETY COMPLIANCE (IRS SAFE HARBOR)
+The Board reviewed the compensation package for the Executive Director for FY 2026-2027. Prior to deliberations, Executive Director [Name] recused themselves and exited the room.
+
+The Treasurer presented independent salary comparability studies gathered from three peer California nonprofit organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
+
+V. IRS FORM 990 REVIEW
+The Treasurer presented the draft of the annual IRS Form 990 for review. Following a comprehensive review of the filing disclosures and upon motion duly made, seconded, and unanimously carried, the Board approved the Form 990 as presented and authorized the Treasurer to file the return.
+
+VI. ADJOURNMENT
+There being no further business, the meeting was adjourned at [Time] PST.
+
+Respectfully submitted,
+
+____________________________________
+[Secretary Name], Board Secretary
+Date Approved: ____________________`;
+
 export const MinutesScorecard: React.FC = () => {
   const { navigate } = useRouter();
   const [copied, setCopied] = useState(false);
@@ -387,68 +450,7 @@ ${secretaryName}, Board Secretary`;
     localStorage.setItem('cdx_minutes_scorecard_checked_ids', JSON.stringify(checkedIds));
   }, [score, grade, criteria]);
 
-  // Horrific board minutes sample
-  const horrificMinutesMock = `MINUTES OF THE BOARD MEETING - CDX CHARITY
-May 15, 2026
-
-Meeting was called to order late around 6:25 PM by President John. We met in the back room of John's downtown diner.
-Present: John, Mary, Sarah, and Bob. John asked Bob if he was still drinking, and Mary joked about the budget. 
-
-Bob argued for two hours that the budget was too tight. Mary yelled at Bob, calling him "a blind accountant who doesn't understand marketing." Mary stated that she wanted to hire her sister's web firm for $15,000, and Bob called John a "corrupt dictator" for supporting Mary. Mary said Bob's accusations were defamatory and John threatened to sue Bob personally if he kept arguing.
-
-John proposed we double Mary's salary as CEO to $145,000 to reward her hard work. Bob voted No, saying it was double market rate and we had no money. John called Bob a "defeatist" and held a voice vote. John, Mary, and Sarah voted YES. Bob voted NO. Mary was happy and thanked the board. Bob slammed his folder and walked out of the meeting, calling the whole board a fraud.
-
-We then approved Mary's husband's catering contract. John said Mary's husband makes the best tacos in Orange County so we didn't need other bids. Mary voted YES.
-
-Meeting closed around 9:00 PM. John bought everyone beers.
-Minutes written by Mary.`;
-
-  // Courtroom safe minutes template
-  const defensiveMinutesTemplate = `MINUTES OF A REGULAR MEETING OF THE BOARD OF DIRECTORS
-OF [ORGANIZATION NAME], A CALIFORNIA NONPROFIT BENEFIT CORPORATION
-
-A regular meeting of the Board of Directors of the Corporation was held on [Date], at [Time] PST, at [Location / Videoconference link]. 
-
-DIRECTORS PRESENT:
-1. [Director Name], Board President
-2. [Director Name], Treasurer
-3. [Director Name], Secretary
-4. [Director Name]
-
-DIRECTORS ABSENT:
-1. [Director Name]
-
-OTHERS PRESENT:
-1. [Executive Director Name], Executive Director (Recused during salary discussions)
-2. [CPA Name], Guest Legal Counsel / CPA
-
-I. CALL TO ORDER & WELCOME
-The meeting was called to order at [Time] PST by [President Name]. The Board Secretary verified that a quorum of independent, disinterested directors was present, and the meeting proceeded to official business.
-
-II. APPROVAL OF PAST MINUTES
-Upon motion duly made, seconded, and unanimously carried, the Board approved the minutes of the regular meeting held on [Previous Date], as presented.
-
-III. CONFLICT OF INTEREST DISCLOSURE & RECUSAL (CONTRACT APPROVAL)
-The Board President raised the matter of the proposed software contract with [Vendor Entity Name]. Board member [Director Name] disclosed a material financial conflict of interest due to [Nature of Conflict]. 
-
-[Conflicted Director Name] recused themselves from the deliberations and formally exited the room. A quorum of disinterested directors remained. Following general deliberations, review of competitive vendor bids, and upon a motion duly made and seconded, the disinterested directors voted [Unanimously / or specify vote count] to approve the contract, noting that the transaction was fair, reasonable, and in the best interests of the Corporation. [Conflicted Director Name] returned to the room following the vote.
-
-IV. EXECUTIVE COMPENSATION REVIEW & SAFETY COMPLIANCE (IRS SAFE HARBOR)
-The Board reviewed the compensation package for the Executive Director for FY 2026-2027. Prior to deliberations, Executive Director [Name] recused themselves and exited the room.
-
-The Treasurer presented independent salary comparability studies gathered from three peer California nonprofit organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
-
-V. IRS FORM 990 REVIEW
-The Treasurer presented the draft of the annual IRS Form 990 for review. Following a comprehensive review of the filing disclosures and upon motion duly made, seconded, and unanimously carried, the Board approved the Form 990 as presented and authorized the Treasurer to file the return.
-
-VI. ADJOURNMENT
-There being no further business, the meeting was adjourned at [Time] PST.
-
-Respectfully submitted,
-
-____________________________________
-[Secretary Name], Board Secretary
-Date Approved: ____________________`;
+  // Static mock declarations moved to top of file to prevent early access errors
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(defensiveMinutesTemplate);

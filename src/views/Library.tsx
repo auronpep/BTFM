@@ -70,19 +70,22 @@ export const Library: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(getInitialCategory());
 
   React.useEffect(() => {
-    if (path === 'money-audit') {
-      setSelectedCategory('Finance');
-      setActiveTab('articles');
-    } else if (path === 'executive-oversight') {
-      setSelectedCategory('Strategy');
-      setActiveTab('articles');
-    } else if (path === 'risk-safety') {
-      setSelectedCategory('Safety');
-      setActiveTab('articles');
-    } else if (path === 'minutes-records') {
-      setSelectedCategory('Legal');
-      setActiveTab('articles');
-    }
+    const timer = setTimeout(() => {
+      if (path === 'money-audit') {
+        setSelectedCategory('Finance');
+        setActiveTab('articles');
+      } else if (path === 'executive-oversight') {
+        setSelectedCategory('Strategy');
+        setActiveTab('articles');
+      } else if (path === 'risk-safety') {
+        setSelectedCategory('Safety');
+        setActiveTab('articles');
+      } else if (path === 'minutes-records') {
+        setSelectedCategory('Legal');
+        setActiveTab('articles');
+      }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [path]);
 
   const categories = ['All', 'Strategy', 'Finance', 'Safety', 'Legal', 'Startup'];

@@ -9,7 +9,7 @@ interface AudioNarratorProps {
 export const AudioNarrator: React.FC<AudioNarratorProps> = ({ title, durationSeconds = 165 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const timerRef = useRef<any | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [waveHeights, setWaveHeights] = useState<number[]>([15, 25, 10, 35, 20, 40, 12, 30, 22, 28, 14, 24]);
 
   useEffect(() => {
@@ -28,8 +28,6 @@ export const AudioNarrator: React.FC<AudioNarratorProps> = ({ title, durationSec
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
-      // Reset wave heights to rest
-      setWaveHeights([12, 16, 10, 18, 14, 20, 10, 15, 12, 16, 10, 14]);
     }
 
     return () => {
@@ -41,7 +39,7 @@ export const AudioNarrator: React.FC<AudioNarratorProps> = ({ title, durationSec
 
   // Fast animation for the waves if playing
   useEffect(() => {
-    let animInterval: any = null;
+    let animInterval: ReturnType<typeof setInterval> | null = null;
     if (isPlaying) {
       animInterval = setInterval(() => {
         setWaveHeights(prev => prev.map(() => Math.floor(Math.random() * 35) + 5));
@@ -125,15 +123,18 @@ export const AudioNarrator: React.FC<AudioNarratorProps> = ({ title, durationSec
 
         {/* Pulse Sound Waveform display */}
         <div className="hidden sm:flex items-end justify-center gap-[3px] h-10 w-20 shrink-0 select-none pb-0.5 px-1 border-l border-fog/60">
-          {waveHeights.map((h, i) => (
-            <div
-              key={i}
-              className={`w-[3px] rounded-t transition-all duration-150 ${
-                isPlaying ? 'bg-brass animate-pulse' : 'bg-ink/15'
-              }`}
-              style={{ height: `${h}%` }}
-            />
-          ))}
+          {waveHeights.map((h, i) => {
+            const restHeights = [12, 16, 10, 18, 14, 20, 10, 15, 12, 16, 10, 14];
+            return (
+              <div
+                key={i}
+                className={`w-[3px] rounded-t transition-all duration-150 ${
+                  isPlaying ? 'bg-brass animate-pulse' : 'bg-ink/15'
+                }`}
+                style={{ height: `${isPlaying ? h : (restHeights[i] || 15)}%` }}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
