@@ -111,36 +111,41 @@ export const SelfAssessment: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>({});
   const [quizComplete, setQuizComplete] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
 
   const calculateCategoryScores = () => {
     const categories = [
       {
-        name: "Board Structure & Independence",
-        qIds: [1, 9], // 1-based IDs
-        maxPoints: 10,
+        name: "Legal & Compliance Duty",
+        qIds: [1, 3, 5], // Board Independence, Meeting Time Allocation, Exec Compensation
+        maxPoints: 15,
         color: "bg-burgundy",
-        textColor: "text-burgundy"
+        textColor: "text-burgundy",
+        guidance: "Duty of Loyalty & CA Corp Code. Low scores risk excess benefit penalties."
       },
       {
-        name: "Duty of Care & Operations",
-        qIds: [2, 3, 6, 10],
-        maxPoints: 20,
-        color: "bg-slate-brand",
-        textColor: "text-slate-brand"
-      },
-      {
-        name: "Financial Audit & Accountability",
-        qIds: [4, 5],
-        maxPoints: 10,
+        name: "Financial & Audit Control",
+        qIds: [2, 4, 7], // Packet Prep, Financial Review, Constituent Safety
+        maxPoints: 15,
         color: "bg-teal-brand",
-        textColor: "text-teal-brand"
+        textColor: "text-teal-brand",
+        guidance: "Financial oversight and physical/legal protection screens."
       },
       {
-        name: "Risk Management & Constituent Safety",
-        qIds: [7, 8],
+        name: "Operational & Meeting Prep",
+        qIds: [6, 8], // Minutes, D&O Insurance
+        maxPoints: 10,
+        color: "bg-slate-brand",
+        textColor: "text-slate-brand",
+        guidance: "Duty of Care, D&O liability shields, and defensive minutes."
+      },
+      {
+        name: "Board Leadership & Administration",
+        qIds: [9, 10], // Conflict of Interest, Bylaws Review
         maxPoints: 10,
         color: "bg-copper",
-        textColor: "text-copper"
+        textColor: "text-copper",
+        guidance: "Corporate bylaws structure and conflict recusal discipline."
       }
     ];
 
@@ -457,27 +462,126 @@ export const SelfAssessment: React.FC = () => {
                     </h3>
                     
                     <div className="space-y-4 text-left">
-                      {calculateCategoryScores().map((cat, idx) => (
-                        <div key={idx} className="space-y-1.5">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-semibold">
-                            <span className="font-serif font-bold text-ink text-xs leading-none">{cat.name}</span>
-                            <div className="flex items-center gap-2 font-sans">
-                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold border uppercase tracking-wider ${cat.ratingColor}`}>
-                                {cat.rating}
-                              </span>
-                              <span className="font-mono font-bold text-ink/70 shrink-0 w-12 text-right">
-                                {cat.score} / {cat.maxPoints} pts
+                      {calculateCategoryScores().map((cat, idx) => {
+                        const isExpanded = expandedCategory === idx;
+                        const ratio = cat.score / cat.maxPoints;
+                        
+                        let advice = "";
+                        let adviceTitle = "";
+                        let adviceBorder = "";
+                        let adviceBg = "";
+                        
+                        if (idx === 0) { // Legal & Compliance
+                          if (ratio <= 0.6) {
+                            adviceTitle = "🚨 Critical Compliance Risk (CA Corp Code Violation)";
+                            advice = "CRITICAL COMPLIANCE RISK: Your board is operating with high exposure. Executive salary setting violates Rebuttable Presumption rules (IRC § 4958), or board size fails California statutory guidelines. Direct personal excise taxes may apply.";
+                            adviceBorder = "border-rose-300";
+                            adviceBg = "bg-rose-50/50";
+                          } else if (ratio <= 0.85) {
+                            adviceTitle = "⚠️ Compliance Advisory (Comparability Studies Needed)";
+                            advice = "MODERATE ADVISORY: Basic meeting discipline is present, but lacks formal recusal documentation or independent salary benchmarks. Obtain written Northern/Southern California comparability studies.";
+                            adviceBorder = "border-amber-300";
+                            adviceBg = "bg-amber-50/40";
+                          } else {
+                            adviceTitle = "🛡️ Gold Shield Compliance Approved";
+                            advice = "GOLD SHIELD: Meets strict Duty of Loyalty standards. Keep recording disinterested votes and independent compensation comparability reports in meeting minutes.";
+                            adviceBorder = "border-emerald-300";
+                            adviceBg = "bg-emerald-50/30";
+                          }
+                        } else if (idx === 1) { // Financial & Audit
+                          if (ratio <= 0.6) {
+                            adviceTitle = "🚨 Critical Financial Exposure (Breach of Fiduciary Care)";
+                            advice = "CRITICAL FINANCIAL EXPOSURE: Absence of robust packet delivery, detailed balance sheet reviews, or constituent background screenings creates severe liability leaks. Directors risk personal liability for breach of oversight.";
+                            adviceBorder = "border-rose-300";
+                            adviceBg = "bg-rose-50/50";
+                          } else if (ratio <= 0.85) {
+                            adviceTitle = "⚠️ Financial Review Advisory";
+                            advice = "COMPLIANCE REVIEW: Standard financial reports are presented, but variance tolerance limit scanning is absent. Require a formal monthly variance report for deviations over 10%.";
+                            adviceBorder = "border-amber-300";
+                            adviceBg = "bg-amber-50/40";
+                          } else {
+                            adviceTitle = "🛡️ Gold Shield Financial Stewardship";
+                            advice = "GOLD SHIELD: Outstanding oversight protocols. Background check screening covers 100% of staff and active financials audit protects corporate assets.";
+                            adviceBorder = "border-emerald-300";
+                            adviceBg = "bg-emerald-50/30";
+                          }
+                        } else if (idx === 2) { // Operational & Meeting Prep
+                          if (ratio <= 0.6) {
+                            adviceTitle = "🚨 Personal Asset Exposure Warn (D&O / Minutes Gap)";
+                            advice = "CRITICAL PERSONAL ASSET RISKS: Operating without documented meeting minutes or lacking dedicated D&O insurance exposes individual directors' homes and bank accounts to direct creditor and employee litigation.";
+                            adviceBorder = "border-rose-300";
+                            adviceBg = "bg-rose-50/50";
+                          } else if (ratio <= 0.85) {
+                            adviceTitle = "⚠️ Record Keeping & Insurance Advisory";
+                            advice = "OPERATIONAL GAP: Standard liability shields are present, but minute-taking practices are vague or lack systematic approval. Ensure minutes strictly record neutral resolution boundaries.";
+                            adviceBorder = "border-amber-300";
+                            adviceBg = "bg-amber-50/40";
+                          } else {
+                            adviceTitle = "🛡️ Gold Shield Liability Cushion";
+                            advice = "GOLD SHIELD: Safe and secure. Robust D&O policy limits and professional defensive minutes protect all active directors.";
+                            adviceBorder = "border-emerald-300";
+                            adviceBg = "bg-emerald-50/30";
+                          }
+                        } else { // Board Leadership
+                          if (ratio <= 0.6) {
+                            adviceTitle = "🚨 Outdated Bylaws (Decisions Legally Voidable)";
+                            advice = "CRITICAL GOVERNING DEFICIT: Bylaws are obsolete (exceeding 10 years old) or conflict-of-interest voting procedures directly violate California Corporations Code. Decisions may be legally voided.";
+                            adviceBorder = "border-rose-300";
+                            adviceBg = "bg-rose-50/50";
+                          } else if (ratio <= 0.85) {
+                            adviceTitle = "⚠️ Governance Code Advisory";
+                            advice = "GOVERNANCE REVIEW: Basic policies are available but updated infrequently. Plan a formal bylaws review session in the next 12 months to align with California non-profit statutory shifts.";
+                            adviceBorder = "border-amber-300";
+                            adviceBg = "bg-amber-50/40";
+                          } else {
+                            adviceTitle = "🛡️ Gold Shield Administration";
+                            advice = "GOLD SHIELD: Stellar governance rhythm. Biennial audits keep corporate guidelines in perfect alignment with statutory changes.";
+                            adviceBorder = "border-emerald-300";
+                            adviceBg = "bg-emerald-50/30";
+                          }
+                        }
+
+                        return (
+                          <div 
+                            key={idx} 
+                            className="p-4 bg-paper/10 border border-fog/50 rounded-xl space-y-2 hover:border-brass/30 transition-premium cursor-pointer"
+                            onClick={() => setExpandedCategory(isExpanded ? null : idx)}
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-semibold">
+                              <span className="font-serif font-bold text-ink text-sm leading-none">{cat.name}</span>
+                              <div className="flex items-center gap-2 font-sans">
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-bold border uppercase tracking-wider ${cat.ratingColor}`}>
+                                  {cat.rating}
+                                </span>
+                                <span className="font-mono font-bold text-ink/70 shrink-0 w-16 text-right">
+                                  {cat.score} / {cat.maxPoints} pts
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <div className="w-full bg-fog h-2.5 rounded-full overflow-hidden border border-fog/40">
+                              <div 
+                                className={`h-full rounded-full transition-all duration-500 ${cat.color}`}
+                                style={{ width: `${cat.percent}%` }}
+                              />
+                            </div>
+                            
+                            <div className="flex items-center justify-between text-[11px] text-ink/50 pt-1 font-sans">
+                              <span>{cat.guidance}</span>
+                              <span className="text-brass font-bold hover:underline shrink-0 pl-2">
+                                {isExpanded ? "Hide Counsel Advice ▲" : "Show Counsel Advice ▼"}
                               </span>
                             </div>
+
+                            {isExpanded && (
+                              <div className={`mt-3 p-3 rounded-lg border text-xs leading-relaxed font-sans ${adviceBorder} ${adviceBg} animate-fade-in`}>
+                                <p className="font-bold text-ink mb-1">{adviceTitle}</p>
+                                <p className="text-ink/80">{advice}</p>
+                              </div>
+                            )}
                           </div>
-                          <div className="w-full bg-fog h-2.5 rounded-full overflow-hidden border border-fog/40">
-                            <div 
-                              className={`h-full rounded-full transition-all duration-500 ${cat.color}`}
-                              style={{ width: `${cat.percent}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 

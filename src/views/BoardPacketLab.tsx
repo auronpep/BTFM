@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
-  ShieldAlert, AlertCircle, HelpCircle, ArrowRight, BookOpen, CheckCircle 
+  ShieldAlert, AlertCircle, HelpCircle, ArrowRight, BookOpen, CheckCircle, X, ShieldCheck 
 } from 'lucide-react';
 import { 
   DoNotDoThisCard, AskThisCard, LegalEscalationCard, CaliforniaNoteBadge 
@@ -197,6 +197,7 @@ export const BoardPacketLab: React.FC = () => {
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [showSolutions, setShowSolutions] = useState(false);
+  const [isScannerDrawerOpen, setIsScannerDrawerOpen] = useState(false);
   const [uncoveredFlags, setUncoveredFlags] = useState<string[]>(() => {
     const saved = localStorage.getItem('cdx_board_packet_uncovered_flags');
     return saved ? JSON.parse(saved) : [];
@@ -446,6 +447,13 @@ export const BoardPacketLab: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsScannerDrawerOpen(true)}
+                  className="px-4 py-2.5 bg-teal-brand/10 hover:bg-teal-brand/20 text-teal-brand border border-teal-brand/30 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-premium cursor-pointer"
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Audit Wizard Drawer</span>
+                </button>
                 <button
                   onClick={resetSimulation}
                   className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded border border-rose-200 text-rose-700 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300 transition-premium"
@@ -1182,6 +1190,135 @@ export const BoardPacketLab: React.FC = () => {
             <strong className="text-brass uppercase tracking-wider text-[10px] block mb-1">Educational Fiduciary Laboratory</strong>
             These scenarios are modeled after common corporate and financial errors inspected by California regulators. They are designed for educational training purposes only. Always consult a licensed attorney to audit your specific board packets and operational policies.
           </div>
+
+          {/* Scanner Audit Assistant Drawer */}
+          {isScannerDrawerOpen && (
+            <div 
+              className="fixed inset-0 bg-ink/40 backdrop-blur-xs z-50 transition-opacity flex justify-end"
+              onClick={() => setIsScannerDrawerOpen(false)}
+            >
+              <div 
+                className="h-full w-full max-w-lg bg-white border-l border-fog shadow-2xl p-6 overflow-y-auto z-50 text-left flex flex-col justify-between"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div>
+                  <div className="flex items-center justify-between border-b border-fog pb-4 mb-5">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-teal-brand" />
+                      <h2 className="font-serif text-lg font-bold text-ink">Scanner Audit Wizard</h2>
+                    </div>
+                    <button 
+                      onClick={() => setIsScannerDrawerOpen(false)}
+                      className="p-1 rounded-full hover:bg-fog text-ink/60 hover:text-ink transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-6 text-xs text-ink/80 leading-relaxed font-sans">
+                    {/* Progress Checklist */}
+                    <div className="bg-teal-brand/5 border border-teal-brand/10 rounded-xl p-4 space-y-3">
+                      <h3 className="font-sans font-extrabold text-teal-brand uppercase tracking-wider text-[11px] leading-none">
+                        Document Scan Integrity Checklist
+                      </h3>
+                      <p className="text-[11px] text-ink/60">
+                        Tracks whether at least one finding has been scanned in each corporate segment.
+                      </p>
+                      
+                      <div className="space-y-2 pt-1">
+                        {[
+                          { name: "Board Meeting Agenda", key: "agenda", flags: ['agenda-comp', 'agenda-bylaws'] },
+                          { name: "Executive Director Report", key: "ceo", flags: ['ceo-bridge', 'ceo-spouse'] },
+                          { name: "Quarterly Financial Statements", key: "financials", flags: ['fin-restricted', 'fin-payroll'] },
+                          { name: "Annual Operating Budget", key: "budget", flags: ['budget-travel', 'budget-consult'] },
+                          { name: "Audit Committee Minutes", key: "audit", flags: ['audit-controls'] }
+                        ].map((sec, sIdx) => {
+                          const isScanned = sec.flags.some(fl => uncoveredFlags.includes(fl));
+                          return (
+                            <div key={sIdx} className="flex items-center justify-between py-1 border-b border-fog/40 last:border-0">
+                              <span className="font-medium text-ink/80">{sec.name}</span>
+                              <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider shrink-0 ${
+                                isScanned 
+                                  ? "bg-emerald-100 text-emerald-800" 
+                                  : "bg-slate-100 text-slate-500"
+                              }`}>
+                                {isScanned ? "Scanned ✓" : "Pending Scan"}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Missing Policies */}
+                    <div className="space-y-3">
+                      <h3 className="font-sans font-extrabold text-brass uppercase tracking-wider text-[11px] leading-none">
+                        Critical Corporate Policy Deficits
+                      </h3>
+                      <p className="text-[11px] text-ink/60">
+                        Most board packets are missing these mandatory internal oversight documents. Pair them with these defensive scripts to request action:
+                      </p>
+
+                      <div className="space-y-3 pt-1">
+                        {[
+                          {
+                            title: "Whistleblower Protection Policy (CA Labor Code § 1102.5)",
+                            desc: "Mandatory for organizations with employees. Ensures staff can report financial or governance variances without retaliation.",
+                            script: "Do we have an active Whistleblower Protection policy matching California Labor Code standards? I request we formalize and review this at our next meeting to protect the board from employer liability."
+                          },
+                          {
+                            title: "Document Retention & Destruction Policy (Sarbanes-Oxley / IRS Form 990)",
+                            desc: "Required to document compliance. Sets rules on file destruction schedules and prohibits shredding in case of audit.",
+                            script: "Our IRS Form 990 asks if we have a written Document Retention policy. To ensure clean filing compliance, can the Governance Committee draft a formal policy for next quarter's approval?"
+                          },
+                          {
+                            title: "Gift Acceptance & Vetting Policy (Donor Restriction Protection)",
+                            desc: "Standardizes terms for accepting non-cash assets, restricted trusts, or real estate liabilities before receiving them.",
+                            script: "Before we accept any further complex donor-restricted gifts or physical assets, do we have an active Gift Acceptance policy to vet our liabilities? Let's adopt a standard draft."
+                          }
+                        ].map((pol, pIdx) => (
+                          <div key={pIdx} className="p-3 bg-paper/20 border border-fog rounded-xl space-y-2">
+                            <p className="font-bold text-ink leading-tight">{pol.title}</p>
+                            <p className="text-[11px] text-ink/70">{pol.desc}</p>
+                            <div className="p-2 bg-white rounded border border-brass/20 text-[10px] leading-relaxed italic text-ink/80 relative pl-6">
+                              <span className="absolute left-2 text-brass font-bold">“</span>
+                              {pol.script}
+                              <span className="absolute right-2 text-brass font-bold">”</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Defensive Deliberation Tips */}
+                    <div className="space-y-2 pt-2 border-t border-fog">
+                      <h3 className="font-sans font-extrabold text-ink uppercase tracking-wider text-[11px] leading-none">
+                        Active Deliberation Rules of Thumb
+                      </h3>
+                      <ul className="list-disc pl-4 space-y-1 text-[11px] text-ink/75">
+                        <li><strong>Recusal Discipline:</strong> Interested directors must leave the chamber prior to a conflict-of-interest vote.</li>
+                        <li><strong>The Paper Trail:</strong> Never vote on oral-only financial reports. Insist on a written balance sheet and deviation logs.</li>
+                        <li><strong>Safe Harbors:</strong> Executive pay must be backed by a written comparability survey to protect the board from IRS sanctions.</li>
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-fog mt-6 text-center">
+                  <a
+                    href="https://NPOlawyers.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-slate-brand hover:bg-ink text-white font-bold uppercase tracking-wider rounded transition-premium text-xs"
+                  >
+                    <span>Request Professional Policy Templates</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-brass" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

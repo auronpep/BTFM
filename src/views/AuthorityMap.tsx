@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckCircle, Landmark, Shield, User, 
-  X, Award, ExternalLink 
+  X, Award, ExternalLink, HelpCircle 
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -26,6 +26,7 @@ export const AuthorityMap: React.FC = () => {
   const [showResults, setShowResults] = useState<boolean>(() => {
     return localStorage.getItem('cdx_authority_map_show_results') === 'true';
   });
+  const [isHelpDrawerOpen, setIsHelpDrawerOpen] = useState<boolean>(false);
 
   const items: ActionItem[] = [
     {
@@ -214,7 +215,14 @@ export const AuthorityMap: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-3 shrink-0 flex-wrap">
+              <button
+                onClick={() => setIsHelpDrawerOpen(true)}
+                className="px-3.5 py-2 bg-brass/10 hover:bg-brass/20 text-xs font-bold uppercase tracking-wider text-brass-dark border border-brass/30 hover:border-brass rounded transition-premium flex items-center gap-1.5"
+              >
+                <HelpCircle className="w-4 h-4 text-brass" />
+                <span>Delegation Guide</span>
+              </button>
               <button
                 onClick={solveAll}
                 className="px-3.5 py-2 bg-white text-xs font-bold uppercase tracking-wider text-ink border border-fog hover:border-brass rounded transition-premium"
@@ -615,6 +623,80 @@ export const AuthorityMap: React.FC = () => {
                 >
                   Try Exercise Again
                 </button>
+              </div>
+            </div>
+          )}
+          {/* Help Drawer Overlay */}
+          {isHelpDrawerOpen && (
+            <div 
+              className="fixed inset-0 bg-ink/40 backdrop-blur-xs z-50 transition-opacity flex justify-end"
+              onClick={() => setIsHelpDrawerOpen(false)}
+            >
+              <div 
+                className="h-full w-full max-w-md bg-white border-l border-fog shadow-2xl p-6 overflow-y-auto z-50 text-left flex flex-col justify-between"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div>
+                  <div className="flex items-center justify-between border-b border-fog pb-4 mb-5">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-brass" />
+                      <h2 className="font-serif text-lg font-bold text-ink">Delegation & Bylaws Guide</h2>
+                    </div>
+                    <button 
+                      onClick={() => setIsHelpDrawerOpen(false)}
+                      className="p-1 rounded-full hover:bg-fog text-ink/60 hover:text-ink transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-6 text-xs text-ink/80 leading-relaxed font-sans">
+                    <div>
+                      <h3 className="font-bold text-slate-brand uppercase tracking-wider mb-2">Non-Delegable Duties (Board Only)</h3>
+                      <p className="mb-2">Under <strong>California Corporations Code § 5212(a)</strong>, certain corporate powers can never be outsourced to any committee, officer, or individual:</p>
+                      <ul className="list-disc pl-4 space-y-1.5">
+                        <li><strong>Bylaw Amendments:</strong> Amending or repealing bylaws is strictly reserved for the full Board.</li>
+                        <li><strong>Officer Selection:</strong> Appointing or removing chief officers or the CEO/ED must be decided by the Board.</li>
+                        <li><strong>Budget Approval:</strong> Final adoption of the annual operating budget is an exclusive Board authority.</li>
+                        <li><strong>Covenants & Settlements:</strong> Settling lawsuits or taking out material commercial loans binds the entire entity.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold text-teal-brand uppercase tracking-wider mb-2">Interim Governance (Board Committees)</h3>
+                      <p className="mb-2">Board committees (like the Executive Committee) are authorized under <strong>CA Corp Code § 5212</strong> to manage timely operational updates between full board assemblies:</p>
+                      <ul className="list-disc pl-4 space-y-1.5">
+                        <li><strong>Interim Spending:</strong> Approving emergency unbudgeted expenses within pre-defined limits.</li>
+                        <li><strong>Research & Drafting:</strong> Redlining bylaws or drafting initial budget matrices before submitting to the full board.</li>
+                        <li><strong>Contract/Dispute Resolution:</strong> Settling minor, routine commercial vendor disputes.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold text-copper uppercase tracking-wider mb-2">Day-to-Day Delegation (CEO/ED)</h3>
+                      <p className="mb-2">To prevent administrative deadlock, boards delegate day-to-day administrative operations to the executive leader:</p>
+                      <ul className="list-disc pl-4 space-y-1.5">
+                        <li><strong>Budget Spending:</strong> Executing approved budget line-items (e.g., standard office rent, utility bills).</li>
+                        <li><strong>Staff Management:</strong> Hiring, supervising, and terminating entry-to-mid-level employees.</li>
+                        <li><strong>Routine Filings:</strong> Submitting standard compliance notices (such as changing the mailing address on the California Statement of Information).</li>
+                        <li><strong>Asset Protection:</strong> Executing immediate minor building repairs to prevent facility damage.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-fog mt-6 text-center">
+                  <p className="text-[11px] text-ink/60 mb-3">Struggling to solve the map? Auto-assign cards with one click:</p>
+                  <button
+                    onClick={() => {
+                      solveAll();
+                      setIsHelpDrawerOpen(false);
+                    }}
+                    className="w-full py-2.5 bg-teal-brand hover:bg-ink text-white font-bold uppercase tracking-wider rounded transition-premium text-xs"
+                  >
+                    Auto-Assign All Cards
+                  </button>
+                </div>
               </div>
             </div>
           )}
