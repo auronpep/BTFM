@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from './Router';
-import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap } from 'lucide-react';
+import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap, Search } from 'lucide-react';
+import { articles } from '../data/articles';
+import { scenarios } from '../data/scenarios';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +12,19 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { path, navigate } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toolsState, setToolsState] = useState<'none' | 'in-progress' | 'completed'>('none');
+  const [isToolsHovered, setIsToolsHovered] = useState(false);
+  
+  // Search state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [labStates, setLabStates] = useState({
+    self: { started: false, completed: false, text: 'Not Started' },
+    packet: { started: false, completed: false, count: 0, text: 'Not Started' },
+    minutes: { started: false, completed: false, text: 'Not Started' },
+    budget: { started: false, completed: false, count: 0, text: 'Not Started' },
+    authority: { started: false, completed: false, text: 'Not Started' }
+  });
 
   useEffect(() => {
     try {
@@ -56,10 +71,42 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       } else {
         setToolsState('none');
       }
+
+      setLabStates({
+        self: { started: completedSelf, completed: completedSelf, text: completedSelf ? 'Completed ✓' : 'Not Started' },
+        packet: { started: packetCount > 0, completed: completedPacket, count: packetCount, text: completedPacket ? 'Completed ✓' : (packetCount > 0 ? `In Progress (${packetCount}/9)` : 'Not Started') },
+        minutes: { started: completedMinutes, completed: completedMinutes, text: completedMinutes ? 'Completed ✓' : 'Not Started' },
+        budget: { started: budgetCount > 0, completed: completedBudget, count: budgetCount, text: completedBudget ? 'Completed ✓' : (budgetCount > 0 ? `In Progress (${budgetCount}/6)` : 'Not Started') },
+        authority: { started: authCount > 0 || completedAuth, completed: completedAuth, text: completedAuth ? 'Completed ✓' : (authCount > 0 ? 'In Progress' : 'Not Started') }
+      });
     } catch (e) {
       console.error(e);
     }
   }, [path]);
+
+  // Global search keyboard trigger
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      const isInput = activeElement && (
+        activeElement.tagName === 'INPUT' || 
+        activeElement.tagName === 'TEXTAREA' || 
+        (activeElement as HTMLElement).isContentEditable
+      );
+      
+      if ((e.key === 'k' && (e.ctrlKey || e.metaKey)) || (e.key === '/' && !isInput)) {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+      
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Situational/Topic Navigation configuration
   const navItems = [
@@ -133,6 +180,84 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               {navItems.map((item) => {
                 const active = isActive(item.target);
                 const isTools = item.target === 'tools';
+                
+                if (isTools) {
+                  return (
+                    <div 
+                      key={item.target}
+                      className="relative"
+                      onMouseEnter={() => setIsToolsHovered(true)}
+                      onMouseLeave={() => setIsToolsHovered(false)}
+                    >
+                      <button
+                        onClick={() => handleNavClick(item.target)}
+                        className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-1 relative ${
+                          active 
+                            ? 'border-brass text-brass bg-paper/50 font-bold' 
+                            : 'text-ink/75 hover:text-ink hover:bg-fog/30'
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {toolsState === 'in-progress' && (
+                          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse inline-block" title="Laboratory in progress" />
+                        )}
+                        {toolsState === 'completed' && (
+                          <span className="text-[10px] text-teal-brand font-bold inline-block" title="All Laboratories Completed">✓</span>
+                        )}
+                      </button>
+                      
+                      {isToolsHovered && (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-72">
+                          <div className="bg-white border-2 border-brass rounded-lg shadow-xl p-4 text-left">
+                            <h4 className="font-serif italic text-sm text-ink border-b border-fog pb-2 mb-2 flex items-center justify-between">
+                              <span>Lab Progress</span>
+                              <span className="text-[10px] font-sans font-bold uppercase tracking-wider bg-brass/10 text-brass px-1.5 py-0.5 rounded">
+                                {[labStates.self, labStates.packet, labStates.minutes, labStates.budget, labStates.authority].filter(l => l.completed).length} / 5 Done
+                              </span>
+                            </h4>
+                            
+                            <div className="space-y-1.5">
+                              {[
+                                { name: "Board Self-Assessment", state: labStates.self, path: "tools/self-assessment" },
+                                { name: "Board Packet Audit Lab", state: labStates.packet, path: "tools/board-packet-lab" },
+                                { name: "Minutes Quality Scorecard", state: labStates.minutes, path: "tools/minutes-scorecard" },
+                                { name: "Budget Worksheet", state: labStates.budget, path: "tools/budget-worksheet" },
+                                { name: "Board Authority Map", state: labStates.authority, path: "tools/authority-map" }
+                              ].map((lab) => (
+                                <button
+                                  key={lab.path}
+                                  onClick={() => handleNavClick(lab.path)}
+                                  className="w-full text-left p-1.5 rounded hover:bg-paper transition-premium flex items-center justify-between group/item"
+                                >
+                                  <span className="text-[11px] font-medium text-ink/80 group-hover/item:text-brass transition-premium truncate">
+                                    {lab.name}
+                                  </span>
+                                  <span className={`text-[9px] font-bold shrink-0 px-1.5 py-0.5 rounded ${
+                                    lab.state.completed 
+                                      ? 'bg-teal-500/10 text-teal-700' 
+                                      : (lab.state.started ? 'bg-amber-500/10 text-amber-700' : 'bg-gray-100 text-ink/40')
+                                  }`}>
+                                    {lab.state.completed ? '✓ Done' : (lab.state.started ? 'Started' : 'Not Started')}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                            
+                            <div className="mt-3 pt-2 border-t border-fog">
+                              <div className="w-full bg-fog rounded-full h-1.5 overflow-hidden">
+                                <div 
+                                  className="bg-brass h-1.5 transition-all duration-500"
+                                  style={{ width: `${([labStates.self, labStates.packet, labStates.minutes, labStates.budget, labStates.authority].filter(l => l.completed).length / 5) * 100}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
                   <button
                     key={item.target}
@@ -144,15 +269,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     }`}
                   >
                     <span>{item.label}</span>
-                    {isTools && toolsState === 'in-progress' && (
-                      <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse inline-block" title="Laboratory in progress" />
-                    )}
-                    {isTools && toolsState === 'completed' && (
-                      <span className="text-[10px] text-teal-brand font-bold inline-block" title="All Laboratories Completed">✓</span>
-                    )}
                   </button>
                 );
               })}
+              
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 text-ink/75 hover:text-brass transition-premium rounded flex items-center gap-1 cursor-pointer"
+                title="Search (Ctrl+K or /)"
+              >
+                <Search className="w-4 h-4 text-ink/70 hover:text-brass" />
+                <span className="text-[9px] font-sans font-bold text-ink/30 bg-fog px-1 py-0.5 rounded border border-fog-dark/10">⌘K</span>
+              </button>
               
               <div className="h-6 w-[1px] bg-fog/80 mx-2" />
               
@@ -324,6 +452,163 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </footer>
+
+      {/* Global Search Spotlight Overlay Modal (Enhancement 7) */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-ink/75 backdrop-blur-md flex items-start justify-center pt-20 px-4 animate-fade-in">
+          <div 
+            className="fixed inset-0" 
+            onClick={() => setIsSearchOpen(false)} 
+          />
+          
+          <div className="bg-white border-2 border-brass max-w-2xl w-full rounded-xl shadow-2xl overflow-hidden relative z-10 transition-premium transform scale-100 max-h-[80vh] flex flex-col">
+            {/* Search Input Bar */}
+            <div className="flex items-center border-b border-fog px-4 py-4 gap-3 bg-paper">
+              <Search className="w-5 h-5 text-ink/40" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search articles, scenarios, and tools... (e.g. Compensation, Audit, Bylaws)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent text-ink placeholder-ink/35 text-base focus:outline-none"
+              />
+              <button 
+                onClick={() => setIsSearchOpen(false)}
+                className="text-[10px] font-sans font-bold text-ink/40 hover:text-brass bg-fog px-2 py-1 rounded border border-fog-dark/10 shadow-sm"
+              >
+                ESC
+              </button>
+            </div>
+
+            {/* Results or Suggestions Box */}
+            <div className="overflow-y-auto p-4 flex-grow">
+              {searchQuery.trim() === '' ? (
+                <div className="space-y-4">
+                  <p className="text-[11px] font-bold text-ink/40 uppercase tracking-widest">Suggested Search Paths</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {[
+                      { title: "Mature Board Self-Assessment", path: "tools/self-assessment", desc: "Evaluate your board's fiduciary competency" },
+                      { title: "Form 990 & Compensation Studies", path: "article/form-990-and-executive-compensation-governance", desc: "IRS executive compensation safe harbors" },
+                      { title: "California Board Rules Index", path: "california-board-rules", desc: "CPA audits and Registry of Charitable Trusts" },
+                      { title: "Conflict of Interest Recusals", path: "scenario/founder-salary-conflict", desc: "How to handle interested director votes" }
+                    ].map((s) => (
+                      <button
+                        key={s.path}
+                        onClick={() => {
+                          handleNavClick(s.path);
+                          setIsSearchOpen(false);
+                          setSearchQuery('');
+                        }}
+                        className="w-full text-left p-3 rounded-lg border border-fog hover:border-brass hover:bg-paper transition-premium group"
+                      >
+                        <p className="text-xs font-bold text-slate-brand group-hover:text-brass transition-premium">{s.title}</p>
+                        <p className="text-[10px] text-ink/65 mt-0.5">{s.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {(() => {
+                    const query = searchQuery.toLowerCase();
+                    const matchedArticles = articles.filter(a => 
+                      a.title.toLowerCase().includes(query) || 
+                      a.description.toLowerCase().includes(query) ||
+                      a.category.toLowerCase().includes(query)
+                    ).map(a => ({
+                      title: a.title,
+                      subtitle: a.description,
+                      badge: "Article",
+                      badgeColor: "bg-teal-500/10 text-teal-700 border-teal-500/20",
+                      path: `article/${a.slug}`
+                    }));
+
+                    const matchedScenarios = scenarios.filter(s => 
+                      s.title.toLowerCase().includes(query) || 
+                      s.facts.toLowerCase().includes(query) ||
+                      s.issueType.toLowerCase().includes(query)
+                    ).map(s => ({
+                      title: s.title,
+                      subtitle: s.facts,
+                      badge: `Scenario • ${s.issueType}`,
+                      badgeColor: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+                      path: `scenario/${s.slug}`
+                    }));
+
+                    const pages = [
+                      { title: "Prepare for Your Next Meeting", subtitle: "Structured prep agenda checklist & balanced meeting planning", path: "next-meeting" },
+                      { title: "California Board Rules Index", subtitle: "CPA audits, Form 990, SOI, and CT registry requirements", path: "california-board-rules" },
+                      { title: "Training Syllabus Planner", subtitle: "Diagnostic workbook and board capacity planner", path: "training" },
+                      { title: "Boards 101 Reference Manual", subtitle: "Governance rules, quick quiz and video resources", path: "boards-101" },
+                      { title: "Mature Board Self-Assessment Lab", subtitle: "10-question compliance rating & fiduciary analytics scorecard", path: "tools/self-assessment" },
+                      { title: "Board Packet Scan Lab", subtitle: "Interactive vetting checklist & board packet simulator", path: "tools/board-packet-lab" },
+                      { title: "Minutes Quality Scorecard Lab", subtitle: "Audits & grades resolution minutes and records", path: "tools/minutes-scorecard" },
+                      { title: "Budget Deviation Worksheet Lab", subtitle: "Variance auditing and risk scanning calculator", path: "tools/budget-worksheet" },
+                      { title: "Board Authority Map Lab", subtitle: "Interactively map corporate delegation bounds", path: "tools/authority-map" },
+                      { title: "About Us & CCNL", subtitle: "Nonprofit Center Law Firm information", path: "about-us" }
+                    ];
+
+                    const matchedPages = pages.filter(p => 
+                      p.title.toLowerCase().includes(query) || 
+                      p.subtitle.toLowerCase().includes(query)
+                    ).map(p => ({
+                      title: p.title,
+                      subtitle: p.subtitle,
+                      badge: "Tools & Resources",
+                      badgeColor: "bg-brass/10 text-brass border-brass/20",
+                      path: p.path
+                    }));
+
+                    const results = [...matchedPages, ...matchedArticles, ...matchedScenarios].slice(0, 7);
+
+                    if (results.length === 0) {
+                      return (
+                        <div className="text-center py-8">
+                          <p className="text-sm font-medium text-ink/50">No files or resources matched your query.</p>
+                          <p className="text-[11px] text-ink/40 mt-1">Try typing "Bylaws", "Audit", or "Safe Harbor".</p>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-bold text-ink/40 uppercase tracking-widest">Search Results ({results.length})</p>
+                        {results.map((res, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              handleNavClick(res.path);
+                              setIsSearchOpen(false);
+                              setSearchQuery('');
+                            }}
+                            className="w-full text-left p-3 rounded-lg hover:bg-paper border border-transparent hover:border-fog transition-premium flex flex-col sm:flex-row sm:items-center justify-between gap-2 group"
+                          >
+                            <div className="space-y-0.5 truncate max-w-lg">
+                              <p className="text-xs font-bold text-slate-brand group-hover:text-brass transition-premium truncate">{res.title}</p>
+                              <p className="text-[10px] text-ink/60 truncate">{res.subtitle}</p>
+                            </div>
+                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border self-start sm:self-center ${res.badgeColor}`}>
+                              {res.badge}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-paper border-t border-fog p-3 text-center text-[10px] text-ink/45 flex justify-center items-center gap-4">
+              <span>Use <span className="font-bold">↑↓</span> to navigate</span>
+              <span><span className="font-bold">↵</span> to select</span>
+              <span>Press <span className="font-bold">ESC</span> to exit</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

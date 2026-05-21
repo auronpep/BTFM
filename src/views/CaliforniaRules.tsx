@@ -8,6 +8,39 @@ import { CheckSquare, Square, Landmark, ChevronRight, ShieldCheck, AlertTriangle
 
 export const CaliforniaRules: React.FC = () => {
   const { navigate } = useRouter();
+
+  // State for D&O estimator (Enhancement 2)
+  const [budget, setBudget] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_do_liability_estimator');
+      return saved ? JSON.parse(saved).budget : 500000;
+    } catch {
+      return 500000;
+    }
+  });
+
+  const [headcount, setHeadcount] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cdx_do_liability_estimator');
+      return saved ? JSON.parse(saved).headcount : 8;
+    } catch {
+      return 8;
+    }
+  });
+
+  const saveEstimator = (b: number, h: number) => {
+    localStorage.setItem('cdx_do_liability_estimator', JSON.stringify({ budget: b, headcount: h }));
+  };
+
+  const handleBudgetChange = (val: number) => {
+    setBudget(val);
+    saveEstimator(val, headcount);
+  };
+
+  const handleHeadcountChange = (val: number) => {
+    setHeadcount(val);
+    saveEstimator(budget, val);
+  };
   
   // State to track checked compliance actions across the 5 rules
   // key format: "ruleId-actionIndex"
@@ -307,6 +340,147 @@ export const CaliforniaRules: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Interactive D&O Liability Slider & Coverage Estimator (Enhancement 2) */}
+          <div className="bg-white rounded-xl shadow-md border-2 border-brass/50 overflow-hidden text-left p-6 space-y-6">
+            <div className="space-y-1">
+              <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20 inline-block">
+                Interactive Diagnostic Lab
+              </span>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-ink tracking-wide">
+                D&O Liability & Fiduciary Coverage Estimator
+              </h3>
+              <p className="text-xs text-ink/70 font-sans max-w-2xl leading-relaxed">
+                Adjust the sliders representing your organization's annual operating budget and employee headcount to calculate your statutory risk exposure and suggested insurance parameters in California.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+              {/* Sliders Area */}
+              <div className="space-y-5 bg-paper/20 p-4 rounded-lg border border-fog">
+                {/* Operating Budget Slider */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <label htmlFor="budget-slider" className="font-bold text-ink/80 uppercase tracking-wider">Annual Operating Budget</label>
+                    <span className="font-mono font-bold text-brass text-sm bg-white border border-brass/20 px-2 py-0.5 rounded shadow-sm">
+                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(budget)}
+                    </span>
+                  </div>
+                  <input
+                    id="budget-slider"
+                    type="range"
+                    min="50000"
+                    max="5000000"
+                    step="50000"
+                    value={budget}
+                    onChange={(e) => handleBudgetChange(parseInt(e.target.value))}
+                    className="w-full h-2 bg-fog rounded-lg appearance-none cursor-pointer accent-brass focus:outline-none"
+                  />
+                  <div className="flex justify-between text-[9px] text-ink/40 font-semibold">
+                    <span>$50,000</span>
+                    <span>$1,000,000</span>
+                    <span>$2,500,000</span>
+                    <span>$5,000,000+</span>
+                  </div>
+                </div>
+
+                {/* Staff Headcount Slider */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <label htmlFor="headcount-slider" className="font-bold text-ink/80 uppercase tracking-wider">Active Staff Headcount</label>
+                    <span className="font-mono font-bold text-brass text-sm bg-white border border-brass/20 px-2.5 py-0.5 rounded shadow-sm">
+                      {headcount} {headcount === 1 ? 'Employee' : 'Employees'}
+                    </span>
+                  </div>
+                  <input
+                    id="headcount-slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value={headcount}
+                    onChange={(e) => handleHeadcountChange(parseInt(e.target.value))}
+                    className="w-full h-2 bg-fog rounded-lg appearance-none cursor-pointer accent-brass focus:outline-none"
+                  />
+                  <div className="flex justify-between text-[9px] text-ink/40 font-semibold">
+                    <span>0 (All Volunteer)</span>
+                    <span>10 Staff</span>
+                    <span>50 Staff</span>
+                    <span>100+ Staff</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Analysis Area */}
+              <div className="space-y-4 flex flex-col justify-between">
+                {/* Stance Indicator Cards */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-paper p-3 rounded-lg border border-fog text-left shadow-sm">
+                    <span className="text-[9px] font-bold text-ink/40 uppercase tracking-wider block">Risk Exposure</span>
+                    <span className={`font-serif font-black text-sm block mt-1 ${
+                      budget >= 2000000 || headcount >= 30 
+                        ? 'text-burgundy' 
+                        : (budget >= 1000000 || headcount >= 15 ? 'text-amber-600' : 'text-teal-700')
+                    }`}>
+                      {(() => {
+                        if (budget < 250000 && headcount < 5) return "Low Risk";
+                        if (budget < 1000000 && headcount < 15) return "Moderate Risk";
+                        if (budget >= 3000000 || headcount >= 45) return "Severe / Fiduciary Red";
+                        return "High Exposure";
+                      })()}
+                    </span>
+                  </div>
+
+                  <div className="bg-paper p-3 rounded-lg border border-fog text-left shadow-sm">
+                    <span className="text-[9px] font-bold text-ink/40 uppercase tracking-wider block">Suggested D&O Limit</span>
+                    <span className="font-serif font-black text-sm text-brass block mt-1">
+                      {(() => {
+                        if (budget < 250000) return "$1,000,000";
+                        if (budget < 1000000) return "$1,000,000 – $2,000,000";
+                        if (budget < 3000000) return "$2,000,000 – $3,000,000";
+                        return "$3,000,000 – $5,000,000";
+                      })()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Multi-Trigger Statutory Alerts */}
+                <div className="space-y-2 flex-grow flex flex-col justify-center">
+                  {/* CA Corp Audit Trigger */}
+                  <div className={`p-3 rounded border text-xs leading-relaxed transition-premium flex items-start gap-2 ${
+                    budget >= 2000000
+                      ? 'bg-burgundy/5 border-burgundy/30 text-burgundy font-semibold'
+                      : 'bg-teal-500/5 border-teal-500/20 text-teal-800'
+                  }`}>
+                    <span className="text-sm shrink-0">{budget >= 2000000 ? '🔴' : '✓'}</span>
+                    <p>
+                      {budget >= 2000000 ? (
+                        <span><strong>MANDATORY CPA AUDIT (CA Corp Code § 12586):</strong> Your budget meets or exceeds $2M. You are legally required to form an independent audit committee and retain a licensed CPA for an annual financial audit.</span>
+                      ) : (
+                        <span><strong>CPA Audit Optional (Statutory threshold):</strong> Budgets under $2M do not trigger mandatory CPA audits under CA law. Volunteer-level oversight is legally sufficient.</span>
+                      )}
+                    </p>
+                  </div>
+
+                  {/* EPLI Trigger */}
+                  <div className={`p-3 rounded border text-xs leading-relaxed transition-premium flex items-start gap-2 ${
+                    headcount >= 5
+                      ? 'bg-amber-500/5 border-amber-500/20 text-amber-900 font-semibold'
+                      : 'bg-teal-500/5 border-teal-500/20 text-teal-800'
+                  }`}>
+                    <span className="text-sm shrink-0">{headcount >= 5 ? '⚠' : '✓'}</span>
+                    <p>
+                      {headcount >= 5 ? (
+                        <span><strong>HIGHLY RECOMMENDED EPLI:</strong> With {headcount} employees, employment disputes (harassment, wrongful termination) are your highest risk. You must secure a dedicated EPLI policy/rider immediately.</span>
+                      ) : (
+                        <span><strong>EPLI Safe Zone:</strong> With low staff headcount, standard D&O with small employment endorsements is generally sufficient, though HR policies should be monitored.</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* D&O Coverage Spotlight Matrix (Enhancement 5) */}
