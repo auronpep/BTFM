@@ -69,6 +69,62 @@ export const Training: React.FC = () => {
     setInpersonSubmitted(true);
   };
 
+  const handleDownloadICS = (webinarId: string) => {
+    const webinar = webinarsList.find(w => w.id === webinarId);
+    if (!webinar) return;
+
+    let start = '';
+    let end = '';
+    if (webinar.id === 'webinar-comp') {
+      start = '20260618T170000Z';
+      end = '20260618T183000Z';
+    } else if (webinar.id === 'webinar-audit') {
+      start = '20260715T200000Z';
+      end = '20260715T210000Z';
+    } else if (webinar.id === 'webinar-minutes') {
+      start = '20260811T180000Z';
+      end = '20260811T190000Z';
+    } else {
+      start = '20260618T170000Z';
+      end = '20260618T183000Z';
+    }
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//CDX Boardroom//Webinar Calendar//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${webinar.id}-2026@cdxboardroom.org`,
+      `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${webinar.title}`,
+      `DESCRIPTION:Thank you for registering for the CDX Boardroom Webinar: ${webinar.title}. Zoom Link and login credentials will be emailed to you prior to the event. Web: https://NPOlawyers.com`,
+      'LOCATION:Online Zoom Webinar',
+      'STATUS:CONFIRMED',
+      'SEQUENCE:0',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Reminder for CDX Boardroom Webinar',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${webinar.id}-invite.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Layout>
       <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
@@ -223,6 +279,17 @@ export const Training: React.FC = () => {
                     <p className="text-xs sm:text-sm text-ink/80 leading-relaxed max-w-sm mx-auto">
                       Thank you, <strong className="text-ink font-bold">{webinarName}</strong>. A calendar invitation and Zoom webinar link have been sent to <strong className="text-ink font-bold">{webinarEmail}</strong>.
                     </p>
+                  </div>
+
+                  {/* Add to Calendar (.ics) download button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={() => handleDownloadICS(selectedWebinar)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                    >
+                      <Calendar className="w-4 h-4 shrink-0" />
+                      <span>Add to Calendar (.ics)</span>
+                    </button>
                   </div>
 
                   <div className="pt-4 border-t border-fog/50">

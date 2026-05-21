@@ -56,10 +56,18 @@ export const Library: React.FC = () => {
 
   const categories = ['All', 'Strategy', 'Finance', 'Safety', 'Legal', 'Startup'];
 
+  const matchesMultiTokenSearch = (itemTextSources: string[], query: string) => {
+    if (!query.trim()) return true;
+    const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const combinedText = itemTextSources.map(s => (s || '').toLowerCase()).join(' ');
+    return tokens.every(token => combinedText.includes(token));
+  };
+
   const filteredArticles = articles.filter(art => {
-    const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          art.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          art.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = matchesMultiTokenSearch(
+      [art.title, art.description, art.content, art.category, art.difficulty],
+      searchQuery
+    );
     const matchesCategory = selectedCategory === 'All' || art.category === selectedCategory;
     
     const isStudied = studiedList.includes(art.slug);
@@ -71,9 +79,10 @@ export const Library: React.FC = () => {
   });
 
   const filteredScenarios = scenarios.filter(sc => {
-    const matchesSearch = sc.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          sc.facts.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          sc.recommendedAction.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = matchesMultiTokenSearch(
+      [sc.title, sc.facts, sc.recommendedAction, sc.issueType, sc.boardStage],
+      searchQuery
+    );
     const matchesCategory = selectedCategory === 'All' || 
                             (selectedCategory === 'Finance' && sc.issueType === 'Financial Oversight') ||
                             (selectedCategory === 'Safety' && sc.issueType === 'Risk Management') ||

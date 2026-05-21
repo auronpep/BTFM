@@ -11,14 +11,26 @@ export const CaliforniaRules: React.FC = () => {
   
   // State to track checked compliance actions across the 5 rules
   // key format: "ruleId-actionIndex"
-  const [checkedActions, setCheckedActions] = useState<Record<string, boolean>>({});
+  const [checkedActions, setCheckedActions] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem('cdx_cal_rules_checked_ids');
+      return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+      console.error(e);
+      return {};
+    }
+  });
 
   const handleToggleAction = (ruleId: string, actionIndex: number) => {
     const key = `${ruleId}-${actionIndex}`;
-    setCheckedActions(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
+    setCheckedActions(prev => {
+      const next = {
+        ...prev,
+        [key]: !prev[key]
+      };
+      localStorage.setItem('cdx_cal_rules_checked_ids', JSON.stringify(next));
+      return next;
+    });
   };
 
   const isRuleFullyCompliant = (rule: CaliforniaRule) => {
@@ -28,6 +40,8 @@ export const CaliforniaRules: React.FC = () => {
   const countCompletedActions = (rule: CaliforniaRule) => {
     return rule.complianceActionList.filter((_, idx) => checkedActions[`${rule.id}-${idx}`] === true).length;
   };
+
+  const compliantRulesCount = californiaRules.filter(isRuleFullyCompliant).length;
 
   return (
     <Layout>
@@ -46,6 +60,81 @@ export const CaliforniaRules: React.FC = () => {
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
               A comprehensive reference of verified state legal thresholds, strict filing timelines, and Registry mandates under the California Corporations Code. Complete the active checklists to verify your board's compliance.
             </p>
+          </div>
+
+          {/* Top-Level Compliance Dashboard (Enhancement 4) */}
+          <div className="bg-gradient-to-br from-slate-brand to-ink text-white rounded-xl shadow-md p-6 text-left border border-brass/20 space-y-4">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20 inline-block">
+                  Fiduciary Security Dashboard
+                </span>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide">
+                  California Compliance Stance
+                </h3>
+                <p className="text-xs text-paper/70 font-sans max-w-lg leading-relaxed">
+                  The California Attorney General requires rigorous corporate governance. Complete all checklist items on each state mandate to secure a fully compliant legal posture.
+                </p>
+              </div>
+
+              {/* Progress Circle or Count */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="relative flex items-center justify-center">
+                  <svg className="w-20 h-28 transform -rotate-95">
+                    <circle cx="40" cy="56" r="32" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-white/10" />
+                    <circle 
+                      cx="40" 
+                      cy="56" 
+                      r="32" 
+                      stroke="#C5A880" 
+                      strokeWidth="6" 
+                      fill="transparent" 
+                      strokeDasharray={2 * Math.PI * 32}
+                      strokeDashoffset={2 * Math.PI * 32 * (1 - compliantRulesCount / californiaRules.length)}
+                      className="transition-premium"
+                    />
+                  </svg>
+                  <div className="absolute flex flex-col items-center">
+                    <span className="font-sans font-black text-xl text-white">{compliantRulesCount}</span>
+                    <span className="text-[8px] uppercase tracking-wider text-brass font-bold">of {californiaRules.length} rules</span>
+                  </div>
+                </div>
+                <div className="text-left font-sans">
+                  <p className="text-[10px] uppercase tracking-wider text-brass font-bold">Stance Level</p>
+                  <p className="font-serif font-bold text-sm text-paper">
+                    {compliantRulesCount === californiaRules.length 
+                      ? "Fully Secured" 
+                      : compliantRulesCount >= 3 
+                        ? "Active Guard" 
+                        : compliantRulesCount >= 1 
+                          ? "Fiduciary At-Risk" 
+                          : "Critical Exposure"
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Overall status comment */}
+            <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+              <p className="text-xs text-paper/60 font-sans leading-relaxed">
+                {compliantRulesCount === californiaRules.length
+                  ? "✓ Excellent. Your board satisfies all 5 major California regulatory thresholds. Keep all records updated."
+                  : "⚠ Fiduciary vulnerabilities detected. Check the red boxes below and complete outstanding action items."
+                }
+              </p>
+              {compliantRulesCount < californiaRules.length && (
+                <a
+                  href="https://NPOlawyers.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-bold uppercase tracking-wider text-brass hover:text-white transition-premium shrink-0 inline-flex items-center gap-1"
+                >
+                  <span>Request Governance Counsel</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-brass" />
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Quick Stats Grid */}
@@ -218,6 +307,84 @@ export const CaliforniaRules: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* D&O Coverage Spotlight Matrix (Enhancement 5) */}
+          <div className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
+            <div className="p-6 bg-burgundy text-paper border-b border-brass/20 space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-white/10 border border-white/20 text-brass rounded text-[10px] font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-3 h-3 text-brass" />
+                <span>Executive Asset Cushion</span>
+              </div>
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-white tracking-wide">
+                Board Liability Protection Spotlight: D&O vs. EPLI Matrix
+              </h3>
+              <p className="text-xs text-paper/70 font-sans max-w-2xl leading-relaxed">
+                Many California directors mistakenly believe standard General Liability policies shield their personal savings. In reality, board-level lawsuits (which are 90% employment-related) require targeted riders.
+              </p>
+            </div>
+
+            <div className="p-6 overflow-x-auto">
+              <table className="w-full text-xs text-ink/80 font-sans border-collapse">
+                <thead>
+                  <tr className="border-b border-fog/80 text-[10px] uppercase tracking-wider text-ink/50 font-bold bg-paper/10">
+                    <th className="py-3 px-4 text-left font-sans">Coverage Type</th>
+                    <th className="py-3 px-4 text-left font-sans">Primary Risk Guarded</th>
+                    <th className="py-3 px-4 text-center font-sans">Protects Personal Assets?</th>
+                    <th className="py-3 px-4 text-left font-sans">Typical Limits</th>
+                    <th className="py-3 px-4 text-left font-sans">Critical CA Exclusions</th>
+                    <th className="py-3 px-4 text-left font-sans">Prudent Board Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-fog/60">
+                  <tr>
+                    <td className="py-4 px-4 font-bold text-slate-brand font-serif text-sm">General Liability (GL)</td>
+                    <td className="py-4 px-4">Physical slip-and-falls, property damage, bodily injury during public programs.</td>
+                    <td className="py-4 px-4 text-center font-bold text-burgundy">NO</td>
+                    <td className="py-4 px-4">$1M / $2M occurrence limit.</td>
+                    <td className="py-4 px-4">Excludes fiduciary breaches, conflicts of interest, wrongful termination.</td>
+                    <td className="py-4 px-4 italic">Standard policy; required for facility lease and public events.</td>
+                  </tr>
+                  <tr className="bg-paper/10">
+                    <td className="py-4 px-4 font-bold text-brass font-serif text-sm">Directors & Officers (D&O)</td>
+                    <td className="py-4 px-4">Breaches of fiduciary duties (Care, Loyalty, Obedience), IRS audits, mismanagement, regulatory delinquencies.</td>
+                    <td className="py-4 px-4 text-center font-bold text-teal-brand">YES (Absolute)</td>
+                    <td className="py-4 px-4 font-mono font-semibold">$1M to $5M depending on asset base.</td>
+                    <td className="py-4 px-4">Fraud, criminal acts, intentional illegal transactions.</td>
+                    <td className="py-4 px-4 font-semibold text-brass">MANDATORY. Procure immediately upon incorporating. Do not serve without it.</td>
+                  </tr>
+                  <tr>
+                    <td className="py-4 px-4 font-bold text-burgundy font-serif text-sm">EPLI (Employment Practices)</td>
+                    <td className="py-4 px-4">Wrongful termination, sexual harassment, discrimination, hostile work environment (90% of non-profit claims).</td>
+                    <td className="py-4 px-4 text-center font-bold text-teal-brand">YES</td>
+                    <td className="py-4 px-4 font-mono">Often bundled with D&O or as separate $1M rider.</td>
+                    <td className="py-4 px-4">Wage & hour claims (unpaid overtime, missed meal breaks in California).</td>
+                    <td className="py-4 px-4 italic font-semibold text-brass">Verify this rider is active; ensure your HR policy manual complies with CA wage-and-hour.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bg-brass/5 p-4 sm:p-5 border-t border-fog flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="text-left space-y-1">
+                <h5 className="font-serif font-bold text-sm text-burgundy flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>Wage & Hour Exclusion Risk Alert</span>
+                </h5>
+                <p className="text-xs text-ink/75 font-sans leading-relaxed max-w-2xl font-semibold">
+                  California's wage-and-hour laws are exceptionally strict. Because standard EPLI excludes missed breaks and overtime disputes, board members must conduct regular HR audits. NPO Lawyers provides privileged audits.
+                </p>
+              </div>
+              <a
+                href="https://NPOlawyers.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap"
+              >
+                <span>Request Policy Audit</span>
+                <ChevronRight className="w-3.5 h-3.5 text-brass" />
+              </a>
+            </div>
           </div>
 
           {/* Quick navigation reference */}

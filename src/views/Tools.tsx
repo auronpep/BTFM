@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
-import { Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, ArrowRight } from 'lucide-react';
+import { Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, ArrowRight, RefreshCw } from 'lucide-react';
 
 export const Tools: React.FC = () => {
   const { navigate } = useRouter();
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   const [labStates, setLabStates] = useState({
     selfAssessment: { score: null as string | null, level: null as string | null },
@@ -60,6 +61,43 @@ export const Tools: React.FC = () => {
       authorityMap: { score: authScore, total: authTotal, count: authCount }
     });
   }, []);
+
+  const handleResetAll = () => {
+    const keysToRemove = [
+      'cdx_self_assessment_score',
+      'cdx_self_assessment_level',
+      'cdx_board_packet_uncovered_flags',
+      'cdx_minutes_scorecard_grade',
+      'cdx_minutes_scorecard_score',
+      'cdx_budget_audited_lines',
+      'cdx_authority_map_assignments',
+      'cdx_authority_map_score',
+      'cdx_authority_map_total',
+      'cdx_cal_rules_checked_ids',
+      'cdx_next_meeting_checked_files',
+      'board_mastery_progress',
+      'webinar_registrations',
+      'inperson_inquiries'
+    ];
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+    
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('cdx_feedback_status_')) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    setLabStates({
+      selfAssessment: { score: null, level: null },
+      boardPacket: { count: 0 },
+      minutesScorecard: { grade: null, score: null },
+      budgetWorksheet: { count: 0 },
+      authorityMap: { score: null, total: null, count: 0 }
+    });
+    
+    setIsResetModalOpen(false);
+  };
 
   const renderBadge = (id: string) => {
     switch (id) {
@@ -238,6 +276,15 @@ export const Tools: React.FC = () => {
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
               Interactive clinical exercises built for working directors. Engage with active ledgers, check minutes safety, sort delegations of power, and test board competency.
             </p>
+            <div className="pt-2 flex justify-center">
+              <button
+                onClick={() => setIsResetModalOpen(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-ink/50 hover:text-burgundy font-semibold tracking-wide transition-premium cursor-pointer py-1.5 px-3 rounded-md hover:bg-burgundy/5 border border-transparent hover:border-burgundy/15"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Reset All Platform Lab Data</span>
+              </button>
+            </div>
           </div>
 
           {/* Tools Grid */}
@@ -313,6 +360,48 @@ export const Tools: React.FC = () => {
 
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      {isResetModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-ink/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsResetModalOpen(false)}
+          />
+          
+          {/* Modal Card */}
+          <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full border border-fog p-6 text-left space-y-5">
+            <div className="flex items-center gap-3 text-burgundy">
+              <div className="w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center shrink-0">
+                <RefreshCw className="w-5 h-5 animate-spin-hover" />
+              </div>
+              <h3 className="font-serif font-bold text-lg text-ink">
+                Reset All Platform Data?
+              </h3>
+            </div>
+            
+            <p className="text-sm text-ink/70 leading-relaxed font-sans">
+              This action will permanently erase your local progress, completed quiz scores, flagged budget lines, sorted delegation maps, and article reading marks across the entire CDX Boardroom platform. This cannot be undone.
+            </p>
+            
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setIsResetModalOpen(false)}
+                className="px-4 py-2 bg-paper/20 hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetAll}
+                className="px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer shadow-sm font-semibold"
+              >
+                Reset Everything
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

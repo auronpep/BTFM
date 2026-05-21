@@ -308,7 +308,19 @@ export const SelfAssessment: React.FC = () => {
               {/* Progress and Question Count */}
               <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-ink/40 pb-4 border-b border-fog/60">
                 <span>Governance Area {currentQuestion.id} of {questions.length}</span>
-                <span className="text-brass">Progress: {Math.round((currentQuestion.id / questions.length) * 100)}%</span>
+                <div className="flex items-center gap-4">
+                  {Object.keys(selectedOptions).length > 0 && (
+                    <button
+                      onClick={handleReset}
+                      className="text-brass hover:text-burgundy flex items-center gap-1.5 transition-premium normal-case text-xs font-semibold cursor-pointer"
+                      title="Reset Assessment"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin-hover" />
+                      <span>Reset Quiz</span>
+                    </button>
+                  )}
+                  <span className="text-brass">Progress: {Math.round((currentQuestion.id / questions.length) * 100)}%</span>
+                </div>
               </div>
 
               {/* Progress Bar */}
