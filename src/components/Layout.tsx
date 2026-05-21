@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from './Router';
 import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap } from 'lucide-react';
 
@@ -9,6 +9,57 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { path, navigate } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toolsState, setToolsState] = useState<'none' | 'in-progress' | 'completed'>('none');
+
+  useEffect(() => {
+    try {
+      const selfAssessment = localStorage.getItem('cdx_self_assessment_score') !== null;
+      
+      let packetCount = 0;
+      const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+      if (packetSaved) {
+        packetCount = JSON.parse(packetSaved).length || 0;
+      }
+      
+      const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade') !== null;
+      
+      let budgetCount = 0;
+      const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
+      if (budgetSaved) {
+        budgetCount = JSON.parse(budgetSaved).length || 0;
+      }
+      
+      let authCount = 0;
+      const authSaved = localStorage.getItem('cdx_authority_map_assignments');
+      if (authSaved) {
+        authCount = Object.keys(JSON.parse(authSaved)).length || 0;
+      }
+      
+      const completedSelf = selfAssessment;
+      const completedPacket = packetCount === 9;
+      const completedMinutes = minutesGrade;
+      const completedBudget = budgetCount === 6;
+      const completedAuth = localStorage.getItem('cdx_authority_map_score') !== null;
+
+      const anyIncompleteAndStarted = 
+        (packetCount > 0 && packetCount < 9) || 
+        (budgetCount > 0 && budgetCount < 6) || 
+        (authCount > 0 && !completedAuth);
+        
+      const anyCompleted = completedSelf || completedPacket || completedMinutes || completedBudget || completedAuth;
+      const allCompleted = completedSelf && completedPacket && completedMinutes && completedBudget && completedAuth;
+
+      if (allCompleted) {
+        setToolsState('completed');
+      } else if (anyCompleted || anyIncompleteAndStarted) {
+        setToolsState('in-progress');
+      } else {
+        setToolsState('none');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [path]);
 
   // Situational/Topic Navigation configuration
   const navItems = [
@@ -81,17 +132,24 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <nav className="hidden lg:flex items-center gap-1.5">
               {navItems.map((item) => {
                 const active = isActive(item.target);
+                const isTools = item.target === 'tools';
                 return (
                   <button
                     key={item.target}
                     onClick={() => handleNavClick(item.target)}
-                    className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass ${
+                    className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded border-b-2 border-transparent transition-premium focus-visible:outline-2 focus-visible:outline-brass flex items-center gap-1 relative ${
                       active 
-                        ? 'border-brass text-brass bg-paper/50' 
+                        ? 'border-brass text-brass bg-paper/50 font-bold' 
                         : 'text-ink/75 hover:text-ink hover:bg-fog/30'
                     }`}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    {isTools && toolsState === 'in-progress' && (
+                      <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse inline-block" title="Laboratory in progress" />
+                    )}
+                    {isTools && toolsState === 'completed' && (
+                      <span className="text-[10px] text-teal-brand font-bold inline-block" title="All Laboratories Completed">✓</span>
+                    )}
                   </button>
                 );
               })}
@@ -139,6 +197,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
               {navItems.map((item) => {
                 const active = isActive(item.target);
+                const isTools = item.target === 'tools';
                 return (
                   <button
                     key={item.target}
@@ -149,7 +208,15 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         : 'text-ink hover:bg-paper/50'
                     }`}
                   >
-                    <span>{item.label}</span>
+                    <span className="flex items-center gap-1.5">
+                      <span>{item.label}</span>
+                      {isTools && toolsState === 'in-progress' && (
+                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse inline-block" />
+                      )}
+                      {isTools && toolsState === 'completed' && (
+                        <span className="text-[10px] text-teal-brand font-bold inline-block">✓</span>
+                      )}
+                    </span>
                     <ChevronRight className={`w-4 h-4 ${active ? 'text-brass' : 'text-ink/20'}`} />
                   </button>
                 );
