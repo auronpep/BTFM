@@ -27,6 +27,7 @@ interface BudgetLine {
   cfoInquiry: string[];
   invoicesRequest: string[];
   minutesShow: string;
+  advisoryText?: string;
 }
 
 export const BudgetWorksheet: React.FC = () => {
@@ -37,12 +38,23 @@ export const BudgetWorksheet: React.FC = () => {
     const saved = localStorage.getItem('cdx_budget_audited_lines');
     return saved ? JSON.parse(saved) : [];
   });
+  const [varianceRiskTolerance, setVarianceRiskTolerance] = useState<number>(() => {
+    const saved = localStorage.getItem('cdx_variance_risk_tolerance');
+    return saved ? Number(saved) : 25; // default is 25%
+  });
+
+  const handleToleranceChange = (value: number) => {
+    setVarianceRiskTolerance(value);
+    localStorage.setItem('cdx_variance_risk_tolerance', String(value));
+  };
 
   const resetScan = () => {
     setAuditedLines([]);
     setSelectedLineId(null);
     setShowVulnerabilities(false);
+    setVarianceRiskTolerance(25);
     localStorage.removeItem('cdx_budget_audited_lines');
+    localStorage.removeItem('cdx_variance_risk_tolerance');
   };
 
   // Budget database
@@ -79,7 +91,8 @@ export const BudgetWorksheet: React.FC = () => {
         'Board meeting minutes containing the formal approval of compensation, detailing the comparability data and recusal.',
         'Signed employment agreement amendment or offer letter signed by the Board President.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRS Section 4958.'
+      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRS Section 4958.',
+      advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates California Attorney General guidelines, initiating immediate IRS § 4958 intermediate sanctions risk.'
     },
     'self-dealing': {
       id: 'self-dealing',
@@ -112,7 +125,8 @@ export const BudgetWorksheet: React.FC = () => {
         'At least 2 comparable independent bids/proposals from unrelated marketing firms.',
         'Bylaws or procurement policies showing conflict of interest guidelines.'
       ],
-      minutesShow: 'RESOLVED, that the disinterested members of the Board, having reviewed two competitive bids and finding the agreement with [Spousal Entity] to be of fair market value, highly advantageous, and in the best interest of the corporation, hereby approves the $15,000 agreement. The Executive Director was recused, did not participate in discussion, and abstained from voting in compliance with CA Corp Code § 5233.'
+      minutesShow: 'RESOLVED, that the disinterested members of the Board, having reviewed two competitive bids and finding the agreement with [Spousal Entity] to be of fair market value, highly advantageous, and in the best interest of the corporation, hereby approves the $15,000 agreement. The Executive Director was recused, did not participate in discussion, and abstained from voting in compliance with CA Corp Code § 5233.',
+      advisoryText: 'SELF-DEALING CONTRACT EXCEEDED: Awarding a 100% spousal contract without pre-approval, competitive bids, or recusal violates CA Corp Code § 5233. This exposes voting directors to direct corporate restitution demands.'
     },
     'payroll-tax': {
       id: 'payroll-tax',
@@ -145,7 +159,8 @@ export const BudgetWorksheet: React.FC = () => {
         'EFTPS (Electronic Federal Tax Payment System) receipt confirmations for the last 3 pay periods.',
         'All recent IRS and EDD billing notices or outstanding balance notices.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors directs the Treasurer and Executive Director to immediately pay all outstanding federal and state employee tax withholdings. The Board hereby mandates that no other operating expense or vendor payment be authorized if employee payroll tax withholdings remain unpaid, to preserve compliance and eliminate direct director personal liability under IRC § 6672.'
+      minutesShow: 'RESOLVED, that the Board of Directors directs the Treasurer and Executive Director to immediately pay all outstanding federal and state employee tax withholdings. The Board hereby mandates that no other operating expense or vendor payment be authorized if employee payroll tax withholdings remain unpaid, to preserve compliance and eliminate direct director personal liability under IRC § 6672.',
+      advisoryText: 'TRUST FUND EXPOSURE EXCEEDED: Failing to deposit payroll withholdings triggers immediate 100% personal liability for directors under IRC § 6672. The IRS can seize personal assets to recover these trust fund taxes.'
     },
     'restricted-funds': {
       id: 'restricted-funds',
@@ -178,7 +193,8 @@ export const BudgetWorksheet: React.FC = () => {
         'General Ledger reports showing the transfer from the scholarship account to the general operating account.',
         'Bank statements for restricted accounts and copies of any written correspondence with the donor.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors directs the immediate transfer of $65,000 from the general operating cash account back into the donor-restricted scholarship account. The Board further mandates that no restricted funds are to be used for general operations, and that a formal written donor consent protocol must be initiated before any restricted asset is reallocated in the future.'
+      minutesShow: 'RESOLVED, that the Board of Directors directs the immediate transfer of $65,000 from the general operating cash account back into the donor-restricted scholarship account. The Board further mandates that no restricted funds are to be used for general operations, and that a formal written donor consent protocol must be initiated before any restricted asset is reallocated in the future.',
+      advisoryText: 'BREACH OF CHARITABLE TRUST TRIGGERED: Diverting 76.5% of scholarship funds to cover administrative payroll violates the CA Charitable Trust Doctrine. This triggers direct California Attorney General personal enforcement actions.'
     },
     'luxury-travel': {
       id: 'luxury-travel',
@@ -211,7 +227,8 @@ export const BudgetWorksheet: React.FC = () => {
         'Written business expense reports showing the business purpose, dates, and names of all participants.',
         'The board-approved Travel and Expense Reimbursement Policy.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors establishes a strict $5,000 ceiling on any single travel event and mandates that all executive travel expenses over $1,000 be pre-approved by the Treasurer. The Board hereby directs that reimbursement be denied for any travel or entertainment lacking itemized receipts and a detailed commercial business rationale in compliance with the CA Corp Code § 5231 Duty of Care.'
+      minutesShow: 'RESOLVED, that the Board of Directors establishes a strict $5,000 ceiling on any single travel event and mandates that all executive travel expenses over $1,000 be pre-approved by the Treasurer. The Board hereby directs that reimbursement be denied for any travel or entertainment lacking itemized receipts and a detailed commercial business rationale in compliance with the CA Corp Code § 5231 Duty of Care.',
+      advisoryText: 'DUTY OF CARE OVERRUN EXCEEDED: A 350% travel overrun suggests complete failure of internal financial controls under CA Corp Code § 5231. Fiduciaries can be held personally liable for waste of charitable assets.'
     },
     'lapsed-do': {
       id: 'lapsed-do',
@@ -244,7 +261,8 @@ export const BudgetWorksheet: React.FC = () => {
         'Reinstatement invoice or new premium quotes from our insurance broker.',
         'Most recent written notification of policy expiration or non-renewal.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors finds the lapse of the Director and Officer (D&O) liability insurance policy to represent an unacceptable exposure of the personal assets of the directors. The Treasurer is hereby authorized and directed to immediately fund the premium payment of $35,000 and reinstate the policy to preserve volunteer director immunity under CA Corp Code § 5047.5.'
+      minutesShow: 'RESOLVED, that the Board of Directors finds the lapse of the Director and Officer (D&O) liability insurance policy to represent an unacceptable exposure of the personal assets of the directors. The Treasurer is hereby authorized and directed to immediately fund the premium payment of $35,000 and reinstate the policy to preserve volunteer director immunity under CA Corp Code § 5047.5.',
+      advisoryText: 'IMMUNITY SHIELD NULLIFIED: A lapsed D&O policy strips volunteer directors of California statutory immunity (CA Corp Code § 5047.5). Directors are 100% personally exposed to lawsuit defense costs.'
     }
   };
 
@@ -357,6 +375,30 @@ export const BudgetWorksheet: React.FC = () => {
                     </p>
                   </div>
                 </div>
+
+                {/* Variance Risk Tolerance Slider */}
+                <div className="flex flex-col gap-1.5 w-full sm:w-auto min-w-[220px] bg-white p-3 rounded-xl border border-fog/80 shadow-sm font-sans">
+                  <div className="flex justify-between items-center text-[10px] font-bold text-ink/70">
+                    <span className="uppercase tracking-wider flex items-center gap-1">
+                      <Scale className="w-3.5 h-3.5 text-brass" />
+                      Risk Tolerance Limit
+                    </span>
+                    <span className="font-mono text-rose-700 font-extrabold">{varianceRiskTolerance}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="10"
+                    max="50"
+                    step="5"
+                    value={varianceRiskTolerance}
+                    onChange={(e) => handleToleranceChange(Number(e.target.value))}
+                    className="w-full accent-brass cursor-pointer h-1.5 bg-fog rounded-lg appearance-none"
+                  />
+                  <div className="flex justify-between text-[9px] text-ink/40 font-bold uppercase tracking-widest font-mono">
+                    <span>10% Strict</span>
+                    <span>50% Loose</span>
+                  </div>
+                </div>
                 
                 {/* Complete Badge / Scanning Status */}
                 <div className="shrink-0 flex items-center">
@@ -391,24 +433,34 @@ export const BudgetWorksheet: React.FC = () => {
                     {Object.values(budgetLines).map((line) => {
                       const isSelected = selectedLineId === line.id;
                       const hasAlert = line.status !== 'safe';
+                      const absPct = Math.abs(line.pct);
+                      const exceedsThreshold = absPct >= varianceRiskTolerance;
                       return (
                         <React.Fragment key={line.id}>
                           <tr
                             onClick={() => handleLineClick(line.id)}
                             className={`cursor-pointer transition-premium group ${
                               isSelected 
-                                ? 'bg-brass/15 hover:bg-brass/20 text-ink border-l-4 border-l-brass' 
-                                : showVulnerabilities && hasAlert
-                                  ? 'bg-amber-100/50 hover:bg-amber-100/70 border-l-4 border-l-copper animate-pulse'
-                                  : 'hover:bg-paper/30'
+                                ? 'bg-brass/15 hover:bg-brass/20 text-ink border-l-4 border-l-brass font-medium' 
+                                : exceedsThreshold
+                                  ? 'bg-rose-50/70 hover:bg-rose-100/70 border-l-4 border-l-rose-600 animate-pulse font-medium'
+                                  : showVulnerabilities && hasAlert
+                                    ? 'bg-amber-100/50 hover:bg-amber-100/70 border-l-4 border-l-copper animate-pulse font-medium'
+                                    : 'hover:bg-paper/30 font-medium'
                             }`}
                           >
-                            <td className="py-4 px-5 font-semibold">
+                            <td className="py-4 px-5">
                               <div className="flex items-center gap-2 flex-wrap">
                                 {hasAlert && (
                                   <AlertCircle className={`w-4 h-4 shrink-0 ${line.status === 'extreme' ? 'text-rose-700' : 'text-brass'}`} />
                                 )}
                                 <span className="font-serif font-bold text-ink text-sm sm:text-xs leading-tight">{line.category}</span>
+                                {exceedsThreshold && (
+                                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-rose-600 text-white text-[9px] font-sans font-extrabold uppercase tracking-widest rounded shadow-sm">
+                                    <ShieldAlert className="w-2.5 h-2.5 shrink-0 text-brass animate-bounce" />
+                                    <span>Overrun Triggered</span>
+                                  </span>
+                                )}
                                 {auditedLines.includes(line.id) ? (
                                   <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-50 border border-emerald-100 text-[9px] font-sans font-bold text-emerald-700 rounded uppercase tracking-wider">
                                     <CheckCircle className="w-2.5 h-2.5 text-emerald-600 shrink-0" />
@@ -439,9 +491,38 @@ export const BudgetWorksheet: React.FC = () => {
 
                           {/* COLLAPSIBLE ROW FOR ATTORNEY ANALYSIS DESK */}
                           {isSelected && (
-                            <tr className="bg-paper/10 border-l-4 border-l-brass border-r border-b border-fog/80 animate-fade-in">
+                            <tr className="bg-paper/10 border-l-4 border-l-brass border-r border-b border-fog/80 animate-fade-in font-medium">
                               <td colSpan={5} className="p-6">
                                 <div className="space-y-6">
+                                  {/* Custom Sliding Attorney Advisory Card (if threshold exceeded) */}
+                                  {exceedsThreshold && (
+                                    <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 flex gap-3 items-start animate-fade-in shadow-sm">
+                                      <div className="bg-rose-100 text-rose-700 p-2 rounded-lg shrink-0">
+                                        <ShieldAlert className="w-5 h-5 animate-bounce" />
+                                      </div>
+                                      <div className="space-y-1">
+                                        <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-rose-800 flex items-center gap-1.5">
+                                          <span>Attorney Compliance Advisory Alert</span>
+                                          <span className="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded-full font-mono font-extrabold tracking-widest uppercase">Variance Limit Exceeded</span>
+                                        </h4>
+                                        <p className="text-xs text-rose-700 font-semibold leading-relaxed">
+                                          {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under California nonprofit law."}
+                                        </p>
+                                        <div className="pt-2 flex items-center gap-4">
+                                          <a
+                                            href="https://NPOlawyers.com"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[10px] font-extrabold uppercase tracking-wider text-rose-800 hover:text-rose-950 flex items-center gap-1"
+                                          >
+                                            <span>Immediate Legal Review Required</span>
+                                            <ArrowRight className="w-3.5 h-3.5 text-brass" />
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
                                   {/* Section Header */}
                                   <div className="flex items-center gap-2 border-b border-fog/80 pb-3">
                                     <Scale className="w-4 h-4 text-brass" />
@@ -460,7 +541,7 @@ export const BudgetWorksheet: React.FC = () => {
                                       </h4>
                                       <ul className="space-y-2 list-none">
                                         {line.cfoInquiry?.map((inq, iIdx) => (
-                                          <li key={iIdx} className="text-[11px] text-ink/80 leading-relaxed font-medium pl-3 border-l-2 border-slate-brand/40">
+                                          <li key={iIdx} className="text-[11px] text-ink/80 leading-relaxed pl-3 border-l-2 border-slate-brand/40 font-semibold">
                                             {inq}
                                           </li>
                                         ))}
@@ -475,7 +556,7 @@ export const BudgetWorksheet: React.FC = () => {
                                       </h4>
                                       <ul className="space-y-2 list-none">
                                         {line.invoicesRequest?.map((doc, dIdx) => (
-                                          <li key={dIdx} className="text-[11px] text-ink/80 leading-relaxed font-medium pl-3 border-l-2 border-teal-brand/40">
+                                          <li key={dIdx} className="text-[11px] text-ink/80 leading-relaxed pl-3 border-l-2 border-teal-brand/40 font-semibold">
                                             {doc}
                                           </li>
                                         ))}
