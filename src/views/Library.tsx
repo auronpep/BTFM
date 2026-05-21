@@ -3,7 +3,7 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
-import { Search, ChevronRight, BookOpen, AlertTriangle, Award } from 'lucide-react';
+import { Search, ChevronRight, BookOpen, AlertTriangle, Award, Star, CheckSquare, Square, Check, Trash2 } from 'lucide-react';
 
 export const Library: React.FC = () => {
   const { navigate, path } = useRouter();
@@ -14,7 +14,7 @@ export const Library: React.FC = () => {
   const [masteryFilter, setMasteryFilter] = useState<'all' | 'studied' | 'unstudied'>('all');
   
   // Local storage state
-  const [studiedList] = useState<string[]>(() => {
+  const [studiedList, setStudiedList] = useState<string[]>(() => {
     try {
       const stored = localStorage.getItem('board_mastery_progress');
       if (stored) {
@@ -26,6 +26,37 @@ export const Library: React.FC = () => {
     }
     return [];
   });
+
+  const [bookmarkedList, setBookmarkedList] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('cdx_bookmarked_slugs');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  });
+
+  const handleToggleBookmark = (slug: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBookmarkedList(prev => {
+      const next = prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug];
+      localStorage.setItem('cdx_bookmarked_slugs', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleToggleStudy = (slug: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setStudiedList(prev => {
+      const next = prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug];
+      localStorage.setItem('board_mastery_progress', JSON.stringify(next));
+      return next;
+    });
+  };
 
   // Map specific paths to initial categories
   const getInitialCategory = () => {
@@ -171,11 +202,26 @@ export const Library: React.FC = () => {
                               <span className="bg-paper border border-fog/80 px-2 py-0.5 rounded text-slate-brand">{art.category}</span>
                               <div className="flex items-center gap-2">
                                 <span className="text-ink/40">{art.readingTime} Min Read</span>
-                                {hasStudied && (
-                                  <span className="text-brass bg-brass/10 border border-brass/25 px-1.5 py-0.2 rounded text-[8px] font-black">
-                                    ✓ STUDIED
-                                  </span>
-                                )}
+                                <div className="flex items-center gap-1 bg-paper/50 p-0.5 rounded border border-fog/40 select-none">
+                                  <button
+                                    onClick={(e) => handleToggleBookmark(art.slug, e)}
+                                    className="p-1 rounded-full hover:bg-fog/40 text-ink/40 hover:text-brass transition-premium cursor-pointer focus:outline-none"
+                                    title={bookmarkedList.includes(art.slug) ? "Remove Bookmark" : "Save Bookmark"}
+                                  >
+                                    <Star className={`w-3.5 h-3.5 ${bookmarkedList.includes(art.slug) ? "fill-brass text-brass" : ""}`} />
+                                  </button>
+                                  <button
+                                    onClick={(e) => handleToggleStudy(art.slug, e)}
+                                    className="p-1 rounded-full hover:bg-fog/40 text-ink/40 hover:text-emerald-700 transition-premium cursor-pointer focus:outline-none"
+                                    title={hasStudied ? "Mark as Unstudied" : "Mark as Studied"}
+                                  >
+                                    {hasStudied ? (
+                                      <CheckSquare className="w-3.5 h-3.5 text-emerald-750" />
+                                    ) : (
+                                      <Square className="w-3.5 h-3.5" />
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                             
@@ -229,11 +275,26 @@ export const Library: React.FC = () => {
                               </span>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] font-bold text-ink/40 uppercase tracking-widest bg-paper px-2 py-0.5 rounded border border-fog/40">{sc.boardStage} stage</span>
-                                {hasStudied && (
-                                  <span className="text-brass bg-brass/10 border border-brass/25 px-1.5 py-0.2 rounded text-[8px] font-black">
-                                    ✓ STUDIED
-                                  </span>
-                                )}
+                                <div className="flex items-center gap-1 bg-paper/50 p-0.5 rounded border border-fog/40 select-none">
+                                  <button
+                                    onClick={(e) => handleToggleBookmark(sc.slug, e)}
+                                    className="p-1 rounded-full hover:bg-fog/40 text-ink/40 hover:text-brass transition-premium cursor-pointer focus:outline-none"
+                                    title={bookmarkedList.includes(sc.slug) ? "Remove Bookmark" : "Save Bookmark"}
+                                  >
+                                    <Star className={`w-3.5 h-3.5 ${bookmarkedList.includes(sc.slug) ? "fill-brass text-brass" : ""}`} />
+                                  </button>
+                                  <button
+                                    onClick={(e) => handleToggleStudy(sc.slug, e)}
+                                    className="p-1 rounded-full hover:bg-fog/40 text-ink/40 hover:text-emerald-700 transition-premium cursor-pointer focus:outline-none"
+                                    title={hasStudied ? "Mark as Unstudied" : "Mark as Studied"}
+                                  >
+                                    {hasStudied ? (
+                                      <CheckSquare className="w-3.5 h-3.5 text-emerald-750" />
+                                    ) : (
+                                      <Square className="w-3.5 h-3.5" />
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                             
@@ -382,6 +443,52 @@ export const Library: React.FC = () => {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* My Bookmarked Library Widget */}
+              <div className="bg-white p-5 rounded-xl border border-fog shadow-sm text-left space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-fog/60">
+                  <div className="space-y-1">
+                    <h4 className="font-serif font-bold text-base text-ink tracking-wide">Saved Guides</h4>
+                    <p className="text-[10px] text-ink/40 uppercase tracking-widest font-extrabold">Your Study List</p>
+                  </div>
+                  <Star className="w-5 h-5 text-brass fill-brass/20" />
+                </div>
+
+                {bookmarkedList.length === 0 ? (
+                  <div className="text-xs text-ink/50 py-4 text-center leading-relaxed font-sans">
+                    No saved guides yet. Click the <Star className="w-3 h-3 inline fill-brass text-brass mb-0.5" /> star on any card to bookmark it here for fast reference.
+                  </div>
+                ) : (
+                  <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                    {bookmarkedList.map((slug) => {
+                      const art = articles.find(a => a.slug === slug);
+                      const sc = scenarios.find(s => s.slug === slug);
+                      const title = art ? art.title : (sc ? sc.title : slug);
+                      const type = art ? "Article" : "Scenario";
+                      const path = art ? `article/${slug}` : `scenario/${slug}`;
+                      
+                      return (
+                        <div key={slug} className="flex items-start justify-between gap-2 p-2 hover:bg-paper/35 rounded-lg border border-transparent hover:border-fog/40 transition-premium">
+                          <button
+                            onClick={() => navigate(path)}
+                            className="flex-1 text-left text-xs font-semibold text-ink hover:text-brass transition-premium leading-tight focus:outline-none cursor-pointer"
+                          >
+                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-brass/80 block mb-0.5">{type}</span>
+                            <span className="line-clamp-2">{title}</span>
+                          </button>
+                          <button
+                            onClick={(e) => handleToggleBookmark(slug, e)}
+                            className="text-ink/30 hover:text-burgundy p-1 rounded-full hover:bg-fog/50 transition-premium shrink-0 cursor-pointer"
+                            title="Remove Bookmark"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
             </aside>
