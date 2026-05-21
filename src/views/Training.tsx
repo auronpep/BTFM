@@ -1,8 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
-import { Calendar, User, Mail, ShieldCheck, CheckCircle2, ChevronRight, Award, GraduationCap, Building } from 'lucide-react';
+import { Calendar, User, Mail, ShieldCheck, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
 
 export const Training: React.FC = () => {
+
+  // 3. Syllabus Diagnostic Wizard States
+  const [diagnostic, setDiagnostic] = useState(() => {
+    const saved = localStorage.getItem('cdx_training_diagnostic');
+    return saved ? JSON.parse(saved) : {
+      step: 1, // 1, 2, 3, or 'completed'
+      budget: '$250k - $1M',
+      anxiety: 'Conflict of Interest',
+      boardFrequency: 'Bi-monthly (6x/year)'
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cdx_training_diagnostic', JSON.stringify(diagnostic));
+  }, [diagnostic]);
+
+  const handleNextStep = () => {
+    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? prev.step + 1 : prev.step }));
+  };
+
+  const handlePrevStep = () => {
+    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? Math.max(1, prev.step - 1) : 1 }));
+  };
+
+  const handleResetDiagnostic = () => {
+    setDiagnostic({
+      step: 1,
+      budget: '$250k - $1M',
+      anxiety: 'Conflict of Interest',
+      boardFrequency: 'Bi-monthly (6x/year)'
+    });
+  };
+
+  const handleAutoSelectWebinar = () => {
+    if (diagnostic.anxiety === 'Financials & Overruns') {
+      setSelectedWebinar('webinar-audit');
+    } else if (diagnostic.anxiety === 'Conflict of Interest') {
+      setSelectedWebinar('webinar-comp');
+    } else {
+      setSelectedWebinar('webinar-minutes');
+    }
+    // Scroll to webinar registration card
+    const el = document.getElementById('webinar-card');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const getRecommendation = () => {
+    const { budget, anxiety } = diagnostic;
+    let title = "Fiduciary Oversight Plan";
+    let desc = "";
+    let tools = [] as string[];
+    let rationale = "";
+
+    if (anxiety === 'Financials & Overruns') {
+      title = "Financial Control & Audit Protocol";
+      desc = `Your primary concern is managing budgets and overruns. With your selected budget of ${budget}, establishing robust independent variance review is a top legal duty.`;
+      tools = ["Budget Worksheet Audit Lab", "California Board Rules Center"];
+      rationale = budget === 'Over $5M' || budget === '$1M - $5M'
+        ? "California mandates a fully independent CPA Audit Committee for nonprofits exceeding $2M in gross revenues (CA Gov Code § 12586). Your budget size puts you in high statutory exposure."
+        : "While a formal CPA audit isn't mandated for budgets under $2M, the California Attorney General recommends a 3-director Audit Task Force to oversee financial ledgers and prevent internal embezzlement.";
+    } else if (anxiety === 'Conflict of Interest') {
+      title = "Conflict Recusal & Compliance Protocol";
+      desc = "Managing self-dealing transactions is critical. Interested director contracts must be handled via strict statutory safe harbors.";
+      tools = ["Minutes Quality Scorecard", "Board Authority Map"];
+      rationale = "Under California Section 5233, any contract involving a conflicted director must be approved by fully disinterested, independent board members. Conflicted parties must exit the room and be recused from voting.";
+    } else if (anxiety === 'IRS Filings & Delinquency') {
+      title = "California Board Status & Registry Protocol";
+      desc = "Failure to file required state forms will cause immediate, automatic registry suspension and status loss.";
+      tools = ["California Board Rules Center", "Self-Assessment Diagnostic"];
+      rationale = "The California Attorney General requires annual CT-TR-1 filing and SOI-100 Statement of Information to be filed on time. Any delay can trigger automatic suspension, making the board personally liable for corporate actions.";
+    } else {
+      title = "Defensive Governance Minutes Protocol";
+      desc = "Protect individual directors from litigation discovery and IRS personal excise tax penalties.";
+      tools = ["Minutes Quality Scorecard", "Boards 101 Fundamental Manual"];
+      rationale = "IRS Section 4958 requires the board to document compensation studies in contemporaneous minutes to secure the 'Rebuttable Presumption of Reasonableness.' Minutes are legal evidence, not transcripts of disagreements.";
+    }
+
+    return { title, desc, tools, rationale };
+  };
 
   // 1. Webinar Form States
   const [webinarName, setWebinarName] = useState('');
@@ -195,246 +276,469 @@ export const Training: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Forms Section */}
+          {/* Interactive Training & Diagnostic Section */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Left: Webinar Registration (lg:col-span-5) */}
-            <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-fog overflow-hidden">
-              <div className="bg-slate-brand text-paper p-5 border-b border-brass/20 text-left space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Immediate Enrollment</span>
-                <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Registration</h4>
+            {/* Left: Syllabus Diagnostic Wizard (lg:col-span-4) */}
+            <div className="lg:col-span-4 bg-amber-50/20 rounded-2xl border border-amber-900/10 p-5 space-y-5 text-left shadow-sm">
+              <div className="border-b border-amber-900/10 pb-3">
+                <div className="flex items-center gap-1.5 text-brass">
+                  <Sparkles className="w-4 h-4 fill-brass/20 animate-pulse" />
+                  <span className="text-[9px] font-extrabold uppercase tracking-widest">Syllabus Planner</span>
+                </div>
+                <h4 className="font-serif text-lg font-bold text-ink">Curriculum Diagnostic</h4>
+                <p className="text-xs text-ink/50 mt-0.5 leading-relaxed">
+                  Analyze your organization's specific legal vulnerabilities to compile a customized board training syllabus.
+                </p>
               </div>
 
-              {!webinarSubmitted ? (
-                <form onSubmit={handleWebinarSubmit} className="p-6 text-left space-y-4">
-                  {webinarError && (
-                    <div className="p-3 bg-burgundy/5 text-burgundy text-xs font-semibold rounded border border-burgundy/15">
-                      {webinarError}
-                    </div>
-                  )}
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Full Name:</label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
-                      <input
-                        type="text"
-                        required
-                        value={webinarName}
-                        onChange={(e) => setWebinarName(e.target.value)}
-                        placeholder="Director Name"
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                      />
-                    </div>
+              {diagnostic.step === 1 && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass/80">Step 1 of 3</span>
+                    <h5 className="text-sm font-bold text-ink font-serif">What is your annual operating budget?</h5>
                   </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Email Address:</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
-                      <input
-                        type="email"
-                        required
-                        value={webinarEmail}
-                        onChange={(e) => setWebinarEmail(e.target.value)}
-                        placeholder="director@yournonprofit.org"
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    {[
+                      'Under $250k',
+                      '$250k - $1M',
+                      '$1M - $5M',
+                      'Over $5M'
+                    ].map((b) => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setDiagnostic({ ...diagnostic, budget: b })}
+                        className={`w-full text-left px-3.5 py-2.5 rounded-lg border text-xs font-semibold flex items-center justify-between transition-premium cursor-pointer ${
+                          diagnostic.budget === b
+                            ? 'border-brass bg-brass/5 text-ink'
+                            : 'border-fog bg-white text-ink/75 hover:border-brass/50'
+                        }`}
+                      >
+                        <span>{b}</span>
+                        {diagnostic.budget === b && <Check className="w-4 h-4 text-brass" />}
+                      </button>
+                    ))}
                   </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Topic:</label>
-                    <select
-                      required
-                      value={selectedWebinar}
-                      onChange={(e) => setSelectedWebinar(e.target.value)}
-                      className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium"
-                    >
-                      <option value="">-- Select Upcoming Session --</option>
-                      {webinarsList.map(w => (
-                        <option key={w.id} value={w.id}>{w.date} - {w.title}</option>
-                      ))}
-                    </select>
-                  </div>
-
                   <button
-                    type="submit"
-                    className="w-full inline-flex justify-center items-center gap-2 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                    type="button"
+                    onClick={handleNextStep}
+                    className="w-full inline-flex justify-center items-center gap-1 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
                   >
-                    <span>Reserve My Webinar Seat</span>
+                    <span>Next: Compliance Anxiety</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
-                </form>
-              ) : (
-                /* Webinar Confirmation Screen */
-                <div className="p-8 text-center space-y-5 animate-fade-in">
-                  <div className="w-12 h-12 bg-teal-brand/15 text-teal-brand rounded-full flex items-center justify-center mx-auto border border-teal-brand/30">
-                    <ShieldCheck className="w-6 h-6" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <h5 className="font-serif font-bold text-lg text-ink">Registration Confirmed</h5>
-                    <p className="text-xs text-ink/60 font-semibold uppercase tracking-wider">Topic: {webinarSubmitted}</p>
-                    <p className="text-xs sm:text-sm text-ink/80 leading-relaxed max-w-sm mx-auto">
-                      Thank you, <strong className="text-ink font-bold">{webinarName}</strong>. A calendar invitation and Zoom webinar link have been sent to <strong className="text-ink font-bold">{webinarEmail}</strong>.
-                    </p>
-                  </div>
+                </div>
+              )}
 
-                  {/* Add to Calendar (.ics) download button */}
-                  <div className="pt-2">
+              {diagnostic.step === 2 && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass/80">Step 2 of 3</span>
+                    <h5 className="text-sm font-bold text-ink font-serif">What is your board's primary anxiety?</h5>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      { key: 'Financials & Overruns', label: 'Financials & Overruns' },
+                      { key: 'Conflict of Interest', label: 'Conflict of Interest' },
+                      { key: 'IRS Filings & Delinquency', label: 'IRS Filings & Delinquency' },
+                      { key: 'Deliberation boundaries', label: 'Minutes & Liability' }
+                    ].map((opt) => (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => setDiagnostic({ ...diagnostic, anxiety: opt.key })}
+                        className={`w-full text-left px-3.5 py-2.5 rounded-lg border text-xs font-semibold flex items-center justify-between transition-premium cursor-pointer ${
+                          diagnostic.anxiety === opt.key
+                            ? 'border-brass bg-brass/5 text-ink'
+                            : 'border-fog bg-white text-ink/75 hover:border-brass/50'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        {diagnostic.anxiety === opt.key && <Check className="w-4 h-4 text-brass" />}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 pt-1">
                     <button
-                      onClick={() => handleDownloadICS(selectedWebinar)}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="py-2 border border-fog hover:border-brass rounded text-xs font-bold uppercase tracking-wider text-ink/65 hover:text-ink transition-premium cursor-pointer text-center"
                     >
-                      <Calendar className="w-4 h-4 shrink-0" />
-                      <span>Add to Calendar (.ics)</span>
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleNextStep}
+                      className="py-2 bg-slate-brand hover:bg-ink text-white rounded text-xs font-bold uppercase tracking-wider transition-premium cursor-pointer"
+                    >
+                      Next Step
                     </button>
                   </div>
+                </div>
+              )}
 
-                  <div className="pt-4 border-t border-fog/50">
+              {diagnostic.step === 3 && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass/80">Step 3 of 3</span>
+                    <h5 className="text-sm font-bold text-ink font-serif">How frequently does your board meet?</h5>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Monthly (10-12x/year)',
+                      'Bi-monthly (6x/year)',
+                      'Quarterly (4x/year)'
+                    ].map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => setDiagnostic({ ...diagnostic, boardFrequency: f })}
+                        className={`w-full text-left px-3.5 py-2.5 rounded-lg border text-xs font-semibold flex items-center justify-between transition-premium cursor-pointer ${
+                          diagnostic.boardFrequency === f
+                            ? 'border-brass bg-brass/5 text-ink'
+                            : 'border-fog bg-white text-ink/75 hover:border-brass/50'
+                        }`}
+                      >
+                        <span>{f}</span>
+                        {diagnostic.boardFrequency === f && <Check className="w-4 h-4 text-brass" />}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 pt-1">
                     <button
-                      onClick={() => setWebinarId(null)}
-                      className="text-xs font-extrabold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="py-2 border border-fog hover:border-brass rounded text-xs font-bold uppercase tracking-wider text-ink/65 hover:text-ink transition-premium cursor-pointer text-center"
                     >
-                      Enroll Another Director
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDiagnostic((prev: any) => ({ ...prev, step: 'completed' }))}
+                      className="py-2 bg-teal-brand hover:bg-ink text-white rounded text-xs font-bold uppercase tracking-wider transition-premium cursor-pointer"
+                    >
+                      Generate Plan
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {diagnostic.step === 'completed' && (
+                <div className="space-y-4 animate-fade-in text-xs">
+                  <div className="bg-white rounded-xl border border-brass/20 p-4 space-y-3.5 relative">
+                    <div className="absolute -top-2.5 -right-2 bg-brass text-ink font-extrabold uppercase tracking-widest text-[8px] px-2 py-0.5 rounded shadow-sm border border-amber-950/15">
+                      Personalized
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-brass uppercase tracking-widest font-black">Recommended Track</p>
+                      <h5 className="font-serif text-sm font-bold text-ink leading-tight">{getRecommendation().title}</h5>
+                    </div>
+
+                    <p className="text-[11px] text-ink/70 leading-relaxed font-sans">
+                      {getRecommendation().desc}
+                    </p>
+
+                    <div className="bg-paper/40 p-2.5 rounded-lg border border-fog/50 space-y-1.5 text-left">
+                      <strong className="text-[9px] uppercase tracking-wider text-ink/40 block">Statutory Audit Rationale:</strong>
+                      <p className="text-[10px] text-ink/80 leading-relaxed font-medium">
+                        {getRecommendation().rationale}
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5 text-left">
+                      <strong className="text-[9px] uppercase tracking-wider text-ink/40 block">Key Workspace Labs to Review:</strong>
+                      <div className="flex flex-col gap-1 text-[11px] font-bold text-slate-brand">
+                        {getRecommendation().tools.map((t, idx) => (
+                          <div key={idx} className="flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                            <span>{t}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      onClick={handleAutoSelectWebinar}
+                      className="w-full inline-flex justify-center items-center gap-1 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                    >
+                      <span>Select Suggested Webinar</span>
+                      <ChevronRight className="w-4 h-4 text-brass" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleResetDiagnostic}
+                      className="w-full inline-flex justify-center items-center gap-1.5 py-1.5 border border-fog hover:border-brass text-ink/65 hover:text-ink text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Retake Diagnostic</span>
                     </button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Right: In-Person Workshop Request (lg:col-span-7) */}
-            <div className="lg:col-span-7 bg-white rounded-xl shadow-md border border-fog overflow-hidden">
-              <div className="bg-teal-brand text-paper p-5 border-b border-brass/20 text-left space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Organization Consultation</span>
-                <h4 className="font-serif text-lg font-bold text-white tracking-wide">Request Custom On-Site Training</h4>
-              </div>
+            {/* Right: Webinars & Custom Workshops (lg:col-span-8) */}
+            <div className="lg:col-span-8 grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+              
+              {/* Left: Webinar Registration (lg:col-span-5) */}
+              <div id="webinar-card" className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
+                <div className="bg-slate-brand text-paper p-5 border-b border-brass/20 space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Immediate Enrollment</span>
+                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Registration</h4>
+                </div>
 
-              {!inpersonSubmitted ? (
-                <form onSubmit={handleInpersonSubmit} className="p-6 text-left space-y-4">
-                  {inpersonError && (
-                    <div className="p-3 bg-burgundy/5 text-burgundy text-xs font-semibold rounded border border-burgundy/15">
-                      {inpersonError}
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
-                      <input
-                        type="text"
-                        required
-                        value={orgName}
-                        onChange={(e) => setOrgName(e.target.value)}
-                        placeholder="Nonprofit Corporation"
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                      />
-                    </div>
+                {!webinarSubmitted ? (
+                  <form onSubmit={handleWebinarSubmit} className="p-6 space-y-4">
+                    {webinarError && (
+                      <div className="p-3 bg-burgundy/5 text-burgundy text-xs font-semibold rounded border border-burgundy/15">
+                        {webinarError}
+                      </div>
+                    )}
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Full Name:</label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
+                        <input
+                          type="text"
+                          required
+                          value={webinarName}
+                          onChange={(e) => setWebinarName(e.target.value)}
+                          placeholder="Director Name"
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Email Address:</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
+                        <input
+                          type="email"
+                          required
+                          value={webinarEmail}
+                          onChange={(e) => setWebinarEmail(e.target.value)}
+                          placeholder="director@yournonprofit.org"
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Topic:</label>
                       <select
                         required
-                        value={boardSize}
-                        onChange={(e) => setBoardSize(e.target.value)}
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        value={selectedWebinar}
+                        onChange={(e) => setSelectedWebinar(e.target.value)}
+                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium cursor-pointer"
                       >
-                        <option value="">-- Choose Size --</option>
-                        <option value="3-5">3 to 5 Directors</option>
-                        <option value="6-9">6 to 9 Directors</option>
-                        <option value="10-15">10 to 15 Directors</option>
-                        <option value="15+">15+ Directors</option>
+                        <option value="">-- Select Upcoming Session --</option>
+                        {webinarsList.map(w => (
+                          <option key={w.id} value={w.id}>{w.date} - {w.title}</option>
+                        ))}
                       </select>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
-                      <input
-                        type="text"
-                        required
-                        value={contactName}
-                        onChange={(e) => setContactName(e.target.value)}
-                        placeholder="Board Chair or President"
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
-                      <input
-                        type="email"
-                        required
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                        placeholder="chair@yournonprofit.org"
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Main Training Topic:</label>
-                    <select
-                      required
-                      value={trainingTopic}
-                      onChange={(e) => setTrainingTopic(e.target.value)}
-                      className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium"
-                    >
-                      <option value="">-- Select Target Curriculum Area --</option>
-                      <option value="onboarding">Board Onboarding & Fiduciary Duties (Care, Loyalty, Obedience)</option>
-                      <option value="audit">Bylaws Auditing & California Registry Requirements</option>
-                      <option value="compensation">Executive Compensation surveys & Safe Harbors (Form 990)</option>
-                      <option value="boundaries">Strategic Deliberation & Governance vs. Management (40-40-20 Rule)</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Optional Notes or Specific Concerns:</label>
-                    <textarea
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="List any specific bylaws delinquency or IRS concerns..."
-                      rows={3}
-                      className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full inline-flex justify-center items-center gap-2 py-3 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
-                  >
-                    <span>Submit Training Request</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </form>
-              ) : (
-                /* In-Person Confirmation Screen */
-                <div className="p-8 text-center space-y-5 animate-fade-in">
-                  <div className="w-12 h-12 bg-teal-brand/15 text-teal-brand rounded-full flex items-center justify-center mx-auto border border-teal-brand/30">
-                    <Award className="w-6 h-6 animate-spin-slow" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <h5 className="font-serif font-bold text-lg text-ink font-semibold">Training Inquiry Received</h5>
-                    <p className="text-xs text-ink/65 font-bold uppercase tracking-widest">{orgName} - {trainingTopic}</p>
-                    <p className="text-xs sm:text-sm text-ink/85 leading-relaxed max-w-md mx-auto">
-                      Thank you, <strong className="text-ink font-bold">{contactName}</strong>. Your workshop request has been successfully recorded. An attorney from the <strong className="text-ink font-bold">California Center for Nonprofit Law</strong> will contact you at <strong className="text-ink font-bold">{contactEmail}</strong> within 2 business days to schedule a custom curriculum planning session.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-fog/50">
                     <button
-                      onClick={() => setInpersonSubmitted(false)}
-                      className="text-xs font-extrabold uppercase tracking-wider text-teal-brand hover:text-brass transition-premium"
+                      type="submit"
+                      className="w-full inline-flex justify-center items-center gap-2 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
                     >
-                      Submit Another Workshop Inquiry
+                      <span>Reserve My Webinar Seat</span>
+                      <ChevronRight className="w-4 h-4" />
                     </button>
+                  </form>
+                ) : (
+                  /* Webinar Confirmation Screen */
+                  <div className="p-8 text-center space-y-5 animate-fade-in">
+                    <div className="w-12 h-12 bg-teal-brand/15 text-teal-brand rounded-full flex items-center justify-center mx-auto border border-teal-brand/30">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h5 className="font-serif font-bold text-lg text-ink">Registration Confirmed</h5>
+                      <p className="text-xs text-ink/60 font-semibold uppercase tracking-wider">Topic: {webinarSubmitted}</p>
+                      <p className="text-xs sm:text-sm text-ink/80 leading-relaxed max-w-sm mx-auto">
+                        Thank you, <strong className="text-ink font-bold">{webinarName}</strong>. A calendar invitation and Zoom webinar link have been sent to <strong className="text-ink font-bold">{webinarEmail}</strong>.
+                      </p>
+                    </div>
+
+                    {/* Add to Calendar (.ics) download button */}
+                    <div className="pt-2">
+                      <button
+                        onClick={() => handleDownloadICS(selectedWebinar)}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                      >
+                        <Calendar className="w-4 h-4 shrink-0" />
+                        <span>Add to Calendar (.ics)</span>
+                      </button>
+                    </div>
+
+                    <div className="pt-4 border-t border-fog/50">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setWebinarName('');
+                          setWebinarEmail('');
+                          setSelectedWebinar('');
+                          setWebinarId(null);
+                        }}
+                        className="text-xs font-extrabold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium cursor-pointer"
+                      >
+                        Enroll Another Director
+                      </button>
+                    </div>
                   </div>
+                )}
+              </div>
+
+              {/* Right: In-Person Workshop Request (lg:col-span-7) */}
+              <div className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
+                <div className="bg-teal-brand text-paper p-5 border-b border-brass/20 space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Organization Consultation</span>
+                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Request Custom On-Site Training</h4>
                 </div>
-              )}
+
+                {!inpersonSubmitted ? (
+                  <form onSubmit={handleInpersonSubmit} className="p-6 space-y-4">
+                    {inpersonError && (
+                      <div className="p-3 bg-burgundy/5 text-burgundy text-xs font-semibold rounded border border-burgundy/15">
+                        {inpersonError}
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
+                        <input
+                          type="text"
+                          required
+                          value={orgName}
+                          onChange={(e) => setOrgName(e.target.value)}
+                          placeholder="Nonprofit Corporation"
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
+                        <select
+                          required
+                          value={boardSize}
+                          onChange={(e) => setBoardSize(e.target.value)}
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans cursor-pointer"
+                        >
+                          <option value="">-- Choose Size --</option>
+                          <option value="3-5">3 to 5 Directors</option>
+                          <option value="6-9">6 to 9 Directors</option>
+                          <option value="10-15">10 to 15 Directors</option>
+                          <option value="15+">15+ Directors</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
+                        <input
+                          type="text"
+                          required
+                          value={contactName}
+                          onChange={(e) => setContactName(e.target.value)}
+                          placeholder="Board Chair or President"
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
+                        <input
+                          type="email"
+                          required
+                          value={contactEmail}
+                          onChange={(e) => setContactEmail(e.target.value)}
+                          placeholder="chair@yournonprofit.org"
+                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Main Training Topic:</label>
+                      <select
+                        required
+                        value={trainingTopic}
+                        onChange={(e) => setTrainingTopic(e.target.value)}
+                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium cursor-pointer"
+                      >
+                        <option value="">-- Select Target Curriculum Area --</option>
+                        <option value="onboarding">Board Onboarding & Fiduciary Duties (Care, Loyalty, Obedience)</option>
+                        <option value="audit">Bylaws Auditing & California Registry Requirements</option>
+                        <option value="compensation">Executive Compensation surveys & Safe Harbors (Form 990)</option>
+                        <option value="boundaries">Strategic Deliberation & Governance vs. Management (40-40-20 Rule)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Optional Notes or Specific Concerns:</label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="List any specific bylaws delinquency or IRS concerns..."
+                        rows={3}
+                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center items-center gap-2 py-3 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                    >
+                      <span>Submit Training Request</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </form>
+                ) : (
+                  /* In-Person Confirmation Screen */
+                  <div className="p-8 text-center space-y-5 animate-fade-in font-medium">
+                    <div className="w-12 h-12 bg-teal-brand/15 text-teal-brand rounded-full flex items-center justify-center mx-auto border border-teal-brand/30">
+                      <Award className="w-6 h-6 animate-spin-slow" />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h5 className="font-serif font-bold text-lg text-ink">Training Inquiry Received</h5>
+                      <p className="text-xs text-ink/65 font-bold uppercase tracking-widest">{orgName} - {trainingTopic}</p>
+                      <p className="text-xs sm:text-sm text-ink/85 leading-relaxed max-w-md mx-auto">
+                        Thank you, <strong className="text-ink font-bold">{contactName}</strong>. Your workshop request has been successfully recorded. An attorney from the <strong className="text-ink font-bold">California Center for Nonprofit Law</strong> will contact you at <strong className="text-ink font-bold">{contactEmail}</strong> within 2 business days to schedule a custom curriculum planning session.
+                      </p>
+                    </div>
+
+                    <div className="pt-4 border-t border-fog/50">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOrgName('');
+                          setContactName('');
+                          setContactEmail('');
+                          setBoardSize('');
+                          setTrainingTopic('');
+                          setNotes('');
+                          setInpersonSubmitted(false);
+                        }}
+                        className="text-xs font-extrabold uppercase tracking-wider text-teal-brand hover:text-brass transition-premium cursor-pointer"
+                      >
+                        Submit Another Workshop Inquiry
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
             </div>
 
           </div>
