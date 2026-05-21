@@ -5,7 +5,7 @@ import { scenarios } from '../data/scenarios';
 import { articles } from '../data/articles';
 import { LegalEscalationCard } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
-import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square } from 'lucide-react';
+import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle } from 'lucide-react';
 
 export const ScenarioReader: React.FC = () => {
   const { queryParams, navigate } = useRouter();
@@ -13,6 +13,24 @@ export const ScenarioReader: React.FC = () => {
 
   // Find scenario
   const scenario = scenarios.find((sc) => sc.slug === slug);
+
+  const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
+    try {
+      const saved = localStorage.getItem(`cdx_feedback_status_${slug}`);
+      return saved as 'yes' | 'no' | null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const handleFeedback = (val: 'yes' | 'no') => {
+    try {
+      localStorage.setItem(`cdx_feedback_status_${slug}`, val);
+      setFeedback(val);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Local storage mastery tracking state
   const [isStudied, setIsStudied] = useState(() => {
@@ -220,6 +238,81 @@ export const ScenarioReader: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {/* Feedback Survey */}
+              <div className="mt-6 pt-6 border-t border-fog/60 space-y-4">
+                {feedback === null ? (
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-paper/10 p-4 rounded-lg border border-fog/55 text-left">
+                    <span className="text-xs font-bold text-ink/70 tracking-wide font-sans">Was this scenario case study helpful for your board?</span>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <button
+                        onClick={() => handleFeedback('yes')}
+                        className="px-4 py-1.5 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs font-bold uppercase tracking-wider rounded shadow-sm hover:bg-emerald-100 transition-premium cursor-pointer font-sans"
+                      >
+                        👍 Yes
+                      </button>
+                      <button
+                        onClick={() => handleFeedback('no')}
+                        className="px-4 py-1.5 bg-rose-50 border border-rose-300 text-rose-700 text-xs font-bold uppercase tracking-wider rounded shadow-sm hover:bg-rose-100 transition-premium cursor-pointer font-sans"
+                      >
+                        👎 No
+                      </button>
+                    </div>
+                  </div>
+                ) : feedback === 'yes' ? (
+                  <div className="bg-emerald-50/45 border border-emerald-200 p-4 rounded-lg text-xs font-semibold text-emerald-800 flex items-center justify-between gap-3 animate-fade-in text-left">
+                    <span>✓ Thank you! Your review has been added to our board alignment records.</span>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                        setFeedback(null);
+                      }}
+                      className="text-[10px] text-emerald-600 hover:underline font-bold uppercase cursor-pointer"
+                    >
+                      Undo
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4 animate-fade-in text-left">
+                    <div className="bg-paper p-4 rounded-lg border border-fog text-xs font-semibold text-ink/75 flex items-center justify-between gap-3">
+                      <span>Thank you. We understand this general scenario might not match the specific legal complexities your board is facing.</span>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                          setFeedback(null);
+                        }}
+                        className="text-[10px] text-burgundy hover:underline font-bold uppercase shrink-0 cursor-pointer"
+                      >
+                        Change
+                      </button>
+                    </div>
+                    
+                    {/* Legal Counselling Escalation Memo Card */}
+                    <div className="bg-burgundy/5 border-l-4 border-burgundy p-5 rounded-r-xl space-y-3 text-left">
+                      <div className="flex items-center gap-1.5 text-burgundy">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <span className="text-[10px] font-extrabold uppercase tracking-widest">Fiduciary Action Plan — Privileged Board Audit Required</span>
+                      </div>
+                      <h4 className="font-serif font-bold text-base text-ink">
+                        Involved in a complex conflict or board dispute?
+                      </h4>
+                      <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
+                        If your board is navigating delicate governance matters, unvoted contracts, or potential self-dealing triggers, general educational reading is not a substitute for counsel. Secure a direct **Board Governance & Safety Audit** under professional attorney-client privilege with Myron Steeves and NPO Lawyers.
+                      </p>
+                      <div className="pt-2">
+                        <a
+                          href="https://NPOlawyers.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold"
+                        >
+                          <span>Consult Attorney Now ➜</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* LEGAL REFERRAL ROW */}
               <div className="pt-2">
