@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { 
   Clock, 
@@ -16,9 +16,7 @@ import {
   Play,
   Pause,
   Volume2,
-  RotateCw,
-  CheckSquare,
-  Square
+  RotateCw
 } from 'lucide-react';
 
 export const Boards101: React.FC = () => {
@@ -528,8 +526,6 @@ export const Boards101: React.FC = () => {
                 </div>
               )}
             </div>
-
-          </div>
 
           </div>
 

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { 
   Landmark, ArrowRight, ShieldCheck, Scale, FileText, CheckCircle2, 
-  ChevronRight, Activity, Zap, Calendar, Award 
+  ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles
 } from 'lucide-react';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
@@ -12,18 +12,29 @@ export const Home: React.FC = () => {
   const { navigate } = useRouter();
   const [heroTab, setHeroTab] = useState<'ledger' | 'schedule'>('ledger');
   const [activeCategory, setActiveCategory] = useState<'conflicts' | 'oversight' | 'audits' | 'california'>('conflicts');
-  const [studiedList, setStudiedList] = useState<string[]>([]);
+  
+  // Storing resolved problems locally
+  const [resolvedProblems, setResolvedProblems] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('cdx_resolved_problems');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
 
-  // Sourced from real scenarios and rules
+  // Sourced from real scenarios and rules with unique IDs
   const boardroomProblems = {
     conflicts: [
       {
+        id: 'founder-salary',
         title: "The Founder Demands the Board Approve Her Salary",
         subtitle: "Executive Compensation Safe Harbor (IRS § 4958)",
         desc: "The founder demands a major salary increase without comparable data. Learn the IRS rebuttable presumption of reasonableness standard.",
         target: "scenario/founder-salary-conflict"
       },
       {
+        id: 'spousal-dev',
         title: "Awarding Spousal Web Dev Contracts",
         subtitle: "Self-Dealing & Procurement Violations",
         desc: "The Board awards a $15,000 contract directly to the ED's spouse. Identify California self-dealing warning signs and approvals.",
@@ -32,12 +43,14 @@ export const Home: React.FC = () => {
     ],
     oversight: [
       {
+        id: 'director-micromanage',
         title: "A Director Micromanages Staff Between Meetings",
         subtitle: "Chain of Command Boundaries",
         desc: "A board member bypasses the CEO to direct employees. Establish boundaries of governance vs. management using manual templates.",
         target: "scenario/director-micromanaging-staff"
       },
       {
+        id: 'packet-advance',
         title: "Is Your Board Receiving Packets 5 Days in Advance?",
         subtitle: "Duty of Care & Operational Preparation",
         desc: "Packets handed out at meetings leave directors legally unshielded. Learn to audit your prep timelines.",
@@ -46,12 +59,14 @@ export const Home: React.FC = () => {
     ],
     audits: [
       {
+        id: 'vague-financials',
         title: "The Treasurer Presents Vague Financial Reports",
         subtitle: "Active Financial Verification",
         desc: "A single-page cash report is presented to the board. Review standard Balance Sheets and Statements of Activities.",
         target: "scenario/treasurer-vague-financials"
       },
       {
+        id: 'missing-receipts',
         title: "The Board Discovers Missing Receipts & Variances",
         subtitle: "Internal Financial Controls",
         desc: "Scan operating ledger overruns, check payroll tax withholdings, and discover critical vulnerabilities.",
@@ -60,12 +75,14 @@ export const Home: React.FC = () => {
     ],
     california: [
       {
+        id: 'independent-audit',
         title: "The California $2M Independent Audit Mandate",
         subtitle: "CA Government Code § 12586",
         desc: "Check if your organization requires a CPA-audited financial statement and a separate, independent Audit Committee.",
         target: "california-board-rules"
       },
       {
+        id: 'biennial-audit',
         title: "Bylaws Biennial Audit Schedule",
         subtitle: "California Registry Compliance",
         desc: "Obsolete bylaws put volunteer directors at risk. Verify compliance with California Registry of Charitable Trusts rules.",
@@ -74,19 +91,16 @@ export const Home: React.FC = () => {
     ]
   };
 
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('board_mastery_progress');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setStudiedList(parsed);
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+  const handleToggleProblem = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Avoid triggering card navigation
+    setResolvedProblems(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem('cdx_resolved_problems', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const securityScore = Math.round((resolvedProblems.length / 8) * 100);
 
   return (
     <Layout>
@@ -112,7 +126,6 @@ export const Home: React.FC = () => {
 
       {/* 2. Hero Section: Premium Courtroom/Editorial Aesthetics */}
       <section className="relative overflow-hidden bg-ink text-paper py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-brass/30">
-        {/* Background Subtle Corinthian Overlay */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#C29A4A_1px,transparent_1px)] [background-size:16px_16px]" />
         
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
@@ -148,115 +161,90 @@ export const Home: React.FC = () => {
             </div>
           </div>
           
-          {/* Dual-Tabbed Hero Workspace - Boardroom Companion Desk */}
-          <div className="lg:col-span-5 flex justify-center w-full">
-            <div className="bg-white/5 border border-brass/20 rounded-2xl overflow-hidden w-full max-w-md shadow-2xl relative flex flex-col text-left">
-              {/* Tabs */}
-              <div className="grid grid-cols-2 border-b border-paper/10 bg-black/20 text-xs font-bold uppercase tracking-widest text-center">
-                <button
+          {/* Dual-Tabbed Calendar & Ledger Hero Companion */}
+          <div className="lg:col-span-5 bg-white/5 rounded-xl border border-brass/20 p-5 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-sm">
+            <div className="flex items-center justify-between border-b border-paper/10 pb-3 mb-4">
+              <div className="flex gap-2">
+                <button 
                   onClick={() => setHeroTab('ledger')}
-                  className={`py-3 transition-premium cursor-pointer ${
-                    heroTab === 'ledger'
-                      ? 'bg-brass text-ink font-black border-b-2 border-brass'
-                      : 'text-paper/60 hover:text-paper hover:bg-white/5'
+                  className={`px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-premium cursor-pointer focus:outline-none select-none ${
+                    heroTab === 'ledger' ? 'bg-brass text-ink font-extrabold shadow' : 'text-paper/60 hover:text-white'
                   }`}
                 >
-                  Fiduciary Mastery
+                  Operating Ledger
                 </button>
-                <button
+                <button 
                   onClick={() => setHeroTab('schedule')}
-                  className={`py-3 transition-premium cursor-pointer ${
-                    heroTab === 'schedule'
-                      ? 'bg-brass text-ink font-black border-b-2 border-brass'
-                      : 'text-paper/60 hover:text-paper hover:bg-white/5'
+                  className={`px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-widest transition-premium cursor-pointer focus:outline-none select-none ${
+                    heroTab === 'schedule' ? 'bg-brass text-ink font-extrabold shadow' : 'text-paper/60 hover:text-white'
                   }`}
                 >
-                  Faculty Schedule
+                  Webinar Desk
                 </button>
               </div>
-
-              {/* Tab Content A: Mastery Tracker */}
-              {heroTab === 'ledger' ? (
-                <div className="p-6 space-y-5 flex-grow flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-serif font-bold text-lg text-white">Continuous Board Education</h4>
-                      <Award className="w-5 h-5 text-brass" />
-                    </div>
-                    
-                    {/* Mastery Gauge */}
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between items-center text-[10px] font-extrabold uppercase tracking-wider">
-                        <span className="text-paper/60">Study Progress</span>
-                        <span className="text-brass bg-brass/10 px-2 py-0.5 rounded border border-brass/20 text-[9px]">
-                          {studiedList.length >= 15 ? 'Governing Director' : studiedList.length >= 8 ? 'Prudent Trustee' : 'Fiduciary Apprentice'}
-                        </span>
-                      </div>
-                      <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden border border-brass/5">
-                        <div
-                          className="bg-brass h-full rounded-full transition-all duration-500"
-                          style={{ width: `${(studiedList.length / 18) * 100}%` }}
-                        />
-                      </div>
-                      <p className="text-[11px] text-paper/80 font-mono font-bold pt-0.5">
-                        {studiedList.length} of 18 Masterclasses Complete
-                      </p>
-                    </div>
-
-                    <p className="text-xs text-paper/60 leading-relaxed font-sans">
-                      Our static study tracker syncs local storage across modules. Complete case studies and diagnostic assessments to earn senior "Governing Director" credentials.
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-paper/10 flex items-center justify-between text-[10px] font-bold text-brass uppercase tracking-wider">
-                    <button 
-                      onClick={() => navigate('articles')}
-                      className="hover:underline flex items-center gap-1 cursor-pointer focus:outline-none text-left"
-                    >
-                      <span>Study Guides Library</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                    <span>v4.0.0</span>
-                  </div>
-                </div>
-              ) : (
-                /* Tab Content B: Live Schedule */
-                <div className="p-6 space-y-4 flex-grow flex flex-col justify-between">
-                  <div className="space-y-3.5 text-left">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4.5 h-4.5 text-brass shrink-0" />
-                      <h4 className="font-serif font-bold text-base text-white">Upcoming Webinars</h4>
-                    </div>
-
-                    <div className="space-y-2 text-xs">
-                      <div className="p-2.5 rounded bg-white/5 border border-paper/10 hover:border-brass/20 transition-premium">
-                        <p className="font-extrabold text-brass uppercase text-[9px] tracking-wider">JUNE 18, 2026 — 10:00 AM PST</p>
-                        <p className="text-white font-serif font-bold text-xs truncate mt-0.5">IRS § 4958 Executive Compensation</p>
-                      </div>
-                      <div className="p-2.5 rounded bg-white/5 border border-paper/10 hover:border-brass/20 transition-premium">
-                        <p className="font-extrabold text-brass uppercase text-[9px] tracking-wider">JULY 15, 2026 — 1:00 PM PST</p>
-                        <p className="text-white font-serif font-bold text-xs truncate mt-0.5">California $2M Independent Audit Mandate</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-paper/10 grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => navigate('training')}
-                      className="w-full inline-flex justify-center items-center py-2 bg-brass hover:bg-white text-ink text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer text-center"
-                    >
-                      Register Seats
-                    </button>
-                    <button
-                      onClick={() => navigate('training')}
-                      className="w-full inline-flex justify-center items-center py-2 border border-paper/30 hover:border-brass text-paper hover:text-brass text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer text-center"
-                    >
-                      Request Workshop
-                    </button>
-                  </div>
-                </div>
-              )}
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
+
+            {heroTab === 'ledger' ? (
+              <div className="space-y-4 animate-fade-in text-left">
+                <div className="space-y-1">
+                  <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest">Active Ledger Alerts</span>
+                  <h3 className="font-serif text-lg font-bold text-white leading-tight">Financial Red Flags Detected</h3>
+                </div>
+                <div className="space-y-2 text-xs">
+                  <div className="p-3 bg-white/5 border border-paper/10 rounded flex items-center justify-between gap-3 hover:bg-white/10 transition-premium">
+                    <div className="space-y-0.5">
+                      <span className="font-semibold text-white block">Executive Compensation Variance</span>
+                      <span className="text-paper/60 font-sans block">+$35,000 Overrun. Bypassing IRC § 4958.</span>
+                    </div>
+                    <span className="font-serif font-extrabold text-brass shrink-0 font-medium">31.8% Deviation</span>
+                  </div>
+                  <div className="p-3 bg-white/5 border border-paper/10 rounded flex items-center justify-between gap-3 hover:bg-white/10 transition-premium">
+                    <div className="space-y-0.5">
+                      <span className="font-semibold text-white block">Unpaid Payroll Taxes (US Treasury)</span>
+                      <span className="text-paper/60 font-sans block">Deferred deposits. Personal joint-and-several risk.</span>
+                    </div>
+                    <span className="font-bold text-rose-400 shrink-0 font-medium bg-rose-500/10 border border-rose-500/25 px-1.5 py-0.5 rounded">Extreme Risk</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => navigate('tools/budget-worksheet')}
+                  className="w-full inline-flex justify-center items-center gap-1.5 py-2.5 bg-paper hover:bg-brass text-ink hover:text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold shadow"
+                >
+                  <span>Open Budget Worksheet Lab</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4 animate-fade-in text-left">
+                <div className="space-y-1">
+                  <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest">Enrollment Panel</span>
+                  <h3 className="font-serif text-lg font-bold text-white leading-tight">Join Masterclass Training</h3>
+                </div>
+                <div className="space-y-2 text-xs">
+                  <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
+                    <Calendar className="w-5 h-5 text-brass mt-0.5 shrink-0" />
+                    <div className="space-y-0.5">
+                      <span className="font-semibold text-white block">California Rules Checklist Masterclass</span>
+                      <span className="text-paper/65 font-sans block">Online Webinar &bull; July 15, 2026</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
+                    <Award className="w-5 h-5 text-brass mt-0.5 shrink-0" />
+                    <div className="space-y-0.5">
+                      <span className="font-semibold text-white block">Fiduciary Duties Assessment Course</span>
+                      <span className="text-paper/65 font-sans block">Interactive Q&A Session &bull; On Demand</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate('training')}
+                  className="w-full inline-flex justify-center items-center py-2 border border-paper/30 hover:border-brass text-paper hover:text-brass text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer text-center"
+                >
+                  Request Workshop
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -277,6 +265,47 @@ export const Home: React.FC = () => {
             <p className="text-xs sm:text-sm text-ink/65 max-w-xl mx-auto leading-relaxed">
               Identify high-stakes operational symptoms your directors are currently facing. Select a category tab below to scan standard rules and actions.
             </p>
+          </div>
+
+          {/* Fiduciary Security Scorebar */}
+          <div className="max-w-4xl mx-auto bg-paper/20 rounded-xl p-5 border border-fog shadow-sm text-left flex flex-col sm:flex-row gap-5 items-center justify-between">
+            <div className="space-y-1.5 w-full">
+              <div className="flex justify-between items-end text-[10px] font-extrabold uppercase tracking-wider text-ink/70">
+                <span className="flex items-center gap-1 text-burgundy">
+                  <ShieldCheck className="w-4 h-4 text-brass" />
+                  <span>Fiduciary Security Score</span>
+                </span>
+                <span className="font-serif text-sm font-extrabold text-ink">{securityScore}% Resolved</span>
+              </div>
+              {/* Dynamic Bar */}
+              <div className="w-full bg-fog rounded-full h-2.5 overflow-hidden">
+                <div 
+                  className="bg-gradient-to-r from-brass to-emerald-600 h-full rounded-full transition-all duration-700" 
+                  style={{ width: `${securityScore}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-[10px] text-ink/50 pt-1 leading-normal font-sans font-medium">
+                <span>0% Vulnerable Board</span>
+                <span>{8 - resolvedProblems.length} Unresolved Vulnerability Warnings</span>
+                <span>100% Fully Secure Board</span>
+              </div>
+            </div>
+            
+            {/* Action Callout */}
+            {securityScore === 100 ? (
+              <div className="shrink-0 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg p-3 text-xs flex items-center gap-2 font-sans font-bold shadow-sm">
+                <Sparkles className="w-4 h-4 fill-emerald-600 animate-pulse text-emerald-600" />
+                <span>All Fiduciary Threats Mitigated!</span>
+              </div>
+            ) : securityScore >= 50 ? (
+              <div className="shrink-0 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg p-3 text-xs flex items-center gap-2 font-sans font-bold">
+                <span>Fiduciary Defense Maturing!</span>
+              </div>
+            ) : (
+              <div className="shrink-0 bg-rose-50 text-rose-800 border border-rose-150 rounded-lg p-3 text-xs flex items-center gap-2 font-sans font-medium leading-relaxed">
+                <span>Board Exposure High. Check solutions.</span>
+              </div>
+            )}
           </div>
 
           {/* Diagnostic Desktop Tabs */}
@@ -332,35 +361,58 @@ export const Home: React.FC = () => {
 
           {/* Cards Display Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto pt-4 text-left">
-            {boardroomProblems[activeCategory].map((prob, idx) => (
-              <div
-                key={idx}
-                onClick={() => navigate(prob.target)}
-                className={`bg-white rounded-xl shadow-sm border border-fog/80 p-6 flex flex-col justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-premium group relative overflow-hidden`}
-              >
-                <div className="absolute top-0 left-0 w-1.5 h-full transition-premium bg-brass" />
-                
-                <div className="space-y-3 pl-2">
-                  <span className="text-[9px] font-extrabold uppercase tracking-widest text-brass block">
-                    {prob.subtitle}
-                  </span>
-                  <h4 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium leading-snug">
-                    {prob.title}
-                  </h4>
-                  <p className="font-sans text-xs text-ink/75 leading-relaxed font-medium">
-                    {prob.desc}
-                  </p>
-                </div>
+            {boardroomProblems[activeCategory].map((prob, idx) => {
+              const isResolved = resolvedProblems.includes(prob.id);
+              return (
+                <div
+                  key={idx}
+                  onClick={() => navigate(prob.target)}
+                  className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col justify-between cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-premium group relative overflow-hidden ${
+                    isResolved ? 'border-emerald-250 bg-emerald-500/[0.02]' : 'border-fog/80'
+                  }`}
+                >
+                  <div className={`absolute top-0 left-0 w-1.5 h-full transition-premium ${isResolved ? 'bg-emerald-600' : 'bg-brass'}`} />
+                  
+                  <div className="space-y-3 pl-2">
+                    <div className="flex justify-between items-start gap-4">
+                      <span className="text-[9px] font-extrabold uppercase tracking-widest text-brass block">
+                        {prob.subtitle}
+                      </span>
+                      {/* Interactive checkoff checkbox button */}
+                      <button
+                        onClick={(e) => handleToggleProblem(prob.id, e)}
+                        className={`p-1 rounded border shrink-0 transition-premium flex items-center justify-center cursor-pointer ${
+                          isResolved 
+                            ? 'bg-emerald-600 border-emerald-600 text-white hover:bg-emerald-700 hover:border-emerald-700' 
+                            : 'border-fog/80 hover:border-brass text-transparent hover:text-brass/20'
+                        }`}
+                        title={isResolved ? "Mark Vulnerability Unresolved" : "Mark Vulnerability Mitigated"}
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <h4 className={`font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium leading-snug ${
+                      isResolved ? 'line-through text-ink/40 decoration-brass/35 font-semibold' : ''
+                    }`}>
+                      {prob.title}
+                    </h4>
+                    <p className={`font-sans text-xs leading-relaxed font-medium ${isResolved ? 'text-ink/40 font-normal' : 'text-ink/75'}`}>
+                      {prob.desc}
+                    </p>
+                  </div>
 
-                <div className="pt-4 border-t border-fog/50 mt-5 pl-2 flex items-center justify-between">
-                  <span className="text-[10px] text-ink/40 font-bold uppercase tracking-widest">Diagnostic Solution</span>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-brand group-hover:text-brass group-hover:translate-x-1 transition-premium">
-                    <span>Inspect Standard</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </span>
+                  <div className="pt-4 border-t border-fog/50 mt-5 pl-2 flex items-center justify-between">
+                    <span className="text-[10px] text-ink/40 font-bold uppercase tracking-widest">
+                      {isResolved ? '✓ Mitigated & Secure' : 'Diagnostic Solution'}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-brand group-hover:text-brass group-hover:translate-x-1 transition-premium">
+                      <span>{isResolved ? 'Review Standard' : 'Inspect Standard'}</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -492,7 +544,6 @@ export const Home: React.FC = () => {
               </p>
             </div>
 
-            {/* Pull the first scenario details */}
             {scenarios.slice(0, 1).map((sc, idx) => (
               <div key={idx} className="bg-paper border border-brass/30 p-6 rounded-xl space-y-4 shadow-sm hover:shadow-md transition-premium">
                 <div className="flex items-center gap-2 justify-between flex-wrap">

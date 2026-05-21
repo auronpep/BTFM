@@ -45,7 +45,7 @@ export const NextMeeting: React.FC = () => {
   });
 
   const handleSliderChange = (key: 'routine' | 'strategy' | 'risk', newVal: number) => {
-    setSliders(prev => {
+    setSliders((prev: { routine: number; strategy: number; risk: number }) => {
       const currentVal = prev[key];
       if (newVal === currentVal) return prev;
 
