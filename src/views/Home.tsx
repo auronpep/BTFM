@@ -12,6 +12,7 @@ export const Home: React.FC = () => {
   const { navigate } = useRouter();
   const [heroTab, setHeroTab] = useState<'ledger' | 'schedule'>('ledger');
   const [activeCategory, setActiveCategory] = useState<'conflicts' | 'oversight' | 'audits' | 'california'>('conflicts');
+  const [activeOption5Tab, setActiveOption5Tab] = useState<'symptom' | 'solution'>('symptom');
   
   // Storing resolved problems locally
   const [resolvedProblems, setResolvedProblems] = useState<string[]>(() => {
@@ -426,6 +427,314 @@ export const Home: React.FC = () => {
               >
                 For Presidents &rarr;
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 5: Interactive Comparative Dial (Active vs. Effective) */}
+      <section className="py-20 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 5: Interactive Comparative Dial</div>
+        
+        <div className="max-w-5xl mx-auto pt-4 space-y-10">
+          <div className="text-center space-y-3">
+            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-tight">
+              Many boards are active. <span className="text-brass italic">Few are effective.</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-xs sm:text-sm text-ink/70 leading-relaxed font-sans">
+              Where does your boardroom sit on the spectrum? Toggle the dial below to contrast standard active behaviors with high-stewardship effective solutions.
+            </p>
+          </div>
+
+          {/* Interactive Dial Switch */}
+          <div className="max-w-md mx-auto bg-paper border border-fog/85 rounded-full p-1.5 flex items-center justify-between shadow-sm relative z-10">
+            <button
+              onClick={() => setActiveOption5Tab('symptom')}
+              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                activeOption5Tab === 'symptom'
+                  ? 'bg-burgundy text-white shadow-md'
+                  : 'text-ink/60 hover:text-ink'
+              }`}
+            >
+              The Active Board (Symptom)
+            </button>
+            <button
+              onClick={() => setActiveOption5Tab('solution')}
+              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                activeOption5Tab === 'solution'
+                  ? 'bg-teal-brand text-white shadow-md'
+                  : 'text-ink/60 hover:text-ink'
+              }`}
+            >
+              The Effective Board (Solution)
+            </button>
+          </div>
+
+          {/* Content Comparative Desk */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto relative z-10 text-left">
+            {activeOption5Tab === 'symptom' ? (
+              <>
+                <div className="bg-burgundy/5 border border-burgundy/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-burgundy/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-burgundy block">Behavior 1</span>
+                  <h4 className="font-serif font-bold text-base text-ink">Exhaustive Packet Handouts</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    Directors receive dense, hundreds-of-pages board packets on the morning of the meeting, rendering thorough fiduciary study impossible.
+                  </p>
+                </div>
+                <div className="bg-burgundy/5 border border-burgundy/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-burgundy/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-burgundy block">Behavior 2</span>
+                  <h4 className="font-serif font-bold text-base text-ink">Tactical Micromanagement</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    Individual directors bypass the CEO and directly instruct staff between meetings, fracturing operations and creating legal liabilities.
+                  </p>
+                </div>
+                <div className="bg-burgundy/5 border border-burgundy/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-burgundy/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-burgundy block">Behavior 3</span>
+                  <h4 className="font-serif font-bold text-base text-ink">Passive Budget Review</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    Finances are reviewed passively without questioning variances, leaving the organization exposed to statutory self-dealing and audit fines.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="bg-teal-brand/5 border border-teal-brand/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-teal-brand/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-brand block">Solution 1</span>
+                  <h4 className="font-serif font-bold text-base text-ink">5-Day Advance Lead Times</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    Materials and agendas are finalized and securely distributed at least five days prior, guaranteeing directors fulfill their statutory Duty of Care.
+                  </p>
+                </div>
+                <div className="bg-teal-brand/5 border border-teal-brand/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-teal-brand/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-brand block">Solution 2</span>
+                  <h4 className="font-serif font-bold text-base text-ink">Strict Symmetrical Delegation</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    A formal board authority map dictates precise delegation boundaries, separating operational execution from oversight duties.
+                  </p>
+                </div>
+                <div className="bg-teal-brand/5 border border-teal-brand/15 rounded-xl p-6 space-y-3 transition-premium hover:bg-teal-brand/[0.08]">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-brand block">Solution 3</span>
+                  <h4 className="font-serif font-bold text-base text-ink">Interactive Financial Audits</h4>
+                  <p className="text-xs text-ink/70 leading-relaxed">
+                    Directors deploy targeted, structured CFO inquiry scripts to trace financial discrepancies and isolate potential self-dealing conflicts.
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Action CTAs */}
+          <div className="text-center space-y-4 pt-4">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass block">Activate Your Core Leadership Role</span>
+            <div className="flex flex-wrap justify-center gap-4">
+              <button 
+                onClick={() => navigate('articles')}
+                className="px-6 py-2.5 bg-ink text-white hover:bg-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold shadow"
+              >
+                For Members &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('next-meeting')}
+                className="px-6 py-2.5 border border-ink/20 hover:border-brass text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold"
+              >
+                For Chairmen &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('tools')}
+                className="px-6 py-2.5 border border-ink/20 hover:border-brass text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold"
+              >
+                For Presidents &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 6: Judicial Signature Scroll with Legal Seal */}
+      <section className="py-20 bg-paper/35 border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 6: Legal Memo with Statutory Seal</div>
+        
+        <div className="max-w-4xl mx-auto pt-4">
+          <div className="bg-white border border-brass/25 rounded p-8 sm:p-12 shadow-md relative overflow-hidden">
+            {/* Elegant Circular Legal Emblem / Seal */}
+            <div className="absolute -top-12 -right-12 sm:-top-8 sm:-right-8 w-44 h-44 border-4 border-double border-brass/15 rounded-full flex items-center justify-center rotate-12 pointer-events-none select-none">
+              <div className="border border-dashed border-brass/20 w-36 h-36 rounded-full flex flex-col items-center justify-center p-2 text-center text-[7px] font-black text-brass/20 uppercase tracking-widest">
+                <span>California Center</span>
+                <span className="my-1 text-brass/25"><Scale className="w-5 h-5" /></span>
+                <span>Nonprofit Law</span>
+              </div>
+            </div>
+
+            <div className="space-y-6 relative z-10 text-left">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-brass/10 rounded-full flex items-center justify-center text-brass">
+                  <Scale className="w-5 h-5" />
+                </div>
+                <div className="space-y-0.5">
+                  <span className="text-[9px] font-black text-brass uppercase tracking-widest block">Official Juridical Proclamation</span>
+                  <h3 className="font-serif font-bold text-lg text-ink">Stewardship Decree</h3>
+                </div>
+              </div>
+
+              <div className="w-full h-px bg-gradient-to-r from-brass/30 via-brass/10 to-transparent" />
+
+              <h2 className="font-serif text-2xl sm:text-3xl text-ink font-bold tracking-tight leading-tight max-w-xl">
+                "Many boards are active. <br />
+                <span className="text-brass italic">But few are effective."</span>
+              </h2>
+
+              <p className="font-sans text-xs sm:text-sm text-ink/75 leading-relaxed max-w-2xl">
+                The defining difference is not intelligence or devotion, but <strong className="text-ink font-bold">clarity</strong>. Effective boards understand the sharp dividing line between policy governance and administrative execution. They do not meddle, they do not ornament—they steward.
+              </p>
+
+              {/* Signature Line Styled Buttons */}
+              <div className="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+                {/* Member Sign line */}
+                <div 
+                  onClick={() => navigate('articles')}
+                  className="group cursor-pointer space-y-2 text-left"
+                >
+                  <div className="text-[10px] font-sans font-extrabold uppercase text-brass tracking-wider">Executed By:</div>
+                  <div className="font-serif italic text-base text-ink group-hover:text-brass transition-premium h-8 flex items-end">
+                    Board Trustee
+                  </div>
+                  <div className="h-0.5 w-full bg-ink/20 group-hover:bg-brass transition-premium relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full bg-brass -translate-x-full group-hover:translate-x-0 transition-all duration-500 ease-out" />
+                  </div>
+                  <div className="text-[9px] font-sans text-ink/50 group-hover:text-brass/70 transition-premium uppercase font-black tracking-widest flex justify-between">
+                    <span>Articles Desk</span>
+                    <span>Sign Here &rarr;</span>
+                  </div>
+                </div>
+
+                {/* Chairman Sign line */}
+                <div 
+                  onClick={() => navigate('next-meeting')}
+                  className="group cursor-pointer space-y-2 text-left"
+                >
+                  <div className="text-[10px] font-sans font-extrabold uppercase text-brass tracking-wider">Approved By:</div>
+                  <div className="font-serif italic text-base text-ink group-hover:text-brass transition-premium h-8 flex items-end">
+                    Board President & Chair
+                  </div>
+                  <div className="h-0.5 w-full bg-ink/20 group-hover:bg-brass transition-premium relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full bg-brass -translate-x-full group-hover:translate-x-0 transition-all duration-500 ease-out" />
+                  </div>
+                  <div className="text-[9px] font-sans text-ink/50 group-hover:text-brass/70 transition-premium uppercase font-black tracking-widest flex justify-between">
+                    <span>Meeting Desk</span>
+                    <span>Sign Here &rarr;</span>
+                  </div>
+                </div>
+
+                {/* President Sign line */}
+                <div 
+                  onClick={() => navigate('tools')}
+                  className="group cursor-pointer space-y-2 text-left"
+                >
+                  <div className="text-[10px] font-sans font-extrabold uppercase text-brass tracking-wider">Certified By:</div>
+                  <div className="font-serif italic text-base text-ink group-hover:text-brass transition-premium h-8 flex items-end">
+                    CEO / Executive Director
+                  </div>
+                  <div className="h-0.5 w-full bg-ink/20 group-hover:bg-brass transition-premium relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full bg-brass -translate-x-full group-hover:translate-x-0 transition-all duration-500 ease-out" />
+                  </div>
+                  <div className="text-[9px] font-sans text-ink/50 group-hover:text-brass/70 transition-premium uppercase font-black tracking-widest flex justify-between">
+                    <span>Diagnostics Lab</span>
+                    <span>Sign Here &rarr;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 7: Modern Corporate Magazine Overlap Grid */}
+      <section className="py-20 bg-ink border-b border-brass/25 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-ink via-ink to-slate-brand/10 opacity-40 pointer-events-none" />
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/15 px-2 py-0.5 rounded border border-brass/25 z-20">Option 7: Modern Magazine Overlap Grid</div>
+        
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-8 relative z-10">
+          {/* Column A (Left: 01-02-03 Numbered Metrics) */}
+          <div className="lg:col-span-3 space-y-8 text-left hidden lg:block">
+            <div className="flex items-start gap-4">
+              <span className="font-sans font-extrabold text-2xl text-brass/40 tracking-wider">01</span>
+              <div>
+                <h5 className="font-sans font-black uppercase text-[10px] tracking-widest text-white">Diligence</h5>
+                <p className="font-sans text-[11px] text-paper/60 leading-normal">5-Day advance review cycle.</p>
+              </div>
+            </div>
+            <div className="w-12 h-px bg-brass/20" />
+            <div className="flex items-start gap-4">
+              <span className="font-sans font-extrabold text-2xl text-brass/40 tracking-wider">02</span>
+              <div>
+                <h5 className="font-sans font-black uppercase text-[10px] tracking-widest text-white">Discipline</h5>
+                <p className="font-sans text-[11px] text-paper/60 leading-normal">Operational chain boundaries.</p>
+              </div>
+            </div>
+            <div className="w-12 h-px bg-brass/20" />
+            <div className="flex items-start gap-4">
+              <span className="font-sans font-extrabold text-2xl text-brass/40 tracking-wider">03</span>
+              <div>
+                <h5 className="font-sans font-black uppercase text-[10px] tracking-widest text-white">Direction</h5>
+                <p className="font-sans text-[11px] text-paper/60 leading-normal">Tripartite standard alignment.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Column B (Center: Headline block) */}
+          <div className="lg:col-span-5 text-left space-y-6">
+            <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">The Executive Contrast</span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-extrabold tracking-tight leading-tight">
+              Many boards are active. <br />
+              <span className="text-brass italic">Few are effective.</span>
+            </h2>
+            <p className="font-sans text-xs sm:text-sm text-paper/75 leading-relaxed">
+              True board stewardship is defined by precision, not hours spent in committees. Select your specific leadership desk to run interactive diagnostic assessments and verify compliance with state and federal laws.
+            </p>
+          </div>
+
+          {/* Column C (Right: Modern Floating Overlap Cards) */}
+          <div className="lg:col-span-4 space-y-4">
+            {/* Card 1 */}
+            <div 
+              onClick={() => navigate('articles')}
+              className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 hover:border-brass/50 transition-premium cursor-pointer group flex items-center justify-between text-left"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] font-sans font-black text-brass uppercase tracking-widest">Masterclasses</span>
+                <h4 className="font-serif font-bold text-sm text-white group-hover:text-brass transition-premium">For Board Members</h4>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brass group-hover:text-ink transition-premium flex items-center justify-center text-white text-xs">
+                &rarr;
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div 
+              onClick={() => navigate('next-meeting')}
+              className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 hover:border-brass/50 transition-premium cursor-pointer group flex items-center justify-between text-left translate-x-0 lg:translate-x-4"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] font-sans font-black text-brass uppercase tracking-widest">Meeting Prep</span>
+                <h4 className="font-serif font-bold text-sm text-white group-hover:text-brass transition-premium">For Board Chairmen</h4>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brass group-hover:text-ink transition-premium flex items-center justify-center text-white text-xs">
+                &rarr;
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div 
+              onClick={() => navigate('tools')}
+              className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/10 hover:border-brass/50 transition-premium cursor-pointer group flex items-center justify-between text-left"
+            >
+              <div className="space-y-1">
+                <span className="text-[9px] font-sans font-black text-brass uppercase tracking-widest">Diagnostic Worksheets</span>
+                <h4 className="font-serif font-bold text-sm text-white group-hover:text-brass transition-premium">For CEOs & Presidents</h4>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-brass group-hover:text-ink transition-premium flex items-center justify-center text-white text-xs">
+                &rarr;
+              </div>
             </div>
           </div>
         </div>
