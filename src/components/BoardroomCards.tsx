@@ -14,14 +14,16 @@ export const BoardroomRuleCard: React.FC<BoardroomRuleCardProps> = ({ ruleNumber
   return (
     <div className="bg-white border-l-4 border-brass p-6 rounded-r-lg shadow-sm hover:shadow-md transition-premium border border-fog/80 relative overflow-hidden group">
       <div className="absolute top-0 right-0 w-16 h-16 bg-brass/5 rounded-bl-full -mr-2 -mt-2 group-hover:bg-brass/10 transition-premium" />
-      <div className="flex items-start gap-4">
+      <div className="space-y-3">
         {ruleNumber && (
-          <div className="bg-brass text-ink font-sans font-extrabold text-xs px-2.5 py-1 rounded tracking-wider uppercase shrink-0 mt-0.5 shadow-sm">
-            Rule {ruleNumber}
+          <div>
+            <span className="inline-block bg-brass text-ink font-sans font-extrabold text-[10px] px-2.5 py-1 rounded tracking-wider uppercase shadow-sm">
+              Rule {ruleNumber}
+            </span>
           </div>
         )}
         <div className="space-y-2">
-          <h4 className="font-serif font-bold text-lg text-ink leading-tight tracking-wide">
+          <h4 className="font-serif font-bold text-lg text-ink leading-snug tracking-wide">
             {title}
           </h4>
           <div className="font-sans text-sm text-ink/75 leading-relaxed prose prose-sm prose-slate">
@@ -44,30 +46,35 @@ interface AskThisCardProps {
 
 export const AskThisCard: React.FC<AskThisCardProps> = ({ question, rationale, targetRole = "the CEO" }) => {
   return (
-    <div className="bg-teal-brand/5 border border-teal-brand/30 p-5 rounded-lg shadow-sm hover:border-teal-brand/60 hover:shadow-md transition-premium flex flex-col md:flex-row items-start gap-4">
-      <div className="bg-teal-brand text-white p-2.5 rounded-lg shrink-0 shadow-inner">
-        <HelpCircle className="w-5 h-5" />
+    <div className="bg-teal-brand/5 border border-teal-brand/30 rounded-lg shadow-sm hover:border-teal-brand/60 hover:shadow-md transition-premium overflow-hidden">
+      {/* Top half content with standard padding */}
+      <div className="p-5">
+        <div className="flex items-start gap-4">
+          <div className="bg-teal-brand text-white p-2.5 rounded-lg shrink-0 shadow-inner">
+            <HelpCircle className="w-5 h-5" />
+          </div>
+          <div className="space-y-3 flex-grow">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <span className="text-[10px] font-bold tracking-widest text-teal-brand uppercase bg-teal-brand/10 px-2 py-0.5 rounded">
+                Director's Question Script
+              </span>
+              <span className="text-[11px] font-semibold text-teal-brand italic">
+                Target: {targetRole}
+              </span>
+            </div>
+            
+            {/* The Actual Script */}
+            <p className="font-serif italic text-base font-medium text-ink leading-snug border-l-2 border-teal-brand/40 pl-3">
+              "{question}"
+            </p>
+          </div>
+        </div>
       </div>
-      <div className="space-y-3 flex-grow">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <span className="text-[10px] font-bold tracking-widest text-teal-brand uppercase bg-teal-brand/10 px-2 py-0.5 rounded">
-            Director's Question Script
-          </span>
-          <span className="text-[11px] font-semibold text-teal-brand italic">
-            Target: {targetRole}
-          </span>
-        </div>
-        
-        {/* The Actual Script */}
-        <p className="font-serif italic text-base font-medium text-ink leading-snug border-l-2 border-teal-brand/40 pl-3">
-          "{question}"
-        </p>
-        
-        {/* Rationale Explainer */}
-        <div className="pt-2 border-t border-teal-brand/15 text-xs text-ink/70 leading-relaxed">
-          <strong className="text-teal-brand font-semibold block uppercase tracking-wider text-[9px] mb-1">Governance Purpose:</strong>
-          {rationale}
-        </div>
+
+      {/* Rationale Explainer spanning 100% card width */}
+      <div className="pt-3 pb-4 px-5 border-t border-teal-brand/15 bg-teal-brand/10 text-xs text-ink/70 leading-relaxed">
+        <strong className="text-teal-brand font-semibold block uppercase tracking-wider text-[9px] mb-1">Governance Purpose:</strong>
+        {rationale}
       </div>
     </div>
   );
@@ -84,33 +91,37 @@ interface DoNotDoThisCardProps {
 
 export const DoNotDoThisCard: React.FC<DoNotDoThisCardProps> = ({ title, items, consequence }) => {
   return (
-    <div className="bg-white border border-copper/30 border-t-4 border-t-copper p-5 rounded-b-lg rounded-t-sm shadow-sm hover:shadow-md hover:border-copper/50 transition-premium">
-      <div className="flex items-start gap-3.5">
-        <div className="bg-copper/10 text-copper p-2 rounded-lg shrink-0">
-          <AlertTriangle className="w-5 h-5" />
-        </div>
-        <div className="space-y-3 w-full">
-          <h4 className="font-sans font-extrabold text-sm uppercase tracking-wider text-copper leading-tight">
-            DO NOT DO THIS: {title}
-          </h4>
-          
-          <ul className="space-y-2">
-            {items.map((item, index) => (
-              <li key={index} className="flex items-start gap-2.5 text-xs text-ink/80 leading-relaxed">
-                <span className="text-copper font-bold shrink-0 mt-0.5 text-base leading-none">×</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-
-          {consequence && (
-            <div className="mt-3 pt-2 border-t border-copper/15 bg-copper/5 -mx-5 -mb-5 p-4 rounded-b-lg text-[11px] text-copper font-medium">
-              <strong className="uppercase tracking-wider text-[9px] block mb-0.5">D&O Liability Warning / Real Consequence:</strong>
-              {consequence}
-            </div>
-          )}
+    <div className="bg-white border border-copper/30 border-t-4 border-t-copper rounded-b-lg rounded-t-sm shadow-sm hover:shadow-md hover:border-copper/50 transition-premium overflow-hidden">
+      {/* Top half content with standard padding */}
+      <div className="p-5">
+        <div className="flex items-start gap-3.5">
+          <div className="bg-copper/10 text-copper p-2 rounded-lg shrink-0">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <div className="space-y-3 w-full">
+            <h4 className="font-sans font-extrabold text-sm uppercase tracking-wider text-copper leading-tight">
+              DO NOT DO THIS: {title}
+            </h4>
+            
+            <ul className="space-y-2">
+              {items.map((item, index) => (
+                <li key={index} className="flex items-start gap-2.5 text-xs text-ink/80 leading-relaxed">
+                  <span className="text-copper font-bold shrink-0 mt-0.5 text-base leading-none">×</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
+
+      {/* Bottom consequence banner spanning the full width of the card */}
+      {consequence && (
+        <div className="pt-3 pb-4 px-5 border-t border-copper/15 bg-copper/5 text-[11px] text-copper font-medium">
+          <strong className="uppercase tracking-wider text-[9px] block mb-1">D&O Liability Warning / Real Consequence:</strong>
+          {consequence}
+        </div>
+      )}
     </div>
   );
 };

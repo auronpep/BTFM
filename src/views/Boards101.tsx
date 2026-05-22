@@ -254,7 +254,7 @@ export const Boards101: React.FC = () => {
                     <div className="space-y-1">
                       <h4 className="font-serif font-bold text-base text-ink">Audit: "Trust, But Verify" Standards</h4>
                       <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                        You trust your CEO, but your fiduciary duty requires proof. We teach boards to review the CFO's reports by scrutinizing the **10 biggest budget deviations** to understand the strategic narrative, and verifying that the entity strictly abides by California's statutory guidelines.
+                        You trust your CEO, but your fiduciary duty requires proof. We teach boards to review the CFO's reports by scrutinizing the <strong>10 biggest budget deviations</strong> to understand the strategic narrative, and verifying that the entity strictly abides by California's statutory guidelines.
                       </p>
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export const Boards101: React.FC = () => {
                   Meeting Dynamics: The 40-40-20 Rule
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                  An efficient board meeting demands high-quality materials. We teach directors how to implement the **40-40-20 Rule**:
+                  An efficient board meeting demands high-quality materials. We teach directors how to implement the <strong>40-40-20 Rule</strong>:
                 </p>
                 <ul className="list-disc pl-5 text-xs text-ink/70 space-y-1.5 font-sans">
                   <li><strong>40% Pre-Meeting Preparation:</strong> Reviewing board packets, writing down questions, and identifying information gaps before arriving in the boardroom.</li>
@@ -514,7 +514,7 @@ export const Boards101: React.FC = () => {
                       Congratulations, <strong className="text-ink font-semibold">{contactName}</strong>! Your Boards 101 training session inquiry for <strong className="text-ink font-semibold">{preferredDate}</strong> has been logged locally in `localStorage`.
                     </p>
                     <p className="text-xs text-ink/60 leading-relaxed max-w-sm mx-auto pt-1">
-                      A coordinator from the **California Center for Nonprofit Law** will reach out to you at <strong className="text-ink font-semibold">{contactEmail}</strong> to review your bylaws structure and confirm scheduling details.
+                      A coordinator from the <strong>California Center for Nonprofit Law</strong> will reach out to you at <strong className="text-ink font-semibold">{contactEmail}</strong> to review your bylaws structure and confirm scheduling details.
                     </p>
                   </div>
 
@@ -685,10 +685,10 @@ export const Boards101: React.FC = () => {
                       <span>Grade A — Fully Safe Harbor Aligned</span>
                     </div>
                     <p className="text-xs sm:text-sm text-emerald-900 leading-relaxed font-sans font-medium">
-                      Congratulations! Your understanding of California board requirements is flawless. You answered **3 out of 3** questions correctly. Your board is positioned with a strong regulatory shield, satisfying quorums and executive compensation rules.
+                      Congratulations! Your understanding of California board requirements is flawless. You answered <strong>3 out of 3</strong> questions correctly. Your board is positioned with a strong regulatory shield, satisfying quorums and executive compensation rules.
                     </p>
                     <p className="text-xs text-emerald-800 leading-relaxed max-w-2xl font-medium pt-1">
-                      To maintain this level of fiduciary hygiene, we recommend downloading our **Defensive Minutes Template** and **Annual Compliance Calendar** from our library.
+                      To maintain this level of fiduciary hygiene, we recommend downloading our <strong>Defensive Minutes Template</strong> and <strong>Annual Compliance Calendar</strong> from our library.
                     </p>
                   </div>
                 ) : quizScore === 2 ? (
@@ -698,14 +698,14 @@ export const Boards101: React.FC = () => {
                       <span>Grade C — Compliance Gaps Identified</span>
                     </div>
                     <p className="text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
-                      You answered **2 out of 3** questions correctly. While you understand some core fiduciary parameters, critical compliance gaps exist. Obsolete quorum provisions (allowing paid employees to control votes) or bad recusal procedures are the leading causes of California Attorney General corporate registry suspensions.
+                      You answered <strong>2 out of 3</strong> questions correctly. While you understand some core fiduciary parameters, critical compliance gaps exist. Obsolete quorum provisions (allowing paid employees to control votes) or bad recusal procedures are the leading causes of California Attorney General corporate registry suspensions.
                     </p>
                     
                     {/* Legal Consultation Escalation */}
                     <div className="bg-burgundy/5 border-l-4 border-burgundy p-4 rounded-r-lg space-y-2">
                       <h4 className="font-serif font-bold text-xs text-ink">Bylaws Deficiencies Create Volunteer Liability Exposure</h4>
                       <p className="text-xs text-ink/75 leading-relaxed">
-                        In California, volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional **Bylaws and Board Governance Audit** with California Center for Nonprofit Law.
+                        In California, volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional <strong>Bylaws and Board Governance Audit</strong> with California Center for Nonprofit Law.
                       </p>
                       <div className="pt-1">
                         <a
@@ -726,7 +726,7 @@ export const Boards101: React.FC = () => {
                       <span>Grade F — Severe Regulatory Exposure</span>
                     </div>
                     <p className="text-xs sm:text-sm text-burgundy leading-relaxed font-sans font-medium">
-                      Critical Risk Warning! You answered **{quizScore} out of 3** questions correctly. Your board is likely operating under dangerous procedural deficiencies regarding CA Corp Code § 5227 or IRS excess benefit penalties. Unvoted self-dealing contract approvals or staff voting control can void corporate actions and trigger immediate IRS excise penalties up to 200%.
+                      Critical Risk Warning! You answered <strong>{quizScore} out of 3</strong> questions correctly. Your board is likely operating under dangerous procedural deficiencies regarding CA Corp Code § 5227 or IRS excess benefit penalties. Unvoted self-dealing contract approvals or staff voting control can void corporate actions and trigger immediate IRS excise penalties up to 200%.
                     </p>
 
                     {/* Legal Consultation Escalation */}
@@ -757,7 +757,7 @@ export const Boards101: React.FC = () => {
             <div className="md:col-span-8 space-y-2">
               <h3 className="font-serif text-lg sm:text-xl text-white font-bold">Fiduciary Certification & D&O Coverage</h3>
               <p className="text-xs sm:text-sm text-paper/85 leading-relaxed font-sans">
-                Many Directors and Officers (D&O) liability insurance carriers look favorably upon boards that engage in regular, documented professional governance training. Upon completion of our **Boards 101** 60-minute session, your board of directors will receive an official **Certificate of Fiduciary Competency**, establishing formal evidence of due diligence for your corporate records.
+                Many Directors and Officers (D&O) liability insurance carriers look favorably upon boards that engage in regular, documented professional governance training. Upon completion of our <strong>Boards 101</strong> 60-minute session, your board of directors will receive an official <strong>Certificate of Fiduciary Competency</strong>, establishing formal evidence of due diligence for your corporate records.
               </p>
             </div>
             <div className="md:col-span-4 flex justify-start md:justify-end">

@@ -209,7 +209,7 @@ export const Training: React.FC = () => {
   return (
     <Layout>
       <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto space-y-12">
+        <div className="max-w-7xl mx-auto space-y-12">
           
           {/* Header */}
           <div className="text-center space-y-3">
@@ -279,8 +279,11 @@ export const Training: React.FC = () => {
           {/* Interactive Training & Diagnostic Section */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Left: Syllabus Diagnostic Wizard (lg:col-span-4) */}
-            <div className="lg:col-span-4 bg-amber-50/20 rounded-2xl border border-amber-900/10 p-5 space-y-5 text-left shadow-sm">
+            {/* Left Column: Syllabus Diagnostic Wizard & Webinar Registration (lg:col-span-5) */}
+            <div className="lg:col-span-5 flex flex-col gap-8">
+              
+              {/* Syllabus Diagnostic Wizard */}
+              <div className="bg-amber-50/20 rounded-2xl border border-amber-900/10 p-5 space-y-5 text-left shadow-sm">
               <div className="border-b border-amber-900/10 pb-3">
                 <div className="flex items-center gap-1.5 text-brass">
                   <Sparkles className="w-4 h-4 fill-brass/20 animate-pulse" />
@@ -482,10 +485,8 @@ export const Training: React.FC = () => {
               )}
             </div>
 
-            {/* Right: Webinars & Custom Workshops (lg:col-span-8) */}
-            <div className="lg:col-span-8 grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
               
-              {/* Left: Webinar Registration (lg:col-span-5) */}
+              {/* Webinar Registration Card */}
               <div id="webinar-card" className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
                 <div className="bg-slate-brand text-paper p-5 border-b border-brass/20 space-y-1">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Immediate Enrollment</span>
@@ -597,7 +598,10 @@ export const Training: React.FC = () => {
                 )}
               </div>
 
-              {/* Right: In-Person Workshop Request (lg:col-span-7) */}
+            </div>
+
+            {/* Right Column: Request Custom On-Site Training (lg:col-span-7) */}
+            <div className="lg:col-span-7">
               <div className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
                 <div className="bg-teal-brand text-paper p-5 border-b border-brass/20 space-y-1">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Organization Consultation</span>
@@ -612,59 +616,63 @@ export const Training: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
-                        <input
-                          type="text"
-                          required
-                          value={orgName}
-                          onChange={(e) => setOrgName(e.target.value)}
-                          placeholder="Nonprofit Corporation"
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                        />
+                    <div className="space-y-4">
+                      {/* Row 1: Organization Name & Approximate Board Size */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
+                          <input
+                            type="text"
+                            required
+                            value={orgName}
+                            onChange={(e) => setOrgName(e.target.value)}
+                            placeholder="Nonprofit Corporation"
+                            className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
+                          <select
+                            required
+                            value={boardSize}
+                            onChange={(e) => setBoardSize(e.target.value)}
+                            className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans cursor-pointer"
+                          >
+                            <option value="">-- Choose Size --</option>
+                            <option value="3-5">3 to 5 Directors</option>
+                            <option value="6-9">6 to 9 Directors</option>
+                            <option value="10-15">10 to 15 Directors</option>
+                            <option value="15+">15+ Directors</option>
+                          </select>
+                        </div>
                       </div>
 
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
-                        <select
-                          required
-                          value={boardSize}
-                          onChange={(e) => setBoardSize(e.target.value)}
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans cursor-pointer"
-                        >
-                          <option value="">-- Choose Size --</option>
-                          <option value="3-5">3 to 5 Directors</option>
-                          <option value="6-9">6 to 9 Directors</option>
-                          <option value="10-15">10 to 15 Directors</option>
-                          <option value="15+">15+ Directors</option>
-                        </select>
-                      </div>
-                    </div>
+                      {/* Row 2: Contact Person & Contact Email */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
+                          <input
+                            type="text"
+                            required
+                            value={contactName}
+                            onChange={(e) => setContactName(e.target.value)}
+                            placeholder="Board Chair or President"
+                            className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                          />
+                        </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
-                        <input
-                          type="text"
-                          required
-                          value={contactName}
-                          onChange={(e) => setContactName(e.target.value)}
-                          placeholder="Board Chair or President"
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
-                        <input
-                          type="email"
-                          required
-                          value={contactEmail}
-                          onChange={(e) => setContactEmail(e.target.value)}
-                          placeholder="chair@yournonprofit.org"
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                        />
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
+                          <input
+                            type="email"
+                            required
+                            value={contactEmail}
+                            onChange={(e) => setContactEmail(e.target.value)}
+                            placeholder="chair@yournonprofit.org"
+                            className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
+                          />
+                        </div>
                       </div>
                     </div>
 

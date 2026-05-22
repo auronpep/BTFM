@@ -14,35 +14,27 @@ import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Clock, Award, CheckSquare, Square, AlertCircle } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
-// Simple Markdown to HTML parser for articles
+// Simple Markdown to HTML parser for articles (robust line-by-line processing)
 const renderMarkdown = (text: string) => {
-  return text.split('\n\n').map((paragraph, idx) => {
-    let cleaned = paragraph.trim();
-    if (!cleaned) return null;
-
-    // Headings
-    if (cleaned.startsWith('### ')) {
-      return (
-        <h3 key={idx} className="font-serif text-xl sm:text-2xl text-slate-brand font-bold mt-6 mb-3 leading-snug">
-          {parseTextWithStatutesAndGlossary(cleaned.substring(4))}
-        </h3>
-      );
-    }
-    if (cleaned.startsWith('## ')) {
-      return (
-        <h2 key={idx} className="font-serif text-2xl sm:text-3xl text-ink font-bold mt-8 mb-4 leading-tight">
-          {parseTextWithStatutesAndGlossary(cleaned.substring(3))}
-        </h2>
-      );
-    }
-
-    // Bullet Lists
-    if (cleaned.startsWith('* ')) {
-      const items = cleaned.split('\n* ');
-      return (
-        <ul key={idx} className="list-disc pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
-          {items.map((item, iIdx) => {
-            let itemText = item.startsWith('* ') ? item.substring(2) : item;
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  
+  let currentListType: 'ul' | 'ol' | null = null;
+  let currentListItems: string[] = [];
+  
+  const flushList = (key: string | number) => {
+    if (!currentListType) return;
+    
+    const items = [...currentListItems];
+    const type = currentListType;
+    
+    currentListType = null;
+    currentListItems = [];
+    
+    if (type === 'ul') {
+      elements.push(
+        <ul key={key} className="list-disc pl-6 my-5 space-y-3 font-serif text-base sm:text-lg text-ink/85 leading-relaxed sm:leading-loose marker:text-brass">
+          {items.map((itemText, iIdx) => {
             // Parse inline bold
             const boldRegex = /\*\*(.*?)\*\*/g;
             const parts = [];
@@ -50,12 +42,11 @@ const renderMarkdown = (text: string) => {
             let match;
             while ((match = boldRegex.exec(itemText)) !== null) {
               parts.push(itemText.substring(lastIndex, match.index));
-              parts.push(<strong key={match.index} className="font-bold text-ink">{match[1]}</strong>);
+              parts.push(<strong key={match.index} className="font-bold text-ink font-semibold">{match[1]}</strong>);
               lastIndex = boldRegex.lastIndex;
             }
             parts.push(itemText.substring(lastIndex));
 
-            // Apply glossary/statute parser on string chunks
             const finalizedParts = parts.flatMap((part) => {
               if (typeof part === 'string') {
                 return parseTextWithStatutesAndGlossary(part);
@@ -63,19 +54,14 @@ const renderMarkdown = (text: string) => {
               return part;
             });
 
-            return <li key={iIdx}>{finalizedParts.length > 0 ? finalizedParts : itemText}</li>;
+            return <li key={iIdx} className="pl-1">{finalizedParts.length > 0 ? finalizedParts : itemText}</li>;
           })}
         </ul>
       );
-    }
-
-    // Numbered Lists
-    if (cleaned.match(/^\d+\.\s/)) {
-      const items = cleaned.split(/\n\d+\.\s/);
-      return (
-        <ol key={idx} className="list-decimal pl-5 my-4 space-y-2 text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
-          {items.map((item, iIdx) => {
-            let itemText = item.replace(/^\d+\.\s/, '');
+    } else {
+      elements.push(
+        <ol key={key} className="list-decimal pl-6 my-5 space-y-3 font-serif text-base sm:text-lg text-ink/85 leading-relaxed sm:leading-loose marker:text-brass">
+          {items.map((itemText, iIdx) => {
             // Parse inline bold
             const boldRegex = /\*\*(.*?)\*\*/g;
             const parts = [];
@@ -83,12 +69,11 @@ const renderMarkdown = (text: string) => {
             let match;
             while ((match = boldRegex.exec(itemText)) !== null) {
               parts.push(itemText.substring(lastIndex, match.index));
-              parts.push(<strong key={match.index} className="font-bold text-ink">{match[1]}</strong>);
+              parts.push(<strong key={match.index} className="font-bold text-ink font-semibold">{match[1]}</strong>);
               lastIndex = boldRegex.lastIndex;
             }
             parts.push(itemText.substring(lastIndex));
 
-            // Apply glossary/statute parser on string chunks
             const finalizedParts = parts.flatMap((part) => {
               if (typeof part === 'string') {
                 return parseTextWithStatutesAndGlossary(part);
@@ -96,23 +81,81 @@ const renderMarkdown = (text: string) => {
               return part;
             });
 
-            return <li key={iIdx}>{finalizedParts.length > 0 ? finalizedParts : itemText}</li>;
+            return <li key={iIdx} className="pl-1">{finalizedParts.length > 0 ? finalizedParts : itemText}</li>;
           })}
         </ol>
       );
     }
-
+  };
+  
+  for (let idx = 0; idx < lines.length; idx++) {
+    const line = lines[idx].trim();
+    
+    if (!line) {
+      if (currentListType) {
+        flushList(`list-empty-${idx}`);
+      }
+      continue;
+    }
+    
+    // Check for headings
+    if (line.startsWith('### ')) {
+      if (currentListType) flushList(`list-h3-${idx}`);
+      elements.push(
+        <h3 key={`h3-${idx}`} className="font-serif text-xl sm:text-2xl text-slate-brand font-bold mt-9 mb-4 leading-snug">
+          {parseTextWithStatutesAndGlossary(line.substring(4))}
+        </h3>
+      );
+      continue;
+    }
+    
+    if (line.startsWith('## ')) {
+      if (currentListType) flushList(`list-h2-${idx}`);
+      elements.push(
+        <h2 key={`h2-${idx}`} className="font-serif text-2xl sm:text-3xl text-ink font-extrabold mt-12 mb-5 pb-2 border-b border-fog/50 leading-tight">
+          {parseTextWithStatutesAndGlossary(line.substring(3))}
+        </h2>
+      );
+      continue;
+    }
+    
+    // Check for bullet list item
+    if (line.startsWith('* ')) {
+      if (currentListType && currentListType !== 'ul') {
+        flushList(`list-swap-ul-${idx}`);
+      }
+      currentListType = 'ul';
+      currentListItems.push(line.substring(2).trim());
+      continue;
+    }
+    
+    // Check for numbered list item
+    const numMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (numMatch) {
+      if (currentListType && currentListType !== 'ol') {
+        flushList(`list-swap-ol-${idx}`);
+      }
+      currentListType = 'ol';
+      currentListItems.push(numMatch[2].trim());
+      continue;
+    }
+    
+    // Standard paragraph line
+    if (currentListType) {
+      flushList(`list-p-${idx}`);
+    }
+    
     // Parse inline bold within paragraphs
     const boldRegex = /\*\*(.*?)\*\*/g;
     const parts = [];
     let lastIndex = 0;
     let match;
-    while ((match = boldRegex.exec(cleaned)) !== null) {
-      parts.push(cleaned.substring(lastIndex, match.index));
-      parts.push(<strong key={match.index} className="font-bold text-ink">{match[1]}</strong>);
+    while ((match = boldRegex.exec(line)) !== null) {
+      parts.push(line.substring(lastIndex, match.index));
+      parts.push(<strong key={match.index} className="font-bold text-ink font-semibold">{match[1]}</strong>);
       lastIndex = boldRegex.lastIndex;
     }
-    parts.push(cleaned.substring(lastIndex));
+    parts.push(line.substring(lastIndex));
 
     // Apply glossary/statute parser on string chunks
     const finalizedParts = parts.flatMap((part) => {
@@ -122,12 +165,18 @@ const renderMarkdown = (text: string) => {
       return part;
     });
 
-    return (
-      <p key={idx} className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed font-normal mb-4">
-        {finalizedParts.length > 0 ? finalizedParts : cleaned}
+    elements.push(
+      <p key={`p-${idx}`} className="font-serif text-base sm:text-lg text-ink/90 leading-relaxed sm:leading-loose mb-5">
+        {finalizedParts.length > 0 ? finalizedParts : line}
       </p>
     );
-  });
+  }
+  
+  if (currentListType) {
+    flushList(`list-end`);
+  }
+  
+  return elements;
 };
 
 export const ArticleReader: React.FC = () => {
@@ -292,13 +341,13 @@ export const ArticleReader: React.FC = () => {
               </div>
             </aside>
 
-            {/* Center Area (Deep Editorial Content Desk) - lg:col-span-5 */}
-            <article className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-xl border border-fog shadow-sm text-left space-y-6">
-              <div className="space-y-3 pb-6 border-b border-fog/60">
-                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink font-extrabold tracking-tight leading-tight">
+            {/* Center Area (Deep Editorial Content Desk) - lg:col-span-6 */}
+            <article className="lg:col-span-6 bg-white p-6 sm:p-10 rounded-xl border border-fog shadow-sm text-left space-y-8">
+              <div className="space-y-4 pb-6 border-b border-fog/60">
+                <h1 className="font-serif text-3xl sm:text-4xl lg:text-[42px] text-ink font-extrabold tracking-tight leading-tight">
                   {article.title}
                 </h1>
-                <p className="font-sans italic text-sm sm:text-base text-ink/65 leading-relaxed">
+                <p className="font-sans italic text-base sm:text-lg text-ink/60 leading-relaxed font-medium mt-3">
                   {article.description}
                 </p>
               </div>
@@ -309,15 +358,15 @@ export const ArticleReader: React.FC = () => {
               </div>
 
               {/* Problem/Challenge Box */}
-              <div className="p-4 bg-copper/5 border-l-4 border-copper rounded-r-lg space-y-1">
-                <span className="text-[9px] font-extrabold uppercase tracking-widest text-copper">The Boardroom Challenge:</span>
-                <p className="font-serif text-xs sm:text-sm italic text-ink font-medium leading-relaxed">
+              <div className="p-5 bg-copper/5 border-l-4 border-copper rounded-r-xl space-y-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-copper block font-sans">The Boardroom Challenge</span>
+                <p className="font-serif text-base sm:text-[17px] italic text-ink/90 leading-relaxed">
                   "{article.problem}"
                 </p>
               </div>
 
               {/* Long-form rendered markdown text */}
-              <div className="prose prose-sm sm:prose prose-slate max-w-none">
+              <div className="space-y-6">
                 {renderMarkdown(article.content)}
               </div>
 
@@ -397,8 +446,8 @@ export const ArticleReader: React.FC = () => {
               </div>
             </article>
 
-            {/* Right Rail (Interactive Meeting Prep Box) - lg:col-span-4 */}
-            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+            {/* Right Rail (Interactive Meeting Prep Box) - lg:col-span-3 */}
+            <aside className="lg:col-span-3 space-y-6 lg:sticky lg:top-24">
               
               {/* Header block for prep box */}
               <div className="bg-slate-brand text-paper p-4 rounded-t-xl border-b border-brass/25 text-left space-y-1">
