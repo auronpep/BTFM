@@ -7,7 +7,6 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { articles } from '../data/articles';
-import { scenarios } from '../data/scenarios';
 
 export const Home: React.FC = () => {
   const { navigate } = useRouter();
@@ -623,46 +622,81 @@ export const Home: React.FC = () => {
       {/* 5. Featured Classroom Scenarios & Masterclasses */}
       <section className="py-20 bg-white px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Column: Featured Scenario Case Study */}
+          {/* Left Column: The 40-40-20 Rule Highlighting */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <div className="space-y-2">
               <h3 className="font-serif font-extrabold text-2xl sm:text-3xl text-ink tracking-wide">
-                High-Stakes Scenario
+                The 40-40-20 Rule Standard
               </h3>
               <p className="text-xs sm:text-sm text-ink/60">
-                Study classroom cases of board failures to protect your directors from liability.
+                A battle-tested agenda paradigm designed by nonprofit attorneys to optimize boardroom time.
               </p>
             </div>
 
-            {scenarios.slice(0, 1).map((sc, idx) => (
-              <div key={idx} className="bg-paper border border-brass/30 p-6 rounded-xl space-y-4 shadow-sm hover:shadow-md transition-premium">
+            <div className="bg-paper border border-brass/30 p-6 sm:p-8 rounded-xl space-y-6 shadow-sm hover:shadow-md transition-premium relative overflow-hidden flex flex-col justify-between h-[360px]">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brass/5 rounded-bl-full pointer-events-none" />
+              
+              <div className="space-y-4">
                 <div className="flex items-center gap-2 justify-between flex-wrap">
                   <span className="text-[10px] font-extrabold text-brass uppercase bg-brass/10 px-2.5 py-0.5 rounded border border-brass/20">
-                    {sc.issueType}
+                    Fiduciary Time Standard
                   </span>
-                  <span className="text-xs text-ink/50 font-bold">{sc.boardStage} Level</span>
+                  <span className="text-xs text-slate-brand font-bold">Duty of Care</span>
                 </div>
-                
-                <h4 className="font-serif font-bold text-xl text-ink leading-tight hover:text-brass cursor-pointer" onClick={() => navigate(`scenario/${sc.slug}`)}>
-                  {sc.title}
-                </h4>
-                
-                <p className="text-xs sm:text-sm text-ink/85 leading-relaxed line-clamp-3">
-                  {sc.facts}
-                </p>
-                
-                <div className="pt-3 border-t border-brass/15 flex items-center justify-between">
-                  <span className="text-[11px] text-brass italic font-medium">Rebuttable Presumption Focus</span>
-                  <button 
-                    onClick={() => navigate(`scenario/${sc.slug}`)}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
-                  >
-                    <span>Inspect Case Study</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+
+                <div className="space-y-1.5">
+                  <h4 className="font-serif font-bold text-xl text-ink leading-tight">
+                    Stop Reading Slides. <br />
+                    <span className="text-brass italic">Start Governing.</span>
+                  </h4>
+                  <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
+                    Many boards waste 80% of meetings listening to dry executive slide read-outs. The 40-40-20 standard structuralizes meetings to focus on active forward strategy and strict compliance risk auditing.
+                  </p>
+                </div>
+
+                {/* Graphical Segmented Bar */}
+                <div className="space-y-2">
+                  <div className="w-full bg-fog rounded-lg h-4 overflow-hidden flex font-sans text-[9px] font-black text-white text-center tracking-wider uppercase shadow-inner select-none">
+                    <div className="bg-slate-brand h-full flex items-center justify-center transition-all duration-500" style={{ width: '40%' }} title="40% Pre-Meeting Prep">
+                      40% Prep
+                    </div>
+                    <div className="bg-teal-brand h-full flex items-center justify-center transition-all duration-500" style={{ width: '40%' }} title="40% Active Q&A">
+                      40% Q&A
+                    </div>
+                    <div className="bg-burgundy h-full flex items-center justify-center transition-all duration-500" style={{ width: '20%' }} title="20% Strategy/Audit">
+                      20% Risk
+                    </div>
+                  </div>
+                  
+                  {/* Rule Segment Explanations */}
+                  <div className="grid grid-cols-3 gap-3 text-left font-sans">
+                    <div className="space-y-0.5">
+                      <span className="block text-[9px] font-extrabold text-slate-brand uppercase tracking-wider">40% Pre-Meeting</span>
+                      <p className="text-[9px] text-ink/65 font-semibold leading-snug">Packets delivered 5 days prior. Directors study papers.</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <span className="block text-[9px] font-extrabold text-teal-brand uppercase tracking-wider">40% Active Q&A</span>
+                      <p className="text-[9px] text-ink/65 font-semibold leading-snug">Zero slides. Direct dialog testing report variables.</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <span className="block text-[9px] font-extrabold text-burgundy uppercase tracking-wider">20% Future Risk</span>
+                      <p className="text-[9px] text-ink/65 font-semibold leading-snug">Strategic goals, charter checks, and compliance audits.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
+
+              <div className="pt-3 border-t border-brass/15 flex items-center justify-between">
+                <span className="text-[11px] text-brass italic font-medium">Balancer Tool Included</span>
+                <button 
+                  onClick={() => navigate('next-meeting')}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
+                >
+                  <span>Use Agenda Balancer</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Right Column: Key Masterclass Articles */}
