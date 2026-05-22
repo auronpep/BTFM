@@ -167,10 +167,73 @@ const response = await fetch('/api/submit.php', {
 
 ---
 
-### 3. SEO, Accessibility, & Disclaimers Review
+#### 3. SEO, Accessibility, & Disclaimers Review
 *   **Unique Document Titles:** The website currently loads inside a Single Page App. In production, we should ensure the HTML document title updates dynamically as the user navigates between views (e.g. `document.title = "Fiduciary Duty - Next Meeting | CDX Boardroom"`).
 *   **Contrast Audit:** The warm book aesthetic (deep executive navy text over beige paper backgrounds) matches strict WCAG 2.2 AA guidelines (text contrast exceeds **4.5:1**). 
 *   **Legal Disclaimers:** The educational disclaimer is anchored prominently in the layout footer, at the bottom of the Articles and Scenarios readers, and embedded within generated diagnostic PDFs. This satisfies our legal guardrail of avoiding overpromising compliance outcomes.
+
+---
+
+## Phase 2: Disclaimers, Forms, and Wording Deep Audit
+
+This section documents the targeted, line-by-line review of legal protections, interactive lead captures, and professional legal nomenclature throughout the system.
+
+### A. Disclaimer Placements & Gaps Audit
+
+While the global footer features a robust disclaimer, California attorney ethics rules require that a user cannot easily bypass legal advice warnings when consuming educational curriculum.
+
+1. **Article Template Gap (`ArticleReader.tsx`):**
+   * *Audit Finding:* There is currently no inline disclaimer immediately following the long-form masterclass text before the feedback widget.
+   * *Technical Correction:* We will inject a subtle, italicized block directly under `{renderMarkdown(article.content)}`:
+     ```tsx
+     <div className="mt-6 p-4 bg-paper/50 border border-fog/60 rounded text-[11px] text-ink/60 leading-relaxed font-sans italic">
+       <strong>Educational Disclaimer:</strong> This article is published by the California Center for Nonprofit Law for general training purposes. It is not legal counsel, does not establish an attorney-client relationship, and must not be used as a substitute for consulting qualified legal counsel.
+     </div>
+     ```
+2. **Scenario Reader Template (`ScenarioReader.tsx`):**
+   * *Audit Finding:* The narrative scenario reader relies exclusively on the global footer disclaimer.
+   * *Technical Correction:* Inject a corresponding inline legal notice directly below the simulated debrief summary.
+3. **Print Styles Sheet Verification (`Layout.tsx` / CSS):**
+   * *Audit Finding:* Verified that standard browser printing (`Ctrl+P`) of the **Fiduciary Diligence Portfolio** and **Board Memo** keeps our liability disclaimers fully visible.
+   * *Technical Correction:* Ensure the printing layouts do not contain `print:hidden` classes on any legal disclaimer banners or footer segments.
+
+---
+
+### B. Interactive Forms & Lead Capture Audit
+
+1. **Webinar Registration Form (`Training.tsx`):**
+   * *Audit Finding:* The webinar form collects name and email but lacks an explicit agreement checkbox regarding the educational nature of the training.
+   * *Wording Correction:* Implement a mandatory checkbox before enabling the submit button:
+     ```html
+     <input type="checkbox" required id="webinar-consent" />
+     <label for="webinar-consent">
+       I understand this webinar is an educational training session and does not constitute formal legal representation.
+     </label>
+     ```
+2. **Custom On-Site Training Inquiry (`Training.tsx`):**
+   * *Audit Finding:* The form prompts board members to list their current bylaws or IRS concerns in a free-text field. Submitting highly sensitive conflict details or active litigation disputes outside of attorney-client privilege is a risk.
+   * *Wording Correction:* Add a clear warning above the "Notes/Concerns" text area:
+     > **⚠️ Privacy Notice:** To protect your board, please do not submit highly confidential details regarding active disputes or litigation here. This form is for general training requests only.
+3. **Self-Review Memo Form (`AboutUs.tsx`):**
+   * *Audit Finding:* The generated boardroom memo is highly detailed and looks like formal legal counsel.
+   * *Wording Correction:* Ensure the output header and footer of the generated document are watermarked with:
+     `"CONFIDENTIAL EDUCATIONAL STUDY AID — NOT FORMAL LEGAL COUNSEL"`
+
+---
+
+### C. Legal Citation & Terminology Audit
+
+To project the highest caliber of legal authority, all regulatory and statutory references have been audited line-by-line:
+
+1. **IRC § 4958 vs. IRS § 4958:**
+   * *Audit Finding:* Several UI views and static copy blocks refer to "IRS § 4958".
+   * *Correction:* Standardize all occurrences to **IRC § 4958** (Internal Revenue Code Section 4958) or **Internal Revenue Code Section 4958 (Excise Taxes on Excess Benefit Transactions)**. This is the precise nomenclature preferred by attorneys and tax courts.
+2. **California CPA Audit Thresholds:**
+   * *Audit Finding:* Some text passages refer to "organizations with a $2M budget."
+   * *Correction:* Clarify the phrasing to **"California organizations with gross annual revenues of $2 Million or more (CA Gov Code § 12586)"**. Since "annual budget" is an internal projection while "gross revenues" is the official statutory metric on IRS Form 990, this prevents dangerous misinterpretations.
+3. **Corporations Code Citations:**
+   * *Audit Finding:* The shorthand "CA Section 5233" is used occasionally.
+   * *Correction:* Standardize to **California Corporations Code Section 5233** (Conflict of Interest / Self-Dealing standard) and **California Corporations Code Section 5239** (Volunteer Director Liability Protection) to preserve supreme publishing credibility.
 
 ---
 
@@ -190,3 +253,7 @@ To coordinate your final actions with Myron Steeves and the technical team, comp
   - Add a fast `useEffect` inside `src/App.tsx` or `src/components/Layout.tsx` to synchronize `document.title` with the active `path` state.
 - [ ] **5. Set up Domain Forwarding:**
   - Point your primary domain name (e.g. `boardroom.NPOlawyers.com` or custom branded domain) to the Hostinger server IP address.
+- [ ] **6. Apply Phase 2 Disclaimer & Terminology Polishes:**
+  - Inject inline disclaimers inside `ArticleReader.tsx` and `ScenarioReader.tsx`.
+  - Add consent checkboxes and privacy warnings to the `Training.tsx` forms.
+  - Update "IRS" references to "IRC" and standardize CA statutory citation formats.
