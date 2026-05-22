@@ -363,7 +363,7 @@ export const Home: React.FC = () => {
                 </h2>
                 
                 <p className="font-sans text-sm sm:text-base text-ink/80 leading-relaxed">
-                  Move beyond static checklists. We design and deliver custom, on-site board training retreats and facilitated alignment sessions tailored for $3M+ established California nonprofit organizations. Ensure your trustees operate in full compliance with state and federal fiduciary regulations.
+                  Move beyond static checklists. NPO Lawyers design and deliver custom, on-site board training retreats and facilitated alignment sessions tailored for established charity and 501(c) organizations. Ensure your trustees operate in full compliance with state and federal fiduciary regulations.
                 </p>
                 
                 {/* Responsive Checklist of Modular Deliverables */}
