@@ -3,7 +3,8 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { 
   Landmark, ArrowRight, ShieldCheck, Scale, FileText, CheckCircle2, 
-  ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles
+  ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles, Users,
+  ExternalLink
 } from 'lucide-react';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
@@ -229,6 +230,227 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Editorial Clarity Block (Integrated from Hostinger) */}
+      <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center space-y-6">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink font-bold tracking-tight">
+            Many boards are active. <span className="text-brass italic">Few are effective.</span>
+          </h2>
+          <p className="font-sans text-xs sm:text-sm md:text-base text-ink/75 leading-relaxed max-w-3xl mx-auto">
+            The difference is usually not intelligence or goodwill, but <strong className="text-ink font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
+          </p>
+          
+          <div className="pt-4 flex flex-wrap justify-center gap-4">
+            <button 
+              onClick={() => navigate('articles')}
+              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+            >
+              for members &gt;
+            </button>
+            <button 
+              onClick={() => navigate('next-meeting')}
+              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+            >
+              for chairmen &gt;
+            </button>
+            <button 
+              onClick={() => navigate('tools')}
+              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+            >
+              for presidents &gt;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. The Three Jobs of the Board Grid */}
+      <section className="py-20 bg-paper/40 px-4 sm:px-6 lg:px-8 border-b border-fog/85">
+        <div className="max-w-7xl mx-auto space-y-12 text-center">
+          <div className="space-y-3">
+            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
+              The Three Jobs of a Mature Board
+            </h2>
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
+              Under California statutory law, directors must operate under a tripartite standard of stewardship. Move away from ornamenting and into active governance.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Strategy */}
+            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-slate-brand/40 text-left space-y-4">
+              <div className="w-12 h-12 bg-slate-brand/10 text-slate-brand rounded-lg flex items-center justify-center border border-slate-brand/20">
+                <Activity className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-xl text-ink">1. Strategy</h3>
+              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
+                Looking ten years out. Establishing the organization's strategic contours, verifying that programs remain strictly aligned with your tax-exempt charter, and setting the initial budget boundaries.
+              </p>
+              <ul className="space-y-1 text-xs text-slate-brand font-semibold pt-2">
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>3-Year Planning Templates</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>40-40-20 Meeting Rules</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Safety */}
+            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-copper/40 text-left space-y-4">
+              <div className="w-12 h-12 bg-copper/10 text-copper rounded-lg flex items-center justify-center border border-copper/20">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-xl text-ink">2. Safety</h3>
+              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
+                Risk mitigation. Conducting background Live Scan audits for youth mentoring staff, procuring robust D&O insurance with employment practice riders, and implementing strict corporate controls.
+              </p>
+              <ul className="space-y-1 text-xs text-copper font-semibold pt-2">
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>Background Verification Screens</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>D&O Coverage Checklist</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Audit */}
+            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-teal-brand/40 text-left space-y-4">
+              <div className="w-12 h-12 bg-teal-brand/10 text-teal-brand rounded-lg flex items-center justify-center border border-teal-brand/20">
+                <Scale className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-xl text-ink">3. Audit</h3>
+              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
+                Active verification. Scrutinizing ledger balances, reviewing the 10 largest budget deviations, auditing the CEO's credit card statements, and drafting defensive corporate minutes.
+              </p>
+              <ul className="space-y-1 text-xs text-teal-brand font-semibold pt-2">
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>Budget Deviation worksheet</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
+                  <span>Stand-alone Audit Committee setup</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Custom Boardroom Retreats & Corporate Facilitation */}
+      <section className="py-20 bg-paper/60 border-b border-fog/85 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl border border-brass/30 p-8 sm:p-12 relative overflow-hidden max-w-6xl mx-auto hover:shadow-2xl hover:border-brass transition-premium">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-brass/5 rounded-bl-full pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-brass/5 rounded-tr-full pointer-events-none" />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+              {/* Left Column: Premium Pitch Checklist */}
+              <div className="lg:col-span-7 space-y-6 text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-brass/10 text-brass rounded-full text-xs font-semibold uppercase tracking-wider border border-brass/20">
+                  <Users className="w-4 h-4" />
+                  <span>Corporate Workshops & Facilitation</span>
+                </div>
+                
+                <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-tight leading-tight">
+                  Facilitated Board Retreats & <br />
+                  <span className="text-brass italic">Custom Governance</span> Workshops
+                </h2>
+                
+                <p className="font-sans text-sm sm:text-base text-ink/80 leading-relaxed">
+                  Move beyond static checklists. We design and deliver custom, on-site board training retreats and facilitated alignment sessions tailored for $3M+ established California nonprofit organizations. Ensure your trustees operate in full compliance with state and federal fiduciary regulations.
+                </p>
+                
+                {/* Responsive Checklist of Modular Deliverables */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-brass/10 text-brass p-1 rounded mt-0.5 shrink-0 border border-brass/25">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-sm text-ink">Bylaws & Charter Audits</h4>
+                      <p className="text-xs text-ink/65 font-medium leading-normal">Resolve obsolete corporate terms and align with recent CA Attorney General guidelines.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="bg-brass/10 text-brass p-1 rounded mt-0.5 shrink-0 border border-brass/25">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-sm text-ink">Compensation Safe Harbors</h4>
+                      <p className="text-xs text-ink/65 font-medium leading-normal">Establish rebuttable presumption procedures and document salary comparability data under IRC § 4958.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="bg-brass/10 text-brass p-1 rounded mt-0.5 shrink-0 border border-brass/25">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-sm text-ink">Conflict of Interest Shields</h4>
+                      <p className="text-xs text-ink/65 font-medium leading-normal">Structure safe-harbor board approvals for founder, director, and officer business transactions.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="bg-brass/10 text-brass p-1 rounded mt-0.5 shrink-0 border border-brass/25">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif font-bold text-sm text-ink">Governance Boundary Mapping</h4>
+                      <p className="text-xs text-ink/65 font-medium leading-normal">Clarify executive team roles to prevent director micromanagement and build trust.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right Column: High-Converting Booking Desk */}
+              <div className="lg:col-span-5 bg-paper/35 rounded-xl border border-brass/20 p-6 sm:p-8 shadow-inner text-left space-y-5">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">Direct Board Engagement</span>
+                  <h3 className="font-serif text-xl font-bold text-ink leading-tight">Request a Custom Workshop</h3>
+                  <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
+                    Schedule a tailored 60-minute workshop, half-day alignment retreat, or confidential bylaws risk assessment facilitated by Myron Steeves, J.D.
+                  </p>
+                </div>
+                
+                <div className="space-y-3 pt-1">
+                  <button
+                    onClick={() => navigate('training')}
+                    className="w-full inline-flex justify-center items-center gap-2 py-3 bg-brass hover:bg-ink hover:text-white text-ink font-bold uppercase tracking-wider text-xs rounded shadow transition-premium cursor-pointer"
+                  >
+                    <span>Request Custom Board Training</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  
+                  <a
+                    href="https://NPOlawyers.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex justify-center items-center gap-2 py-3 border border-brass hover:bg-brass/10 text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium"
+                  >
+                    <span>Schedule Law Firm Consultation</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+                
+                <div className="pt-2 border-t border-brass/20">
+                  <p className="text-[10px] text-ink/50 italic leading-normal font-sans font-medium text-center">
+                    Educational training is provided for general informational purposes and does not constitute formal legal representation or establish attorney-client privilege.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. Category-Tabbed Diagnostic Problem Picker Hub */}
       <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto space-y-8">
@@ -395,118 +617,6 @@ export const Home: React.FC = () => {
             })}
           </div>
 
-        </div>
-      </section>
-
-      {/* Editorial Clarity Block (Integrated from Hostinger) */}
-      <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink font-bold tracking-tight">
-            Many boards are active. <span className="text-brass italic">Few are effective.</span>
-          </h2>
-          <p className="font-sans text-xs sm:text-sm md:text-base text-ink/75 leading-relaxed max-w-3xl mx-auto">
-            The difference is usually not intelligence or goodwill, but <strong className="text-ink font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
-          </p>
-          
-          <div className="pt-4 flex flex-wrap justify-center gap-4">
-            <button 
-              onClick={() => navigate('articles')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
-            >
-              for members &gt;
-            </button>
-            <button 
-              onClick={() => navigate('next-meeting')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
-            >
-              for chairmen &gt;
-            </button>
-            <button 
-              onClick={() => navigate('tools')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
-            >
-              for presidents &gt;
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. The Three Jobs of the Board Grid */}
-      <section className="py-20 bg-paper/40 px-4 sm:px-6 lg:px-8 border-b border-fog/85">
-        <div className="max-w-7xl mx-auto space-y-12 text-center">
-          <div className="space-y-3">
-            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
-              The Three Jobs of a Mature Board
-            </h2>
-            <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
-              Under California statutory law, directors must operate under a tripartite standard of stewardship. Move away from ornamenting and into active governance.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Strategy */}
-            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-slate-brand/40 text-left space-y-4">
-              <div className="w-12 h-12 bg-slate-brand/10 text-slate-brand rounded-lg flex items-center justify-center border border-slate-brand/20">
-                <Activity className="w-6 h-6" />
-              </div>
-              <h3 className="font-serif font-bold text-xl text-ink">1. Strategy</h3>
-              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                Looking ten years out. Establishing the organization's strategic contours, verifying that programs remain strictly aligned with your tax-exempt charter, and setting the initial budget boundaries.
-              </p>
-              <ul className="space-y-1 text-xs text-slate-brand font-semibold pt-2">
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>3-Year Planning Templates</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>40-40-20 Meeting Rules</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Safety */}
-            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-copper/40 text-left space-y-4">
-              <div className="w-12 h-12 bg-copper/10 text-copper rounded-lg flex items-center justify-center border border-copper/20">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="font-serif font-bold text-xl text-ink">2. Safety</h3>
-              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                Risk mitigation. Conducting background Live Scan audits for youth mentoring staff, procuring robust D&O insurance with employment practice riders, and implementing strict corporate controls.
-              </p>
-              <ul className="space-y-1 text-xs text-copper font-semibold pt-2">
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>Background Verification Screens</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>D&O Coverage Checklist</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Audit */}
-            <div className="bg-white border border-fog p-8 rounded-xl shadow-sm hover:shadow-md transition-premium hover:border-teal-brand/40 text-left space-y-4">
-              <div className="w-12 h-12 bg-teal-brand/10 text-teal-brand rounded-lg flex items-center justify-center border border-teal-brand/20">
-                <Scale className="w-6 h-6" />
-              </div>
-              <h3 className="font-serif font-bold text-xl text-ink">3. Audit</h3>
-              <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                Active verification. Scrutinizing ledger balances, reviewing the 10 largest budget deviations, auditing the CEO's credit card statements, and drafting defensive corporate minutes.
-              </p>
-              <ul className="space-y-1 text-xs text-teal-brand font-semibold pt-2">
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>Budget Deviation worksheet</span>
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brass" />
-                  <span>Stand-alone Audit Committee setup</span>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
 
