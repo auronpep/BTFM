@@ -5,6 +5,7 @@ import { californiaRules } from '../data/californiaRules';
 import type { CaliforniaRule } from '../data/californiaRules';
 import { CaliforniaNoteBadge, LegalEscalationCard } from '../components/BoardroomCards';
 import { CheckSquare, Square, Landmark, ChevronRight, ShieldCheck, AlertTriangle, Terminal, Search, Loader2, Copy, Check, ShieldAlert, FileText } from 'lucide-react';
+import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
 export const CaliforniaRules: React.FC = () => {
   const { navigate } = useRouter();
@@ -410,13 +411,13 @@ export const CaliforniaRules: React.FC = () => {
                       <div className="space-y-2">
                         <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50">Fiduciary Threshold Trigger:</h4>
                         <p className="font-serif italic text-sm text-ink leading-relaxed border-l-2 border-brass/40 pl-3">
-                          {rule.threshold}
+                          {parseTextWithStatutesAndGlossary(rule.threshold)}
                         </p>
                       </div>
                       <div className="space-y-2">
                         <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-burgundy">Regulatory Consequence of Failure:</h4>
                         <p className="font-sans text-xs sm:text-sm text-ink/80 leading-relaxed bg-burgundy/5 p-3 rounded border border-burgundy/15">
-                          {rule.consequenceOfFailure}
+                          {parseTextWithStatutesAndGlossary(rule.consequenceOfFailure)}
                         </p>
                       </div>
                     </div>
@@ -425,7 +426,7 @@ export const CaliforniaRules: React.FC = () => {
                     <div className="space-y-2">
                       <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50">Detailed Legal Commentary:</h4>
                       <p className="font-sans text-xs sm:text-sm text-ink/85 leading-relaxed">
-                        {rule.fullExplanation}
+                        {parseTextWithStatutesAndGlossary(rule.fullExplanation)}
                       </p>
                     </div>
 
@@ -453,7 +454,7 @@ export const CaliforniaRules: React.FC = () => {
                                 {isChecked ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
                               </div>
                               <span className={`font-sans text-xs sm:text-sm leading-relaxed ${isChecked ? 'text-teal-brand font-medium' : 'text-ink/80'}`}>
-                                {action}
+                                {parseTextWithStatutesAndGlossary(action)}
                               </span>
                             </div>
                           );

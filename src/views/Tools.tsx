@@ -5,6 +5,7 @@ import {
   Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, 
   ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion, CheckSquare
 } from 'lucide-react';
+import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
 interface ScriptTemplate {
   id: string;
@@ -113,7 +114,15 @@ export const Tools: React.FC = () => {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isScriptSandboxOpen, setIsScriptSandboxOpen] = useState(false);
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
-  const [userOrgName, setUserOrganizationName] = useState('Our Charitable Board');
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
+  const [userOrgName, setUserOrganizationName] = useState(() => {
+    return localStorage.getItem('cdx_user_org_name') || 'Our Charitable Board';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cdx_user_org_name', userOrgName);
+  }, [userOrgName]);
+
   const [copySuccess, setCopySuccess] = useState(false);
 
   // State for Form 990 Review Wizard (Enhancement 9)
@@ -336,15 +345,17 @@ export const Tools: React.FC = () => {
     setIsResetModalOpen(false);
   };
 
-  // Completed Labs count out of 6
+  // Completed Labs count out of 7
   const getCompletedLabsCount = () => {
     let completed = 0;
     if (labStates.selfAssessment.score) completed++;
     if (labStates.boardPacket.count === 9) completed++;
     if (labStates.minutesScorecard.grade) completed++;
     if (labStates.budgetWorksheet.count === 6) completed++;
-    if (labStates.authorityMap.score) completed++;
+    if (labStates.authorityMap.score && labStates.authorityMap.score === labStates.authorityMap.total) completed++;
     if (labStates.scriptBuilder.completed) completed++;
+    const form990AnsweredCount = Object.keys(form990Answers).filter(k => form990Answers[k] !== undefined && form990Answers[k] !== null).length;
+    if (form990AnsweredCount === 12) completed++;
     return completed;
   };
 
@@ -517,6 +528,265 @@ export const Tools: React.FC = () => {
               
               <div class="seal">
                 FIDUCIARY<br/>COMPLIANT<br/>2026
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  const handlePrintPortfolio = () => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const todayStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Determine state for each lab
+    const selfAssessmentCompleted = !!labStates.selfAssessment.score;
+    const selfAssessmentText = selfAssessmentCompleted
+      ? `Score: ${labStates.selfAssessment.score}/50 (${labStates.selfAssessment.level || ''})`
+      : "Complete the diagnostic to verify board quorums and structural quorums.";
+
+    const boardPacketCompleted = labStates.boardPacket.count === 9;
+    const boardPacketText = boardPacketCompleted
+      ? "9 of 9 hidden red-flag vulnerabilities successfully scanned."
+      : labStates.boardPacket.count > 0 
+        ? `${labStates.boardPacket.count} of 9 red-flag vulnerabilities scanned (Partially Completed).`
+        : "Scan packet documents for hidden compliance vulnerabilities.";
+
+    const minutesCompleted = !!labStates.minutesScorecard.grade;
+    const minutesText = minutesCompleted
+      ? `Grade: ${labStates.minutesScorecard.grade} (${labStates.minutesScorecard.score})`
+      : "Score draft meeting minutes to verify legal discoverability.";
+
+    const budgetCompleted = labStates.budgetWorksheet.count === 6;
+    const budgetText = budgetCompleted
+      ? "6 of 6 budget ledger variances scanned."
+      : labStates.budgetWorksheet.count > 0
+        ? `${labStates.budgetWorksheet.count} of 6 budget ledger variances scanned (Partially Completed).`
+        : "Scrutinize ledger variances for tax and self-dealing exposures.";
+
+    const authorityCompleted = !!(labStates.authorityMap.score && labStates.authorityMap.score === labStates.authorityMap.total);
+    const authorityText = authorityCompleted
+      ? "12 of 12 corporate actions correctly mapped."
+      : labStates.authorityMap.score 
+        ? `Map score: ${labStates.authorityMap.score} of ${labStates.authorityMap.total} correctly mapped (Partially Completed).`
+        : "Assign corporate actions to proper statutory approval slots.";
+
+    const scriptCompleted = labStates.scriptBuilder.completed;
+    const scriptText = scriptCompleted
+      ? "Custom courtroom-grade inquiry guide compiled in sandbox."
+      : "Compile and test a courtroom-grade inquiry script.";
+
+    const form990AnsweredCount = Object.keys(form990Answers).filter(k => form990Answers[k] !== undefined && form990Answers[k] !== null).length;
+    const form990Completed = form990AnsweredCount === 12;
+    const form990Text = form990Completed
+      ? `12 of 12 responses completed. Optimal alignment: ${Object.keys(form990Answers).filter(k => form990Answers[k] === 'yes').length} of 12.`
+      : "Complete the 12-question Part VI checklist.";
+
+    const html = `
+      <html>
+        <head>
+          <title>Fiduciary Diligence Portfolio - ${userOrgName}</title>
+          <style>
+            @media print {
+              body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #ffffff; }
+              .no-print { display: none; }
+            }
+            body { 
+              font-family: 'Georgia', serif; 
+              padding: 40px; 
+              background-color: #fcfbf7; 
+              color: #1e293b;
+              box-sizing: border-box;
+              line-height: 1.6;
+            }
+            .border-double { 
+              border: 8px double #800020; 
+              padding: 40px; 
+              max-width: 900px; 
+              margin: 0 auto;
+              background: #fff;
+              box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #8b6c4c; padding-bottom: 20px; }
+            .header-initiative { font-size: 14px; font-weight: bold; color: #a47e3c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif; }
+            .header-title { font-size: 30px; font-family: 'Times New Roman', serif; font-weight: bold; color: #800020; margin-bottom: 10px; text-transform: uppercase; }
+            .header-subtitle { font-size: 13px; font-style: italic; color: #64748b; }
+            
+            .metadata-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; font-size: 13px; font-family: sans-serif; background: #fafaf9; padding: 15px; border: 1px solid #e7e5e4; }
+            .metadata-item strong { color: #1e293b; }
+            
+            .dossier-intro { font-size: 14px; margin-bottom: 30px; line-height: 1.7; text-align: justify; }
+            
+            table { width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px; font-family: sans-serif; }
+            th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e7e5e4; }
+            th { background-color: #f8fafc; color: #1e293b; font-weight: bold; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+            
+            .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+            .badge-success { background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+            .badge-pending { background-color: #fef3c7; color: #78350f; border: 1px solid #fde68a; }
+            
+            .disclaimer-box { background-color: #f8fafc; border-left: 4px solid #64748b; padding: 15px; margin-bottom: 30px; font-size: 12px; font-style: italic; color: #475569; }
+            
+            .firm-outreach-box { border: 2px solid #8b6c4c; background-color: #fafaf9; padding: 20px; margin-bottom: 35px; border-radius: 4px; text-align: center; }
+            .firm-title { font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; color: #800020; margin-bottom: 5px; }
+            .firm-subtitle { font-size: 12px; color: #a47e3c; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; font-family: sans-serif; }
+            .firm-text { font-size: 12px; color: #475569; line-height: 1.6; margin-bottom: 15px; }
+            .firm-link { font-family: sans-serif; font-size: 12px; font-weight: bold; color: #800020; text-decoration: none; border-bottom: 1px solid #800020; }
+            
+            .footer-grid { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; }
+            .signature-block { width: 250px; text-align: center; font-size: 11px; color: #64748b; font-family: sans-serif; }
+            .line { border-top: 1px solid #8b6c4c; margin-bottom: 6px; }
+            .sig-name { font-weight: bold; color: #1e293b; font-family: 'Georgia', serif; font-style: italic; font-size: 13px; height: 18px; }
+          </style>
+        </head>
+        <body>
+          <div class="border-double">
+            <div class="header">
+              <div class="header-initiative">California Boardroom Initiative</div>
+              <div class="header-title">Fiduciary Diligence Portfolio</div>
+              <div class="header-subtitle">Consolidated Board Self-Audit Compliance Dossier</div>
+            </div>
+            
+            <div class="metadata-grid">
+              <div class="metadata-item">
+                <strong>Nonprofit Entity:</strong> ${userOrgName}<br/>
+                <strong>Compilation Date:</strong> ${todayStr}
+              </div>
+              <div class="metadata-item">
+                <strong>Registry Jurisdiction:</strong> California<br/>
+                <strong>Audit Standard:</strong> California Corporations Code & IRS Guidelines
+              </div>
+            </div>
+            
+            <div class="dossier-intro">
+              This dossier compiles the diagnostic metrics and verification states from the California Boardroom Initiative laboratories. 
+              The governance checklists contained herein are designed to align boardroom oversight with fiduciary statutory duties, ensuring proper diligence is exercised regarding conflicts of interest, executive payroll, asset restrictions, and minute keeping.
+            </div>
+            
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 35%;">Governance Laboratory</th>
+                  <th style="width: 25%;">Statutory Standard</th>
+                  <th style="width: 15%;">Audit Status</th>
+                  <th style="width: 25%;">Audit Details / Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1. Mature Board Self-Assessment</strong></td>
+                  <td>CA Corp Code § 5231</td>
+                  <td>
+                    <span class="badge ${selfAssessmentCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${selfAssessmentCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${selfAssessmentText}</td>
+                </tr>
+                <tr>
+                  <td><strong>2. Board Packet Audit Lab</strong></td>
+                  <td>CA Corp Code § 5227 / IRC § 4958</td>
+                  <td>
+                    <span class="badge ${boardPacketCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${boardPacketCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${boardPacketText}</td>
+                </tr>
+                <tr>
+                  <td><strong>3. Minutes Quality Scorecard</strong></td>
+                  <td>CA Corp Code § 5215</td>
+                  <td>
+                    <span class="badge ${minutesCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${minutesCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${minutesText}</td>
+                </tr>
+                <tr>
+                  <td><strong>4. Budget Deviation Worksheet</strong></td>
+                  <td>CA Corp Code § 5231 / IRC § 6672</td>
+                  <td>
+                    <span class="badge ${budgetCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${budgetCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${budgetText}</td>
+                </tr>
+                <tr>
+                  <td><strong>5. Board Authority Delegation Map</strong></td>
+                  <td>CA Corp Code § 5212 / § 5210</td>
+                  <td>
+                    <span class="badge ${authorityCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${authorityCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${authorityText}</td>
+                </tr>
+                <tr>
+                  <td><strong>6. Boardroom Script Constructor</strong></td>
+                  <td>IRC § 4958 / CA Corp Code § 5233</td>
+                  <td>
+                    <span class="badge ${scriptCompleted ? 'badge-success' : 'badge-pending'}">
+                      ${scriptCompleted ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${scriptText}</td>
+                </tr>
+                <tr>
+                  <td><strong>7. IRS Form 990 Review Wizard</strong></td>
+                  <td>IRS Form 990 Part VI</td>
+                  <td>
+                    <span class="badge ${form990Completed ? 'badge-success' : 'badge-pending'}">
+                      ${form990Completed ? '✓ CERTIFIED' : '⏳ PENDING'}
+                    </span>
+                  </td>
+                  <td>${form990Text}</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div class="disclaimer-box">
+              <strong>EDUCATIONAL INFORMATION DISCLAIMER:</strong> This portfolio is compiled based on diagnostic labs completed by board representatives. 
+              The information is structured for general educational and training purposes only. It does not constitute formal legal advice, does not establish 
+              an attorney-client relationship, and should not be relied upon as a substitute for professional legal review of specific governance disputes.
+            </div>
+            
+            <div class="firm-outreach-box">
+              <div class="firm-title">California Center for Nonprofit Law</div>
+              <div class="firm-subtitle">Independent Governance & Bylaws Audits</div>
+              <div class="firm-text">
+                For formal corporate bylaws reviews, executive compensation safe harbor reviews, conflict of interest evaluations, or statutory dispute resolution under California law, please contact Myron Steeves, J.D., founder of the California Center for Nonprofit Law / NPO Lawyers.
+              </div>
+              <a href="https://NPOlawyers.com" target="_blank" class="firm-link">Visit NPOlawyers.com &rarr;</a>
+            </div>
+            
+            <div class="footer-grid">
+              <div class="signature-block">
+                <div class="sig-name"></div>
+                <div class="line"></div>
+                <div>Board President Signature</div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${userOrgName}</div>
+              </div>
+              
+              <div class="signature-block">
+                <div class="sig-name"></div>
+                <div class="line"></div>
+                <div>Board Secretary Signature</div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${userOrgName}</div>
+              </div>
+              
+              <div class="signature-block">
+                <div class="sig-name" style="font-style: normal; font-family: sans-serif; font-size: 12px; padding-top: 4px;">${todayStr}</div>
+                <div class="line"></div>
+                <div>Compilation Date</div>
               </div>
             </div>
           </div>
@@ -742,6 +1012,25 @@ export const Tools: React.FC = () => {
     }
   ];
 
+  const selfAssessmentCompleted = !!labStates.selfAssessment.score;
+  const boardPacketCompleted = labStates.boardPacket.count === 9;
+  const minutesCompleted = !!labStates.minutesScorecard.grade;
+  const budgetCompleted = labStates.budgetWorksheet.count === 6;
+  const authorityCompleted = !!(labStates.authorityMap.score && labStates.authorityMap.score === labStates.authorityMap.total);
+  const scriptCompleted = labStates.scriptBuilder.completed;
+  const form990AnsweredCount = Object.keys(form990Answers).filter(k => form990Answers[k] !== undefined && form990Answers[k] !== null).length;
+  const form990Completed = form990AnsweredCount === 12;
+
+  const labsStatusList = [
+    { label: 'Diagnostic', completed: selfAssessmentCompleted },
+    { label: 'Packet Audit', completed: boardPacketCompleted },
+    { label: 'Minutes', completed: minutesCompleted },
+    { label: 'Ledger Audit', completed: budgetCompleted },
+    { label: 'Authority Map', completed: authorityCompleted },
+    { label: 'Sandbox Script', completed: scriptCompleted },
+    { label: 'IRS Form 990', completed: form990Completed },
+  ];
+
   return (
     <Layout>
       <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
@@ -797,6 +1086,102 @@ export const Tools: React.FC = () => {
               </button>
             </div>
           )}
+
+          {/* Fiduciary Diligence Portfolio Progress Desk */}
+          <div className="bg-white rounded-xl shadow-md border border-fog/80 p-6 space-y-6 text-left relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-burgundy/5 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-fog pb-4.5">
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-burgundy">
+                  <Award className="w-4 h-4 text-brass" />
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest font-sans">
+                    California Boardroom compliance portal
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl sm:text-2xl text-ink font-bold">
+                  Fiduciary Diligence Portfolio Desk
+                </h3>
+                <p className="text-xs sm:text-sm text-ink/75 leading-relaxed font-sans max-w-2xl">
+                  Assemble, review, and print your permanent board self-audit records under California law. Track, optimize, and lock clearances across all 7 interactive laboratories.
+                </p>
+              </div>
+              <div className="shrink-0 font-sans text-right">
+                <div className="text-sm font-black text-burgundy">{completedCount} of 7</div>
+                <div className="text-[9px] font-extrabold text-ink/40 uppercase tracking-widest">Labs Verified</div>
+              </div>
+            </div>
+
+            {/* Labs Progress Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-[10px] font-extrabold uppercase tracking-wider text-ink/55 font-sans">
+                <span>Dossier Completion Progress</span>
+                <span className="text-burgundy">{Math.round((completedCount / 7) * 100)}%</span>
+              </div>
+              <div className="h-2.5 w-full bg-fog rounded-full overflow-hidden border border-fog/40 shadow-inner">
+                <div 
+                  className="h-full bg-gradient-to-r from-brass via-burgundy to-burgundy transition-all duration-700 ease-out"
+                  style={{ width: `${(completedCount / 7) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Labs Pills Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              {labsStatusList.map((lab, idx) => (
+                <div 
+                  key={idx}
+                  className={`p-2.5 rounded-lg border text-center space-y-1 transition-premium ${
+                    lab.completed 
+                      ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-800' 
+                      : 'bg-slate-50/50 border-fog/60 text-ink/40'
+                  }`}
+                >
+                  <div className="text-[9px] font-black uppercase tracking-wider leading-none">Lab {idx + 1}</div>
+                  <div className="flex items-center justify-center gap-1.5 text-[10.5px] font-bold truncate">
+                    {lab.completed ? (
+                      <Check className="w-3.5 h-3.5 shrink-0 text-emerald-600 font-extrabold" />
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0 animate-pulse" />
+                    )}
+                    <span>{lab.label}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Persistence & Synchronization Actions */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 border-t border-fog/60 pt-5">
+              <div className="w-full sm:w-1/2 space-y-1.5">
+                <label className="text-[9.5px] font-extrabold text-ink/50 uppercase tracking-widest block">
+                  Nonprofit Entity / Board Name (Synced)
+                </label>
+                <input 
+                  type="text"
+                  value={userOrgName}
+                  onChange={(e) => setUserOrganizationName(e.target.value)}
+                  placeholder="e.g. Hope Foundation Board of Directors"
+                  className="w-full text-xs font-bold border border-fog/70 p-2.5 rounded bg-paper/5 focus:ring-1 focus:ring-brass focus:border-brass focus:outline-none text-ink"
+                />
+              </div>
+              <div className="w-full sm:w-1/2 flex flex-col sm:flex-row gap-3 sm:pt-5">
+                <button
+                  onClick={() => setIsPortfolioOpen(true)}
+                  className="w-full py-3 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer shadow-md inline-flex justify-center items-center gap-2"
+                >
+                  <Award className="w-4 h-4 text-brass" />
+                  <span>Compile Diligence Portfolio</span>
+                </button>
+                <a
+                  href="https://NPOlawyers.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 border border-fog/80 hover:bg-fog/40 text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium text-center inline-flex justify-center items-center gap-1"
+                >
+                  <span>NPOlawyers.com &rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
 
           {/* Tools Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -923,11 +1308,11 @@ export const Tools: React.FC = () => {
 
                 <div className="p-4 bg-paper/20 rounded-lg border border-fog/40 text-xs space-y-2">
                   <span className="font-bold text-ink uppercase tracking-wide text-[9px] block">Dispute Assessment:</span>
-                  <p className="text-ink/75 leading-relaxed font-sans">{scriptTemplates[selectedScriptId].problem}</p>
+                  <p className="text-ink/75 leading-relaxed font-sans">{parseTextWithStatutesAndGlossary(scriptTemplates[selectedScriptId].problem)}</p>
                   <div className="pt-2 border-t border-fog/30">
                     <span className="font-bold text-ink uppercase tracking-wide text-[9px] block">Statutory Standard:</span>
-                    <span className="text-burgundy font-bold text-[11px] block mt-0.5">{scriptTemplates[selectedScriptId].statute}</span>
-                    <span className="text-[10px] text-ink/65 leading-normal block">{scriptTemplates[selectedScriptId].statuteTitle}</span>
+                    <span className="text-burgundy font-bold text-[11px] block mt-0.5">{parseTextWithStatutesAndGlossary(scriptTemplates[selectedScriptId].statute)}</span>
+                    <span className="text-[10px] text-ink/65 leading-normal block">{parseTextWithStatutesAndGlossary(scriptTemplates[selectedScriptId].statuteTitle)}</span>
                   </div>
                 </div>
 
@@ -972,10 +1357,10 @@ export const Tools: React.FC = () => {
                     <div className="space-y-1">
                       <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest block">Question {idx + 1}</span>
                       <p className="font-serif text-sm sm:text-base font-bold text-ink italic leading-relaxed">
-                        "{q.question}"
+                        "{parseTextWithStatutesAndGlossary(q.question)}"
                       </p>
                       <p className="text-xs text-ink/50 leading-relaxed italic">
-                        <strong>Legal Rationale:</strong> {q.rationale}
+                        <strong>Legal Rationale:</strong> {parseTextWithStatutesAndGlossary(q.rationale)}
                       </p>
                     </div>
 
@@ -990,7 +1375,7 @@ export const Tools: React.FC = () => {
                       <div className="pt-2 border-t border-fog/20 space-y-1">
                         <span className="font-extrabold text-emerald-800 text-[10px] uppercase tracking-wider block">Attorney Counter-Inquiry Response Strategy:</span>
                         <p className="text-ink/85 leading-relaxed font-sans">
-                          {q.counterStrike}
+                          {parseTextWithStatutesAndGlossary(q.counterStrike)}
                         </p>
                       </div>
                     </div>
@@ -1069,6 +1454,280 @@ export const Tools: React.FC = () => {
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Certificate</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fiduciary Diligence Portfolio Modal */}
+      {isPortfolioOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-ink/60 backdrop-blur-sm" onClick={() => setIsPortfolioOpen(false)} />
+          
+          <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full border border-fog p-6 flex flex-col max-h-[90vh]">
+            <button onClick={() => setIsPortfolioOpen(false)} className="absolute top-4 right-4 text-ink/40 hover:text-ink cursor-pointer z-10">
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-1.5 pt-2 pb-4 text-center border-b border-fog/50">
+              <Award className="w-12 h-12 text-burgundy mx-auto" />
+              <h3 className="font-serif font-bold text-2xl text-ink">
+                Fiduciary Diligence Dossier Preview
+              </h3>
+              <p className="text-xs text-ink/60 max-w-lg mx-auto">
+                Review your consolidated board compliance self-audit records. Click "Print Fiduciary Portfolio" to export your official dossier.
+              </p>
+            </div>
+
+            {/* Scrollable Document Area */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 border-b border-fog/50">
+              <div className="border-8 double border-burgundy p-6 sm:p-10 bg-[#fcfbf7] text-left space-y-6 max-w-3xl mx-auto rounded shadow-inner font-serif text-ink relative">
+                <div className="text-center space-y-1.5 border-b border-brass/25 pb-4">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass block font-sans">
+                    California Boardroom Initiative
+                  </span>
+                  <h4 className="text-xl sm:text-2xl font-bold text-burgundy tracking-wide uppercase">
+                    Fiduciary Diligence Portfolio
+                  </h4>
+                  <p className="text-[11px] text-ink/60 font-sans italic">
+                    Consolidated Board Self-Audit Compliance Records
+                  </p>
+                </div>
+
+                {/* Metadata details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans bg-paper/10 p-4 border border-fog/45 rounded-lg">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Nonprofit Entity / Board Name</label>
+                    <input 
+                      type="text"
+                      value={userOrgName}
+                      onChange={(e) => setUserOrganizationName(e.target.value)}
+                      className="w-full font-bold border border-fog/40 p-2 rounded focus:ring-1 focus:ring-brass focus:outline-none bg-white text-ink"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Compilation Date</label>
+                    <input 
+                      type="text"
+                      value={new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      className="w-full font-bold border border-fog/40 p-2 rounded bg-paper/5 focus:outline-none text-ink cursor-default"
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <p className="text-xs text-ink/75 leading-relaxed font-sans text-justify">
+                  This portfolio compiles the complete self-audit clearance status for all 7 interactive laboratories. Completed labs represent certified clearance states aligned with California statutory codes and IRS best practices. Pending labs highlight areas where structural governance and risk diagnostics remain unchecked.
+                </p>
+
+                {/* Scorecard Table */}
+                <div className="border border-fog/60 rounded-lg overflow-hidden font-sans">
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-slate-100 text-ink/70 uppercase text-[10px] tracking-wider font-extrabold border-b border-fog">
+                      <tr>
+                        <th className="p-3">Oversight Laboratory</th>
+                        <th className="p-3">Statutory Standard</th>
+                        <th className="p-3 text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-fog">
+                      {/* Self-Assessment */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">1. Mature Board Self-Assessment</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {selfAssessmentCompleted 
+                              ? `Score: ${labStates.selfAssessment.score}/50 (${labStates.selfAssessment.level || 'Institutional'})` 
+                              : 'Pending board diagnostic completion.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">CA Corp Code § 5231</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            selfAssessmentCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {selfAssessmentCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Board Packet */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">2. Board Packet Audit Lab</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {boardPacketCompleted 
+                              ? '9 of 9 red-flag vulnerabilities successfully scanned.' 
+                              : labStates.boardPacket.count > 0 
+                                ? `${labStates.boardPacket.count} of 9 red-flag vulnerabilities scanned (Partially Completed).` 
+                                : 'Scan documents for compliance vulnerabilities.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">CA Corp Code § 5227</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            boardPacketCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {boardPacketCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Minutes */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">3. Minutes Quality Scorecard</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {minutesCompleted 
+                              ? `Grade: ${labStates.minutesScorecard.grade} (${labStates.minutesScorecard.score})` 
+                              : 'Score draft minutes to verify legal discoverability.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">CA Corp Code § 5215</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            minutesCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {minutesCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Budget */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">4. Budget Deviation Worksheet</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {budgetCompleted 
+                              ? '6 of 6 budget ledger variances scanned.' 
+                              : labStates.budgetWorksheet.count > 0 
+                                ? `${labStates.budgetWorksheet.count} of 6 budget ledger variances scanned (Partially Completed).` 
+                                : 'Scrutinize ledger variances.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">IRC § 6672</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            budgetCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {budgetCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Authority Map */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">5. Board Authority Delegation Map</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {authorityCompleted 
+                              ? '12 of 12 corporate actions correctly mapped.' 
+                              : labStates.authorityMap.score 
+                                ? `Map score: ${labStates.authorityMap.score} of ${labStates.authorityMap.total} correctly mapped.` 
+                                : 'Map corporate actions to statutory slots.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">CA Corp Code § 5212</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            authorityCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {authorityCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Script Sandbox */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">6. Boardroom Script Constructor</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {scriptCompleted 
+                              ? 'Custom courtroom-grade inquiry guide compiled in sandbox.' 
+                              : 'Compile and test an inquiry script.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">CA Corp Code § 5233</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            scriptCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {scriptCompleted ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Form 990 */}
+                      <tr className="hover:bg-paper/5">
+                        <td className="p-3">
+                          <div className="font-bold text-ink">7. IRS Form 990 Review Wizard</div>
+                          <div className="text-[10px] text-ink/60 mt-0.5">
+                            {form990Completed 
+                              ? `12 of 12 responses completed.` 
+                              : 'Complete the 12-question Part VI checklist.'}
+                          </div>
+                        </td>
+                        <td className="p-3 text-[10px] font-bold text-ink/70">Form 990 Part VI</td>
+                        <td className="p-3 text-center">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            form990Completed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {form990Completed ? '✓ Certified' : '⏳ Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Disclaimer */}
+                <div className="p-4 bg-slate-100 border-l-4 border-slate-400 rounded-r text-[11px] font-sans text-ink/70 italic leading-relaxed text-justify">
+                  <strong>Educational-Information Disclaimer:</strong> This portfolio is compiled from board diagnostic self-audits. 
+                  The contents are structured for training and self-evaluative review only. This dossier does not represent formal legal 
+                  advice, nor does it establish an attorney-client relationship under California law. 
+                </div>
+
+                {/* Premium Firm Callout block */}
+                <div className="border border-brass/40 bg-brass/5 p-4 rounded-lg text-center font-sans space-y-2">
+                  <div className="font-serif text-base font-bold text-burgundy">California Center for Nonprofit Law</div>
+                  <div className="text-[10px] text-brass font-extrabold uppercase tracking-widest">Independent Fiduciary Audits</div>
+                  <p className="text-xs text-ink/75 max-w-lg mx-auto">
+                    For customized bylaws revision, independent director compensation reviews, and formal regulatory risk evaluations under California law, please consult attorney Myron Steeves, J.D. at NPO Lawyers.
+                  </p>
+                  <a href="https://NPOlawyers.com" target="_blank" rel="noopener noreferrer" className="inline-block text-xs font-bold text-burgundy hover:text-ink underline">
+                    Visit NPOlawyers.com &rarr;
+                  </a>
+                </div>
+
+                {/* Signature Block */}
+                <div className="flex flex-col sm:flex-row justify-between items-end gap-6 pt-6 font-sans text-[10px] text-ink/60 border-t border-brass/25">
+                  <div className="w-full sm:w-1/3 text-center space-y-1">
+                    <div className="h-6 border-b border-brass/35" />
+                    <div>Board President Signature</div>
+                    <div className="text-[8px] text-ink/40">{userOrgName}</div>
+                  </div>
+                  <div className="w-full sm:w-1/3 text-center space-y-1">
+                    <div className="h-6 border-b border-brass/35" />
+                    <div>Board Secretary Signature</div>
+                    <div className="text-[8px] text-ink/40">{userOrgName}</div>
+                  </div>
+                  <div className="w-full sm:w-1/3 text-center space-y-1">
+                    <div className="font-serif text-xs text-ink font-bold">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                    <div className="border-t border-brass/35 pt-1">Compilation Date</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="p-4 flex gap-3 justify-end bg-white">
+              <button
+                onClick={() => setIsPortfolioOpen(false)}
+                className="px-5 py-2.5 bg-paper/20 hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer"
+              >
+                Close Preview
+              </button>
+              <button
+                onClick={handlePrintPortfolio}
+                className="px-5 py-2.5 bg-burgundy text-white hover:bg-ink text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer shadow-md inline-flex items-center gap-1.5"
+              >
+                <Printer className="w-4 h-4 text-brass" />
+                <span>Print Fiduciary Portfolio</span>
               </button>
             </div>
           </div>
@@ -1353,7 +2012,7 @@ export const Tools: React.FC = () => {
 
                       {/* Question Text */}
                       <p className="font-serif text-lg sm:text-xl font-bold text-ink italic leading-relaxed">
-                        "{form990Questions[form990ActiveIndex].question}"
+                        "{parseTextWithStatutesAndGlossary(form990Questions[form990ActiveIndex].question)}"
                       </p>
                     </div>
 
@@ -1415,7 +2074,7 @@ export const Tools: React.FC = () => {
                   </div>
 
                   <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                    {form990Questions[form990ActiveIndex].guidance}
+                    {parseTextWithStatutesAndGlossary(form990Questions[form990ActiveIndex].guidance)}
                   </p>
 
                   <div className="pt-4 border-t border-fog/30 space-y-2 font-sans">

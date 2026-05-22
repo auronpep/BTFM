@@ -6,37 +6,11 @@ import { articles } from '../data/articles';
 import { LegalEscalationCard } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle, Sparkles } from 'lucide-react';
+import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
 // React-safe glossary parser (Enhancement 6)
-const parseTextWithGlossary = (text: string): React.ReactNode[] => {
-  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires)/gi;
-  const parts = text.split(regex);
-  return parts.map((part, i) => {
-    const lower = part.toLowerCase();
-    let termId = '';
-    if (lower === 'self-dealing') termId = 'self-dealing';
-    else if (lower === 'rebuttable presumption') termId = 'rebuttable-presumption';
-    else if (lower === 'donor intent') termId = 'donor-intent';
-    else if (lower === 'duty of care') termId = 'duty-of-care';
-    else if (lower === 'duty of loyalty') termId = 'duty-of-loyalty';
-    else if (lower === 'quorum') termId = 'quorum';
-    else if (lower === 'interested director' || lower === 'interested person') termId = 'interested-director';
-    else if (lower === 'ultra vires') termId = 'ultra-vires';
-
-    if (termId) {
-      return (
-        <span 
-          key={i} 
-          className="glossary-term cursor-help border-b border-dotted border-brass/80 text-ink hover:text-brass transition-all font-semibold inline duration-150"
-          data-term={termId}
-          title="Click to open Fiduciary Glossary definition"
-        >
-          {part}
-        </span>
-      );
-    }
-    return part;
-  });
+const parseTextWithGlossary = (text: string): React.ReactNode => {
+  return parseTextWithStatutesAndGlossary(text);
 };
 
 interface SimOption {

@@ -12,38 +12,7 @@ import {
 } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Clock, Award, CheckSquare, Square, AlertCircle } from 'lucide-react';
-
-// React-safe glossary parser (Enhancement 6)
-const parseTextWithGlossary = (text: string): React.ReactNode[] => {
-  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires)/gi;
-  const parts = text.split(regex);
-  return parts.map((part, i) => {
-    const lower = part.toLowerCase();
-    let termId = '';
-    if (lower === 'self-dealing') termId = 'self-dealing';
-    else if (lower === 'rebuttable presumption') termId = 'rebuttable-presumption';
-    else if (lower === 'donor intent') termId = 'donor-intent';
-    else if (lower === 'duty of care') termId = 'duty-of-care';
-    else if (lower === 'duty of loyalty') termId = 'duty-of-loyalty';
-    else if (lower === 'quorum') termId = 'quorum';
-    else if (lower === 'interested director' || lower === 'interested person') termId = 'interested-director';
-    else if (lower === 'ultra vires') termId = 'ultra-vires';
-
-    if (termId) {
-      return (
-        <span 
-          key={i} 
-          className="glossary-term cursor-help border-b border-dotted border-brass/80 text-ink hover:text-brass transition-all font-semibold inline duration-150"
-          data-term={termId}
-          title="Click to open Fiduciary Glossary definition"
-        >
-          {part}
-        </span>
-      );
-    }
-    return part;
-  });
-};
+import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
 // Simple Markdown to HTML parser for articles
 const renderMarkdown = (text: string) => {
@@ -55,14 +24,14 @@ const renderMarkdown = (text: string) => {
     if (cleaned.startsWith('### ')) {
       return (
         <h3 key={idx} className="font-serif text-xl sm:text-2xl text-slate-brand font-bold mt-6 mb-3 leading-snug">
-          {parseTextWithGlossary(cleaned.substring(4))}
+          {parseTextWithStatutesAndGlossary(cleaned.substring(4))}
         </h3>
       );
     }
     if (cleaned.startsWith('## ')) {
       return (
         <h2 key={idx} className="font-serif text-2xl sm:text-3xl text-ink font-bold mt-8 mb-4 leading-tight">
-          {parseTextWithGlossary(cleaned.substring(3))}
+          {parseTextWithStatutesAndGlossary(cleaned.substring(3))}
         </h2>
       );
     }
@@ -86,10 +55,10 @@ const renderMarkdown = (text: string) => {
             }
             parts.push(itemText.substring(lastIndex));
 
-            // Apply glossary parser on string chunks
+            // Apply glossary/statute parser on string chunks
             const finalizedParts = parts.flatMap((part) => {
               if (typeof part === 'string') {
-                return parseTextWithGlossary(part);
+                return parseTextWithStatutesAndGlossary(part);
               }
               return part;
             });
@@ -119,10 +88,10 @@ const renderMarkdown = (text: string) => {
             }
             parts.push(itemText.substring(lastIndex));
 
-            // Apply glossary parser on string chunks
+            // Apply glossary/statute parser on string chunks
             const finalizedParts = parts.flatMap((part) => {
               if (typeof part === 'string') {
-                return parseTextWithGlossary(part);
+                return parseTextWithStatutesAndGlossary(part);
               }
               return part;
             });
@@ -145,10 +114,10 @@ const renderMarkdown = (text: string) => {
     }
     parts.push(cleaned.substring(lastIndex));
 
-    // Apply glossary parser on string chunks
+    // Apply glossary/statute parser on string chunks
     const finalizedParts = parts.flatMap((part) => {
       if (typeof part === 'string') {
-        return parseTextWithGlossary(part);
+        return parseTextWithStatutesAndGlossary(part);
       }
       return part;
     });
