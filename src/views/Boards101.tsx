@@ -602,7 +602,7 @@ export const Boards101: React.FC = () => {
                 <div className="space-y-3 text-left border-t border-fog/40 pt-4">
                   <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
                     <span className="text-brass">Q2:</span>
-                    <span>When reviewing or voting on executive compensation under IRS § 4958 comparable standards, does the CEO participate?</span>
+                    <span>When reviewing or voting on executive compensation under IRC § 4958 comparable standards, does the CEO participate?</span>
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[

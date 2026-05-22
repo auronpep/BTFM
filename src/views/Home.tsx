@@ -29,7 +29,7 @@ export const Home: React.FC = () => {
       {
         id: 'founder-salary',
         title: "The Founder Demands the Board Approve Her Salary",
-        subtitle: "Executive Compensation Safe Harbor (IRS § 4958)",
+        subtitle: "Executive Compensation Safe Harbor (IRC § 4958)",
         desc: "The founder demands a major salary increase without comparable data. Learn the IRS rebuttable presumption of reasonableness standard.",
         target: "scenario/founder-salary-conflict"
       },

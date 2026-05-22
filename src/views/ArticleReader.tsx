@@ -368,6 +368,9 @@ export const ArticleReader: React.FC = () => {
               {/* Long-form rendered markdown text */}
               <div className="space-y-6">
                 {renderMarkdown(article.content)}
+                <div className="mt-6 p-4 bg-paper/50 border border-fog/60 rounded text-[11px] text-ink/60 leading-relaxed font-sans italic">
+                  <strong>Educational Disclaimer:</strong> This article is published by the California Center for Nonprofit Law for general training purposes. It is not legal counsel, does not establish an attorney-client relationship, and must not be used as a substitute for consulting qualified legal counsel.
+                </div>
               </div>
 
               {/* Feedback Survey */}

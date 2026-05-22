@@ -54,7 +54,7 @@ const questions: Question[] = [
     id: 5,
     text: "Executive Compensation Approval",
     options: [
-      { text: "The CEO/ED sets their own salary, or the board votes with the ED in the room.", points: 1, description: "Automatic excess benefit risk. Fines up to 200% under IRS Section 4958." },
+      { text: "The CEO/ED sets their own salary, or the board votes with the ED in the room.", points: 1, description: "Automatic excess benefit risk. Fines up to 200% under IRC Section 4958." },
       { text: "The board votes on the salary but doesn't review independent comparability data.", points: 3, description: "Lacks IRS safe harbor protection. Vulnerable to audits." },
       { text: "Approved by disinterested directors relying on written comparability surveys.", points: 5, description: "Satisfies the IRS Rebuttable Presumption. Safe harbor achieved." }
     ]

@@ -168,7 +168,8 @@ export const AboutUs: React.FC = () => {
 
     if (!worriesText) worriesText = '- General board governance checkup and review';
 
-    return `CONFIDENTIAL ATTORNEY-CLIENT PRIVILEGED INTAKE BRIEF
+    return `CONFIDENTIAL EDUCATIONAL STUDY AID — NOT FORMAL LEGAL COUNSEL
+CONFIDENTIAL ATTORNEY-CLIENT PRIVILEGED INTAKE BRIEF
 --------------------------------------------------
 TO: Myron Steeves, J.D. • California Center for Nonprofit Law
 FROM: Board Representative • ${orgName}
@@ -565,6 +566,9 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
 
                   <div className="space-y-4 border-b border-fog pb-6 font-serif">
                     <div className="text-center pb-4 text-ink/65 border-b border-fog/55">
+                      <div className="text-[10px] font-bold text-copper uppercase tracking-widest mb-1.5 font-sans">
+                        CONFIDENTIAL EDUCATIONAL STUDY AID — NOT FORMAL LEGAL COUNSEL
+                      </div>
                       <div className="font-extrabold uppercase text-xs tracking-widest">Pre-Consultation Briefing Dossier</div>
                       <div className="font-serif italic text-xs mt-1">California Center for Nonprofit Law</div>
                     </div>

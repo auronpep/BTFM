@@ -496,6 +496,10 @@ export const ScenarioReader: React.FC = () => {
                     );
                   })}
                 </div>
+
+                <div className="p-4 bg-paper/50 border border-fog/60 rounded text-[11px] text-ink/60 leading-relaxed font-sans italic">
+                  <strong>Educational Case Disclaimer:</strong> This scenario study represents structural governance patterns. It is published by the California Center for Nonprofit Law for general board training. It is not formal legal counsel, does not establish an attorney-client relationship, and must not be used as a substitute for consulting qualified legal counsel.
+                </div>
               </div>
 
               {/* WEBINAR TIE-IN */}

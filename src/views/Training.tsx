@@ -79,7 +79,7 @@ export const Training: React.FC = () => {
       title = "Defensive Governance Minutes Protocol";
       desc = "Protect individual directors from litigation discovery and IRS personal excise tax penalties.";
       tools = ["Minutes Quality Scorecard", "Boards 101 Fundamental Manual"];
-      rationale = "IRS Section 4958 requires the board to document compensation studies in contemporaneous minutes to secure the 'Rebuttable Presumption of Reasonableness.' Minutes are legal evidence, not transcripts of disagreements.";
+      rationale = "IRC Section 4958 requires the board to document compensation studies in contemporaneous minutes to secure the 'Rebuttable Presumption of Reasonableness.' Minutes are legal evidence, not transcripts of disagreements.";
     }
 
     return { title, desc, tools, rationale };
@@ -89,6 +89,7 @@ export const Training: React.FC = () => {
   const [webinarName, setWebinarName] = useState('');
   const [webinarEmail, setWebinarEmail] = useState('');
   const [selectedWebinar, setSelectedWebinar] = useState('');
+  const [webinarConsent, setWebinarConsent] = useState(false);
   const [webinarSubmitted, setWebinarId] = useState<string | null>(null);
   const [webinarError, setWebinarError] = useState('');
 
@@ -103,7 +104,7 @@ export const Training: React.FC = () => {
   const [inpersonError, setInpersonError] = useState('');
 
   const webinarsList = [
-    { id: 'webinar-comp', title: 'Fiduciary Duty & Executive Compensation Safe Harbor (IRS § 4958)', date: 'June 18, 2026', time: '10:00 AM - 11:30 AM PST' },
+    { id: 'webinar-comp', title: 'Fiduciary Duty & Executive Compensation Safe Harbor (IRC § 4958)', date: 'June 18, 2026', time: '10:00 AM - 11:30 AM PST' },
     { id: 'webinar-audit', title: 'California $2M Independent Audit & Audit Committee Mandate', date: 'July 15, 2026', time: '1:00 PM - 2:00 PM PST' },
     { id: 'webinar-minutes', title: 'Drafting Defensive Meeting Minutes & Corporate Records', date: 'August 11, 2026', time: '11:00 AM - 12:00 PM PST' }
   ];
@@ -112,6 +113,10 @@ export const Training: React.FC = () => {
     e.preventDefault();
     if (!webinarName || !webinarEmail || !selectedWebinar) {
       setWebinarError('Please complete all form fields.');
+      return;
+    }
+    if (!webinarConsent) {
+      setWebinarError('You must acknowledge the educational disclaimer before registering.');
       return;
     }
     setWebinarError('');
@@ -546,6 +551,20 @@ export const Training: React.FC = () => {
                       </select>
                     </div>
 
+                    <div className="flex items-start gap-2.5 pt-1 pb-2">
+                      <input
+                        id="webinar-consent"
+                        type="checkbox"
+                        required
+                        checked={webinarConsent}
+                        onChange={(e) => setWebinarConsent(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 rounded text-slate-brand focus:ring-brass border-fog/80 cursor-pointer"
+                      />
+                      <label htmlFor="webinar-consent" className="text-[11px] text-ink/70 leading-relaxed font-sans font-medium cursor-pointer select-none">
+                        I acknowledge this webinar is an educational service only and does not establish a formal attorney-client relationship with CCNL or NPO Lawyers.
+                      </label>
+                    </div>
+
                     <button
                       type="submit"
                       className="w-full inline-flex justify-center items-center gap-2 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
@@ -694,6 +713,9 @@ export const Training: React.FC = () => {
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Optional Notes or Specific Concerns:</label>
+                      <div className="p-3 bg-copper/5 border-l-2 border-copper rounded text-[11px] text-copper leading-relaxed font-sans font-medium">
+                        <strong>⚠️ Privacy Notice:</strong> To protect your organization, please do not submit highly confidential details regarding active internal disputes, active board audits, or pending litigation here. This form is for general training inquiries only and does not establish attorney-client privilege.
+                      </div>
                       <textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}

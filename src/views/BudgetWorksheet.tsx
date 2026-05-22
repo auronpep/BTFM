@@ -91,8 +91,8 @@ export const BudgetWorksheet: React.FC = () => {
         'Board meeting minutes containing the formal approval of compensation, detailing the comparability data and recusal.',
         'Signed employment agreement amendment or offer letter signed by the Board President.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRS Section 4958.',
-      advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates California Attorney General guidelines, initiating immediate IRS § 4958 intermediate sanctions risk.'
+      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRC Section 4958.',
+      advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates California Attorney General guidelines, initiating immediate IRC § 4958 intermediate sanctions risk.'
     },
     'self-dealing': {
       id: 'self-dealing',
