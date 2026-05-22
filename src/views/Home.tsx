@@ -229,38 +229,209 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Editorial Clarity Block (Integrated from Hostinger) */}
-      <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink font-bold tracking-tight">
-            Many boards are active. <span className="text-brass italic">Few are effective.</span>
-          </h2>
-          <p className="font-sans text-xs sm:text-sm md:text-base text-ink/75 leading-relaxed max-w-3xl mx-auto">
-            The difference is usually not intelligence or goodwill, but <strong className="text-ink font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
+      {/* --- START OF BRAINSTORMING CLOCKS & BLOCKS --- */}
+      
+      {/* OPTION 1: WSJ Editorial Split-Screen */}
+      <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 1: WSJ Editorial Split-Screen</div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-4">
+          <div className="lg:col-span-5 text-left border-l-4 border-brass pl-6 py-4 space-y-3">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-ink font-extrabold tracking-tight leading-tight">
+              Many boards <br />
+              are active. <br />
+              <span className="text-brass italic">Few are effective.</span>
+            </h2>
+            <div className="w-16 h-0.5 bg-brass/30" />
+          </div>
+          
+          <div className="lg:col-span-7 text-left space-y-6">
+            <p className="font-sans text-sm sm:text-base text-ink/75 leading-relaxed">
+              The difference is usually not intelligence or goodwill, but <strong className="text-ink font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
+            </p>
+            
+            <div className="flex flex-wrap gap-4 pt-2">
+              <button 
+                onClick={() => navigate('articles')}
+                className="px-6 py-3 border border-ink hover:border-brass hover:bg-brass/5 text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold"
+              >
+                For Members &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('next-meeting')}
+                className="px-6 py-3 border border-ink hover:border-brass hover:bg-brass/5 text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold"
+              >
+                For Chairmen &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('tools')}
+                className="px-6 py-3 border border-ink hover:border-brass hover:bg-brass/5 text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer font-semibold"
+              >
+                For Presidents &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 2: Role-Based Triptych Cards */}
+      <section className="py-20 bg-paper/35 border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 2: Role-Based Triptych Cards</div>
+        
+        <div className="max-w-7xl mx-auto space-y-12 text-center pt-4">
+          <div className="space-y-3">
+            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-tight">
+              Many boards are active. <span className="text-brass italic">Few are effective.</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-xs sm:text-sm text-ink/70 leading-relaxed">
+              Effective governance depends on individual clarity. Select your leadership role below to access customized checklists, directories, and compliance guidelines.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Card 1: Members */}
+            <div 
+              onClick={() => navigate('articles')}
+              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
+            >
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
+                  Governance Library
+                </div>
+                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For Board Members</h3>
+                <p className="text-xs text-ink/65 leading-relaxed font-medium">Read the 12 masterclasses on Duty of Care, Duty of Loyalty, executive contracts, and personal liability.</p>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
+                <span>Browse Masterclasses</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </span>
+            </div>
+
+            {/* Card 2: Chairmen */}
+            <div 
+              onClick={() => navigate('next-meeting')}
+              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
+            >
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
+                  Meeting Prep Desk
+                </div>
+                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For Board Chairmen</h3>
+                <p className="text-xs text-ink/65 leading-relaxed font-medium">Coordinate upcoming meetings, calculate statutory notice timelines, and adjust agenda allocations.</p>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
+                <span>Access Meeting Prep Desk</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </span>
+            </div>
+
+            {/* Card 3: Presidents */}
+            <div 
+              onClick={() => navigate('tools')}
+              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
+            >
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
+                  Diagnostic Labs
+                </div>
+                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For CEOs & Presidents</h3>
+                <p className="text-xs text-ink/65 leading-relaxed font-medium">Launch interactive worksheets to audit binders, test financial variances, and map executive delegations.</p>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
+                <span>Launch Laboratories</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 3: Dark Executive Boardroom Panel */}
+      <section className="py-20 bg-ink text-paper border-b border-brass/20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#C29A4A_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/15 px-2 py-0.5 rounded border border-brass/25 z-20">Option 3: Dark Executive Boardroom Panel</div>
+        
+        <div className="max-w-5xl mx-auto text-center space-y-8 relative z-10 pt-4">
+          <div className="space-y-2">
+            <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">Executive Core Principle</span>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-extrabold tracking-tight">
+              Many boards are active. <span className="text-brass italic">Few are effective.</span>
+            </h2>
+          </div>
+          
+          <p className="font-sans text-sm sm:text-base text-paper/75 leading-relaxed max-w-3xl mx-auto">
+            The difference is usually not intelligence or goodwill, but <strong className="text-white font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
           </p>
           
-          <div className="pt-4 flex flex-wrap justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4 max-w-md sm:max-w-xl mx-auto">
             <button 
               onClick={() => navigate('articles')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+              className="flex-1 py-3 bg-brass hover:bg-white text-ink font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold shadow"
             >
-              for members &gt;
+              For Members &rarr;
             </button>
             <button 
               onClick={() => navigate('next-meeting')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+              className="flex-1 py-3 border border-paper/35 hover:border-brass text-paper hover:text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold"
             >
-              for chairmen &gt;
+              For Chairmen &rarr;
             </button>
             <button 
               onClick={() => navigate('tools')}
-              className="px-5 py-3 border border-brass hover:bg-brass text-ink hover:text-white font-serif italic text-sm font-semibold rounded cursor-pointer transition-premium"
+              className="flex-1 py-3 border border-paper/35 hover:border-brass text-paper hover:text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold"
             >
-              for presidents &gt;
+              For Presidents &rarr;
             </button>
           </div>
         </div>
       </section>
+
+      {/* OPTION 4: Minimalist Parchment Desk Scroll */}
+      <section className="py-20 bg-paper/15 border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 4: Minimalist Parchment Desk Scroll</div>
+        
+        <div className="max-w-4xl mx-auto pt-4">
+          <div className="bg-white border-2 border-double border-brass/35 rounded p-8 sm:p-12 shadow-sm text-center space-y-6 relative">
+            <div className="absolute top-4 left-4 text-brass/25 select-none font-serif text-6xl leading-none">&ldquo;</div>
+            <div className="absolute bottom-4 right-4 text-brass/25 select-none font-serif text-6xl leading-none">&rdquo;</div>
+            
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink font-extrabold tracking-tight relative z-10 leading-tight">
+              Many boards are active. <br />
+              <span className="text-brass italic">Few are effective.</span>
+            </h2>
+            
+            <p className="font-serif italic text-sm sm:text-base text-ink/85 leading-relaxed max-w-2xl mx-auto relative z-10">
+              "The difference is usually not intelligence or goodwill, but clarity. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards."
+            </p>
+            
+            <p className="font-sans text-xs text-ink/65 leading-relaxed max-w-3xl mx-auto pt-1 relative z-10 font-medium">
+              This site is published by the California Center for Nonprofit Law as a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
+            </p>
+            
+            <div className="pt-6 flex justify-center flex-wrap gap-x-8 gap-y-3 font-sans text-xs font-extrabold uppercase tracking-widest relative z-10">
+              <button 
+                onClick={() => navigate('articles')}
+                className="text-slate-brand hover:text-brass transition-premium underline decoration-brass/30 underline-offset-4 hover:decoration-brass cursor-pointer"
+              >
+                For Members &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('next-meeting')}
+                className="text-slate-brand hover:text-brass transition-premium underline decoration-brass/30 underline-offset-4 hover:decoration-brass cursor-pointer"
+              >
+                For Chairmen &rarr;
+              </button>
+              <button 
+                onClick={() => navigate('tools')}
+                className="text-slate-brand hover:text-brass transition-premium underline decoration-brass/30 underline-offset-4 hover:decoration-brass cursor-pointer"
+              >
+                For Presidents &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* --- END OF BRAINSTORMING BLOCKS --- */}
 
       {/* 4. The Three Jobs of the Board Grid */}
       <section className="py-20 bg-paper/40 px-4 sm:px-6 lg:px-8 border-b border-fog/85">
