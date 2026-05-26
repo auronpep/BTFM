@@ -156,6 +156,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { label: 'Training', target: 'training', bg: 'hover:border-brass' },
     { label: 'Boards 101', target: 'boards-101', bg: 'hover:border-brass' },
     { label: 'About Us', target: 'about-us', bg: 'hover:border-slate-brand' },
+    { label: 'Contact Us', target: 'contact-us', bg: 'hover:border-burgundy' },
   ];
 
   const handleNavClick = (target: string) => {
@@ -343,15 +344,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <div className="h-6 w-[1px] bg-fog/80 mx-1 xl:mx-1.5" />
               
-              <a
-                href="https://NPOlawyers.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => handleNavClick('contact-us')}
                 className="inline-flex items-center gap-1 px-2.5 xl:px-4 py-2 bg-slate-brand hover:bg-ink text-white text-[10px] xl:text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
               >
-                <span>NPO Lawyers</span>
-                <ExternalLink className="w-3 h-3 text-brass" />
-              </a>
+                <span>Contact Us</span>
+                <ChevronRight className="w-3 h-3 text-brass" />
+              </button>
             </nav>
 
             {/* Mobile Menu Toggle Button */}
@@ -410,15 +409,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               })}
               
               <div className="pt-4 border-t border-fog/50 mt-4">
-                <a
-                  href="https://NPOlawyers.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between px-4 py-3 bg-ink hover:bg-slate-brand text-brass text-sm font-bold uppercase tracking-wider rounded shadow transition-premium"
+                <button
+                  onClick={() => handleNavClick('contact-us')}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-ink hover:bg-slate-brand text-brass text-sm font-bold uppercase tracking-wider rounded shadow transition-premium text-left"
                 >
-                  <span>Visit NPOlawyers.com</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+                  <span>Contact Us & Intake</span>
+                  <ChevronRight className="w-4 h-4 text-brass" />
+                </button>
               </div>
             </div>
           </div>
@@ -444,15 +441,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             While this training website is an excellent reference manual, it is not a substitute for counsel. The attorneys at NPO Lawyers assist California organizations with bylaws audits, executive compensation reviews, conflict-of-interest structures, corporate restructurings, and regulatory compliance.
           </p>
           <div className="pt-3 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <a
-              href="https://NPOlawyers.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => handleNavClick('contact-us')}
               className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-3 bg-brass hover:bg-white hover:text-ink text-ink font-bold uppercase tracking-wider text-xs rounded shadow transition-premium cursor-pointer"
             >
-              <span>Schedule Board Counsel Audit</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
+              <span>Contact Counsel & Submit Intake</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
             <button
               onClick={() => navigate('training')}
               className="w-full sm:w-auto px-6 py-3 border border-paper/40 hover:border-brass text-paper hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium"
@@ -605,7 +600,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       { title: "Minutes Quality Scorecard Lab", subtitle: "Audits & grades resolution minutes and records", path: "tools/minutes-scorecard" },
                       { title: "Budget Deviation Worksheet Lab", subtitle: "Variance auditing and risk scanning calculator", path: "tools/budget-worksheet" },
                       { title: "Board Authority Map Lab", subtitle: "Interactively map corporate delegation bounds", path: "tools/authority-map" },
-                      { title: "About Us & CCNL", subtitle: "Organization Center Law Firm information", path: "about-us" }
+                      { title: "About Us & CCNL", subtitle: "Organization Center Law Firm information", path: "about-us" },
+                      { title: "Contact Us & Attorney Intake", subtitle: "Submit a secure legal inquiry manifest directly to jwood@npolawyers.com", path: "contact-us" }
                     ];
 
                     const matchedPages = pages.filter(p => 

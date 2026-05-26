@@ -11,6 +11,7 @@ import Tools from './views/Tools';
 import Training from './views/Training';
 import AboutUs from './views/AboutUs';
 import Boards101 from './views/Boards101';
+import ContactUs from './views/ContactUs';
 
 // Interactive Laboratories & Workshops
 import { SelfAssessment } from './views/SelfAssessment';
@@ -46,6 +47,8 @@ function AppContent() {
       return <Training />;
     case 'about-us':
       return <AboutUs />;
+    case 'contact-us':
+      return <ContactUs />;
     case 'boards-101':
       return <Boards101 />;
     case 'tools/self-assessment':
