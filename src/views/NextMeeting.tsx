@@ -973,15 +973,13 @@ export const NextMeeting: React.FC = () => {
                 Preparing for a high-stakes board meeting often requires direct attorney-client review to safeguard your officers from D&O liabilities. Get counsel from NPO Lawyers.
               </p>
             </div>
-            <a
-              href="https://NPOlawyers.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap"
+            <button
+              onClick={() => navigate('contact-us?topic=general&message=We%20are%20preparing%20for%20our%20next%20board%20meeting%20and%20have%20some%20bylaws%2C%20conflicts%2C%20or%20administrative%20notice%20questions%20we%20would%20like%20to%20address.')}
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap border-0 cursor-pointer"
             >
               <span>Consult NPO Lawyers</span>
               <ChevronRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
 
         </div>

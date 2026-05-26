@@ -1,5 +1,6 @@
 import React from 'react';
-import { HelpCircle, AlertTriangle, FileText, ShieldAlert, Award, ExternalLink } from 'lucide-react';
+import { HelpCircle, AlertTriangle, FileText, ShieldAlert, Award, ExternalLink, ChevronRight } from 'lucide-react';
+import { useRouter } from './Router';
 
 // ==========================================
 // 1. BOARDROOM RULE CARD
@@ -177,14 +178,40 @@ interface LegalEscalationCardProps {
   explanation: string;
   actionText?: string;
   relatedTopic?: string;
+  to?: string;
+  useInternal?: boolean;
 }
+
+const mapTopicToSlug = (topic: string): string => {
+  const t = topic.toLowerCase();
+  if (t.includes('fiduciary') || t.includes('care') || t.includes('loyalty') || t.includes('duty')) return 'fiduciary';
+  if (t.includes('minute') || t.includes('record') || t.includes('resolution') || t.includes('scorecard') || t.includes('sandbox')) return 'minutes';
+  if (t.includes('budget') || t.includes('financial') || t.includes('finance') || t.includes('deviation')) return 'budget';
+  if (t.includes('bylaws') || t.includes('rule') || t.includes('audit') || t.includes('compliance') || t.includes('incorporation')) return 'bylaws';
+  if (t.includes('retreat') || t.includes('workshop') || t.includes('onsite') || t.includes('curriculum')) return 'retreats';
+  return 'general';
+};
 
 export const LegalEscalationCard: React.FC<LegalEscalationCardProps> = ({ 
   trigger, 
   explanation, 
   actionText = "Schedule Legal Consultation",
-  relatedTopic = "General Compliance"
+  relatedTopic = "General Compliance",
+  to,
+  useInternal = true
 }) => {
+  const { navigate } = useRouter();
+
+  const handleOnClick = (e: React.MouseEvent) => {
+    if (useInternal) {
+      e.preventDefault();
+      const topicSlug = mapTopicToSlug(relatedTopic);
+      const defaultMessage = `We would like to request information on: ${relatedTopic}.\nSpecifically regarding: ${trigger}\n\nContext:\n${explanation}`;
+      const url = `contact-us?topic=${topicSlug}&message=${encodeURIComponent(defaultMessage)}`;
+      navigate(url);
+    }
+  };
+
   return (
     <div className="bg-burgundy/5 border border-burgundy/30 border-l-4 border-l-burgundy p-6 rounded-r-lg shadow-sm hover:shadow-md transition-premium relative overflow-hidden group">
       <div className="absolute top-0 right-0 w-24 h-24 bg-burgundy/5 rounded-bl-full -mr-4 -mt-4 group-hover:bg-burgundy/10 transition-premium" />
@@ -212,15 +239,25 @@ export const LegalEscalationCard: React.FC<LegalEscalationCardProps> = ({
           </div>
 
           <div className="pt-2">
-            <a
-              href="https://NPOlawyers.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium"
-            >
-              <span>{actionText}</span>
-              <ExternalLink className="w-3 h-3 text-brass" />
-            </a>
+            {useInternal ? (
+              <button
+                onClick={handleOnClick}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+              >
+                <span>{actionText}</span>
+                <ChevronRight className="w-3.5 h-3.5 text-brass" />
+              </button>
+            ) : (
+              <a
+                href={to || "https://NPOlawyers.com"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium"
+              >
+                <span>{actionText}</span>
+                <ExternalLink className="w-3 h-3 text-brass" />
+              </a>
+            )}
           </div>
         </div>
       </div>

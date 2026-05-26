@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
+import { useRouter } from '../components/Router';
 import { Award, Landmark, ExternalLink, Users, Scale, ChevronRight, ChevronLeft, FileText, Clipboard, Check, Printer, RotateCcw, AlertCircle, Sparkles } from 'lucide-react';
 
 export const AboutUs: React.FC = () => {
+  const { navigate } = useRouter();
   // State for Intake Brief Generator
   const [step, setStep] = useState(1);
   const [orgName, setOrganizationName] = useState(() => {
@@ -746,14 +748,15 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                     Your generated brief outlines critical legal parameters that expose individual board members or the organization's corporate charter. Submit your dossier to qualified charity counsel to immediately structure recusal procedures, bylaws audits, and Delaware/California AG compliance playbooks.
                   </p>
                   <div className="pt-2 text-left">
-                    <a
-                      href="https://NPOlawyers.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans"
+                    <button
+                      onClick={() => {
+                        const defaultMessage = `We would like to submit our board governance brief for an evaluation. Here are our organization details:\n\n* Organization: ${orgName}\n* Board Size: ${boardSize}\n* Annual Budget: ${budget}\n* Primary Governance Concern: ${customConcerns || 'General Compliance'}`;
+                        navigate(`contact-us?topic=general&org=${encodeURIComponent(orgName)}&message=${encodeURIComponent(defaultMessage)}`);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans border-0"
                     >
-                      <span>Submit Intake Brief to NPO Lawyers ➜</span>
-                    </a>
+                      <span>Submit Intake Brief to Board Training Office ➜</span>
+                    </button>
                   </div>
                 </div>
               </div>

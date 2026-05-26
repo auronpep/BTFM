@@ -330,14 +330,20 @@ export const ArticleReader: React.FC = () => {
                 <p className="text-[11px] text-ink/75 leading-relaxed font-sans font-medium">
                   Operating a board in California carries serious regulatory checkups. Review these guidelines under direct attorney counsel.
                 </p>
-                <a
-                  href="https://NPOlawyers.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex justify-center items-center gap-1.5 py-2 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider rounded shadow transition-premium"
+                <button
+                  onClick={() => {
+                    const t = article.category.toLowerCase();
+                    const topicSlug = t.includes('minutes') ? 'minutes' :
+                                      t.includes('budget') ? 'budget' :
+                                      t.includes('bylaws') ? 'bylaws' :
+                                      t.includes('fiduciary') ? 'fiduciary' : 'general';
+                    const messageText = `We are reading the masterclass article: "${article.title}" and would like to request further training or advice regarding this topic.`;
+                    navigate(`contact-us?topic=${topicSlug}&message=${encodeURIComponent(messageText)}`);
+                  }}
+                  className="w-full inline-flex justify-center items-center gap-1.5 py-2 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer border-0"
                 >
                   <span>Consult NPO Lawyers</span>
-                </a>
+                </button>
               </div>
             </aside>
 
@@ -434,14 +440,20 @@ export const ArticleReader: React.FC = () => {
                         Since this masterclass template does not address your unique board posture, we recommend securing a formal **Bylaws and Board Governance Audit** with California Center for Nonprofit Law. Avoid volunteer director liability and secure your safe harbor compliance.
                       </p>
                       <div className="pt-2">
-                        <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold"
+                        <button
+                          onClick={() => {
+                            const t = article.category.toLowerCase();
+                            const topicSlug = t.includes('minutes') ? 'minutes' :
+                                              t.includes('budget') ? 'budget' :
+                                              t.includes('bylaws') ? 'bylaws' :
+                                              t.includes('fiduciary') ? 'fiduciary' : 'general';
+                            const messageText = `We are reading the masterclass article: "${article.title}" and would like to request a formal Board Governance and Bylaws Audit for our organization.`;
+                            navigate(`contact-us?topic=${topicSlug}&message=${encodeURIComponent(messageText)}`);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold border-0"
                         >
                           <span>Request Privileged Audit ➜</span>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>

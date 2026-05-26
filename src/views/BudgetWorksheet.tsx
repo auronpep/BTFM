@@ -316,15 +316,13 @@ export const BudgetWorksheet: React.FC = () => {
               >
                 {showVulnerabilities ? 'Hide Vulnerability Glows' : 'Highlight Critical Rows'}
               </button>
-              <a
-                href="https://NPOlawyers.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5"
+              <button
+                onClick={() => navigate('contact-us?topic=budget&message=We%20would%20like%20to%20schedule%20a%20professional%20financial%20and%20budget%20variance%20audit.')}
+                className="px-4 py-2 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5 border-0 cursor-pointer"
               >
                 <span>Audit Financials</span>
                 <ShieldAlert className="w-3.5 h-3.5 text-brass" />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -509,15 +507,16 @@ export const BudgetWorksheet: React.FC = () => {
                                           {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under California charity law."}
                                         </p>
                                         <div className="pt-2 flex items-center gap-4">
-                                          <a
-                                            href="https://NPOlawyers.com"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[10px] font-extrabold uppercase tracking-wider text-rose-800 hover:text-rose-950 flex items-center gap-1"
+                                          <button
+                                            onClick={() => {
+                                              const messageText = `We are reviewing the budget sheet: "${line.category}" line showing budgeted $${line.budgeted.toLocaleString()} vs actual $${line.actual.toLocaleString()} (${line.pct}% variance). This variance alert advises an immediate review because: ${line.advisoryText || 'of California statutory limits'}.`;
+                                              navigate(`contact-us?topic=budget&message=${encodeURIComponent(messageText)}`);
+                                            }}
+                                            className="text-[10px] font-extrabold uppercase tracking-wider text-rose-800 hover:text-rose-950 flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0"
                                           >
                                             <span>Immediate Legal Review Required</span>
                                             <ArrowRight className="w-3.5 h-3.5 text-brass" />
-                                          </a>
+                                          </button>
                                         </div>
                                       </div>
                                     </div>
@@ -698,15 +697,16 @@ export const BudgetWorksheet: React.FC = () => {
                       <p className="text-xs text-ink/80 leading-relaxed">
                         To correct this process variance, draft a detailed board resolution establishing active policies, mandate that the executive follow the correct timeline, and consult NPO Lawyers for quick regulatory verification.
                       </p>
-                      <a
-                        href="https://NPOlawyers.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider"
+                      <button
+                        onClick={() => {
+                          const messageText = `We are reviewing the ${currentLine.category} budget line and would like to consult on establishing appropriate board governance and expense review policies.`;
+                          navigate(`contact-us?topic=budget&message=${encodeURIComponent(messageText)}`);
+                        }}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider bg-transparent border-0 cursor-pointer p-0"
                       >
-                        <span>Visit NPOlawyers.com</span>
+                        <span>Request Governance Consultation</span>
                         <ArrowRight className="w-3.5 h-3.5" />
-                      </a>
+                      </button>
                     </div>
                   )}
 

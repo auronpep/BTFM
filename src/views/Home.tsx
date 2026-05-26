@@ -3,8 +3,7 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { 
   Landmark, ArrowRight, ShieldCheck, Scale, FileText, CheckCircle2, 
-  ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles, Users,
-  ExternalLink
+  ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles, Users
 } from 'lucide-react';
 import { articles } from '../data/articles';
 
@@ -438,15 +437,13 @@ export const Home: React.FC = () => {
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   
-                  <a
-                    href="https://NPOlawyers.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex justify-center items-center gap-2 py-3 border border-brass hover:bg-brass/10 text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium"
+                  <button
+                    onClick={() => navigate('contact-us?topic=general&message=We%20would%20like%20to%20schedule%20a%20formal%20law%20firm%20consultation%20regarding%20our%20board\'s%20governance%20and%20compliance.')}
+                    className="w-full inline-flex justify-center items-center gap-2 py-3 border border-brass hover:bg-brass/10 text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer"
                   >
                     <span>Schedule Law Firm Consultation</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
                 
                 <div className="pt-2 border-t border-brass/20">

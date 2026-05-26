@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
-import { Award, CheckCircle, RefreshCw, ChevronRight, ChevronLeft, ShieldCheck, Printer, ExternalLink } from 'lucide-react';
+import { Award, CheckCircle, RefreshCw, ChevronRight, ChevronLeft, ShieldCheck, Printer } from 'lucide-react';
 
 interface Question {
   id: number;
@@ -611,15 +611,16 @@ export const SelfAssessment: React.FC = () => {
                           {assessment.referralReason}
                         </p>
                       </div>
-                      <a
-                        href="https://NPOlawyers.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap shrink-0"
+                      <button
+                        onClick={() => {
+                          const messageText = `We have completed the Mature Board Self-Assessment and scored ${score}/50 (Level: ${assessment.level}). We would like to schedule a customized board counsel audit to address our identified governance priority action: ${assessment.priority}.`;
+                          navigate(`contact-us?topic=fiduciary&message=${encodeURIComponent(messageText)}`);
+                        }}
+                        className="w-full md:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap shrink-0 border-0 cursor-pointer"
                       >
                         <span>Schedule Board Counsel Audit</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-brass" />
-                      </a>
+                        <ChevronRight className="w-3.5 h-3.5 text-brass" />
+                      </button>
                     </div>
                   </div>
 

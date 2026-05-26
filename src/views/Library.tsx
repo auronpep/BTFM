@@ -505,15 +505,13 @@ export const Library: React.FC = () => {
                 The Attorney General's Registry of Charitable Trusts monitors charities strictly. If you have been delinquent, or your bylaws are outdated, consult the team at California Center for Nonprofit Law.
               </p>
             </div>
-            <a
-              href="https://NPOlawyers.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap"
+            <button
+              onClick={() => navigate('contact-us?topic=bylaws&message=We%20are%20using%20the%20Boardroom%20Research%20Desk%20Library%20and%20would%20like%20to%20request%20information%20on%20scheduling%20a%20professional%20bylaws%20and%20governance%20audit%20for%20our%20board.')}
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-3 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap border-0 cursor-pointer"
             >
               <span>Consult NPO Lawyers</span>
               <ChevronRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
 
         </div>

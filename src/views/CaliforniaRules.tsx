@@ -307,9 +307,7 @@ export const CaliforniaRules: React.FC = () => {
               </p>
               {compliantRulesCount < californiaRules.length && (
                 <a
-                  href="https://NPOlawyers.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#/contact-us?topic=bylaws&message=We%20need%20assistance%20and%20counsel%20on%20California%20governing%20board%20and%20regulatory%20rules."
                   className="text-xs font-bold uppercase tracking-wider text-brass hover:text-white transition-premium shrink-0 inline-flex items-center gap-1"
                 >
                   <span>Request Governance Counsel</span>
@@ -664,9 +662,7 @@ export const CaliforniaRules: React.FC = () => {
                           Download CA Form RRF-1
                         </a>
                         <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          href="#/contact-us?topic=bylaws&message=We%20need%20priority%20counsel%20to%20resolve%20a%20delinquency%20issue%20with%20our%20California%20Registry%20of%20Charitable%20Trusts."
                           className="px-3 py-1.5 bg-burgundy text-white text-[10px] font-bold uppercase tracking-wider rounded hover:bg-ink transition-premium text-center"
                         >
                           Request Delinquency Cure Counsel
@@ -707,9 +703,7 @@ export const CaliforniaRules: React.FC = () => {
                       </div>
                       <div className="pt-2 border-t border-burgundy/20 flex justify-end">
                         <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          href="#/contact-us?topic=bylaws&message=Our%20California%20registry%20status%20is%20SUSPENDED%20or%20REVOKED.%20We%20require%20urgent%20legal%20revivor%20assistance."
                           className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy text-white text-xs font-bold uppercase tracking-wider rounded hover:bg-ink transition-premium shadow"
                         >
                           <span>Request Priority Corporate Revivor Petition</span>
@@ -1115,9 +1109,7 @@ export const CaliforniaRules: React.FC = () => {
                 </p>
               </div>
               <a
-                href="https://NPOlawyers.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#/contact-us?topic=bylaws&message=We%20would%20like%20to%20request%20information%20or%20an%20audit%20concerning%20Wage%20%26%20Hour%20Exclusion%20risk%20or%20employment%20policies."
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium whitespace-nowrap"
               >
                 <span>Request Policy Audit</span>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout } from '../components/Layout';
+import { useRouter } from '../components/Router';
 import { 
   Mail, 
   Phone, 
@@ -31,6 +32,8 @@ interface TopicOption {
 }
 
 export const ContactUs: React.FC = () => {
+  const { queryParams } = useRouter();
+
   // Form Input States
   const [orgName, setOrgName] = useState('');
   const [contactName, setContactName] = useState('');
@@ -107,6 +110,60 @@ export const ContactUs: React.FC = () => {
       statusTopRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [submissionStatus]);
+
+  // Prefill fields from query parameters or localStorage
+  useEffect(() => {
+    // 1. Organization Name prefill (override localStorage with queryParam if present)
+    const localOrg = localStorage.getItem('cdx_user_org_name') || '';
+    if (queryParams.org) {
+      setOrgName(queryParams.org);
+    } else if (localOrg) {
+      setOrgName(localOrg);
+    }
+
+    // 2. Contact Name prefill
+    if (queryParams.name) {
+      setContactName(queryParams.name);
+    }
+
+    // 3. Email prefill
+    if (queryParams.email) {
+      setEmail(queryParams.email);
+    }
+
+    // 4. Message prefill
+    if (queryParams.message) {
+      try {
+        setMessage(decodeURIComponent(queryParams.message));
+      } catch (err) {
+        setMessage(queryParams.message);
+      }
+    }
+
+    // 5. Selected Topics prefill
+    if (queryParams.topic) {
+      const topicParam = queryParams.topic.toLowerCase();
+      let matchedTopic = '';
+
+      if (topicParam.includes('fiduciary') || topicParam.includes('care') || topicParam.includes('loyalty') || topicParam.includes('duty')) {
+        matchedTopic = 'fiduciary';
+      } else if (topicParam.includes('minute') || topicParam.includes('record') || topicParam.includes('resolution') || topicParam.includes('scorecard') || topicParam.includes('sandbox')) {
+        matchedTopic = 'minutes';
+      } else if (topicParam.includes('budget') || topicParam.includes('financial') || topicParam.includes('finance') || topicParam.includes('deviation')) {
+        matchedTopic = 'budget';
+      } else if (topicParam.includes('bylaws') || topicParam.includes('rule') || topicParam.includes('audit') || topicParam.includes('compliance') || topicParam.includes('incorporation')) {
+        matchedTopic = 'bylaws';
+      } else if (topicParam.includes('retreat') || topicParam.includes('workshop') || topicParam.includes('onsite') || topicParam.includes('curriculum')) {
+        matchedTopic = 'retreats';
+      } else if (topicParam.includes('general') || topicParam.includes('info')) {
+        matchedTopic = 'general';
+      }
+
+      if (matchedTopic) {
+        setSelectedTopics([matchedTopic]);
+      }
+    }
+  }, [queryParams]);
 
   // Handle mock submission with friendly progress phases
   const handleFormSubmit = (e: React.FormEvent) => {

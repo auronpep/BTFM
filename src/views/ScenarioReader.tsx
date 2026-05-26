@@ -602,14 +602,20 @@ export const ScenarioReader: React.FC = () => {
                         If your board is navigating delicate governance matters, unvoted contracts, or potential self-dealing triggers, general educational reading is not a substitute for counsel. Secure a direct **Board Governance & Safety Audit** under professional attorney-client privilege with Myron Steeves and NPO Lawyers.
                       </p>
                       <div className="pt-2">
-                        <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold"
+                        <button
+                          onClick={() => {
+                            const t = scenario.issueType.toLowerCase();
+                            const topicSlug = t.includes('minutes') ? 'minutes' :
+                                              t.includes('budget') ? 'budget' :
+                                              t.includes('bylaws') ? 'bylaws' :
+                                              t.includes('fiduciary') ? 'fiduciary' : 'general';
+                            const messageText = `We are reviewing the case study: "${scenario.title}" and would like to request professional board governance and safety guidance.`;
+                            navigate(`contact-us?topic=${topicSlug}&message=${encodeURIComponent(messageText)}`);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold border-0"
                         >
                           <span>Consult Attorney Now ➜</span>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>

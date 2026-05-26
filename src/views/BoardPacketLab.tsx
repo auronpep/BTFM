@@ -484,15 +484,13 @@ export const BoardPacketLab: React.FC = () => {
                 >
                   {showSolutions ? 'Hide Answer Highlights' : 'Reveal Red-Flag Answers'}
                 </button>
-                <a
-                  href="https://NPOlawyers.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5"
+                <button
+                  onClick={() => navigate('contact-us?topic=general&message=We%20would%20like%20to%20request%20information%20on%20boardroom%20compliance%20or%20consult%20regarding%20boardroom%20red%20flags.')}
+                  className="px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium flex items-center gap-1.5 border-0 cursor-pointer text-left"
                 >
                   <span>Consult Counsel</span>
                   <ShieldAlert className="w-3.5 h-3.5 text-brass" />
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -1126,14 +1124,12 @@ export const BoardPacketLab: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row justify-center gap-2.5 pt-2">
-                      <a 
-                        href="https://NPOlawyers.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-5 py-2.5 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-md transition-premium text-center"
+                      <button 
+                        onClick={() => navigate('contact-us?topic=bylaws&message=We%20would%20like%20to%20request%20information%20or%20an%20audit%20concerning%20our%20completed%20fiduciary%20record%20suite.')}
+                        className="px-5 py-2.5 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-md transition-premium text-center border-0 cursor-pointer"
                       >
-                        Request Attorney Audit at NPOlawyers.com
-                      </a>
+                        Request Board Audit Information
+                      </button>
                       <button
                         onClick={() => setShowSuccessSeal(false)}
                         className="px-4 py-2.5 bg-paper hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded-lg border border-fog transition-premium cursor-pointer"
@@ -1205,15 +1201,13 @@ export const BoardPacketLab: React.FC = () => {
                     <p className="text-xs text-ink/80 leading-relaxed">
                       Healthy board habits are the ultimate defense against legal liabilities. Use this standard as a blueprint across all future boardroom documentation.
                     </p>
-                    <a
-                      href="https://NPOlawyers.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider"
+                    <button
+                      onClick={() => navigate('contact-us?topic=general')}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider border-0 bg-transparent p-0 cursor-pointer text-left"
                     >
-                      <span>Visit NPOlawyers.com</span>
+                      <span>Request Training Consultation</span>
                       <ArrowRight className="w-3.5 h-3.5" />
-                    </a>
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -1273,15 +1267,13 @@ export const BoardPacketLab: React.FC = () => {
                       <p className="text-xs text-ink/80 leading-relaxed">
                         To correct this process variance, draft a detailed board resolution establishing active policies, mandate that the executive follow the correct timeline, and consult NPO Lawyers for quick regulatory verification.
                       </p>
-                      <a
-                        href="https://NPOlawyers.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider"
+                      <button
+                        onClick={() => navigate('contact-us?topic=general&message=We%20would%20like%20to%20request%20information%20concerning%20corrective%20boardroom%20resolutions%20and%20procedures.')}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-brass hover:text-ink transition-premium uppercase tracking-wider border-0 bg-transparent p-0 cursor-pointer text-left"
                       >
-                        <span>Visit NPOlawyers.com</span>
+                        <span>Request Regulatory Verification</span>
                         <ArrowRight className="w-3.5 h-3.5" />
-                      </a>
+                      </button>
                     </div>
                   )}
 
@@ -1413,15 +1405,13 @@ export const BoardPacketLab: React.FC = () => {
                 </div>
 
                 <div className="pt-6 border-t border-fog mt-6 text-center">
-                  <a
-                    href="https://NPOlawyers.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-slate-brand hover:bg-ink text-white font-bold uppercase tracking-wider rounded transition-premium text-xs"
+                  <button
+                    onClick={() => navigate('contact-us?topic=general&message=We%20would%20like%20to%20request%20professional%20board%20policy%20templates%20and%20materials.')}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 bg-slate-brand hover:bg-ink text-white font-bold uppercase tracking-wider rounded transition-premium text-xs border-0 cursor-pointer"
                   >
                     <span>Request Professional Policy Templates</span>
                     <ArrowRight className="w-3.5 h-3.5 text-brass" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

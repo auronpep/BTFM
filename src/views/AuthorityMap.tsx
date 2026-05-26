@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckCircle, Landmark, Shield, User, 
-  X, Award, ExternalLink, HelpCircle 
+  X, Award, HelpCircle, ChevronRight
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -608,15 +608,13 @@ export const AuthorityMap: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-fog/50 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a
-                  href="https://NPOlawyers.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex justify-center items-center gap-1.5 px-6 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
+                <button
+                  onClick={() => navigate('contact-us?topic=bylaws&message=We%20would%20like%20to%20request%20information%20or%20an%20audit%20on%20our%20board%20bylaws%20and%20delegation%20policies.')}
+                  className="w-full sm:w-auto inline-flex justify-center items-center gap-1.5 px-6 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer border-0"
                 >
                   <span>Audit Board Bylaws & Delegation Policies</span>
-                  <ExternalLink className="w-4 h-4 text-brass" />
-                </a>
+                  <ChevronRight className="w-4 h-4 text-brass" />
+                </button>
                 <button
                   onClick={resetLab}
                   className="w-full sm:w-auto px-6 py-3 border border-fog hover:border-brass text-ink hover:text-brass text-xs font-bold uppercase tracking-wider rounded transition-premium"

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
+import { useRouter } from '../components/Router';
 import { 
   Clock, 
   Scale, 
@@ -27,6 +28,7 @@ const parseTextWithGlossary = (text: string): React.ReactNode => {
 };
 
 export const Boards101: React.FC = () => {
+  const { navigate } = useRouter();
   // Form States
   const [orgName, setOrgName] = useState('');
   const [contactName, setContactName] = useState('');
@@ -708,14 +710,12 @@ export const Boards101: React.FC = () => {
                         In California, volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional <strong>Bylaws and Board Governance Audit</strong> with California Center for Nonprofit Law.
                       </p>
                       <div className="pt-1">
-                        <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider py-1.5 px-3 rounded shadow transition-premium"
+                        <button
+                          onClick={() => navigate('contact-us?topic=bylaws&message=We%20would%20like%20to%20request%20a%20privileged%20bylaws%20and%20governance%20audit.')}
+                          className="inline-flex items-center gap-1 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider py-1.5 px-3 rounded shadow transition-premium cursor-pointer border-0"
                         >
                           <span>Request Privileged Bylaws Audit ➜</span>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -736,14 +736,12 @@ export const Boards101: React.FC = () => {
                         Operating under outdated, un-audited bylaws strips directors of legal shields and subjects officers to personal liability. Secure a direct legal evaluation with Myron Steeves, J.D. and CCNL under professional attorney-client privilege.
                       </p>
                       <div className="pt-1">
-                        <a
-                          href="https://NPOlawyers.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 bg-brass text-ink font-sans font-black text-[10px] uppercase tracking-wider py-2 px-4.5 rounded shadow hover:bg-white hover:text-ink transition-premium"
+                        <button
+                          onClick={() => navigate('contact-us?topic=general&message=We%20would%20like%20to%20consult%20with%20counsel%20concerning%20critical%20boardroom%20quiz%20exposures.')}
+                          className="inline-flex items-center gap-1 bg-brass text-ink font-sans font-black text-[10px] uppercase tracking-wider py-2 px-4.5 rounded shadow hover:bg-white hover:text-ink transition-premium cursor-pointer border-0"
                         >
                           <span>Consult Attorney Privately ➜</span>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -761,15 +759,13 @@ export const Boards101: React.FC = () => {
               </p>
             </div>
             <div className="md:col-span-4 flex justify-start md:justify-end">
-              <a 
-                href="https://npolawyers.com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center gap-1.5 px-5 py-3 bg-brass hover:bg-white hover:text-ink text-ink font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer"
+              <button 
+                onClick={() => navigate('contact-us?topic=fiduciary&message=We%20would%20like%20to%20request%20information%20on%20obtaining%20the%20Certificate%20of%20Fiduciary%20Competency%20for%20our%20board%20of%20directors%20through%20your%20training%20programs.')}
+                className="inline-flex items-center gap-1.5 px-5 py-3 bg-brass hover:bg-white hover:text-ink text-ink font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer border-0"
               >
-                <span>NPO Lawyers Support</span>
+                <span>Request Fiduciary Training</span>
                 <ChevronRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
 

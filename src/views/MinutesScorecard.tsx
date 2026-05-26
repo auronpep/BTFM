@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckSquare, Square, AlertTriangle, Copy, Check,
-  FileText, FileCheck, ExternalLink, Sparkles, Terminal
+  FileText, FileCheck, Sparkles, Terminal, ChevronRight
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -601,15 +601,13 @@ ${secretaryName}, Board Secretary`;
                   The California Center for Nonprofit Law conducts detailed bylaws, policy, and minutes audits. Ensure your board is fully shielded under corporate safe harbors before a dispute arises.
                 </p>
                 <div className="pt-1.5">
-                  <a
-                    href="https://NPOlawyers.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-brass hover:bg-white hover:text-ink text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium"
+                  <button
+                    onClick={() => navigate('contact-us?topic=minutes&message=We%20would%20like%20to%20request%20information%20on%20scheduling%20a%20professional%20records%20and%20minutes%20quality%20audit%20for%20our%20board\'s%20corporate%20book.')}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-brass hover:bg-white hover:text-ink text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium border-0 cursor-pointer"
                   >
                     <span>Schedule Board Records Audit</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 
@@ -1088,30 +1086,26 @@ ${secretaryName}, Board Secretary`;
                     <p className="text-[10px] text-ink/70 leading-normal mb-1.5">
                       <strong>Audit Advisory:</strong> Your minutes record is missing key procedural shields. Under CA Corp Code, inaccurate minutes expose directors to self-dealing and personal tax penalties.
                     </p>
-                    <a
-                      href="https://NPOlawyers.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-brass hover:text-ink uppercase tracking-wider"
+                    <button
+                      onClick={() => navigate('contact-us?topic=minutes&message=We%20are%20using%20the%20Board%20Minutes%20Correction%20Sandbox%20and%20would%20like%20to%20request%20professional%20bylaws%20vetting%20for%20our%20organization.')}
+                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-brass hover:text-ink uppercase tracking-wider bg-transparent border-0 cursor-pointer p-0"
                     >
                       <span>Obtain Professional Bylaws Vetting</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                      <ChevronRight className="w-3 h-3 text-brass" />
+                    </button>
                   </div>
                 ) : (
                   <div className="p-3 bg-teal-brand/5 border border-teal-brand/10 rounded-lg text-left">
                     <p className="text-[10px] text-ink/70 leading-normal mb-1.5">
                       <strong>Defense Complete:</strong> You have implemented a top-tier corporate defensive shield. Congratulations on protecting your board! Keep this template secure or have our firm audit your full corporate book.
                     </p>
-                    <a
-                      href="https://NPOlawyers.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-teal-brand hover:text-ink uppercase tracking-wider"
+                    <button
+                      onClick={() => navigate('contact-us?topic=minutes&message=We%20have%20completed%20the%20Board%20Minutes%20Correction%20Sandbox%20and%20scored%20an%20A.%20We%20would%20like%20to%20schedule%20a%20professional%20corporate%20book%20audit%20to%20ensure%20all%20of%20our%20records%20are%20fully%20compliant.')}
+                      className="inline-flex items-center gap-1 text-[9px] font-extrabold text-teal-brand hover:text-ink uppercase tracking-wider bg-transparent border-0 cursor-pointer p-0"
                     >
                       <span>Request Corporate Book Audit</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                      <ChevronRight className="w-3 h-3 text-teal-brand" />
+                    </button>
                   </div>
                 )}
               </div>
