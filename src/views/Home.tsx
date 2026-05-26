@@ -231,9 +231,8 @@ export const Home: React.FC = () => {
 
       {/* --- START OF BRAINSTORMING CLOCKS & BLOCKS --- */}
       
-      {/* OPTION 1: WSJ Editorial Split-Screen */}
+      {/* Many Boards are Active, Few are Effective Section */}
       <section className="py-16 bg-white border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 1: WSJ Editorial Split-Screen</div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-4">
           <div className="lg:col-span-5 text-left border-l-4 border-brass pl-6 py-4 space-y-3">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-ink font-extrabold tracking-tight leading-tight">
@@ -273,122 +272,8 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* OPTION 2: Role-Based Triptych Cards */}
-      <section className="py-20 bg-paper/35 border-b border-fog/80 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 2: Role-Based Triptych Cards</div>
-        
-        <div className="max-w-7xl mx-auto space-y-12 text-center pt-4">
-          <div className="space-y-3">
-            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-tight">
-              Many boards are active. <span className="text-brass italic">Few are effective.</span>
-            </h2>
-            <p className="max-w-2xl mx-auto text-xs sm:text-sm text-ink/70 leading-relaxed">
-              Effective governance depends on individual clarity. Select your leadership role below to access customized checklists, directories, and compliance guidelines.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Card 1: Members */}
-            <div 
-              onClick={() => navigate('articles')}
-              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
-            >
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
-                  Governance Library
-                </div>
-                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For Board Members</h3>
-                <p className="text-xs text-ink/65 leading-relaxed font-medium">Read the 12 masterclasses on Duty of Care, Duty of Loyalty, executive contracts, and personal liability.</p>
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
-                <span>Browse Masterclasses</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-
-            {/* Card 2: Chairmen */}
-            <div 
-              onClick={() => navigate('next-meeting')}
-              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
-            >
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
-                  Meeting Prep Desk
-                </div>
-                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For Board Chairmen</h3>
-                <p className="text-xs text-ink/65 leading-relaxed font-medium">Coordinate upcoming meetings, calculate statutory notice timelines, and adjust agenda allocations.</p>
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
-                <span>Access Meeting Prep Desk</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-
-            {/* Card 3: Presidents */}
-            <div 
-              onClick={() => navigate('tools')}
-              className="bg-white border border-fog/80 rounded-xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-premium text-left cursor-pointer group flex flex-col justify-between h-[220px]"
-            >
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-1 bg-brass/10 text-brass px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider">
-                  Diagnostic Labs
-                </div>
-                <h3 className="font-serif font-bold text-lg text-ink group-hover:text-brass transition-premium">For CEOs & Presidents</h3>
-                <p className="text-xs text-ink/65 leading-relaxed font-medium">Launch interactive worksheets to audit binders, test financial variances, and map executive delegations.</p>
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-brand group-hover:text-brass transition-premium inline-flex items-center gap-1 pt-4 self-start">
-                <span>Launch Laboratories</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* OPTION 3: Dark Executive Boardroom Panel */}
-      <section className="py-20 bg-ink text-paper border-b border-brass/20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#C29A4A_1px,transparent_1px)] [background-size:16px_16px]" />
-        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/15 px-2 py-0.5 rounded border border-brass/25 z-20">Option 3: Dark Executive Boardroom Panel</div>
-        
-        <div className="max-w-5xl mx-auto text-center space-y-8 relative z-10 pt-4">
-          <div className="space-y-2">
-            <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">Executive Core Principle</span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white font-extrabold tracking-tight">
-              Many boards are active. <span className="text-brass italic">Few are effective.</span>
-            </h2>
-          </div>
-          
-          <p className="font-sans text-sm sm:text-base text-paper/75 leading-relaxed max-w-3xl mx-auto">
-            The difference is usually not intelligence or goodwill, but <strong className="text-white font-semibold">clarity</strong>. Board members need to know what belongs to governance, what belongs to management, and what should be left mercifully alone. Strong organizations need strong boards: not meddlesome boards, not ornamental boards, but thoughtful governing bodies that understand their duties. This site is a practical reference guide for board members, chairmen, and presidents who want to serve wisely and lead responsibly.
-          </p>
-          
-          <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4 max-w-md sm:max-w-xl mx-auto">
-            <button 
-              onClick={() => navigate('articles')}
-              className="flex-1 py-3 bg-brass hover:bg-white text-ink font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold shadow"
-            >
-              For Members &rarr;
-            </button>
-            <button 
-              onClick={() => navigate('next-meeting')}
-              className="flex-1 py-3 border border-paper/35 hover:border-brass text-paper hover:text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold"
-            >
-              For Chairmen &rarr;
-            </button>
-            <button 
-              onClick={() => navigate('tools')}
-              className="flex-1 py-3 border border-paper/35 hover:border-brass text-paper hover:text-brass font-bold uppercase tracking-wider text-xs rounded transition-premium cursor-pointer font-semibold"
-            >
-              For Presidents &rarr;
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* THREE JOBS OPTION 1: Symmetrical Triptych Grid */}
+      {/* The Three Jobs of a Mature Board Section */}
       <section className="py-20 bg-paper/40 px-4 sm:px-6 lg:px-8 border-b border-fog/85 relative">
-        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 1: Symmetrical Triptych Grid</div>
-        
         <div className="max-w-7xl mx-auto space-y-12 text-center pt-4">
           <div className="space-y-3">
             <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
@@ -461,82 +346,6 @@ export const Home: React.FC = () => {
                   <span>Stand-alone Audit Committee setup</span>
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* THREE JOBS OPTION 7: Symmetrical Geometric Hover Deck */}
-      <section className="py-20 bg-white border-b border-fog/85 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute top-2 left-4 text-[9px] font-black tracking-widest text-brass uppercase select-none bg-brass/10 px-2 py-0.5 rounded">Option 7: Symmetrical Geometric Hover Deck</div>
-        
-        <div className="max-w-7xl mx-auto space-y-12 text-center pt-4">
-          <div className="space-y-3">
-            <span className="text-[10px] font-extrabold text-brass uppercase tracking-widest block">Asymmetrical Card Deck</span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-tight">
-              The Three Jobs of a Mature Board
-            </h2>
-            <p className="max-w-2xl mx-auto text-xs sm:text-sm text-ink/70">
-              Hover over each asymmetrical card below to watch its underlying geometric alignment border scale and rotate to absolute zero.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left">
-            {/* Card 1 */}
-            <div className="relative group cursor-pointer p-8 rounded-xl bg-paper/20 border border-fog/80 shadow-sm h-72 flex flex-col justify-between overflow-hidden">
-              {/* Slanted underlying frame border */}
-              <div className="absolute inset-0 border-2 border-slate-brand/20 rounded-xl rotate-1 scale-95 group-hover:rotate-0 group-hover:scale-100 group-hover:border-slate-brand transition-all duration-300 pointer-events-none" />
-              
-              <div className="space-y-3 relative z-10">
-                <span className="text-[9px] font-black text-slate-brand uppercase tracking-widest block">01 / Oversight Direction</span>
-                <h4 className="font-serif font-bold text-xl text-ink">Strategy</h4>
-                <p className="text-xs text-ink/70 leading-relaxed font-medium">
-                  Reviewing strategic contours, protecting core legal charter purposes, setting budget outlines, and tracking structural goals.
-                </p>
-              </div>
-
-              <span className="text-[10px] font-black text-slate-brand uppercase tracking-widest relative z-10 inline-flex items-center gap-1 group-hover:text-brass transition-premium">
-                <span>Strategy Desk</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-
-            {/* Card 2 */}
-            <div className="relative group cursor-pointer p-8 rounded-xl bg-paper/20 border border-fog/80 shadow-sm h-72 flex flex-col justify-between overflow-hidden">
-              {/* Slanted underlying frame border */}
-              <div className="absolute inset-0 border-2 border-copper/20 rounded-xl -rotate-1 scale-95 group-hover:rotate-0 group-hover:scale-100 group-hover:border-copper transition-all duration-300 pointer-events-none" />
-              
-              <div className="space-y-3 relative z-10">
-                <span className="text-[9px] font-black text-copper uppercase tracking-widest block">02 / Asset Protections</span>
-                <h4 className="font-serif font-bold text-xl text-ink">Safety</h4>
-                <p className="text-xs text-ink/70 leading-relaxed font-medium">
-                  Auditing background checks, securing tailored D&O liability insurance policies, and reviewing payroll escrow protections.
-                </p>
-              </div>
-
-              <span className="text-[10px] font-black text-copper uppercase tracking-widest relative z-10 inline-flex items-center gap-1 group-hover:text-brass transition-premium">
-                <span>Safety Desk</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-
-            {/* Card 3 */}
-            <div className="relative group cursor-pointer p-8 rounded-xl bg-paper/20 border border-fog/80 shadow-sm h-72 flex flex-col justify-between overflow-hidden">
-              {/* Slanted underlying frame border */}
-              <div className="absolute inset-0 border-2 border-teal-brand/20 rounded-xl rotate-1 scale-95 group-hover:rotate-0 group-hover:scale-100 group-hover:border-teal-brand transition-all duration-300 pointer-events-none" />
-              
-              <div className="space-y-3 relative z-10">
-                <span className="text-[9px] font-black text-teal-brand uppercase tracking-widest block">03 / Active Inquiry</span>
-                <h4 className="font-serif font-bold text-xl text-ink">Audit</h4>
-                <p className="text-xs text-ink/70 leading-relaxed font-medium">
-                  Tracing transaction deviations with worksheet scanners, setting Audit Committees, and compiling defensive boardroom minutes.
-                </p>
-              </div>
-
-              <span className="text-[10px] font-black text-teal-brand uppercase tracking-widest relative z-10 inline-flex items-center gap-1 group-hover:text-brass transition-premium">
-                <span>Audit Desk</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </span>
             </div>
           </div>
         </div>
