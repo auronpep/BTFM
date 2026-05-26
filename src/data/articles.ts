@@ -18,8 +18,8 @@ export interface Article {
 
 export const articles: Article[] = [
   {
-    title: "What Does a Nonprofit Board Actually Do?",
-    slug: "what-does-a-nonprofit-board-actually-do",
+    title: "What Does a Governing Board Actually Do?",
+    slug: "what-does-a-governing-board-actually-do",
     description: "The three core jobs of the board: Strategy, Safety, and Audit. Move away from meddling or ornamenting and into active governance.",
     category: "Strategy",
     difficulty: "Beginner",
@@ -135,7 +135,7 @@ By doing this, you save meeting time and allow the CEO to prepare a thoughtful a
   {
     title: "Do We Need to Second Every Motion?",
     slug: "do-we-need-to-second-every-motion",
-    description: "Demystifying parliamentary procedure. Learn how informal voting rules work in small nonprofit boards, and why a second is rarely required.",
+    description: "Demystifying parliamentary procedure. Learn how informal voting rules work in small governing boards, and why a second is rarely required.",
     category: "Legal",
     difficulty: "Beginner",
     readingTime: 4,
@@ -181,8 +181,8 @@ Far too often, a director says, *"I move we look into buying a new van."* That i
 This is a clear, actionable instruction. Once voted on and recorded, it gives the executive officers a precise boundary of operation.`
   },
   {
-    title: "What Insurance Does a Nonprofit Board Need?",
-    slug: "what-insurance-does-a-nonprofit-board-need",
+    title: "What Insurance Does a Governing Board Need?",
+    slug: "what-insurance-does-a-governing-board-need",
     description: "Understanding D&O insurance and general liability. Why the corporate shield doesn't protect against gross negligence, and how to verify your coverage.",
     category: "Safety",
     difficulty: "Intermediate",
@@ -193,7 +193,7 @@ This is a clear, actionable instruction. Once voted on and recorded, it gives th
     askQuestions: [
       {
         question: "Does our D&O policy include coverage for employment practices (wrongful termination, harassment) and is our policy limit adequate for our current $3M+ budget?",
-        rationale: "Employment disputes are the most common source of D&O claims in nonprofits with paid staff.",
+        rationale: "Employment disputes are the most common source of D&O claims in organizations with paid staff.",
         targetRole: "the Insurance Broker"
       },
       {
@@ -205,7 +205,7 @@ This is a clear, actionable instruction. Once voted on and recorded, it gives th
     doNots: {
       title: "Insurance Neglect",
       items: [
-        "Do not serve on a nonprofit board that has zero D&O insurance coverage.",
+        "Do not serve on a governing board that has zero D&O insurance coverage.",
         "Do not assume general commercial liability covers boardroom governance decisions.",
         "Do not skip the annual review of the insurance policy exclusions and limits."
       ],
@@ -223,7 +223,7 @@ This is a clear, actionable instruction. Once voted on and recorded, it gives th
     content: `It is a common myth that volunteer directors can never be sued. While California and federal laws provide general protections for volunteer board members, these protections are highly conditional.
 
 ### Why Incorporation is Not Enough
-Incorporation creates a legal barrier that prevents creditors from coming after directors' personal assets for the nonprofit's general debts. However, this "corporate shield" instantly pierces under several circumstances:
+Incorporation creates a legal barrier that prevents creditors from coming after directors' personal assets for the organization's general debts. However, this "corporate shield" instantly pierces under several circumstances:
 1. **Gross Negligence:** Making major decisions without any reasonable inquiry or diligence (e.g., approving a massive building loan without looking at financial statements).
 2. **Willful Wrongdoing:** Committing or allowing fraudulent activities, self-dealing, or illegal behaviors.
 3. **Unpaid Payroll Taxes:** The IRS holds individual board members personally liable for willfully failing to withhold and pay payroll taxes. This is a non-dischargeable personal liability.
@@ -235,16 +235,16 @@ D&O insurance does two critical things:
 * It pays for the legal defense fees, which can accumulate to tens of thousands of dollars even if the lawsuit is completely meritless.
 * It covers settlements or judgments rendered against individual directors, provided the conduct was not fraudulent or criminal.
 
-When reviewing your policy, look out for "Employment Practices Liability (EPLI)." Employment disputes (wrongful termination, discrimination, hostile work environment) are the single biggest cause of legal claims against nonprofit boards. If your organization has paid staff, EPLI is absolutely essential.`
+When reviewing your policy, look out for "Employment Practices Liability (EPLI)." Employment disputes (wrongful termination, discrimination, hostile work environment) are the single biggest cause of legal claims against governing boards. If your organization has paid staff, EPLI is absolutely essential.`
   },
   {
-    title: "The Chain of Command in Nonprofit Governance",
-    slug: "the-chain-of-command-in-nonprofit-governance",
+    title: "The Chain of Command in Organization Governance",
+    slug: "the-chain-of-command-in-governance",
     description: "The legal hierarchy of a corporation: Members, Directors, Officers, Staff, and Volunteers. Understanding where pastors and founders fit.",
     category: "Legal",
     difficulty: "Intermediate",
     readingTime: 5,
-    problem: "Founders or senior pastors treat the nonprofit as a personal fiefdom, ignoring the board's legal authority, leading to severe corporate breakdowns.",
+    problem: "Founders or senior pastors treat the organization as a personal fiefdom, ignoring the board's legal authority, leading to severe corporate breakdowns.",
     ruleTitle: "The Legal Chain of Corporate Command",
     ruleContent: "Under California law, the board of directors sits at the top of the corporate pyramid. Officers (President, Treasurer, Secretary) receive delegated authority from the board. Staff and volunteers report to the officers, who report collectively to the board.",
     askQuestions: [
@@ -268,10 +268,10 @@ When reviewing your policy, look out for "Employment Practices Liability (EPLI).
       mockMinutes: "Upon motion duly made and seconded, the Board resolved that the President is authorized to execute operational contracts up to $25,000 without prior board approval. All contracts exceeding $25,000 require disinterested board approval and must be recorded in the official minutes.",
       whyItMatters: "Sets a precise, legally binding boundary on executive authority, protecting both the CEO and the board."
     },
-    content: `Who is really in charge of a nonprofit? Many people assume it is the founder, the executive director, or in the case of a church, the senior pastor. Legally, this is completely incorrect.
+    content: `Who is really in charge of a organization? Many people assume it is the founder, the executive director, or in the case of a church, the senior pastor. Legally, this is completely incorrect.
 
 ### The Corporate Pyramid
-Under the law, a nonprofit corporation is structured as a clear, legal hierarchy:
+Under the law, a organization corporation is structured as a clear, legal hierarchy:
 1. **The Board of Directors:** The ultimate authority. The board has the final responsibility to see that the organization succeeds and obeys the law.
 2. **The Officers:** The board appoints officers (typically President, Treasurer, and Secretary) to manage daily affairs. These officers serve at the pleasure of the board and can be removed by the board at any time.
 3. **The Staff:** Employees are hired by and report to the officers (principally the CEO or Executive Director).
@@ -287,7 +287,7 @@ If a founder treats the corporate bank account as their personal wallet, or sign
   {
     title: "Fiduciary Duties: Care, Loyalty, and Obedience",
     slug: "fiduciary-duties-care-loyalty-obedience",
-    description: "The core legal obligations of every nonprofit director. What the law actually requires, and how the Business Judgment Rule protects you.",
+    description: "The core legal obligations of every board director. What the law actually requires, and how the Business Judgment Rule protects you.",
     category: "Legal",
     difficulty: "Advanced",
     readingTime: 6,
@@ -330,12 +330,12 @@ The Duty of Care involves making decisions based on reasonable information. It i
 * **Asking questions** to get at information that is not always provided in staff-prepared materials. This is known as the **Duty of Inquiry**.
 
 ### 2. The Duty of Loyalty
-Loyalty means caring about the organization more than yourself when there are conflicts. You must put the interest of the nonprofit above your personal, professional, or financial interest.
+Loyalty means caring about the organization more than yourself when there are conflicts. You must put the interest of the organization above your personal, professional, or financial interest.
 * **Corporate Opportunities:** If you discover a business opportunity (such as a discounted land purchase or donation) in your capacity as a director, that opportunity belongs first to the corporation. You cannot divert it to your private business.
 * **Conflict of Interest:** Never participate in an action or vote by the board in which you or your family members have a personal financial interest.
 
 ### 3. The Duty of Obedience
-The Duty of Obedience requires directors to ensure the organization remains true to its stated charitable purpose, and complies with all applicable federal, state, and local laws. You cannot authorize the nonprofit to engage in activities that violate its Articles of Incorporation or the Internal Revenue Code.
+The Duty of Obedience requires directors to ensure the organization remains true to its stated charitable purpose, and complies with all applicable federal, state, and local laws. You cannot authorize the organization to engage in activities that violate its Articles of Incorporation or the Internal Revenue Code.
 
 ### The Business Judgment Rule
 Fortunately, the law does not expect directors to be infallible. Under the **Business Judgment Rule**, you will not be held personally liable for a decision that turns out poorly, provided you acted:
@@ -346,8 +346,8 @@ Fortunately, the law does not expect directors to be infallible. Under the **Bus
 Crucially, you are legally permitted to **rely on others** whom you reasonably believe to be reliable and competent—including executive officers, independent CPA auditors, legal counsel, and committees of the board.`
   },
   {
-    title: "Starting a Nonprofit: Fiscal Sponsorship vs. Starting Fresh",
-    slug: "starting-a-nonprofit-and-fiscal-sponsorship",
+    title: "Starting a Organization: Fiscal Sponsorship vs. Starting Fresh",
+    slug: "starting-an-organization-and-fiscal-sponsorship",
     description: "Before you spend thousands on legal fees, learn why fiscal sponsorship is the smartest incubator path for any charity under $100k in revenue.",
     category: "Startup",
     difficulty: "Beginner",
@@ -376,7 +376,7 @@ Crucially, you are legally permitted to **rely on others** whom you reasonably b
       mockMinutes: "The Founder presented a comparative report on incorporating vs. entering a Model A fiscal sponsorship with Community Partners. The Board discussed the administrative savings, back-office support, and program timeline. Upon motion, the Board resolved to seek a fiscal sponsorship agreement.",
       whyItMatters: "Documents that the organizers actively evaluated alternatives to reduce waste and maximize early donor funds."
     },
-    content: `Most nonprofit organizations struggle during their first years of operation. Many fail within their first two years, never getting anywhere close to achieving their founders' plans. Many others end up closing because of some form of wrongful operations, where they miss regulatory filing deadlines or violate tax-exempt laws.
+    content: `Most organizations struggle during their first years of operation. Many fail within their first two years, never getting anywhere close to achieving their founders' plans. Many others end up closing because of some form of wrongful operations, where they miss regulatory filing deadlines or violate tax-exempt laws.
 
 Before you begin, you must answer the critical question: **Do I really want to start a charity?**
 
@@ -398,7 +398,7 @@ Our standard recommendation is that any charity that will not reach **$100,000 i
   {
     title: "Recruiting Five Unrelated Directors for a Strong Board",
     slug: "recruiting-five-unrelated-board-directors",
-    description: "The single biggest indicator of nonprofit success. Why starting with fewer than 5 unrelated board members is a recipe for rapid failure.",
+    description: "The single biggest indicator of organization success. Why starting with fewer than 5 unrelated board members is a recipe for rapid failure.",
     category: "Startup",
     difficulty: "Beginner",
     readingTime: 5,
@@ -448,15 +448,15 @@ We recommend starting with five independent directors, but increasing the size o
 * **Over $2,000,000:** Build toward 15 directors to staff active committees (Executive, Audit, Nominating).`
   },
   {
-    title: "Writing an Effective Nonprofit Business Plan",
-    slug: "writing-an-effective-nonprofit-business-plan",
-    description: "The seven essential sections of a nonprofit business plan. How to clarify your resources and prepare for your IRS tax-exempt application.",
+    title: "Writing an Effective Organization Business Plan",
+    slug: "writing-an-effective-organization-business-plan",
+    description: "The seven essential sections of a organization business plan. How to clarify your resources and prepare for your IRS tax-exempt application.",
     category: "Startup",
     difficulty: "Beginner",
     readingTime: 5,
     problem: "Founders jump straight into operations without writing down a plan, leading to running out of cash within 3 months of launching programs.",
     ruleTitle: "The Seven-Section Plan Benchmark",
-    ruleContent: "A professional nonprofit business plan must be 12 to 20 pages long, structured into seven essential sections, and completed prior to applying for IRS tax-exempt status.",
+    ruleContent: "A professional organization business plan must be 12 to 20 pages long, structured into seven essential sections, and completed prior to applying for IRS tax-exempt status.",
     askQuestions: [
       {
         question: "Have we populated the 'Describe the Challenge' section of our business plan with real local data rather than generalities?",
@@ -469,7 +469,7 @@ We recommend starting with five independent directors, but increasing the size o
       items: [
         "Do not launch programs without a 3-year projected cash budget.",
         "Do not write a massive 80-page business plan that is too dense to read.",
-        "Do not copy-paste another nonprofit's business plan; your plan must represent your unique operating model."
+        "Do not copy-paste another organization's business plan; your plan must represent your unique operating model."
       ],
       consequence: "An unwritten plan results in failure to qualify for foundation grants, as funders universally require a formal business plan as part of the diligence process."
     },
@@ -504,7 +504,7 @@ How will donors find you? Detail your fundraising mix: individual gifts, major d
 Provide a detailed spreadsheet showing projected revenues and expenses for the first three years. Be realistic. If you expect to raise $100,000, do not budget $150,000 in salaries.`
   },
   {
-    title: "How Nonprofit Boards Should Review and Approve a Budget",
+    title: "How Governing Boards Should Review and Approve a Budget",
     slug: "how-boards-should-review-a-budget",
     description: "The timeline and steps for reviewing a budget. Why the approved budget is a legal limitation on executive officers.",
     category: "Finance",
@@ -596,7 +596,7 @@ If travel costs doubled, or program enrollment is projected to drop by 20%, dema
     },
     minutesTemplate: {
       agendaItem: "Executive Compensation Review",
-      mockMinutes: "The Board reviewed independent salary data for executives of comparable California nonprofits. Following discussion, and with the Executive Director absent from the room, the Board approved a 3% salary adjustment by a unanimous vote of the disinterested directors.",
+      mockMinutes: "The Board reviewed independent salary data for executives of comparable California organizations. Following discussion, and with the Executive Director absent from the room, the Board approved a 3% salary adjustment by a unanimous vote of the disinterested directors.",
       whyItMatters: "Clean, professional, and proves compliance with California disinterested director rules without unnecessary detail."
     },
     content: `Board minutes are the official, legal record of a corporation's actions. In a lawsuit or a regulatory audit by the Attorney General, the minutes are the very first document requested. They are the supreme evidence of whether the board is fulfilling its fiduciary duties of Care and Loyalty.
@@ -653,7 +653,7 @@ Once minutes are drafted by the Secretary, they must be distributed in the next 
     },
     minutesTemplate: {
       agendaItem: "Executive Compensation Audit",
-      mockMinutes: "The Compensation Committee presented salary comparability data from the 2026 Northern California Nonprofit Compensation Survey. With the Executive Director absent, the disinterested board members reviewed the data showing the median salary for similar $3M budgets is $125,000. Upon motion, the Board approved an annual salary of $122,000.",
+      mockMinutes: "The Compensation Committee presented salary comparability data from the 2026 Northern California Organization Compensation Survey. With the Executive Director absent, the disinterested board members reviewed the data showing the median salary for similar $3M budgets is $125,000. Upon motion, the Board approved an annual salary of $122,000.",
       whyItMatters: "Bulletproof documentation that directly satisfies the IRS Rebuttable Presumption requirements."
     },
     californiaThreshold: {

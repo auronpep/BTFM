@@ -50,8 +50,8 @@ export const californiaRules: CaliforniaRule[] = [
     id: "form-si-100-statement",
     title: "Secretary of State Statement of Information (Form SI-100)",
     statute: "California Corporations Code § 6210",
-    threshold: "Required biennially (every two years) for all California nonprofit corporations.",
-    consequenceOfFailure: "A mandatory $250 penalty levied by the Secretary of State, followed by administrative suspension of corporate powers, rendering the nonprofit unable to sign contracts, protect its trademark, or defend lawsuits.",
+    threshold: "Required biennially (every two years) for all California organization corporations.",
+    consequenceOfFailure: "A mandatory $250 penalty levied by the Secretary of State, followed by administrative suspension of corporate powers, rendering the organization unable to sign contracts, protect its trademark, or defend lawsuits.",
     complianceActionList: [
       "File Form SI-100 with the Secretary of State every two years.",
       "File within the designated 5-month filing window (the anniversary month of incorporation and the preceding 4 months).",
@@ -61,13 +61,13 @@ export const californiaRules: CaliforniaRule[] = [
     ],
     fullExplanation: "The Statement of Information (Form SI-100) is a public filing that keeps the state and the public informed of the identity of the corporation's officers, directors, and its Agent for Service of Process (the individual authorized to receive legal notices). Fines for late filing are automatic and non-negotiable. If suspended, the corporation loses all of its corporate rights, meaning it cannot legally operate or enter into contracts.",
     legalEscalationTrigger: "The corporation has elected new officers (President, Secretary, or Treasurer) or has missed its biennial SI-100 filing deadline.",
-    relatedArticleSlug: "the-chain-of-command-in-nonprofit-governance"
+    relatedArticleSlug: "the-chain-of-command-in-governance"
   },
   {
     id: "attorney-general-guide-compliance",
     title: "Compliance with the California AG's Guide for Charities",
     statute: "California Government Code § 12580-12599.8",
-    threshold: "Applicable to all nonprofit public benefit corporations holding assets in trust for the public.",
+    threshold: "Applicable to all organization public benefit corporations holding assets in trust for the public.",
     consequenceOfFailure: "Investigation by the Attorney General's Charitable Trusts Section, dissolution of the corporation, and civil lawsuits against individual directors for breach of trust.",
     complianceActionList: [
       "Maintain a written Board Conflict of Interest Policy.",
@@ -76,7 +76,7 @@ export const californiaRules: CaliforniaRule[] = [
       "Review the AG's Guide for Charities as part of annual board onboarding procedures.",
       "Ensure all fundraising solicitation disclosures are transparent and accurate."
     ],
-    fullExplanation: "The California Attorney General publishes the 'Guide for Charities' to outline the legal boundaries of public trusts. Under California law, a charity's assets are held in trust for the benefit of the public, not the founders. The AG holds broad supervisory power to investigate board self-dealing, excessive compensation, fraudulent fundraising, and negligent oversight. A key compliance rule is that a California nonprofit is strictly prohibited from making loans of corporate funds to any director, officer, or key employee.",
+    fullExplanation: "The California Attorney General publishes the 'Guide for Charities' to outline the legal boundaries of public trusts. Under California law, a charity's assets are held in trust for the benefit of the public, not the founders. The AG holds broad supervisory power to investigate board self-dealing, excessive compensation, fraudulent fundraising, and negligent oversight. A key compliance rule is that a California organization is strictly prohibited from making loans of corporate funds to any director, officer, or key employee.",
     legalEscalationTrigger: "A director discloses a potential conflict-of-interest transaction, or a founder requests a short-term cash loan from corporate accounts.",
     relatedArticleSlug: "fiduciary-duties-care-loyalty-obedience"
   },
@@ -84,7 +84,7 @@ export const californiaRules: CaliforniaRule[] = [
     id: "independent-director-fifty-one-percent",
     title: "The 51% Independent Board Standard",
     statute: "California Corporations Code § 5227",
-    threshold: "Mandatory standard for all California nonprofit public benefit corporations.",
+    threshold: "Mandatory standard for all California organization public benefit corporations.",
     consequenceOfFailure: "The corporation's transactions can be invalidated, contracts can be set aside, and the Attorney General can file a civil lawsuit to remove the board and dissolve the corporation.",
     complianceActionList: [
       "Ensure that not more than 49% of the voting board members are 'interested persons.'",

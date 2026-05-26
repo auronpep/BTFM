@@ -389,7 +389,7 @@ export const ScenarioReader: React.FC = () => {
                       Test Your Fiduciary Judgment
                     </h2>
                     <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                      Nonprofit directors face serious, personal joint-and-several liabilities if they make hasty decisions on conflicts of interest, finances, or compliance. Select an action path below to see how it impacts your **Director Liability Meter**.
+                      Board directors face serious, personal joint-and-several liabilities if they make hasty decisions on conflicts of interest, finances, or compliance. Select an action path below to see how it impacts your **Director Liability Meter**.
                     </p>
                   </div>
 

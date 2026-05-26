@@ -510,7 +510,7 @@ export const Tools: React.FC = () => {
           <div class="border-double">
             <div class="header">California Boardroom Initiative</div>
             <div class="title">Certificate of Fiduciary Mastery</div>
-            <div class="subtitle">Awarded for Educational Excellence in Nonprofit Law</div>
+            <div class="subtitle">Awarded for Educational Excellence in Charity Law</div>
             
             <div class="recipient">${userOrgName}</div>
             
@@ -656,7 +656,7 @@ export const Tools: React.FC = () => {
             
             <div class="metadata-grid">
               <div class="metadata-item">
-                <strong>Nonprofit Entity:</strong> ${userOrgName}<br/>
+                <strong>Organization Entity:</strong> ${userOrgName}<br/>
                 <strong>Compilation Date:</strong> ${todayStr}
               </div>
               <div class="metadata-item">
@@ -1153,7 +1153,7 @@ export const Tools: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 border-t border-fog/60 pt-5">
               <div className="w-full sm:w-1/2 space-y-1.5">
                 <label className="text-[9.5px] font-extrabold text-ink/50 uppercase tracking-widest block">
-                  Nonprofit Entity / Board Name (Synced)
+                  Organization Entity / Board Name (Synced)
                 </label>
                 <input 
                   type="text"
@@ -1410,7 +1410,7 @@ export const Tools: React.FC = () => {
             {/* Input Form */}
             <div className="max-w-md mx-auto space-y-1">
               <label className="text-[9px] font-extrabold text-ink/40 uppercase tracking-widest block text-left">
-                Nonprofit Organization / Board Name
+                Organization / Board Name
               </label>
               <input 
                 type="text"
@@ -1433,7 +1433,7 @@ export const Tools: React.FC = () => {
                 {userOrgName}
               </p>
               <p className="text-[10px] text-ink/75 leading-relaxed max-w-sm mx-auto font-sans">
-                Acknowledged for educational excellence in California nonprofit governance audit, quorums, and restricted asset stewardship.
+                Acknowledged for educational excellence in California organization governance audit, quorums, and restricted asset stewardship.
               </p>
               <div className="flex justify-between items-center text-[8px] font-sans font-extrabold uppercase tracking-wider text-ink/40 pt-2 px-4">
                 <span>Myron Steeves, J.D. &bull; Dean</span>
@@ -1498,7 +1498,7 @@ export const Tools: React.FC = () => {
                 {/* Metadata details */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans bg-paper/10 p-4 border border-fog/45 rounded-lg">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Nonprofit Entity / Board Name</label>
+                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Organization Entity / Board Name</label>
                     <input 
                       type="text"
                       value={userOrgName}
@@ -1821,7 +1821,7 @@ export const Tools: React.FC = () => {
                   {/* Fields for custom details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans border-b border-brass/25 pb-4">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Nonprofit Board Name</label>
+                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Governing Board Name</label>
                       <input 
                         type="text"
                         value={userOrgName}
@@ -1884,7 +1884,7 @@ export const Tools: React.FC = () => {
                   {/* Memorandum Resolution Text */}
                   <div className="space-y-2 text-ink/80 text-xs leading-relaxed italic text-left border-l-2 border-brass pl-4 font-serif">
                     <p>
-                      <strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits non-profit policies and structural quorums to ensure directors protect public charity assets; and
+                      <strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits organization policies and structural quorums to ensure directors protect public charity assets; and
                     </p>
                     <p>
                       <strong>WHEREAS</strong>, the Board of Directors of <strong>{userOrgName || '[Organization Name]'}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;
@@ -1947,7 +1947,7 @@ export const Tools: React.FC = () => {
                               <div class="subtitle">Execution Record under California Corporations Code & IRS Part VI Standards</div>
                               
                               <div class="meta">
-                                <div><strong>Nonprofit Entity:</strong> ${userOrgName}</div>
+                                <div><strong>Organization Entity:</strong> ${userOrgName}</div>
                                 <div><strong>Review Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                               </div>
 
@@ -1964,7 +1964,7 @@ export const Tools: React.FC = () => {
                               </div>
 
                               <div class="resolutions">
-                                <p><strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits non-profit policies and structural quorums to ensure directors protect public charity assets; and</p>
+                                <p><strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits organization policies and structural quorums to ensure directors protect public charity assets; and</p>
                                 <p><strong>WHEREAS</strong>, the Board of Directors of <strong>${userOrgName}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;</p>
                                 <p><strong>NOW, THEREFORE, BE IT RESOLVED</strong>, that this Board hereby endorses this Governance Memorandum, commits to resolving any flagged non-compliances, and directs the Secretary to append this document to the permanent corporate record.</p>
                               </div>

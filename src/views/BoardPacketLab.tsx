@@ -44,7 +44,7 @@ export const BoardPacketLab: React.FC = () => {
       consequence: 'Under IRC Section 4958 (Intermediate Sanctions), paying an executive in excess of fair market value can trigger a 25% excise tax on the executive and a 10% personal tax on individual directors who approved the package without standard comparable data.',
       statute: 'IRC § 4958',
       statuteText: 'IRS Intermediate Sanctions & Rebuttable Presumption Safe Harbor.',
-      scriptQuestion: 'Has this board obtained independent comparability data of salaries from similar-sized California nonprofits in our geographic region, and will the Executive Director recuse themselves from both our deliberations and the vote?',
+      scriptQuestion: 'Has this board obtained independent comparability data of salaries from similar-sized California organizations in our geographic region, and will the Executive Director recuse themselves from both our deliberations and the vote?',
       scriptRationale: 'Securing three comparable salary data points and ensuring the executive is absent during debate grants the board safe harbor protection under IRS guidelines, preventing personal director penalties.',
       scriptTarget: 'Board President & Treasurer',
       isSevere: true
@@ -61,7 +61,7 @@ export const BoardPacketLab: React.FC = () => {
       consequence: 'Amending bylaws without legal counsel frequently introduces clauses that violate California Corporations Code, create governance deadlocks, or fail to conform with active IRS definitions, risking the corporate tax-exempt status.',
       statute: 'CA Corp Code § 5150',
       statuteText: 'California Corporations Code regulating amendment of bylaws.',
-      scriptQuestion: 'Have these proposed bylaw amendments been vetted and certified by an independent California nonprofit attorney, and can we postpone this vote to allow directors at least seven days to read the full redline draft?',
+      scriptQuestion: 'Have these proposed bylaw amendments been vetted and certified by an independent California charity attorney, and can we postpone this vote to allow directors at least seven days to read the full redline draft?',
       scriptRationale: 'Fiduciary Duty of Care requires directors to make informed decisions. Voting on complex governing documents without reading them or having counsel review them is a prime indicator of negligence.',
       scriptTarget: 'Governance Committee Chair',
       isSevere: false
@@ -151,7 +151,7 @@ export const BoardPacketLab: React.FC = () => {
       ],
       consequence: 'Failing to supervise executive spending and allowing massive unbudgeted luxury expenditures represents a failure of the Duty of Care. It invites IRS audit scrutiny regarding private inurement and could lead to loss of tax exemption or donor class-action lawsuits.',
       statute: 'CA Corp Code § 5231',
-      statuteText: 'Duty of Care and standard of care requirements for nonprofit directors.',
+      statuteText: 'Duty of Care and standard of care requirements for board directors.',
       scriptQuestion: 'What specific business travel or executive retreats accounted for this $35,000 budget overrun, and why was this variance not flagged and pre-authorized by the Treasurer or the Finance Committee?',
       scriptRationale: 'Fiduciary care requires active budget tracking. Allowing large, unapproved discretionary travel budgets suggests a lack of active internal financial oversight and controls.',
       scriptTarget: 'Treasurer & Executive Director',
@@ -1121,7 +1121,7 @@ export const BoardPacketLab: React.FC = () => {
                         Next Professional Action Recommended:
                       </p>
                       <p className="text-[11px] text-ink/65 leading-relaxed">
-                        To cement these protections for your California entity, request a formal attorney review of your current Bylaws and Corporate Book. Our firm specializing in nonprofit law will evaluate your complete record suite.
+                        To cement these protections for your California entity, request a formal attorney review of your current Bylaws and Corporate Book. Our firm specializing in charity law will evaluate your complete record suite.
                       </p>
                     </div>
 
@@ -1262,7 +1262,7 @@ export const BoardPacketLab: React.FC = () => {
                     <LegalEscalationCard 
                       trigger="California Fiduciary Risk Alert" 
                       explanation={`This finding represents a direct violation of regulatory law. Proceeding without certified legal restructuring can trigger severe state penalties, personal director audit assessments, or loss of tax exemption. We recommend obtaining a bylaws or procedures audit from independent legal counsel.`} 
-                      actionText="Consult Nonprofit Attorneys"
+                      actionText="Consult Charity Attorneys"
                       relatedTopic={currentFlag.statute}
                     />
                   ) : (

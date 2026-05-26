@@ -35,7 +35,7 @@ Minutes written by Mary.`;
 
 // Courtroom safe minutes template
 const defensiveMinutesTemplate = `MINUTES OF A REGULAR MEETING OF THE BOARD OF DIRECTORS
-OF [ORGANIZATION NAME], A CALIFORNIA NONPROFIT BENEFIT CORPORATION
+OF [ORGANIZATION NAME], A CALIFORNIA ORGANIZATION BENEFIT CORPORATION
 
 A regular meeting of the Board of Directors of the Corporation was held on [Date], at [Time] PST, at [Location / Videoconference link]. 
 
@@ -66,7 +66,7 @@ The Board President raised the matter of the proposed software contract with [Ve
 IV. EXECUTIVE COMPENSATION REVIEW & SAFETY COMPLIANCE (IRS SAFE HARBOR)
 The Board reviewed the compensation package for the Executive Director for FY 2026-2027. Prior to deliberations, Executive Director [Name] recused themselves and exited the room.
 
-The Treasurer presented independent salary comparability studies gathered from three peer California nonprofit organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
+The Treasurer presented independent salary comparability studies gathered from three peer California organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
 
 V. IRS FORM 990 REVIEW
 The Treasurer presented the draft of the annual IRS Form 990 for review. Following a comprehensive review of the filing disclosures and upon motion duly made, seconded, and unanimously carried, the Board approved the Form 990 as presented and authorized the Treasurer to file the return.
@@ -120,7 +120,7 @@ The board meeting convened at 6:00 PM with a legal quorum present. John Doe pres
 I. EXECUTIVE COMPENSATION REASONABLENESS RESOLUTION (IRC § 4958)
 The board reviewed proposed compensation for the Executive Director. The interested director was fully recused and exited the meeting room prior to deliberations.
 
-The board reviewed independent salary comparability survey data of peer California nonprofits. Based on this market data, the independent and disinterested directors voted to approve a reasonable salary resolution of $120,000, determining the amount is fair and justified.
+The board reviewed independent salary comparability survey data of peer California organizations. Based on this market data, the independent and disinterested directors voted to approve a reasonable salary resolution of $120,000, determining the amount is fair and justified.
 
 II. INTERESTED PARTY TRANSACTION DISCLOSURE (CA CORP CODE § 5233)
 The Board reviewed a proposal to contract with Beacon Tech Solutions. Director Mary Smith disclosed their material financial interest and was fully recused from discussions and the vote.
@@ -251,7 +251,7 @@ NOW, THEREFORE, BE IT RESOLVED:
 
 1. RECUSAL: It is hereby recorded that the Executive Director was fully recused from all board discussions, deliberations, and votes regarding their proposed compensation, and formally exited the meeting room prior to any debate or vote.
 
-2. INDEPENDENT COMPARABLES: The Board Treasurer presented and the Board reviewed independent salary comparability data from a comprehensive salary study of peer California nonprofit organizations of similar budget size ($500,000 to $2,500,000) and geographic scope (the ${comparableRegion} region). This data demonstrated that the median annual compensation for executive directors of comparable organizations ranges from $95,000 to $135,000.
+2. INDEPENDENT COMPARABLES: The Board Treasurer presented and the Board reviewed independent salary comparability data from a comprehensive salary study of peer California organizations of similar budget size ($500,000 to $2,500,000) and geographic scope (the ${comparableRegion} region). This data demonstrated that the median annual compensation for executive directors of comparable organizations ranges from $95,000 to $135,000.
 
 3. APPROVAL AND BASIS: Based on its review of the independent comparability data, the disinterested directors of the Board hereby approve an annual salary of $${salaryAmount} for the Executive Director, finding this amount to be fair, reasonable, and in the best interests of the Corporation.
 

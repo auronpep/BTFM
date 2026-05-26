@@ -78,7 +78,7 @@ export const BudgetWorksheet: React.FC = () => {
       consequence: 'Under IRC § 4958, the IRS can impose "Intermediate Sanctions" for paying compensation in excess of fair market value. This consists of a 25% personal tax on the executive and a 10% personal tax on individual directors who approved the salary without relying on comparable data.',
       statute: 'IRC § 4958',
       statuteText: 'IRS Excess Benefit Transactions and board safe harbors.',
-      scriptQuestion: 'Did the board vote to authorize this $35,000 increase using formal local compensation comparability studies of peer California nonprofits, and are we recording that the executive was completely recused?',
+      scriptQuestion: 'Did the board vote to authorize this $35,000 increase using formal local compensation comparability studies of peer California organizations, and are we recording that the executive was completely recused?',
       scriptRationale: 'Relying on three comparable salary studies and recusing the employee grants the board "rebuttable presumption of reasonableness," shielding directors from personal audit assessments.',
       scriptTarget: 'Board President & Treasurer',
       cfoInquiry: [
@@ -87,11 +87,11 @@ export const BudgetWorksheet: React.FC = () => {
         'Is there a formal signed conflict of interest recusal form for the Executive Director for the meeting during which this increase was discussed and voted upon?'
       ],
       invoicesRequest: [
-        'Compensation survey data or salary reports from 3 similar California budget-sized nonprofits.',
+        'Compensation survey data or salary reports from 3 similar California budget-sized organizations.',
         'Board meeting minutes containing the formal approval of compensation, detailing the comparability data and recusal.',
         'Signed employment agreement amendment or offer letter signed by the Board President.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California nonprofit organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRC Section 4958.',
+      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRC Section 4958.',
       advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates California Attorney General guidelines, initiating immediate IRC § 4958 intermediate sanctions risk.'
     },
     'self-dealing': {
@@ -213,7 +213,7 @@ export const BudgetWorksheet: React.FC = () => {
       ],
       consequence: 'Failing to supervise executive spending and allowing massive unbudgeted luxury expenditures represents a failure of the Duty of Care. It invites IRS audit scrutiny regarding private inurement and could lead to loss of tax exemption or donor class-action lawsuits.',
       statute: 'CA Corp Code § 5231',
-      statuteText: 'Duty of Care and standard of care requirements for nonprofit directors.',
+      statuteText: 'Duty of Care and standard of care requirements for board directors.',
       scriptQuestion: 'What specific business travel or executive retreats accounted for this $35,000 budget overrun, and why was this variance not flagged and pre-authorized by the Treasurer or the Finance Committee?',
       scriptRationale: 'Fiduciary care requires active budget tracking. Allowing large, unapproved discretionary travel budgets suggests a lack of active internal financial oversight and controls.',
       scriptTarget: 'Treasurer & Executive Director',
@@ -249,7 +249,7 @@ export const BudgetWorksheet: React.FC = () => {
       statute: 'CA Corp Code § 5047.5',
       statuteText: 'Mandatory insurance thresholds for volunteer director immunity protection.',
       scriptQuestion: 'Has our D&O liability policy actively lapsed, and can we immediately reinstate the policy to preserve statutory personal immunity under California law?',
-      scriptRationale: 'Maintaining active D&O insurance represents the absolute baseline of personal asset protection for volunteer nonprofit directors.',
+      scriptRationale: 'Maintaining active D&O insurance represents the absolute baseline of personal asset protection for volunteer board directors.',
       scriptTarget: 'Board President & Treasurer',
       cfoInquiry: [
         'Why did the D&O policy lapse, and was it due to an administrative oversight or lack of cash?',
@@ -506,7 +506,7 @@ export const BudgetWorksheet: React.FC = () => {
                                           <span className="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded-full font-mono font-extrabold tracking-widest uppercase">Variance Limit Exceeded</span>
                                         </h4>
                                         <p className="text-xs text-rose-700 font-semibold leading-relaxed">
-                                          {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under California nonprofit law."}
+                                          {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under California charity law."}
                                         </p>
                                         <div className="pt-2 flex items-center gap-4">
                                           <a
@@ -687,7 +687,7 @@ export const BudgetWorksheet: React.FC = () => {
                     <LegalEscalationCard 
                       trigger="California Fiduciary Risk Alert" 
                       explanation={`This finding represents a direct violation of regulatory law. Proceeding without certified legal restructuring can trigger severe state penalties, personal director audit assessments, or loss of tax exemption. We recommend obtaining a bylaws or procedures audit from independent legal counsel.`} 
-                      actionText="Consult Nonprofit Attorneys"
+                      actionText="Consult Charity Attorneys"
                       relatedTopic={currentLine.statute}
                     />
                   ) : (

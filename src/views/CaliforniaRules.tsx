@@ -466,7 +466,7 @@ export const CaliforniaRules: React.FC = () => {
                     <div className="pt-2">
                       <LegalEscalationCard 
                         trigger={rule.legalEscalationTrigger} 
-                        explanation="Failing to address California's nonprofit statutory limits exposes the entity to immediate revocation by the Attorney General. Seek Counsel from NPO Lawyers to correct regulatory delinquent statuses."
+                        explanation="Failing to address California's organization statutory limits exposes the entity to immediate revocation by the Attorney General. Seek Counsel from NPO Lawyers to correct regulatory delinquent statuses."
                         actionText="Schedule Regulatory Audit"
                         relatedTopic={rule.title}
                       />
@@ -778,7 +778,7 @@ export const CaliforniaRules: React.FC = () => {
                     <span>🚨 CRITICAL FIDUCIARY EXPOSURE DETECTED</span>
                   </p>
                   <p className="font-medium text-ink/90 font-semibold">
-                    A bylaws score under 80% indicates major structural gaps under California nonprofit law. Outdated clauses or missing bans (e.g. allowing proxies or omitting electronic definitions) can <strong>void board votes</strong> and trigger <strong>personal joint-and-several liability</strong> under California Corporations Code § 5239.
+                    A bylaws score under 80% indicates major structural gaps under California charity law. Outdated clauses or missing bans (e.g. allowing proxies or omitting electronic definitions) can <strong>void board votes</strong> and trigger <strong>personal joint-and-several liability</strong> under California Corporations Code § 5239.
                   </p>
                 </div>
               ) : bylawScore < 100 ? (
@@ -1094,7 +1094,7 @@ export const CaliforniaRules: React.FC = () => {
                   </tr>
                   <tr>
                     <td className="py-4 px-4 font-bold text-burgundy font-serif text-sm">EPLI (Employment Practices)</td>
-                    <td className="py-4 px-4">Wrongful termination, sexual harassment, discrimination, hostile work environment (90% of non-profit claims).</td>
+                    <td className="py-4 px-4">Wrongful termination, sexual harassment, discrimination, hostile work environment (90% of organization claims).</td>
                     <td className="py-4 px-4 text-center font-bold text-teal-brand">YES</td>
                     <td className="py-4 px-4 font-mono">Often bundled with D&O or as separate $1M rider.</td>
                     <td className="py-4 px-4">Wage & hour claims (unpaid overtime, missed meal breaks in California).</td>

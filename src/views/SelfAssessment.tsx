@@ -272,7 +272,7 @@ export const SelfAssessment: React.FC = () => {
         level: "Level 4: Institutional Stewardship (The Exemplar Board)",
         color: "text-teal-brand border-teal-brand bg-teal-brand/5",
         textBg: "bg-teal-brand text-white",
-        desc: "Congratulations. Your board operates at the absolute gold standard of institutional governance. You have a highly diverse, independent board, complete pre-meeting discipline, separate audit committees, robust comparability salary records, and clean defensive minutes. You serve as an exemplar of nonprofit stewardship.",
+        desc: "Congratulations. Your board operates at the absolute gold standard of institutional governance. You have a highly diverse, independent board, complete pre-meeting discipline, separate audit committees, robust comparability salary records, and clean defensive minutes. You serve as an exemplar of organization stewardship.",
         priority: "PRESERVE EXCELLENCE",
         recs: [
           "Mentor other local California boards on governance best-practices.",
@@ -530,7 +530,7 @@ export const SelfAssessment: React.FC = () => {
                             adviceBg = "bg-rose-50/50";
                           } else if (ratio <= 0.85) {
                             adviceTitle = "⚠️ Governance Code Advisory";
-                            advice = "GOVERNANCE REVIEW: Basic policies are available but updated infrequently. Plan a formal bylaws review session in the next 12 months to align with California non-profit statutory shifts.";
+                            advice = "GOVERNANCE REVIEW: Basic policies are available but updated infrequently. Plan a formal bylaws review session in the next 12 months to align with California organization statutory shifts.";
                             adviceBorder = "border-amber-300";
                             adviceBg = "bg-amber-50/40";
                           } else {

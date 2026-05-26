@@ -301,7 +301,7 @@ export const NextMeeting: React.FC = () => {
       title: "2. CEO/ED Salary & Compensation Review",
       category: "Legal & Fiduciary",
       requiredFiles: [
-        "Executive Salary Survey Report for Northern/Southern California Nonprofits",
+        "Executive Salary Survey Report for Northern/Southern California Organizations",
         "Current CEO Employment Contract & Performance Reviews",
         "Disinterested Director Recusal Resolution Form"
       ],
@@ -322,7 +322,7 @@ export const NextMeeting: React.FC = () => {
       },
       minutesMock: {
         agendaItem: "Executive Compensation Approval",
-        mockMinutes: "The President (CEO) and her sister-in-law (Director) recused themselves from the meeting and physically left the room. The remaining three disinterested directors (constituting a quorum) reviewed Northern California Nonprofit Salary surveys for literacy programs. Based on this data, the board voted unanimously to approve a base salary of $72,000 for the CEO, effective immediately.",
+        mockMinutes: "The President (CEO) and her sister-in-law (Director) recused themselves from the meeting and physically left the room. The remaining three disinterested directors (constituting a quorum) reviewed Northern California Organization Salary surveys for literacy programs. Based on this data, the board voted unanimously to approve a base salary of $72,000 for the CEO, effective immediately.",
         whyItMatters: "Meticulously documents recusal and reliance on written comparable surveys, achieving full IRS safe harbor."
       }
     },
@@ -517,7 +517,7 @@ export const NextMeeting: React.FC = () => {
       ],
       statuteBadge: { statute: "CA Gov Code § 12586", text: "Attorney General oversight of public benefit trusts." },
       askScript: {
-        question: "When was the last time our bylaws were formally audited by a nonprofit attorney, and do they align with recent California registry changes?",
+        question: "When was the last time our bylaws were formally audited by a charity attorney, and do they align with recent California registry changes?",
         rationale: "Ensures the board operates with valid, enforceable legal regulations, protecting directors from internal disputes.",
         targetRole: "the Board Chair"
       },
@@ -525,7 +525,7 @@ export const NextMeeting: React.FC = () => {
         title: "Operating Under Obsolete Regulations",
         items: [
           "Do not operate under bylaws that are over 10 years old.",
-          "Do not allow the board to update bylaws without consulting qualified nonprofit counsel.",
+          "Do not allow the board to update bylaws without consulting qualified charity counsel.",
           "Do not ignore the requirement to file bylaws updates with the AG Registry."
         ],
         consequence: "Outdated bylaws often contain invalid quorum or voting structures, leading to corporate actions being declared void in court."
@@ -706,7 +706,7 @@ export const NextMeeting: React.FC = () => {
                   Optimize Your Boardroom Time Allocation
                 </h2>
                 <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                  Expert nonprofit attorneys recommend spending no more than **40% of meetings on routine reports**, allocating at least **40% to forward-looking strategy**, and dedicating at least **20% to active regulatory and compliance risk audits**. Drag the sliders to grade your scheduled agenda.
+                  Expert charity attorneys recommend spending no more than **40% of meetings on routine reports**, allocating at least **40% to forward-looking strategy**, and dedicating at least **20% to active regulatory and compliance risk audits**. Drag the sliders to grade your scheduled agenda.
                 </p>
               </div>
 

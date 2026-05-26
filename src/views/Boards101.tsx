@@ -167,7 +167,7 @@ export const Boards101: React.FC = () => {
               Boards 101: Core Governance Training
             </h1>
             <p className="max-w-3xl mx-auto text-sm sm:text-base text-ink/75 leading-relaxed">
-              A strong board can save an organization enormous amounts of time, confusion, and unnecessary expense. A poorly trained board can do the opposite. Boards 101 is a 60-minute training session designed specifically for California nonprofit organizations, led by Myron Steeves, J.D., or his senior legal team.
+              A strong board can save an organization enormous amounts of time, confusion, and unnecessary expense. A poorly trained board can do the opposite. Boards 101 is a 60-minute training session designed specifically for California organizations, led by Myron Steeves, J.D., or his senior legal team.
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export const Boards101: React.FC = () => {
                   <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
                     <h4 className="font-serif font-bold text-sm text-slate-brand">1. The Duty of Loyalty</h4>
                     <p className="text-xs text-ink/70 leading-relaxed">
-                      {parseTextWithGlossary("Caring about the nonprofit organization more than yourself when conflicts or business opportunities arise. Personal interests must never infect board votes.")}
+                      {parseTextWithGlossary("Caring about the organization more than yourself when conflicts or business opportunities arise. Personal interests must never infect board votes.")}
                     </p>
                   </div>
                   <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
@@ -415,7 +415,7 @@ export const Boards101: React.FC = () => {
                         required
                         value={orgName}
                         onChange={(e) => setOrgName(e.target.value)}
-                        placeholder="Nonprofit or Foundation"
+                        placeholder="Organization or Foundation"
                         className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium"
                       />
                     </div>
@@ -461,7 +461,7 @@ export const Boards101: React.FC = () => {
                         required
                         value={contactEmail}
                         onChange={(e) => setContactEmail(e.target.value)}
-                        placeholder="president@yournonprofit.org"
+                        placeholder="president@yourorganization.org"
                         className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium"
                       />
                     </div>

@@ -441,7 +441,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             Need Direct Counsel for Your Board of Directors?
           </h2>
           <p className="text-paper/80 font-sans text-sm sm:text-base leading-relaxed">
-            While this training website is an excellent reference manual, it is not a substitute for counsel. The attorneys at NPO Lawyers assist California nonprofits with bylaws audits, executive compensation reviews, conflict-of-interest structures, corporate restructurings, and regulatory compliance.
+            While this training website is an excellent reference manual, it is not a substitute for counsel. The attorneys at NPO Lawyers assist California organizations with bylaws audits, executive compensation reviews, conflict-of-interest structures, corporate restructurings, and regulatory compliance.
           </p>
           <div className="pt-3 flex flex-col sm:flex-row justify-center items-center gap-4">
             <a
@@ -472,7 +472,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className="flex flex-col">
               <span className="font-serif italic font-semibold text-paper/90 text-sm">The Principles of Board Training</span>
-              <span className="text-[9px] uppercase tracking-widest text-brass font-bold mt-0.5">California Nonprofit Governance</span>
+              <span className="text-[9px] uppercase tracking-widest text-brass font-bold mt-0.5">California Organization Governance</span>
             </div>
           </div>
           
@@ -490,7 +490,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="max-w-4xl text-left space-y-2">
             <p className="font-bold text-[10px] text-brass uppercase tracking-wider">OFFICIAL EDUCATIONAL DISCLAIMER</p>
             <p className="leading-relaxed text-[11px] text-paper/70 font-medium">
-              This site provides general educational information for nonprofit boards. It is not legal advice and does not create an attorney-client relationship. For legal advice about a specific organization or situation, contact qualified counsel.
+              This site provides general educational information for governing boards. It is not legal advice and does not create an attorney-client relationship. For legal advice about a specific organization or situation, contact qualified counsel.
             </p>
           </div>
 
@@ -605,7 +605,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       { title: "Minutes Quality Scorecard Lab", subtitle: "Audits & grades resolution minutes and records", path: "tools/minutes-scorecard" },
                       { title: "Budget Deviation Worksheet Lab", subtitle: "Variance auditing and risk scanning calculator", path: "tools/budget-worksheet" },
                       { title: "Board Authority Map Lab", subtitle: "Interactively map corporate delegation bounds", path: "tools/authority-map" },
-                      { title: "About Us & CCNL", subtitle: "Nonprofit Center Law Firm information", path: "about-us" }
+                      { title: "About Us & CCNL", subtitle: "Organization Center Law Firm information", path: "about-us" }
                     ];
 
                     const matchedPages = pages.filter(p => 
@@ -859,7 +859,7 @@ const glossaryData: Record<string, GlossaryItem> = {
   'duty-of-loyalty': {
     id: 'duty-of-loyalty',
     term: 'Duty of Loyalty',
-    definition: 'Requires directors to act in undivided good faith and prioritize the nonprofit\'s charitable mission above any personal, professional, or third-party financial gain. Directors are strictly prohibited from usurping corporate opportunities for themselves.',
+    definition: 'Requires directors to act in undivided good faith and prioritize the organization\'s charitable mission above any personal, professional, or third-party financial gain. Directors are strictly prohibited from usurping corporate opportunities for themselves.',
     statute: 'California Corporations Code § 5231',
     consequences: 'Breaching the Duty of Loyalty voids volunteer director civil immunities. A director can be sued in civil court by other directors or the Attorney General to restore any ill-gotten corporate benefits.',
     laboratoryLink: 'tools/authority-map',
@@ -886,7 +886,7 @@ const glossaryData: Record<string, GlossaryItem> = {
   'ultra-vires': {
     id: 'ultra-vires',
     term: 'Ultra Vires (Exceeding Powers)',
-    definition: 'Corporate actions or expenditures that fall outside the legal purposes, powers, or delegation boundaries defined in the nonprofit\'s Articles of Incorporation, Bylaws, or Board Authority policies.',
+    definition: 'Corporate actions or expenditures that fall outside the legal purposes, powers, or delegation boundaries defined in the organization\'s Articles of Incorporation, Bylaws, or Board Authority policies.',
     statute: 'California Corporations Code § 5141',
     consequences: 'While ultra vires acts are generally binding on third parties, the Attorney General or directors can sue to enjoin the unauthorized activities, and individual directors can be held personally liable for spending charity assets on non-exempt activities.',
     laboratoryLink: 'tools/authority-map',

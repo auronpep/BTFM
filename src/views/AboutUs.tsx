@@ -212,7 +212,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
               About the Faculty
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70 font-sans">
-              Meet our founder, Myron Steeves, J.D., and the legal support teams providing educational resources and custom workshops for California nonprofit directors.
+              Meet our founder, Myron Steeves, J.D., and the legal support teams providing educational resources and custom workshops for California board directors.
             </p>
           </div>
 
@@ -238,11 +238,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                 </div>
 
                 <p className="text-sm sm:text-base text-ink/80 leading-relaxed font-sans">
-                  Myron Steeves, J.D., has extensive experience serving nonprofit organizations. A graduate of <strong className="text-ink font-semibold">Georgetown University Law Center</strong> and <strong className="text-ink font-semibold">Biola University</strong>, Myron brings a rare combination of rigorous legal training, hands-on nonprofit experience, and faith-informed counsel to his work with mission-driven organizations. He is Dean Emeritus of Trinity Law School, a Christian law school devoted to championing a biblical view of human law and government.
+                  Myron Steeves, J.D., has extensive experience serving organizations. A graduate of <strong className="text-ink font-semibold">Georgetown University Law Center</strong> and <strong className="text-ink font-semibold">Biola University</strong>, Myron brings a rare combination of rigorous legal training, hands-on organization experience, and faith-informed counsel to his work with mission-driven organizations. He is Dean Emeritus of Trinity Law School, a Christian law school devoted to championing a biblical view of human law and government.
                 </p>
                 
                 <p className="text-sm sm:text-base text-ink/80 leading-relaxed font-sans">
-                  Throughout his distinguished career, Myron has advised thousands of nonprofit leaders on formation, governance, compliance, bylaws audits, tax exemption, board responsibilities, and the heavy legal duties that come with organizational leadership. He frequently speaks on issues involving nonprofit law and public policy, and remains highly active in bar association initiatives and regional governance coalitions.
+                  Throughout his distinguished career, Myron has advised thousands of organization leaders on formation, governance, compliance, bylaws audits, tax exemption, board responsibilities, and the heavy legal duties that come with organizational leadership. He frequently speaks on issues involving charity law and public policy, and remains highly active in bar association initiatives and regional governance coalitions.
                 </p>
               </div>
             </div>
@@ -254,10 +254,10 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
               <div className="space-y-3">
                 <h3 className="font-serif font-bold text-lg text-slate-brand flex items-center gap-2">
                   <Users className="w-5 h-5 text-brass" />
-                  Nonprofit Support Team
+                  Organization Support Team
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/75 leading-relaxed font-sans">
-                  Myron is joined by a seasoned legal support team with substantial experience in nonprofit administration, corporate formations, tax-exempt applications (IRS Form 1023), bylaws reviews, corporate dissolution proceedings, and contract negotiations. Together, they deliver both legal judgment and practical operational experience to the daily hurdles nonprofit boards face.
+                  Myron is joined by a seasoned legal support team with substantial experience in organization administration, corporate formations, tax-exempt applications (IRS Form 1023), bylaws reviews, corporate dissolution proceedings, and contract negotiations. Together, they deliver both legal judgment and practical operational experience to the daily hurdles governing boards face.
                 </p>
               </div>
 
@@ -743,7 +743,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                     Secure Professional Attorney-Client Protection
                   </h4>
                   <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium text-left">
-                    Your generated brief outlines critical legal parameters that expose individual board members or the organization's corporate charter. Submit your dossier to qualified nonprofit counsel to immediately structure recusal procedures, bylaws audits, and Delaware/California AG compliance playbooks.
+                    Your generated brief outlines critical legal parameters that expose individual board members or the organization's corporate charter. Submit your dossier to qualified charity counsel to immediately structure recusal procedures, bylaws audits, and Delaware/California AG compliance playbooks.
                   </p>
                   <div className="pt-2 text-left">
                     <a

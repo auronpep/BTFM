@@ -20,7 +20,7 @@ export const statuteDict: Record<string, StatuteInfo> = {
   },
   'cacorpcode5239': {
     standard: 'California Corporations Code § 5239',
-    desc: 'Protects volunteer directors of certain nonprofits from personal monetary liability to third parties for negligent acts if acting in good faith.'
+    desc: 'Protects volunteer directors of certain organizations from personal monetary liability to third parties for negligent acts if acting in good faith.'
   },
   'cacorpcode5047.5': {
     standard: 'California Corporations Code § 5047.5',

@@ -121,7 +121,7 @@ export const Home: React.FC = () => {
             </h1>
             
             <p className="text-paper/80 font-sans text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl">
-              Practical, legally-informed guidelines and interactive laboratories for working board members of $3M+ established California nonprofits. Learn to lead defensively, protect your directors, and fulfill your duties of Care, Loyalty, and Obedience.
+              Practical, legally-informed guidelines and interactive laboratories for working board members of $3M+ established California organizations. Learn to lead defensively, protect your directors, and fulfill your duties of Care, Loyalty, and Obedience.
             </p>
             
             <div className="pt-4 flex flex-col sm:flex-row gap-4">
@@ -639,7 +639,7 @@ export const Home: React.FC = () => {
                 The 40-40-20 Rule Standard
               </h3>
               <p className="text-xs sm:text-sm text-ink/60">
-                A battle-tested agenda paradigm designed by nonprofit attorneys to optimize boardroom time.
+                A battle-tested agenda paradigm designed by charity attorneys to optimize boardroom time.
               </p>
             </div>
 
@@ -716,7 +716,7 @@ export const Home: React.FC = () => {
                 Governance Masterclasses
               </h3>
               <p className="text-xs sm:text-sm text-ink/60">
-                Thorough fiduciaries desk articles mapped directly to California Nonprofit guidelines.
+                Thorough fiduciaries desk articles mapped directly to California Organization guidelines.
               </p>
             </div>
 

@@ -63,7 +63,7 @@ export const Training: React.FC = () => {
       desc = `Your primary concern is managing budgets and overruns. With your selected budget of ${budget}, establishing robust independent variance review is a top legal duty.`;
       tools = ["Budget Worksheet Audit Lab", "California Board Rules Center"];
       rationale = budget === 'Over $5M' || budget === '$1M - $5M'
-        ? "California mandates a fully independent CPA Audit Committee for nonprofits exceeding $2M in gross revenues (CA Gov Code § 12586). Your budget size puts you in high statutory exposure."
+        ? "California mandates a fully independent CPA Audit Committee for organizations exceeding $2M in gross revenues (CA Gov Code § 12586). Your budget size puts you in high statutory exposure."
         : "While a formal CPA audit isn't mandated for budgets under $2M, the California Attorney General recommends a 3-director Audit Task Force to oversee financial ledgers and prevent internal embezzlement.";
     } else if (anxiety === 'Conflict of Interest') {
       title = "Conflict Recusal & Compliance Protocol";
@@ -242,12 +242,12 @@ export const Training: React.FC = () => {
                 Live Educational Webinars
               </h3>
               <p className="font-sans text-xs sm:text-sm text-ink/75 leading-relaxed">
-                Our webinars are short, intensive, and designed directly for California nonprofit board members. Each session focuses on a specific, high-risk fiduciary compliance topic, providing practical checklists and ask-this question scripts.
+                Our webinars are short, intensive, and designed directly for California governing board members. Each session focuses on a specific, high-risk fiduciary compliance topic, providing practical checklists and ask-this question scripts.
               </p>
               <ul className="space-y-2 text-xs font-medium text-ink/80 pt-2">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brass mt-0.5 shrink-0" />
-                  <span>Interactive Q&A session with California nonprofit attorneys.</span>
+                  <span>Interactive Q&A session with California charity attorneys.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brass mt-0.5 shrink-0" />
@@ -534,7 +534,7 @@ export const Training: React.FC = () => {
                           required
                           value={webinarEmail}
                           onChange={(e) => setWebinarEmail(e.target.value)}
-                          placeholder="director@yournonprofit.org"
+                          placeholder="director@yourorganization.org"
                           className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
                         />
                       </div>
@@ -649,7 +649,7 @@ export const Training: React.FC = () => {
                             required
                             value={orgName}
                             onChange={(e) => setOrgName(e.target.value)}
-                            placeholder="Nonprofit Corporation"
+                            placeholder="Organization Corporation"
                             className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
                           />
                         </div>
@@ -692,7 +692,7 @@ export const Training: React.FC = () => {
                             required
                             value={contactEmail}
                             onChange={(e) => setContactEmail(e.target.value)}
-                            placeholder="chair@yournonprofit.org"
+                            placeholder="chair@yourorganization.org"
                             className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
                           />
                         </div>
