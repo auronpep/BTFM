@@ -5,26 +5,29 @@ import {
   Phone, 
   MapPin, 
   Landmark, 
-  ShieldCheck, 
-  AlertCircle, 
   Clock, 
   Check, 
   RefreshCw, 
   Send, 
-  Terminal, 
-  Lock, 
   ExternalLink, 
   CheckCircle2, 
   User, 
   Building, 
   Copy, 
-  Printer 
+  Printer, 
+  AlertCircle,
+  Shield,
+  HelpCircle,
+  FileText,
+  ChevronRight,
+  GraduationCap
 } from 'lucide-react';
 
-interface TerminalLog {
-  timestamp: string;
-  text: string;
-  type: 'info' | 'success' | 'command' | 'response' | 'error';
+interface TopicOption {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
 }
 
 export const ContactUs: React.FC = () => {
@@ -33,120 +36,115 @@ export const ContactUs: React.FC = () => {
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [budget, setBudget] = useState('250k-1m');
-  const [category, setCategory] = useState('compliance');
-  const [memo, setMemo] = useState('');
-  const [consentPrivilege, setConsentPrivilege] = useState(false);
+  const [boardSize, setBoardSize] = useState('8-15');
+  const [selectedTopics, setSelectedTopics] = useState<string[]>(['fiduciary']);
+  const [message, setMessage] = useState('');
+  const [consentInformal, setConsentInformal] = useState(false);
   const [formError, setFormError] = useState('');
 
-  // SMTPS Telemetry Terminal Transmission State
-  // 'input' | 'handshake' | 'encrypting' | 'dispatching' | 'delivered'
-  const [transmissionStatus, setTransmissionStatus] = useState<'input' | 'handshake' | 'encrypting' | 'dispatching' | 'delivered'>('input');
-  const [terminalLogs, setTerminalLogs] = useState<TerminalLog[]>([]);
-  const [progressPercent, setProgressPercent] = useState(0);
+  // Submission Progress State
+  // 'input' | 'sending' | 'success'
+  const [submissionStatus, setSubmissionStatus] = useState<'input' | 'sending' | 'success'>('input');
+  const [sendingProgressText, setSendingProgressText] = useState('Preparing inquiry parameters...');
   const [isCopied, setIsCopied] = useState(false);
   
-  const terminalBottomRef = useRef<HTMLDivElement>(null);
+  const statusTopRef = useRef<HTMLDivElement>(null);
 
-  // Helper to append a line to the live simulated terminal
-  const addLog = (text: string, type: 'info' | 'success' | 'command' | 'response' | 'error' = 'info') => {
-    const now = new Date();
-    const timeStr = now.toTimeString().split(' ')[0];
-    setTerminalLogs(prev => [...prev, { timestamp: timeStr, text, type }]);
+  // Available interactive topics
+  const topicsList: TopicOption[] = [
+    {
+      id: 'fiduciary',
+      title: 'Fiduciary Roles & Duties',
+      description: 'Understanding care, loyalty, and obedience boundaries.',
+      icon: <GraduationCap className="w-4 h-4 text-brass" />
+    },
+    {
+      id: 'minutes',
+      title: 'Minutes & Board Records',
+      description: 'Reviewing resolutions, script templates, and correction techniques.',
+      icon: <FileText className="w-4 h-4 text-brass" />
+    },
+    {
+      id: 'budget',
+      title: 'Financial Reviews & Budgets',
+      description: 'Scanning quarterly variances and spot-checking risk sliders.',
+      icon: <Landmark className="w-4 h-4 text-brass" />
+    },
+    {
+      id: 'bylaws',
+      title: 'Bylaws & California Rules',
+      description: 'Aligning with state audit triggers and registry requirements.',
+      icon: <Shield className="w-4 h-4 text-brass" />
+    },
+    {
+      id: 'retreats',
+      title: 'On-Site Board Retreats',
+      description: 'Booking customized group workshops led by attorney faculty.',
+      icon: <ChevronRight className="w-4 h-4 text-brass" />
+    },
+    {
+      id: 'general',
+      title: 'General Curriculum Info',
+      description: 'Accessing books, audio modules, and offline checklist guides.',
+      icon: <HelpCircle className="w-4 h-4 text-brass" />
+    }
+  ];
+
+  // Toggle selection of topics
+  const handleToggleTopic = (id: string) => {
+    if (selectedTopics.includes(id)) {
+      if (selectedTopics.length > 1) {
+        setSelectedTopics(selectedTopics.filter(t => t !== id));
+      }
+    } else {
+      setSelectedTopics([...selectedTopics, id]);
+    }
   };
 
-  // Scroll to terminal bottom as logs stream in
+  // Scroll to status panel as it activates
   useEffect(() => {
-    if (terminalBottomRef.current) {
-      terminalBottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (submissionStatus !== 'input' && statusTopRef.current) {
+      statusTopRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [terminalLogs]);
+  }, [submissionStatus]);
 
-  // Handle simulated SMTP telemetry transmission
+  // Handle mock submission with friendly progress phases
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!orgName.trim() || !contactName.trim() || !email.trim() || !phone.trim() || !memo.trim()) {
-      setFormError('All fields marked as mandatory are required to serialize the intake brief.');
+    if (!orgName.trim() || !contactName.trim() || !email.trim() || !message.trim()) {
+      setFormError('Please fill out all required fields to send your training inquiry.');
       return;
     }
 
-    if (!consentPrivilege) {
-      setFormError('You must acknowledge the legal notice regarding attorney-client privilege status.');
+    if (!consentInformal) {
+      setFormError('Please acknowledge the informational disclaimer regarding educational training.');
       return;
     }
 
     setFormError('');
-    setTransmissionStatus('handshake');
-    setProgressPercent(10);
-    setTerminalLogs([]);
+    setSubmissionStatus('sending');
+    setSendingProgressText('Structuring your training request...');
 
-    // Step 1: Handshake
+    // Phase 1: Structure parameters
     setTimeout(() => {
-      addLog('INITIATING SMTP HANDSHAKE TO HOST INTAKE GATEWAY...', 'info');
-      addLog('Resolving MX records for npolawyers.com...', 'command');
-    }, 200);
+      setSendingProgressText('Selecting customized curriculum topics...');
+    }, 600);
 
+    // Phase 2: Route optimization
     setTimeout(() => {
-      addLog('Found MX: mail.npolawyers.com [IP: 162.241.139.54]', 'response');
-      addLog('Connecting to mail.npolawyers.com on secure SMTPS port 465...', 'command');
-      setProgressPercent(25);
-    }, 800);
+      setSendingProgressText('Connecting secure direct route to jwood@npolawyers.com...');
+    }, 1200);
 
+    // Phase 3: Send
     setTimeout(() => {
-      addLog('220 mail.npolawyers.com ESMTP Exim 4.96.2 #1 Tue, 26 May 2026', 'response');
-      addLog('EHLO client.boardroomtraining.org', 'command');
-      setProgressPercent(35);
-    }, 1500);
+      setSendingProgressText('Transmitting inquiry packet...');
+    }, 1800);
 
-    // Step 2: Encrypting
+    // Phase 4: Complete
     setTimeout(() => {
-      setTransmissionStatus('encrypting');
-      addLog('250-mail.npolawyers.com Hello client.boardroomtraining.org', 'response');
-      addLog('250-STARTTLS', 'response');
-      addLog('250-8BITMIME', 'response');
-      addLog('STARTTLS', 'command');
-      setProgressPercent(50);
-    }, 2400);
-
-    setTimeout(() => {
-      addLog('220 2.0.0 Ready to start TLS handshake', 'response');
-      addLog('Negotiating TLS 1.3 cryptographic session (AES-256-GCM)...', 'info');
-      addLog('TLS Handshake established. Certificate Verified: CN = *.npolawyers.com', 'success');
-      setProgressPercent(65);
-    }, 3200);
-
-    // Step 3: Dispatching
-    setTimeout(() => {
-      setTransmissionStatus('dispatching');
-      addLog('Serializing intake form parameters into raw MIME envelope...', 'info');
-      addLog(`MAIL FROM: <intake-agent@boardroomtraining.org>`, 'command');
-      setProgressPercent(75);
-    }, 4000);
-
-    setTimeout(() => {
-      addLog(`250 2.1.0 <intake-agent@boardroomtraining.org>... Sender ok`, 'response');
-      addLog(`RCPT TO: <jwood@npolawyers.com>`, 'command');
-    }, 4600);
-
-    setTimeout(() => {
-      addLog(`250 2.1.5 <jwood@npolawyers.com>... Recipient ok`, 'response');
-      addLog('DATA', 'command');
-      addLog(`354 Enter mail, end with "." on a line by itself`, 'response');
-      addLog(`Subject: [INTAKE MANIFEST] Board Fiduciary Counsel - ${orgName}`, 'info');
-      addLog(`Body Payload Size: ${Math.round(memo.length * 1.5 + 400)} bytes`, 'info');
-      addLog('Sending raw MIME stream to server...', 'command');
-      setProgressPercent(90);
-    }, 5200);
-
-    // Step 4: Delivered
-    setTimeout(() => {
-      setTransmissionStatus('delivered');
-      addLog('Sending data boundary sentinel "."', 'command');
-      addLog('250 2.0.0 id=1tF4X-0003yW-4Z Message accepted for delivery to jwood@npolawyers.com', 'success');
-      addLog('SMTPS Secure Connection closed cleanly.', 'info');
-      setProgressPercent(100);
-
+      setSubmissionStatus('success');
+      
       // Save record in localStorage to persist submission history
       try {
         const savedIntakes = JSON.parse(localStorage.getItem('cdx_contact_intakes') || '[]');
@@ -155,89 +153,87 @@ export const ContactUs: React.FC = () => {
           contactName,
           email,
           phone,
-          budget,
-          category,
-          memo,
+          boardSize,
+          selectedTopics,
+          message,
           timestamp: new Date().toISOString()
         });
         localStorage.setItem('cdx_contact_intakes', JSON.stringify(savedIntakes));
       } catch (err) {
-        console.error(err);
+        console.error('LocalStorage write failed:', err);
       }
-    }, 6200);
+    }, 2400);
   };
 
-  // Generate Professional attorney-ready intake memo
-  const generateMemoText = () => {
-    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  // Generate clean training manifest text
+  const generateManifestText = () => {
+    const dateStr = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
     
-    const budgetMap: Record<string, string> = {
-      'not-formed': 'Not Yet Officially Formed',
-      'under-250k': 'Under $250,000 / year (Seed/Small Scale)',
-      '250k-1m': '$250,000 - $1,000,000 / year (Established Operational)',
-      '1m-2m': '$1,000,000 - $2,000,000 / year (Audit Threshold Boundary)',
-      'over-2m': 'Over $2,000,000 / year (Mandatory Independent Audit & Committee)'
+    const sizeMap: Record<string, string> = {
+      'under-3': 'Small Group (Under 3 board members)',
+      '3-7': 'Standard Small Board (3 to 7 active trustees)',
+      '8-15': 'Medium Governing Board (8 to 15 active trustees)',
+      '15-plus': 'Large Comprehensive Board (Over 15 active trustees)'
     };
 
-    const categoryMap: Record<string, string> = {
-      'compliance': 'Bylaws Audit, Statutes Check, and Fiduciary Compliance Audit',
-      'compensation': 'Executive Compensation Study & Safe Harbor Procedures (IRC § 4958)',
-      'audit': 'IRS / California Franchise Tax Board / Attorney General Delinquency Representation',
-      'conflict': 'Conflict of Interest Vetting & Self-Dealing Transactions (CA Corp Code § 5233)',
-      'seminar': 'In-Person Custom Board Training Seminar / Governance Retreat Request',
-      'general': 'General Advisory & Boardroom Counsel Retention Counsel'
+    const topicsMap: Record<string, string> = {
+      'fiduciary': 'Fiduciary Roles & Duties (Care, Loyalty, Obedience)',
+      'minutes': 'Minutes & Records (Resolutions, Correction Worksheets)',
+      'budget': 'Financial Reviews & Budgets (Variance & Risk Assessment)',
+      'bylaws': 'Bylaws & California Rules (Audit Triggers, State Registry)',
+      'retreats': 'On-Site Board Retreats & Workshops',
+      'general': 'General Curriculum Info & Classroom Resource Desk'
     };
 
-    return `CONFIDENTIAL ATTORNEY-CLIENT PRIVILEGED ATTORNEY INTAKE MEMORANDUM
+    const formattedTopics = selectedTopics.map(id => `* ${topicsMap[id] || id}`).join('\n');
+
+    return `BOARDROOM FIELD MANUAL - TRAINING INQUIRY MANIFEST
 ======================================================================
-DRAFTED IN CONNECTION WITH THE CALIFORNIA CENTER FOR NONPROFIT LAW
-INTAKE DEPT • TARGET ROUTE: JWOOD@NPOLAWYERS.COM
+SPONSORED BY THE CALIFORNIA CENTER FOR NONPROFIT LAW
+INQUIRY DIRECT TO: JWOOD@NPOLAWYERS.COM
 ======================================================================
 
-TO:       Myron Steeves, Esq.
-          J. Wood, Client Intake Coordinator
-          California Center for Nonprofit Law / NPO Lawyers
+DATE GENERATED:   ${dateStr}
+INQUIRY TYPE:     Board Stewardship Education & Training Information
 
-FROM:     ${contactName} (Representative)
-          On behalf of: ${orgName}
-
-DATE:     ${dateStr}
-
-RE:       INTAKE MEMO FOR PROFESSIONAL COUNSEL RETENTION
-          Fiduciary Reference Area: ${categoryMap[category] || category}
-
---------------------------------================----------------------
-1. CONTACT TELEMETRY & SCALE METRICS
---------------------------------================================------
+1. REPRESENTATIVE & ORGANIZATION COORDINATES
+----------------------------------------------------------------------
 * Organization Name:      ${orgName}
 * Primary Representative: ${contactName}
-* Secure Email Address:   ${email}
-* Direct Telephone:       ${phone}
-* Scale / Operating Size: ${budgetMap[budget] || budget}
+* Email Address:          ${email}
+* Contact Phone:          ${phone || 'Not Provided'}
+* Current Board Size:     ${sizeMap[boardSize] || boardSize}
 
---------------------------------================----------------------
-2. CONFIDENTIAL SITUATIONAL NOTES & COUNSEL REEF
---------------------------------================================------
-${memo}
+2. REQUESTED TRAINING SUBJECTS
+----------------------------------------------------------------------
+${formattedTopics}
 
---------------------------------================================------
-3. ATTORNEY-CLIENT DATA INSTRUCTIONS & NOTICE
---------------------------------================================------
-This memorandum has been formulated to prepare legal counsel in connection with potential representation. Under California Evidence Code Section 952, communications made to an attorney in the course of professional employment are protected by Attorney-Client Privilege. 
+3. SITUATIONAL CHALLENGES & OBJECTIVES
+----------------------------------------------------------------------
+${message}
 
-Please preserve this memorandum strictly in confidential files to prevent waiver of privileged and work-product protection. No formal representation is bound by this form until a written attorney-client agreement is executed.
+----------------------------------------------------------------------
+This document was formulated on client.boardroomtraining.org to prepare
+educational objectives and request custom governance curriculum. 
+Submitting this form does not establish an attorney-client relationship.
 `;
   };
 
-  const handleCopyMemo = () => {
-    const memoText = generateMemoText();
-    navigator.clipboard.writeText(memoText).then(() => {
+  const handleCopyManifest = () => {
+    const text = generateManifestText();
+    navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     });
   };
 
-  const handlePrintMemo = () => {
+  const handlePrintManifest = () => {
     window.print();
   };
 
@@ -246,17 +242,15 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
     setContactName('');
     setEmail('');
     setPhone('');
-    setMemo('');
-    setConsentPrivilege(false);
-    setTransmissionStatus('input');
-    setTerminalLogs([]);
-    setProgressPercent(0);
+    setMessage('');
+    setConsentInformal(false);
+    setSubmissionStatus('input');
   };
 
   // Pre-formatted mailto URL to launch local client
   const getMailtoLink = () => {
-    const subject = encodeURIComponent(`Intake Manifest: ${orgName} - Boardroom Fiduciary Counsel`);
-    const body = encodeURIComponent(generateMemoText());
+    const subject = encodeURIComponent(`Training Inquiry: ${orgName} - Boardroom Field Manual`);
+    const body = encodeURIComponent(generateManifestText());
     return `mailto:jwood@npolawyers.com?subject=${subject}&body=${body}`;
   };
 
@@ -267,41 +261,41 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
           
           {/* Section Hero Header */}
           <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-burgundy/10 border border-burgundy/20 text-burgundy rounded-full text-xs font-semibold uppercase tracking-wider font-sans">
-              <Landmark className="w-4 h-4 text-brass" />
-              <span>Privileged Attorney Counsel Intake</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 border border-teal-200/50 text-teal-800 rounded-full text-xs font-semibold uppercase tracking-wider font-sans">
+              <GraduationCap className="w-4 h-4 text-brass" />
+              <span>Boardroom Stewardship Support</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-ink font-bold tracking-tight">
-              Request Boardroom Counsel
+              Request Training Information
             </h1>
             <p className="text-sm sm:text-base text-ink/75 font-sans leading-relaxed">
-              If your board has an active conflict of interest, outdated bylaws, spousal compensation issues, or regulatory delinquency notices, prepare a secure intake brief below. Your inquiry is targeted directly to <strong className="text-ink font-semibold">jwood@npolawyers.com</strong> at the California Center for Nonprofit Law.
+              Have questions about our training curriculum, interactive worksheets, or booking Myron Steeves for an on-site boardroom retreat? Tell us about your organization below, and we will help you establish a premium fiduciary education plan.
             </p>
           </div>
 
           {/* Two Column Layout Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* LEFT COLUMN: Firm Info & Privilege Trust Center */}
+            {/* LEFT COLUMN: Firm Info & Educational Advisory Coordinates */}
             <div className="lg:col-span-5 space-y-6">
               
-              {/* Trust Badge Card */}
+              {/* Educational Stewardship Trust Center */}
               <div className="bg-ink text-paper rounded-xl p-6 border-b-4 border-brass shadow-lg space-y-4 text-left">
                 <div className="flex items-center gap-2 text-brass">
-                  <ShieldCheck className="w-6 h-6 shrink-0" />
+                  <Shield className="w-6 h-6 shrink-0" />
                   <span className="text-[11px] font-extrabold uppercase tracking-widest">
-                    Privileged Communications Gateway
+                    Educational Stewardship Desk
                   </span>
                 </div>
                 <h3 className="font-serif italic font-bold text-lg text-white">
-                  Evidence Code § 952 Safe Harbor
+                  Stewardship & Governance Excellence
                 </h3>
                 <p className="text-xs text-paper/80 leading-relaxed font-sans font-medium">
-                  Under California law, communications made to preparing lawyers are protected by strict professional secrecy guidelines. This website is sponsored by the <strong>California Center for Nonprofit Law</strong> to allow board representatives to draft, structure, and securely transmit an intake record prior to formal consultation.
+                  We believe that clear board education is the single most effective shield against compliance exposure. This platform is developed in collaboration with the <strong>California Center for Nonprofit Law</strong> to provide public, accessible classrooms and tools that help trustees govern with complete clarity.
                 </p>
                 <div className="bg-white/5 border border-white/10 rounded p-3 text-[11px] font-mono text-brass/90 flex gap-2 items-start">
-                  <Lock className="w-4 h-4 shrink-0 text-brass mt-0.5" />
-                  <span>MIME payload compiled locally and transmitted directly over TLS encrypted sockets to firm networks.</span>
+                  <Clock className="w-4 h-4 shrink-0 text-brass mt-0.5" />
+                  <span>Our advisors review incoming training requests weekly to tailor curriculum guides, handouts, and meeting prep packages.</span>
                 </div>
               </div>
 
@@ -309,7 +303,7 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
               <div className="bg-white rounded-xl border border-fog p-6 space-y-6 text-left shadow-sm">
                 <h4 className="font-serif font-bold text-lg text-slate-brand border-b border-fog pb-2 flex items-center gap-2">
                   <User className="w-5 h-5 text-brass" />
-                  Intake Faculty Coordinates
+                  Training Faculty Coordinates
                 </h4>
 
                 <div className="space-y-4">
@@ -320,7 +314,7 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm font-bold text-ink">J. Wood</p>
-                      <p className="text-[10px] text-brass uppercase font-bold tracking-wider">Client Intake Coordinator</p>
+                      <p className="text-[10px] text-brass uppercase font-bold tracking-wider">Client Intake & Training Coordinator</p>
                       <a href="mailto:jwood@npolawyers.com" className="text-xs text-slate-brand hover:underline font-mono font-semibold flex items-center gap-1">
                         <Mail className="w-3 h-3" />
                         <span>jwood@npolawyers.com</span>
@@ -335,8 +329,8 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm font-bold text-ink">Myron Steeves, J.D.</p>
-                      <p className="text-[10px] text-brass uppercase font-bold tracking-wider">Founder & Principal Counsel</p>
-                      <p className="text-xs text-ink/70">Georgetown University Law Center alumnus. Former law school Dean. Expert in California statutory charity rules.</p>
+                      <p className="text-[10px] text-brass uppercase font-bold tracking-wider">Founder & Principal Educator</p>
+                      <p className="text-xs text-ink/70">Georgetown University Law Center alumnus. Former law school Dean. Authority on California charity governance, fiduciary duties, and bylaws structures.</p>
                     </div>
                   </div>
                 </div>
@@ -362,44 +356,35 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                       <p className="text-ink/65">Facsimile: (714) 744-1201</p>
                     </div>
                   </div>
-
-                  <div className="flex gap-2.5 items-start">
-                    <Clock className="w-4 h-4 text-brass shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-bold text-ink">Availability Guidelines</p>
-                      <p className="text-ink/75 mt-0.5">Monday – Friday: 9:00 AM – 5:00 PM PST</p>
-                      <p className="text-ink/65">Urgent board matters scheduled after hours upon request.</p>
-                    </div>
-                  </div>
                 </div>
               </div>
 
-              {/* Strict Disclaimer Notice */}
-              <div className="bg-rose-50/70 border border-rose-300/40 rounded-xl p-5 space-y-3 text-left">
-                <div className="flex items-center gap-1.5 text-rose-800">
+              {/* Informational Disclaimer Notice */}
+              <div className="bg-amber-50/60 border border-amber-300/30 rounded-xl p-5 space-y-3 text-left">
+                <div className="flex items-center gap-1.5 text-amber-800">
                   <AlertCircle className="w-4.5 h-4.5 shrink-0" />
                   <span className="text-[10px] font-extrabold uppercase tracking-widest">
-                    Official Representation Disclaimer
+                    Educational Outreach Notice
                   </span>
                 </div>
-                <p className="text-[11px] text-rose-950 leading-relaxed font-sans font-medium">
-                  Submitting this contact inquiry form drafts an educational manifest and transmits an intake query to <strong>jwood@npolawyers.com</strong>. This exercise provides initial diagnostic material and does not constitute or establish an attorney-client contract of representation. 
+                <p className="text-[11.5px] text-amber-950 leading-relaxed font-sans font-medium">
+                  This contact page handles training and general educational inquiries, routing details directly to <strong>jwood@npolawyers.com</strong>. Exploring these resources or submitting an inquiry does not constitute or establish an attorney-client contract of representation.
                 </p>
-                <p className="text-[11px] text-rose-950 leading-relaxed font-sans font-medium">
-                  No attorney-client relationship is bound or created until a formal written representation retainer agreement has been reviewed, agreed to, and signed by both the legal counsel and your board representative.
+                <p className="text-[11.5px] text-amber-950 leading-relaxed font-sans font-medium">
+                  If your organization has high-stakes conflicts, attorney general audits, or requires formal legal advocacy, please request a legal consultation directly from Myron Steeves, J.D. at <a href="https://NPOlawyers.com" target="_blank" rel="noopener noreferrer" className="underline font-bold text-ink hover:text-brass transition-premium">NPOlawyers.com</a>.
                 </p>
               </div>
 
             </div>
 
-            {/* RIGHT COLUMN: The Interactive Form / Transmission Simulator */}
-            <div className="lg:col-span-7">
+            {/* RIGHT COLUMN: The Interactive Form / Softer Submission Cards */}
+            <div className="lg:col-span-7" ref={statusTopRef}>
               <div className="bg-white rounded-xl shadow-lg border border-fog overflow-hidden">
                 
                 {/* Form Top Title */}
                 <div className="bg-paper border-b border-fog px-6 py-4 flex items-center justify-between">
                   <h3 className="font-serif font-bold text-lg text-ink">
-                    Secured Boardroom Telemetry Form
+                    Training Inquiry & Resource Request
                   </h3>
                   <span className="text-[10px] font-sans font-bold uppercase tracking-wider bg-brass/10 text-brass px-2 py-0.5 rounded border border-brass/25">
                     Direct To: jwood@npolawyers.com
@@ -407,7 +392,7 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                 </div>
 
                 {/* VIEW 1: Input Form */}
-                {transmissionStatus === 'input' && (
+                {submissionStatus === 'input' && (
                   <form onSubmit={handleFormSubmit} className="p-6 sm:p-8 space-y-6 text-left">
                     
                     {formError && (
@@ -417,38 +402,39 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                       </div>
                     )}
 
+                    {/* Personal Coordinates */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Organization Name */}
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Organization / Proposed Entity <span className="text-burgundy">*</span>
-                        </label>
-                        <div className="relative">
-                          <Building className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
-                          <input 
-                            type="text"
-                            required
-                            placeholder="e.g. Hope Literacy League"
-                            value={orgName}
-                            onChange={(e) => setOrgName(e.target.value)}
-                            className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg pl-9 pr-4 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium"
-                          />
-                        </div>
-                      </div>
-
                       {/* Contact Representative */}
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Representative Name <span className="text-burgundy">*</span>
+                          Contact Name <span className="text-burgundy">*</span>
                         </label>
                         <div className="relative">
                           <User className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
                             type="text"
                             required
-                            placeholder="e.g. Sarah Jenkins, Director"
+                            placeholder="e.g. Eleanor Vance"
                             value={contactName}
                             onChange={(e) => setContactName(e.target.value)}
+                            className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg pl-9 pr-4 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Organization Name */}
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                          Organization Name <span className="text-burgundy">*</span>
+                        </label>
+                        <div className="relative">
+                          <Building className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
+                          <input 
+                            type="text"
+                            required
+                            placeholder="e.g. Community Health Coalition"
+                            value={orgName}
+                            onChange={(e) => setOrgName(e.target.value)}
                             className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg pl-9 pr-4 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium"
                           />
                         </div>
@@ -459,14 +445,14 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                       {/* Email Address */}
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Secure Email Address <span className="text-burgundy">*</span>
+                          Email Address <span className="text-burgundy">*</span>
                         </label>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
                             type="email"
                             required
-                            placeholder="e.g. s.jenkins@example.org"
+                            placeholder="e.g. e.vance@yourorganization.org"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg pl-9 pr-4 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium"
@@ -474,16 +460,15 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                         </div>
                       </div>
 
-                      {/* Direct Phone */}
+                      {/* Direct Phone (Optional) */}
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Direct Telephone Number <span className="text-burgundy">*</span>
+                          Telephone Number <span className="text-ink/40 font-normal">(Optional)</span>
                         </label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
                             type="tel"
-                            required
                             placeholder="e.g. (555) 019-2834"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
@@ -493,74 +478,87 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Operating Budget dropdown */}
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Approximate Operating Scale
-                        </label>
-                        <select 
-                          value={budget}
-                          onChange={(e) => setBudget(e.target.value)}
-                          className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg px-3 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium cursor-pointer"
-                        >
-                          <option value="not-formed">Not Yet Officially Formed</option>
-                          <option value="under-250k">Under $250,000 / year</option>
-                          <option value="250k-1m">$250,000 - $1,000,000 / year</option>
-                          <option value="1m-2m">$1,000,000 - $2,000,000 / year</option>
-                          <option value="over-2m">Over $2,000,000 / year (CA Audit Trigger)</option>
-                        </select>
-                      </div>
+                    {/* Board Size scale */}
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        Approximate Board Size / Scale
+                      </label>
+                      <select 
+                        value={boardSize}
+                        onChange={(e) => setBoardSize(e.target.value)}
+                        className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg px-3 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium cursor-pointer"
+                      >
+                        <option value="under-3">Small Group (Under 3 board members)</option>
+                        <option value="3-7">Standard Small Board (3 to 7 active trustees)</option>
+                        <option value="8-15">Medium Governing Board (8 to 15 active trustees)</option>
+                        <option value="15-plus">Large Comprehensive Board (Over 15 active trustees)</option>
+                      </select>
+                    </div>
 
-                      {/* Advisory Category */}
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Primary Counsel Category
-                        </label>
-                        <select 
-                          value={category}
-                          onChange={(e) => setCategory(e.target.value)}
-                          className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg px-3 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium cursor-pointer"
-                        >
-                          <option value="compliance">Bylaws Audit & Regulatory Compliance Check</option>
-                          <option value="compensation">Executive Compensation Study & Safe Harbor</option>
-                          <option value="audit">IRS / FTB / Attorney General Delinquency Representation</option>
-                          <option value="conflict">Conflict Vetting & Self-Dealing Transactions</option>
-                          <option value="seminar">Custom In-Person Board Training Retreat</option>
-                          <option value="general">General Long-Term Advisory Board Counsel</option>
-                        </select>
+                    {/* Interactive Topics Selection Chips */}
+                    <div className="space-y-2.5">
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        Core Subjects of Interest <span className="text-ink/40 font-normal">(Select all that apply)</span>
+                      </label>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {topicsList.map((topic) => {
+                          const isSelected = selectedTopics.includes(topic.id);
+                          return (
+                            <button
+                              key={topic.id}
+                              type="button"
+                              onClick={() => handleToggleTopic(topic.id)}
+                              className={`flex items-start gap-3 p-3 rounded-lg border text-left transition-premium cursor-pointer ${
+                                isSelected 
+                                  ? 'bg-teal-50/50 border-teal-600/70 shadow-sm ring-1 ring-teal-600/30' 
+                                  : 'bg-paper/10 border-fog hover:border-brass/40 hover:bg-paper/30'
+                              }`}
+                            >
+                              <div className={`p-1.5 rounded ${isSelected ? 'bg-teal-100 text-teal-800' : 'bg-paper text-ink/60'}`}>
+                                {topic.icon}
+                              </div>
+                              <div className="space-y-0.5">
+                                <p className="text-xs font-bold text-ink flex items-center gap-1.5">
+                                  {topic.title}
+                                  {isSelected && <span className="text-teal-700 text-[10px]">✓</span>}
+                                </p>
+                                <p className="text-[10px] text-ink/65 leading-tight font-medium">
+                                  {topic.description}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
-                    {/* Brief Situational Memo */}
+                    {/* Explanatory Message */}
                     <div className="space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
-                          Confidential Situational Briefing Memo <span className="text-burgundy">*</span>
-                        </label>
-                        <span className="text-[9px] font-sans text-ink/40">Provide a high-level briefing</span>
-                      </div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        Tell us about your board's goals or questions <span className="text-burgundy">*</span>
+                      </label>
                       <textarea 
                         required
                         rows={5}
-                        placeholder="Detail your organizational issue or training objectives here. Provide brief facts (e.g. 'We need to amend our bylaws to reduce quorum and update our conflict policies', or 'We received a delinquency warning letter from the California Registry of Charitable Trusts')."
-                        value={memo}
-                        onChange={(e) => setMemo(e.target.value)}
+                        placeholder="What specific topics or questions are your trustees hoping to address? Are you looking for customized study materials, guides, or on-site workshops?"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg p-3 text-xs text-ink focus:outline-none transition-premium font-medium"
                       />
                     </div>
 
-                    {/* Checkbox */}
-                    <div className="bg-paper/50 rounded-lg p-4 border border-fog flex items-start gap-3">
+                    {/* Friendly Checkbox */}
+                    <div className="bg-paper/40 rounded-lg p-4 border border-fog flex items-start gap-3">
                       <input 
                         type="checkbox"
-                        id="consent-privilege"
-                        checked={consentPrivilege}
-                        onChange={(e) => setConsentPrivilege(e.target.checked)}
+                        id="consent-informal"
+                        checked={consentInformal}
+                        onChange={(e) => setConsentInformal(e.target.checked)}
                         className="w-4 h-4 border border-fog hover:border-brass focus:ring-brass rounded text-brass cursor-pointer mt-0.5 shrink-0"
                       />
-                      <label htmlFor="consent-privilege" className="text-[11px] text-ink/75 select-none leading-relaxed cursor-pointer font-medium">
-                        I acknowledge that the information drafted in this memorandum is compiled specifically to prepare for professional legal consultation, and is targeted to <strong>jwood@npolawyers.com</strong>. I understand that submitting this form does not form a binding legal representation agreement. <span className="text-burgundy font-bold">*</span>
+                      <label htmlFor="consent-informal" className="text-[11px] text-ink/75 select-none leading-relaxed cursor-pointer font-medium">
+                        I understand this is a request for training information and educational materials. I agree that submitting this form does not form a binding legal contract or establish an attorney-client relationship. <span className="text-burgundy font-bold">*</span>
                       </label>
                     </div>
 
@@ -570,104 +568,61 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                       className="w-full inline-flex justify-center items-center gap-2 py-3 bg-burgundy hover:bg-ink text-white hover:text-brass text-xs font-bold uppercase tracking-wider rounded-lg shadow-md hover:shadow-lg transition-premium cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>Transmit Privileged Intake Payload</span>
+                      <span>Send Training Inquiry</span>
                     </button>
 
                   </form>
                 )}
 
-                {/* VIEW 2: The Monospace terminal/SMTP transmission animation */}
-                {(transmissionStatus === 'handshake' || 
-                  transmissionStatus === 'encrypting' || 
-                  transmissionStatus === 'dispatching') && (
-                  <div className="p-6 bg-ink text-paper/95 space-y-6">
+                {/* VIEW 2: Softer animated status spinner */}
+                {submissionStatus === 'sending' && (
+                  <div className="p-16 text-center space-y-6">
                     
-                    {/* Pulsing Status Bar */}
-                    <div className="flex items-center justify-between border-b border-brass/20 pb-4">
-                      <div className="flex items-center gap-3">
-                        <Terminal className="w-5 h-5 text-brass animate-pulse" />
-                        <span className="font-mono text-xs font-bold text-brass tracking-wider">
-                          SMTPS TRANSMITTER SECURE PORT 465
-                        </span>
-                      </div>
-                      
-                      <span className="font-mono text-[10px] bg-brass/10 border border-brass/30 text-brass px-2 py-0.5 rounded uppercase animate-pulse">
-                        {transmissionStatus}...
-                      </span>
-                    </div>
-
-                    {/* Monospace Scrolling Log Console */}
-                    <div className="bg-black/80 rounded-lg border border-brass/15 p-4 h-64 overflow-y-auto font-mono text-[10.5px] leading-relaxed space-y-1.5 text-left custom-scrollbar shadow-inner">
-                      {terminalLogs.map((log, i) => (
-                        <div key={i} className="flex gap-2">
-                          <span className="text-brass/45 select-none font-sans">[{log.timestamp}]</span>
-                          <span className={`
-                            ${log.type === 'command' ? 'text-blue-400' : ''}
-                            ${log.type === 'response' ? 'text-amber-300' : ''}
-                            ${log.type === 'success' ? 'text-teal-400 font-bold' : ''}
-                            ${log.type === 'error' ? 'text-rose-500 font-bold' : ''}
-                            ${log.type === 'info' ? 'text-paper/85' : ''}
-                          `}>
-                            {log.type === 'command' ? '❯ ' : ''}
-                            {log.type === 'response' ? '⇦ ' : ''}
-                            {log.text}
-                          </span>
-                        </div>
-                      ))}
-                      
-                      {/* Active Cursor Pulse */}
-                      <div className="flex gap-2 items-center">
-                        <span className="text-brass/45 select-none font-sans">[{new Date().toTimeString().split(' ')[0]}]</span>
-                        <div className="flex items-center gap-1">
-                          <div className="w-1.5 h-3 bg-brass animate-pulse" />
-                          <span className="text-[9px] text-paper/35 tracking-wider italic">Telemetry connection active...</span>
+                    {/* Modern Animated Compass Spinner */}
+                    <div className="flex justify-center">
+                      <div className="relative">
+                        <div className="w-16 h-16 border-4 border-paper border-t-brass rounded-full animate-spin" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <GraduationCap className="w-6 h-6 text-brass animate-pulse" />
                         </div>
                       </div>
-
-                      <div ref={terminalBottomRef} />
                     </div>
 
-                    {/* Progress Bar */}
                     <div className="space-y-2">
-                      <div className="flex justify-between font-mono text-[10px] text-brass">
-                        <span>TRANSMISSION ENVELOPE TELEMETRY</span>
-                        <span>{progressPercent}%</span>
-                      </div>
-                      <div className="w-full bg-black/40 rounded-full h-2 border border-brass/10 overflow-hidden">
-                        <div 
-                          className="bg-brass h-full transition-all duration-300 rounded-full animate-pulse shadow-md"
-                          style={{ width: `${progressPercent}%` }}
-                        />
-                      </div>
+                      <h4 className="font-serif italic font-bold text-lg text-ink animate-pulse">
+                        Sending Inquiry
+                      </h4>
+                      <p className="text-xs text-ink/65 font-mono font-medium max-w-sm mx-auto">
+                        {sendingProgressText}
+                      </p>
                     </div>
 
-                    <div className="text-center font-mono text-[10px] text-paper/40">
-                      DO NOT CLOSING THE BROWSING TAB • CRYPTOGRAPHIC LINK PROTECTED
+                    <div className="w-48 bg-paper/40 rounded-full h-1.5 mx-auto overflow-hidden">
+                      <div className="bg-brass h-full rounded-full animate-pulse w-2/3" />
                     </div>
 
                   </div>
                 )}
 
                 {/* VIEW 3: Golden Wax Seal Confirmation Screen */}
-                {transmissionStatus === 'delivered' && (
+                {submissionStatus === 'success' && (
                   <div className="p-8 sm:p-10 space-y-8 text-center animate-fade-in">
                     
-                    {/* The Golden Wax Seal Emblem */}
+                    {/* The Golden Wax Seal Emblem (Educational) */}
                     <div className="flex justify-center">
                       <div className="relative group select-none">
-                        {/* Outermost Pulsing Brass Ring */}
-                        <div className="absolute inset-0 bg-brass/35 rounded-full scale-110 animate-ping opacity-60" />
+                        <div className="absolute inset-0 bg-brass/25 rounded-full scale-110 animate-ping opacity-50" />
                         
                         {/* Double concentric golden boundary seals */}
                         <div className="w-24 h-24 bg-gradient-to-br from-brass via-white/80 to-brass/95 p-1 rounded-full shadow-2xl flex items-center justify-center border-4 border-brass">
-                          <div className="w-full h-full bg-gradient-to-tr from-burgundy via-burgundy/95 to-burgundy-dark rounded-full border-2 border-brass flex flex-col items-center justify-center text-white relative">
+                          <div className="w-full h-full bg-gradient-to-tr from-teal-800 via-teal-900 to-emerald-950 rounded-full border-2 border-brass flex flex-col items-center justify-center text-white relative">
                             {/* Corinthian Column Emblem in Center */}
                             <Landmark className="w-8 h-8 text-brass stroke-[1.5] mb-0.5" />
                             <span className="font-serif text-[7.5px] tracking-widest text-brass font-bold leading-none uppercase scale-90">
                               CCNL
                             </span>
                             <span className="font-sans text-[5.5px] text-paper/60 uppercase tracking-widest mt-0.5 font-semibold">
-                              SEAL OF LAW
+                              BOARD EDUCATION
                             </span>
                           </div>
                         </div>
@@ -677,14 +632,14 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                     {/* Transmitted Heading */}
                     <div className="space-y-2 max-w-lg mx-auto">
                       <h3 className="font-serif italic font-bold text-2xl text-ink">
-                        Telemetry Dispatch Complete
+                        Inquiry Received
                       </h3>
                       <p className="text-xs text-teal-700 font-bold uppercase tracking-wider flex items-center justify-center gap-1 font-sans">
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>Envelope Dispatched to: jwood@npolawyers.com</span>
+                        <span>Training summary sent to jwood@npolawyers.com</span>
                       </p>
                       <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
-                        The simulated SMTPS courier connection closed cleanly (250 OK code received). Your structured intake memo was serialized and routed to coordinator J. Wood.
+                        Thank you for sharing your board's educational objectives. We have routed your details to J. Wood, our Client Intake & Training Coordinator, who will be in touch with you shortly.
                       </p>
                     </div>
 
@@ -692,14 +647,14 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                     <div className="bg-paper/45 rounded-xl border border-fog p-5 max-w-xl mx-auto text-left space-y-4 shadow-sm">
                       
                       <div className="flex items-center gap-1.5 text-brass border-b border-fog pb-2">
-                        <ShieldCheck className="w-5 h-5 shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 shrink-0" />
                         <span className="text-[10px] font-extrabold uppercase tracking-widest">
-                          Dual-Channel Redundancy Protocols
+                          Direct Communication Fallback
                         </span>
                       </div>
 
-                      <p className="text-[11px] text-ink/75 leading-relaxed font-sans font-semibold">
-                        Due to strict firewalls or email filters on external networks, we strongly recommend using the direct mail action below. This opens your device's native mail program and pre-populates the exact serialized memo payload, ensuring guaranteed end-to-end receipt.
+                      <p className="text-[11.5px] text-ink/75 leading-relaxed font-sans font-medium">
+                        If your organization has strict spam filters or blocklists that might interfere with web form notifications, we suggest clicking <strong>"Open Direct Mail"</strong>. This launches your default mail application pre-loaded with your training request summary.
                       </p>
 
                       <div className="flex flex-col sm:flex-row gap-3 pt-1">
@@ -710,16 +665,16 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                           className="flex-1 inline-flex justify-center items-center gap-1.5 py-2.5 px-4 bg-brass hover:bg-ink hover:text-brass text-ink font-bold uppercase tracking-wider text-[11px] rounded-lg shadow-sm hover:shadow transition-premium cursor-pointer text-center"
                         >
                           <ExternalLink className="w-4 h-4 shrink-0" />
-                          <span>Direct Open Mail Client</span>
+                          <span>Open Direct Mail</span>
                         </a>
 
-                        {/* Copy memorandum to Clipboard */}
+                        {/* Copy manifest to Clipboard */}
                         <button 
-                          onClick={handleCopyMemo}
+                          onClick={handleCopyManifest}
                           className="flex-1 inline-flex justify-center items-center gap-1.5 py-2.5 px-4 border border-fog bg-white hover:bg-paper text-ink font-bold uppercase tracking-wider text-[11px] rounded-lg transition-premium cursor-pointer"
                         >
                           {isCopied ? <Check className="w-4 h-4 text-teal-600 shrink-0" /> : <Copy className="w-4 h-4 text-brass shrink-0" />}
-                          <span>{isCopied ? 'Memo Copied ✓' : 'Copy Serialized Memo'}</span>
+                          <span>{isCopied ? 'Summary Copied ✓' : 'Copy Inquiry Summary'}</span>
                         </button>
                       </div>
 
@@ -728,36 +683,36 @@ Please preserve this memorandum strictly in confidential files to prevent waiver
                     {/* Print, Resume Controls */}
                     <div className="flex justify-center items-center gap-4 max-w-xs mx-auto">
                       <button 
-                        onClick={handlePrintMemo}
-                        className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold uppercase tracking-wider text-ink/65 hover:text-brass transition-premium"
+                        onClick={handlePrintManifest}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold uppercase tracking-wider text-ink/65 hover:text-brass transition-premium cursor-pointer"
                       >
                         <Printer className="w-4 h-4" />
-                        <span>Print/Save Memo</span>
+                        <span>Print Request</span>
                       </button>
                       
                       <div className="w-1.5 h-1.5 bg-fog rounded-full" />
 
                       <button 
                         onClick={handleResetForm}
-                        className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium cursor-pointer"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
-                        <span>Submit New Intake</span>
+                        <span>Submit New Inquiry</span>
                       </button>
                     </div>
 
-                    {/* Pre-formatted Memo Inspection Area */}
+                    {/* Pre-formatted Manifest Inspection Area */}
                     <div className="max-w-xl mx-auto text-left space-y-2 border border-fog rounded-lg p-4 bg-paper/20">
                       <div className="flex justify-between items-center border-b border-fog pb-1.5">
                         <p className="text-[9px] font-bold text-ink/40 uppercase tracking-widest font-sans">
-                          Inspecting Generated Intake Manifest
+                          Inspecting Generated Training Manifest
                         </p>
                         <span className="text-[8px] font-mono text-ink/35 uppercase">
-                          MIME TYPE: text/plain
+                          FORMAT: TEXT/PLAIN
                         </span>
                       </div>
                       <pre className="font-mono text-[9px] text-ink/65 whitespace-pre-wrap select-all max-h-40 overflow-y-auto leading-relaxed font-medium">
-                        {generateMemoText()}
+                        {generateManifestText()}
                       </pre>
                     </div>
 
