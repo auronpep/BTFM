@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
-import { Calendar, User, Mail, ShieldCheck, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
+import { useRouter } from '../components/Router';
+import { Calendar, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
 
 export const Training: React.FC = () => {
+  const { navigate } = useRouter();
 
   // 3. Syllabus Diagnostic Wizard States
   const [diagnostic, setDiagnostic] = useState(() => {
@@ -37,18 +39,15 @@ export const Training: React.FC = () => {
   };
 
   const handleAutoSelectWebinar = () => {
+    let target = 'webinar-fiduciary-update';
     if (diagnostic.anxiety === 'Financials & Overruns') {
-      setSelectedWebinar('webinar-audit');
+      target = 'webinar-audit';
     } else if (diagnostic.anxiety === 'Conflict of Interest') {
-      setSelectedWebinar('webinar-comp');
+      target = 'webinar-comp';
     } else {
-      setSelectedWebinar('webinar-minutes');
+      target = 'webinar-minutes';
     }
-    // Scroll to webinar registration card
-    const el = document.getElementById('webinar-card');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    navigate(`webinar-registration?webinar=${target}`);
   };
 
   const getRecommendation = () => {
@@ -85,15 +84,7 @@ export const Training: React.FC = () => {
     return { title, desc, tools, rationale };
   };
 
-  // 1. Webinar Form States
-  const [webinarName, setWebinarName] = useState('');
-  const [webinarEmail, setWebinarEmail] = useState('');
-  const [selectedWebinar, setSelectedWebinar] = useState('');
-  const [webinarConsent, setWebinarConsent] = useState(false);
-  const [webinarSubmitted, setWebinarId] = useState<string | null>(null);
-  const [webinarError, setWebinarError] = useState('');
-
-  // 2. In-Person Inquiry Form States
+  // 1. In-Person Inquiry Form States
   const [orgName, setOrgName] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -102,35 +93,6 @@ export const Training: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [inpersonSubmitted, setInpersonSubmitted] = useState(false);
   const [inpersonError, setInpersonError] = useState('');
-
-  const webinarsList = [
-    { id: 'webinar-fiduciary-update', title: 'California Board Fiduciary Compliance Update', date: 'June 17, 2026', time: '10:00 AM - 11:30 AM PST' },
-    { id: 'webinar-comp', title: 'Fiduciary Duty & Executive Compensation Safe Harbor (IRC § 4958)', date: 'June 18, 2026', time: '10:00 AM - 11:30 AM PST' },
-    { id: 'webinar-audit', title: 'California $2M Independent Audit & Audit Committee Mandate', date: 'July 15, 2026', time: '1:00 PM - 2:00 PM PST' },
-    { id: 'webinar-minutes', title: 'Drafting Defensive Meeting Minutes & Corporate Records', date: 'August 11, 2026', time: '11:00 AM - 12:00 PM PST' }
-  ];
-
-  const handleWebinarSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!webinarName || !webinarEmail || !selectedWebinar) {
-      setWebinarError('Please complete all form fields.');
-      return;
-    }
-    if (!webinarConsent) {
-      setWebinarError('You must acknowledge the educational disclaimer before registering.');
-      return;
-    }
-    setWebinarError('');
-    
-    // Save to localStorage for demo persistence
-    const reg = { name: webinarName, email: webinarEmail, webinarId: selectedWebinar, date: new Date().toISOString() };
-    const list = JSON.parse(localStorage.getItem('webinar_registrations') || '[]');
-    list.push(reg);
-    localStorage.setItem('webinar_registrations', JSON.stringify(list));
-
-    const confirmed = webinarsList.find(w => w.id === selectedWebinar);
-    setWebinarId(confirmed ? confirmed.title : 'Selected Webinar');
-  };
 
   const handleInpersonSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,65 +116,6 @@ export const Training: React.FC = () => {
     localStorage.setItem('inperson_inquiries', JSON.stringify(list));
 
     setInpersonSubmitted(true);
-  };
-
-  const handleDownloadICS = (webinarId: string) => {
-    const webinar = webinarsList.find(w => w.id === webinarId);
-    if (!webinar) return;
-
-    let start = '';
-    let end = '';
-    if (webinar.id === 'webinar-fiduciary-update') {
-      start = '20260617T170000Z';
-      end = '20260617T183000Z';
-    } else if (webinar.id === 'webinar-comp') {
-      start = '20260618T170000Z';
-      end = '20260618T183000Z';
-    } else if (webinar.id === 'webinar-audit') {
-      start = '20260715T200000Z';
-      end = '20260715T210000Z';
-    } else if (webinar.id === 'webinar-minutes') {
-      start = '20260811T180000Z';
-      end = '20260811T190000Z';
-    } else {
-      start = '20260617T170000Z';
-      end = '20260617T183000Z';
-    }
-
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//CDX Boardroom//Webinar Calendar//EN',
-      'CALSCALE:GREGORIAN',
-      'METHOD:PUBLISH',
-      'BEGIN:VEVENT',
-      `UID:${webinar.id}-2026@cdxboardroom.org`,
-      `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
-      `DTSTART:${start}`,
-      `DTEND:${end}`,
-      `SUMMARY:${webinar.title}`,
-      `DESCRIPTION:Thank you for registering for the CDX Boardroom Webinar: ${webinar.title}. Zoom Link and login credentials will be emailed to you prior to the event. Web: https://NPOlawyers.com`,
-      'LOCATION:Online Zoom Webinar',
-      'STATUS:CONFIRMED',
-      'SEQUENCE:0',
-      'BEGIN:VALARM',
-      'TRIGGER:-PT15M',
-      'ACTION:DISPLAY',
-      'DESCRIPTION:Reminder for CDX Boardroom Webinar',
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${webinar.id}-invite.ics`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -495,130 +398,85 @@ export const Training: React.FC = () => {
             </div>
 
               
-              {/* Webinar Registration Card */}
+              {/* Webinar Registration CTA Card */}
               <div id="webinar-card" className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
                 <div className="bg-slate-brand text-paper p-5 border-b border-brass/20 space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Immediate Enrollment</span>
-                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Registration</h4>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Live Governance Masterclasses</span>
+                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Masterclass Series</h4>
+                  <p className="text-xs text-paper/70 font-sans leading-relaxed">
+                    Intensive, legal-focused training sessions for California directors. Learn to protect your board from high-risk compliance liabilities.
+                  </p>
                 </div>
 
-                {!webinarSubmitted ? (
-                  <form onSubmit={handleWebinarSubmit} className="p-6 space-y-4">
-                    {webinarError && (
-                      <div className="p-3 bg-burgundy/5 text-burgundy text-xs font-semibold rounded border border-burgundy/15">
-                        {webinarError}
-                      </div>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Full Name:</label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
-                        <input
-                          type="text"
-                          required
-                          value={webinarName}
-                          onChange={(e) => setWebinarName(e.target.value)}
-                          placeholder="Director Name"
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Email Address:</label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
-                        <input
-                          type="email"
-                          required
-                          value={webinarEmail}
-                          onChange={(e) => setWebinarEmail(e.target.value)}
-                          placeholder="director@yourorganization.org"
-                          className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 pl-9 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Topic:</label>
-                      <select
-                        required
-                        value={selectedWebinar}
-                        onChange={(e) => setSelectedWebinar(e.target.value)}
-                        className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium font-sans font-medium cursor-pointer"
+                <div className="p-5 space-y-4">
+                  {/* Webinar Schedule List */}
+                  <div className="space-y-3">
+                    {[
+                      { 
+                        id: 'webinar-fiduciary-update', 
+                        title: 'California Board Fiduciary Update', 
+                        date: 'June 17, 2026', 
+                        time: '10:00 AM PST',
+                        badge: 'Fiduciary Duty'
+                      },
+                      { 
+                        id: 'webinar-comp', 
+                        title: 'Executive Compensation Safe Harbor', 
+                        date: 'June 18, 2026', 
+                        time: '10:00 AM PST',
+                        badge: 'IRC § 4958'
+                      },
+                      { 
+                        id: 'webinar-audit', 
+                        title: 'CA $2M Independent Audit Mandate', 
+                        date: 'July 15, 2026', 
+                        time: '1:00 PM PST',
+                        badge: 'CA Gov Code § 12586'
+                      },
+                      { 
+                        id: 'webinar-minutes', 
+                        title: 'Drafting Defensive Meeting Minutes', 
+                        date: 'August 11, 2026', 
+                        time: '11:00 AM PST',
+                        badge: 'Corporate Records'
+                      }
+                    ].map((webinar) => (
+                      <button
+                        key={webinar.id}
+                        type="button"
+                        onClick={() => navigate(`webinar-registration?webinar=${webinar.id}`)}
+                        className="w-full text-left p-3 rounded-lg border border-fog bg-paper/10 hover:bg-brass/5 hover:border-brass/50 transition-premium group flex flex-col gap-1.5 cursor-pointer"
                       >
-                        <option value="">-- Select Upcoming Session --</option>
-                        {webinarsList.map(w => (
-                          <option key={w.id} value={w.id}>{w.date} - {w.title}</option>
-                        ))}
-                      </select>
-                    </div>
+                        <div className="flex justify-between items-start w-full">
+                          <span className="text-[10px] font-extrabold text-brass uppercase tracking-wider">{webinar.date} at {webinar.time}</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-slate-brand/5 text-slate-brand border border-slate-brand/10 rounded font-bold">{webinar.badge}</span>
+                        </div>
+                        <h5 className="text-xs font-bold text-ink group-hover:text-brass transition-colors leading-snug">
+                          {webinar.title}
+                        </h5>
+                        <div className="flex items-center gap-1 text-[10px] text-slate-brand font-bold uppercase tracking-wider mt-0.5 self-end opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span>Register Session</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </div>
+                      </button>
+                    ))}
+                  </div>
 
-                    <div className="flex items-start gap-2.5 pt-1 pb-2">
-                      <input
-                        id="webinar-consent"
-                        type="checkbox"
-                        required
-                        checked={webinarConsent}
-                        onChange={(e) => setWebinarConsent(e.target.checked)}
-                        className="mt-0.5 w-4 h-4 rounded text-slate-brand focus:ring-brass border-fog/80 cursor-pointer"
-                      />
-                      <label htmlFor="webinar-consent" className="text-[11px] text-ink/70 leading-relaxed font-sans font-medium cursor-pointer select-none">
-                        I acknowledge this webinar is an educational service only and does not establish a formal attorney-client relationship with CCNL or NPO Lawyers.
-                      </label>
-                    </div>
-
+                  <div className="pt-3 border-t border-fog/50 flex flex-col gap-2">
                     <button
-                      type="submit"
+                      type="button"
+                      onClick={() => navigate('webinar-registration')}
                       className="w-full inline-flex justify-center items-center gap-2 py-3 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
                     >
-                      <span>Reserve My Webinar Seat</span>
-                      <ChevronRight className="w-4 h-4" />
+                      <span>Open Registration Suite</span>
+                      <ChevronRight className="w-4 h-4 text-brass" />
                     </button>
-                  </form>
-                ) : (
-                  /* Webinar Confirmation Screen */
-                  <div className="p-8 text-center space-y-5 animate-fade-in">
-                    <div className="w-12 h-12 bg-teal-brand/15 text-teal-brand rounded-full flex items-center justify-center mx-auto border border-teal-brand/30">
-                      <ShieldCheck className="w-6 h-6" />
-                    </div>
                     
-                    <div className="space-y-2">
-                      <h5 className="font-serif font-bold text-lg text-ink">Registration Confirmed</h5>
-                      <p className="text-xs text-ink/60 font-semibold uppercase tracking-wider">Topic: {webinarSubmitted}</p>
-                      <p className="text-xs sm:text-sm text-ink/80 leading-relaxed max-w-sm mx-auto">
-                        Thank you, <strong className="text-ink font-bold">{webinarName}</strong>. A calendar invitation and Zoom webinar link have been sent to <strong className="text-ink font-bold">{webinarEmail}</strong>.
-                      </p>
-                    </div>
-
-                    {/* Add to Calendar (.ics) download button */}
-                    <div className="pt-2">
-                      <button
-                        onClick={() => handleDownloadICS(selectedWebinar)}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-brass hover:bg-ink hover:text-white text-ink text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
-                      >
-                        <Calendar className="w-4 h-4 shrink-0" />
-                        <span>Add to Calendar (.ics)</span>
-                      </button>
-                    </div>
-
-                    <div className="pt-4 border-t border-fog/50">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setWebinarName('');
-                          setWebinarEmail('');
-                          setSelectedWebinar('');
-                          setWebinarId(null);
-                        }}
-                        className="text-xs font-extrabold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium cursor-pointer"
-                      >
-                        Enroll Another Director
-                      </button>
-                    </div>
+                    <p className="text-[10px] text-ink/50 text-center leading-normal italic font-sans font-medium">
+                      All webinars include verified iCalendar invites & Fiduciary Competency tracking.
+                    </p>
                   </div>
-                )}
+                </div>
               </div>
 
             </div>

@@ -512,7 +512,15 @@ export const ScenarioReader: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => navigate('training')}
+                  onClick={() => {
+                    let webinarId = 'webinar-fiduciary-update';
+                    if (scenario.slug === 'founder-salary-conflict') {
+                      webinarId = 'webinar-comp';
+                    } else if (scenario.slug === 'treasurer-vague-financials' || scenario.slug === 'missing-receipts-variance') {
+                      webinarId = 'webinar-audit';
+                    }
+                    navigate(`webinar-registration?webinar=${webinarId}`);
+                  }}
                   className="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2.5 bg-slate-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer text-center"
                 >
                   Register For Webinar

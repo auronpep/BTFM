@@ -12,6 +12,7 @@ import Training from './views/Training';
 import AboutUs from './views/AboutUs';
 import Boards101 from './views/Boards101';
 import ContactUs from './views/ContactUs';
+import WebinarRegistration from './views/WebinarRegistration';
 
 // Interactive Laboratories & Workshops
 import { SelfAssessment } from './views/SelfAssessment';
@@ -45,6 +46,8 @@ function AppContent() {
       return <Tools />;
     case 'training':
       return <Training />;
+    case 'webinar-registration':
+      return <WebinarRegistration />;
     case 'about-us':
       return <AboutUs />;
     case 'contact-us':

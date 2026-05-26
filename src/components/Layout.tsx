@@ -134,15 +134,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
 
 
-  // Navigation click handler with custom scroll action for ribbon banner
+  // Navigation click handler to redirect directly to dedicated Webinar Registration page
   const handleRibbonClick = () => {
-    navigate('training');
-    setTimeout(() => {
-      const el = document.getElementById('webinar-card');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 150);
+    navigate('webinar-registration?webinar=webinar-fiduciary-update');
   };
 
   // Situational/Topic Navigation configuration

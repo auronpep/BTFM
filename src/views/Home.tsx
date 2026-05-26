@@ -201,14 +201,22 @@ export const Home: React.FC = () => {
                   <h3 className="font-serif text-lg font-bold text-white leading-tight">Join Masterclass Training</h3>
                 </div>
                 <div className="space-y-2 text-xs">
-                  <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
+                  <div 
+                    onClick={() => navigate('webinar-registration?webinar=webinar-fiduciary-update')}
+                    className="p-3.5 bg-white/5 border border-paper/10 hover:border-brass rounded flex items-start gap-3 hover:bg-white/10 transition-premium cursor-pointer select-none"
+                    title="Register for California Board Fiduciary Compliance Update Webinar"
+                  >
                     <Calendar className="w-5 h-5 text-brass mt-0.5 shrink-0" />
                     <div className="space-y-0.5">
                       <span className="font-semibold text-white block">California Board Fiduciary Compliance Update</span>
                       <span className="text-paper/65 font-sans block">Online Webinar &bull; June 17, 2026</span>
                     </div>
                   </div>
-                  <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
+                  <div 
+                    onClick={() => navigate('tools/self-assessment')}
+                    className="p-3.5 bg-white/5 border border-paper/10 hover:border-brass rounded flex items-start gap-3 hover:bg-white/10 transition-premium cursor-pointer select-none"
+                    title="Take the Interactive Fiduciary Duties Self-Assessment"
+                  >
                     <Award className="w-5 h-5 text-brass mt-0.5 shrink-0" />
                     <div className="space-y-0.5">
                       <span className="font-semibold text-white block">Fiduciary Duties Assessment Course</span>
@@ -217,10 +225,10 @@ export const Home: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => navigate('training')}
-                  className="w-full inline-flex justify-center items-center py-2 border border-paper/30 hover:border-brass text-paper hover:text-brass text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer text-center"
+                  onClick={() => navigate('webinar-registration')}
+                  className="w-full inline-flex justify-center items-center py-2 border border-paper/30 hover:border-brass text-paper hover:text-brass text-[10px] font-bold uppercase tracking-wider rounded transition-premium cursor-pointer text-center font-semibold"
                 >
-                  Request Workshop
+                  Explore Live Webinars
                 </button>
               </div>
             )}
