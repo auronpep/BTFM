@@ -25,7 +25,7 @@ export const ctaMap: Record<string, CtaEntry> = {
   startupGuide: {
     key: "startupGuide",
     label: "Start the Founder Path",
-    href: "/starting-a-nonprofit",
+    href: "/starting-a-charity",
     action: "prepare-read",
     issueTypes: ["formation", "bylaws", "tax-exemption"],
     prompt: "Use the startup path for formation choices, first-board discipline, bylaws, filings, and exemption planning.",
@@ -169,7 +169,7 @@ export const ctaMap: Record<string, CtaEntry> = {
   },
   formationLegalHelp: {
     key: "formationLegalHelp",
-    label: "Get Legal Help Starting a Nonprofit",
+    label: "Get Legal Help Starting a Charity",
     href: "https://NPOlawyers.com",
     action: "visit-npo-lawyers",
     issueTypes: ["formation", "bylaws", "tax-exemption", "california-rules"],

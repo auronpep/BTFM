@@ -7,7 +7,7 @@ export const fieldManualTopics = [
   'california-board-rules',
   'tools',
   'training',
-  'starting-a-nonprofit',
+  'starting-a-charity',
 ] as const;
 
 export const meetingSituations = [

@@ -32,7 +32,7 @@ export const topicPages: Record<TopicSlug, TopicPageConfig> = {
     eyebrow: "Field Manual / Money & Audit",
     title: "Money & Audit",
     description:
-      "Budget review, audit readiness, Form 990 oversight, committee questions, and financial warning signs for nonprofit boards.",
+      "Budget review, audit readiness, Form 990 oversight, committee questions, and financial warning signs for governing boards.",
     deck:
       "Use this section when the board is asked to approve a budget, accept an audit, review Form 990, or rely on a finance committee report that needs clearer board judgment.",
     primaryAction: {

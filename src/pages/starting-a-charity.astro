@@ -3,27 +3,27 @@ import { sitePaths } from "../data/navigation";
 import { routeMap, primaryActionLabels } from "../data/site-map";
 import { ctaMap } from "../data/cta-map";
 
-const startupPath = sitePaths.find((path) => path.href === "/starting-a-nonprofit");
-const startupRoute = routeMap.find((route) => route.path === "/starting-a-nonprofit");
+const startupPath = sitePaths.find((path) => path.href === "/starting-a-charity");
+const startupRoute = routeMap.find((route) => route.path === "/starting-a-charity");
 const founderTopics = [
   {
     label: "Should you start, sponsor, or join?",
-    href: "/starting-a-nonprofit#formation-choice",
+    href: "/starting-a-charity#formation-choice",
     summary: "Compare formation with fiscal sponsorship or joining an existing charity before building a new entity.",
   },
   {
     label: "Recruit the first board",
-    href: "/starting-a-nonprofit#first-board",
+    href: "/starting-a-charity#first-board",
     summary: "Build early board discipline around unrelated directors, authority, meetings, and records.",
   },
   {
     label: "Hold the first meeting",
-    href: "/starting-a-nonprofit#first-meeting",
+    href: "/starting-a-charity#first-meeting",
     summary: "Organize articles, bylaws, officers, banking authority, conflicts, minutes, and follow-up assignments.",
   },
   {
     label: "Plan filings and exemption",
-    href: "/starting-a-nonprofit#filings",
+    href: "/starting-a-charity#filings",
     summary: "Track state registration, tax exemption, annual filings, and public governance expectations.",
   },
 ];
@@ -32,12 +32,12 @@ const founderTopics = [
 <main>
   <header>
     <p>The Principles of Board Training</p>
-    <h1>Starting a Nonprofit</h1>
+    <h1>Starting a Charity</h1>
     <p>
       {startupPath?.promise}
     </p>
     <nav aria-label="Startup path actions">
-      <a href="/starting-a-nonprofit#formation-choice">Start the Founder Path</a>
+      <a href="/starting-a-charity#formation-choice">Start the Founder Path</a>
       <a href="/training">Explore Board Training</a>
       <a href="/training/webinars">Register for a Webinar</a>
       <a href="https://NPOlawyers.com">Visit NPOlawyers.com</a>
@@ -95,7 +95,7 @@ const founderTopics = [
 
   <aside aria-label="Educational disclaimer">
     <p>
-      This site provides general educational information for nonprofit board training. It is not legal advice and
+      This site provides general educational information for board training. It is not legal advice and
       does not create an attorney-client relationship.
     </p>
   </aside>

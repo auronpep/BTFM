@@ -44,7 +44,7 @@ const fieldManualTopic = z.enum([
   'california-board-rules',
   'tools',
   'training',
-  'starting-a-nonprofit',
+  'starting-a-charity',
 ]);
 
 const documentReference = z.object({

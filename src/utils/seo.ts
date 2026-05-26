@@ -15,14 +15,14 @@ export type SeoInput = {
 export const defaultSeo = {
   title: site.name,
   description:
-    "A practical boardroom field manual for California nonprofit directors reviewing budgets, reports, risk, minutes, and governance decisions.",
+    "A practical boardroom field manual for California directors reviewing budgets, reports, risk, minutes, and governance decisions.",
   imagePath: "/og-default.svg",
 } as const;
 
 export const staticSiteRoutes = [
   "/",
   "/working-board/",
-  "/starting-a-nonprofit/",
+  "/starting-a-charity/",
   "/next-meeting/",
   "/money-audit/",
   "/executive-oversight/",

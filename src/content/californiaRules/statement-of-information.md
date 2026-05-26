@@ -1,6 +1,6 @@
 ---
 title: "Statement of Information"
-description: "Issue spotter for California Secretary of State Statement of Information tracking by nonprofit corporation boards."
+description: "Issue spotter for California Secretary of State Statement of Information tracking by governing boards."
 deck: "The Statement of Information keeps public officer, address, and agent information current. The board should know who owns it."
 audience:
   - working-board-member
@@ -59,7 +59,7 @@ The board elects officers, changes addresses, or changes agents, but public reco
 
 ## The careful rule
 
-California Secretary of State FAQ materials describe periodic Statement of Information filing obligations, including biennial filings for California nonprofit corporations. The exact filing window and entity record should be checked directly with the Secretary of State.
+California Secretary of State FAQ materials describe periodic Statement of Information filing obligations, including biennial filings for California charitable corporations. The exact filing window and entity record should be checked directly with the Secretary of State.
 
 ## What the board should ask
 

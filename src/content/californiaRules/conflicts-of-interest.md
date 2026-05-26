@@ -1,6 +1,6 @@
 ---
 title: "Conflicts of Interest"
-description: "Issue spotter for nonprofit board conflicts, recusals, documentation, and legal escalation."
+description: "Issue spotter for governing board conflicts, recusals, documentation, and legal escalation."
 deck: "A conflict policy is only useful if the board follows it before the decision is made."
 audience:
   - working-board-member
@@ -62,7 +62,7 @@ The board has a conflict policy, but the real question appears during a live age
 
 ## The careful rule
 
-Use conflict materials as process prompts, not automatic answers. California nonprofit fiduciary duties, corporate rules, federal tax concepts, Form 990 disclosures, bylaws, and the organization's own policy can all matter.
+Use conflict materials as process prompts, not automatic answers. California charity fiduciary duties, corporate rules, federal tax concepts, Form 990 disclosures, bylaws, and the organization's own policy can all matter.
 
 ## What the board should ask
 

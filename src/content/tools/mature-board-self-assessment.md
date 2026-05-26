@@ -1,6 +1,6 @@
 ---
 title: "Mature Board Self-Assessment"
-description: "A practical self-assessment for established nonprofit boards that have moved beyond startup habits."
+description: "A practical self-assessment for established governing boards that have moved beyond startup habits."
 toolType: "scorecard"
 format: "page"
 downloadHref: "/downloads/mature-board-self-assessment.md"

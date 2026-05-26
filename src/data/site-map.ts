@@ -34,7 +34,7 @@ export const routeMap: RouteMapEntry[] = [
     path: "/working-board",
     label: "Serving on a Working Board",
     summary:
-      "Primary launch path for directors of established California nonprofits that need boardroom judgment support.",
+      "Primary launch path for directors of established California organizations that need boardroom judgment support.",
     primaryAction: "prepare-read",
     audience: "working-board",
     issueTypes: ["next-meeting", "budget", "audit", "executive-oversight", "risk-safety", "minutes-records"],
@@ -150,8 +150,8 @@ export const routeMap: RouteMapEntry[] = [
     owner: "Worker 8",
   },
   {
-    path: "/starting-a-nonprofit",
-    label: "Starting a Nonprofit",
+    path: "/starting-a-charity",
+    label: "Starting a Charity",
     summary:
       "Secondary path for founders and first boards working through fiscal sponsorship, formation, first meetings, bylaws, and exemption.",
     primaryAction: "prepare-read",
@@ -163,7 +163,7 @@ export const routeMap: RouteMapEntry[] = [
   {
     path: "https://NPOlawyers.com",
     label: "Visit NPOlawyers.com",
-    summary: "External referral route for specific legal advice and nonprofit legal services.",
+    summary: "External referral route for specific legal advice and specialized legal services.",
     primaryAction: "visit-npo-lawyers",
     audience: "both",
     issueTypes: ["legal-help"],

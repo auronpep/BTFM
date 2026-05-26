@@ -1,6 +1,6 @@
 ---
 title: "Compensation Approval"
-description: "Issue spotter for executive, founder, officer, and insider compensation decisions by nonprofit boards."
+description: "Issue spotter for executive, founder, officer, and insider compensation decisions by governing boards."
 deck: "Compensation decisions need a disciplined process before the board reaches a number."
 audience:
   - working-board-member

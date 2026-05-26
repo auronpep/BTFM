@@ -1,6 +1,6 @@
 ---
 title: "$3M Board Member Checklist"
-description: "A practical checklist for directors of established nonprofits reviewing finance, audit, filings, insurance, authority, and minutes."
+description: "A practical checklist for directors of established organizations reviewing finance, audit, filings, insurance, authority, and minutes."
 toolType: "checklist"
 format: "page"
 downloadHref: "/downloads/3m-board-member-checklist.md"
@@ -30,4 +30,4 @@ attorneyReviewRequired: false
 
 ## Use This When
 
-Use this checklist before a meeting of a larger nonprofit where the board is responsible for more than founder enthusiasm. It helps directors prepare without taking over staff work.
+Use this checklist before a meeting of a larger organization where the board is responsible for more than founder enthusiasm. It helps directors prepare without taking over staff work.

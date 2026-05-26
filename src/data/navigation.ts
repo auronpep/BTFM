@@ -92,14 +92,14 @@ export const sitePaths = [
     href: '/working-board',
     action: 'prepare-read',
     description:
-      'Primary launch path for directors of established California nonprofits with staff, budgets, audits, insurance, filings, and board risk.',
+      'Primary launch path for directors of established California organizations with staff, budgets, audits, insurance, filings, and board risk.',
     promise:
       'Board service gets serious when the organization gets serious: prepare for meetings, budgets, audits, executive oversight, records, risk, and legal escalation.',
     priority: 'primary',
   },
   {
-    label: 'Starting a Nonprofit',
-    href: '/starting-a-nonprofit',
+    label: 'Starting a Charity',
+    href: '/starting-a-charity',
     action: 'prepare-read',
     description:
       'Secondary path for founders and first boards making formation, fiscal sponsorship, bylaws, filings, and exemption decisions.',
