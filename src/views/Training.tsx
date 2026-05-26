@@ -104,6 +104,7 @@ export const Training: React.FC = () => {
   const [inpersonError, setInpersonError] = useState('');
 
   const webinarsList = [
+    { id: 'webinar-fiduciary-update', title: 'California Board Fiduciary Compliance Update', date: 'June 17, 2026', time: '10:00 AM - 11:30 AM PST' },
     { id: 'webinar-comp', title: 'Fiduciary Duty & Executive Compensation Safe Harbor (IRC § 4958)', date: 'June 18, 2026', time: '10:00 AM - 11:30 AM PST' },
     { id: 'webinar-audit', title: 'California $2M Independent Audit & Audit Committee Mandate', date: 'July 15, 2026', time: '1:00 PM - 2:00 PM PST' },
     { id: 'webinar-minutes', title: 'Drafting Defensive Meeting Minutes & Corporate Records', date: 'August 11, 2026', time: '11:00 AM - 12:00 PM PST' }
@@ -161,7 +162,10 @@ export const Training: React.FC = () => {
 
     let start = '';
     let end = '';
-    if (webinar.id === 'webinar-comp') {
+    if (webinar.id === 'webinar-fiduciary-update') {
+      start = '20260617T170000Z';
+      end = '20260617T183000Z';
+    } else if (webinar.id === 'webinar-comp') {
       start = '20260618T170000Z';
       end = '20260618T183000Z';
     } else if (webinar.id === 'webinar-audit') {
@@ -171,8 +175,8 @@ export const Training: React.FC = () => {
       start = '20260811T180000Z';
       end = '20260811T190000Z';
     } else {
-      start = '20260618T170000Z';
-      end = '20260618T183000Z';
+      start = '20260617T170000Z';
+      end = '20260617T183000Z';
     }
 
     const icsContent = [

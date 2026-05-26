@@ -21,9 +21,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [activeTermId, setActiveTermId] = useState<string | null>(null);
 
-  // Countdown ribbon state (Enhancement 10)
-  const [countdownStr, setCountdownStr] = useState('');
-  const [seats, setSeats] = useState(3);
+
 
   // Derive toolsState and labStates synchronously on render (removes useEffect and state variables)
   let toolsState: 'none' | 'in-progress' | 'completed' = 'none';
@@ -134,31 +132,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => document.removeEventListener('click', handleGlossaryClick);
   }, []);
 
-  // Ticking countdown timer & seat counter (Enhancement 10)
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date();
-      const mins = now.getMinutes();
-      const secs = now.getSeconds();
-      
-      const blockLength = 15 * 60; // 15-minute block
-      const elapsed = (mins % 15) * 60 + secs;
-      const remaining = blockLength - elapsed;
-      
-      const m = Math.floor(remaining / 60);
-      const s = remaining % 60;
-      
-      // Determine remaining seats based on remaining time
-      const computedSeats = Math.max(2, Math.min(8, Math.floor(2 + (remaining / blockLength) * 6)));
-      
-      setCountdownStr(`${m}m ${s < 10 ? '0' : ''}${s}s`);
-      setSeats(computedSeats);
-    };
 
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Navigation click handler with custom scroll action for ribbon banner
   const handleRibbonClick = () => {
@@ -199,23 +173,23 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Webinar Seat Tracker Countdown Ribbon Banner (Enhancement 10) */}
       <div 
         onClick={handleRibbonClick}
-        className="bg-gradient-to-r from-burgundy via-ink to-burgundy text-white text-center py-2.5 px-4 text-xs font-semibold relative cursor-pointer hover:opacity-95 transition-all select-none border-b border-brass/30 z-[60] group flex items-center justify-center gap-2 animate-pulse-slow"
+        className="bg-gradient-to-r from-burgundy via-ink to-burgundy text-white text-center py-2 px-4 text-xs font-semibold relative cursor-pointer hover:opacity-95 transition-all select-none border-b border-brass/30 z-[60] group flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5"
         title="Click to reserve your webinar seat"
       >
-        <span className="relative flex h-2 w-2 mr-1">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brass opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-brass"></span>
         </span>
-        <span className="font-sans">
-          ⚡ <strong className="text-brass font-bold">LIVE BOARDROOM BRIEFING:</strong> Next California Fiduciary Webinar starts soon! Only <strong className="text-brass bg-brass/10 px-1.5 py-0.5 rounded border border-brass/20 font-bold">{seats} seats</strong> remaining.
+        <span className="font-sans tracking-wide">
+          ⚡ <strong className="text-brass font-bold uppercase tracking-wider">Upcoming Webinar:</strong> California Board Fiduciary Compliance Update
         </span>
-        <span className="hidden md:inline-block text-paper/70 px-1">|</span>
-        <span className="font-sans font-medium text-paper/90">
-          Registration closing in <span className="font-mono text-brass font-bold">{countdownStr}</span>
+        <span className="hidden md:inline-block text-paper/40 font-light">|</span>
+        <span className="font-sans font-medium text-brass bg-brass/10 px-2 py-0.5 rounded border border-brass/30 flex items-center gap-1 shrink-0">
+          <span className="text-[10px]">📅</span> June 17th at 10:00 AM PST
         </span>
-        <span className="ml-2 underline text-brass group-hover:text-white transition-premium inline-flex items-center gap-0.5 text-[11px] uppercase tracking-wider font-bold">
+        <span className="ml-1 px-3 py-1 bg-brass hover:bg-white text-ink font-sans font-bold text-[11px] uppercase tracking-wider rounded transition-all duration-300 shadow-sm flex items-center gap-1 group-hover:scale-[1.03] shrink-0">
           <span>Secure Your Seat</span>
-          <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+          <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
         </span>
       </div>
 

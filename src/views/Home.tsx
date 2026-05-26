@@ -205,8 +205,8 @@ export const Home: React.FC = () => {
                   <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
                     <Calendar className="w-5 h-5 text-brass mt-0.5 shrink-0" />
                     <div className="space-y-0.5">
-                      <span className="font-semibold text-white block">California Rules Checklist Masterclass</span>
-                      <span className="text-paper/65 font-sans block">Online Webinar &bull; July 15, 2026</span>
+                      <span className="font-semibold text-white block">California Board Fiduciary Compliance Update</span>
+                      <span className="text-paper/65 font-sans block">Online Webinar &bull; June 17, 2026</span>
                     </div>
                   </div>
                   <div className="p-3.5 bg-white/5 border border-paper/10 rounded flex items-start gap-3 hover:bg-white/10 transition-premium">
