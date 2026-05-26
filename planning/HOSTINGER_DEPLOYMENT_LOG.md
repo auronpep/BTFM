@@ -5,7 +5,7 @@
 The CDX Board Training Platform has been successfully built and deployed via the GitHub CI/CD integration with Hostinger.
 
 ### Deployment Metadata
-* **Active Production Domain:** [lawngreen-armadillo-750991.hostingersite.com](http://lawngreen-armadillo-750991.hostingersite.com)
+* **Active Production Domain:** [lawngreen-antelope-903219.hostingersite.com](http://lawngreen-antelope-903219.hostingersite.com)
 * **GitHub Repository:** `CDX`
 * **Target Deployment Branch:** `main`
 * **Triggering Commit:** `e1ea1ecf`

@@ -7,7 +7,7 @@ This document presents a comprehensive, line-by-line audit of all **19 views, in
 ## Executive Summary & Staging Audit
 
 > [!IMPORTANT]
-> **Active Production Domain:** [lawngreen-armadillo-750991.hostingersite.com](http://lawngreen-armadillo-750991.hostingersite.com)  
+> **Active Production Domain:** [lawngreen-antelope-903219.hostingersite.com](http://lawngreen-antelope-903219.hostingersite.com)  
 > **Status:** The site builds successfully under Vite with zero compilation warnings or ESLint errors. All routes, interactive tools, and state persistence loops (`localStorage` bindings) operate correctly on desktop and mobile viewports.
 
 ### Core Architecture Findings:
