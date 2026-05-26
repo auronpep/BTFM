@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="6" fill="#1e2a43" />
+  <rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#87721f" stroke-width="1.5" />
+  <text x="16" y="21" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#fbf8f2" text-anchor="middle">BT</text>
+</svg>

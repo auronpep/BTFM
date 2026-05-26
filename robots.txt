@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://powderblue-bat-208812.hostingersite.com/sitemap.xml

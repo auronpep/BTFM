@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">The Principles of Board Training</title>
+  <desc id="desc">Boardroom Field Manual open graph image.</desc>
+  <rect width="1200" height="630" fill="#f7f1e6"/>
+  <rect x="72" y="72" width="1056" height="486" fill="#ffffff" stroke="#c29a4a" stroke-width="6"/>
+  <rect x="112" y="112" width="168" height="168" fill="#101827"/>
+  <text x="196" y="211" text-anchor="middle" fill="#f7f1e6" font-family="Georgia, serif" font-size="58" font-weight="700">BT</text>
+  <text x="324" y="164" fill="#176c68" font-family="Consolas, monospace" font-size="26" font-weight="700" letter-spacing="3">BOARDROOM FIELD MANUAL</text>
+  <text x="324" y="255" fill="#101827" font-family="Georgia, serif" font-size="68" font-weight="700">The Principles of</text>
+  <text x="324" y="334" fill="#101827" font-family="Georgia, serif" font-size="68" font-weight="700">Board Training</text>
+  <text x="324" y="420" fill="#4a5262" font-family="Arial, sans-serif" font-size="31">Practical California nonprofit board guidance for</text>
+  <text x="324" y="462" fill="#4a5262" font-family="Arial, sans-serif" font-size="31">meetings, budgets, audits, risk, and minutes.</text>
+  <line x1="112" y1="512" x2="1088" y2="512" stroke="#e7eaf0" stroke-width="3"/>
+  <text x="112" y="540" fill="#6e2f3b" font-family="Arial, sans-serif" font-size="23" font-weight="700">California Center for Nonprofit Law / NPO Lawyers</text>
+</svg>
