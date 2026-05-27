@@ -470,14 +470,14 @@ export const CaliforniaRules: React.FC = () => {
                       />
                     </div>
 
-                    {/* Related Masterclass Article CTA */}
+                    {/* Related Reference Article CTA */}
                     {rule.relatedArticleSlug && (
                       <div className="pt-4 border-t border-fog flex justify-end">
                         <button 
                           onClick={() => navigate(`article/${rule.relatedArticleSlug}`)}
                           className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
                         >
-                          <span>Read Accompanying Masterclass Article</span>
+                          <span>Read Accompanying Reference Article</span>
                           <ChevronRight className="w-4 h-4" />
                         </button>
                       </div>
@@ -757,7 +757,7 @@ export const CaliforniaRules: React.FC = () => {
                     ? "Severe Exposure" 
                     : bylawScore < 100 
                       ? "Statutory Warnings" 
-                      : "Statutory Masterclass"
+                      : "Full Statutory Alignment"
                   }
                 </span>
               </div>
@@ -789,7 +789,7 @@ export const CaliforniaRules: React.FC = () => {
                 <div className="p-4 bg-teal-brand/10 border border-teal-brand/30 rounded-lg text-xs leading-relaxed text-teal-850 space-y-1">
                   <p className="font-bold flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-teal-brand animate-pulse" />
-                    <span>💎 STATUTORY MASTERCLASS COMPLIANCE</span>
+                    <span>💎 FULL STATUTORY COMPLIANCE</span>
                   </p>
                   <p className="font-medium text-teal-950 font-semibold">
                     Excellent. Your bylaws explicitly incorporate all 10 critical California Corporations Code governance constraints. Keep a physical signed copy in your minute book and run an attorney review every 3 years.
