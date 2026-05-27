@@ -1405,7 +1405,7 @@ The strongest version of the site is not a “blog and resource library.” It i
 
 > **A practical boardroom field manual for California nonprofit leaders who need to govern serious organizations without micromanaging them.**
 
-[1]: https://mediumslateblue-caterpillar-718620.hostingersite.com/ "www.boardtrainingprinciples.com"
+[1]: https://lawngreen-antelope-903219.hostingersite.com/ "www.boardtrainingprinciples.com"
 [2]: https://oag.ca.gov/sites/all/files/agweb/pdfs/charities/pdf/nonprofit-integrity-act-nov04-auditreq.pdf?utm_source=chatgpt.com "Audit Requirements under the Nonprofit Integrity Act"
 [3]: https://www.irs.gov/pub/irs-pdf/i990.pdf?utm_source=chatgpt.com "2025 Instructions for Form 990 Return of Organization ..."
 [4]: https://npolawyers.com/ "California Nonprofit Law Attorneys | California Center for Nonprofit Law"

@@ -34,7 +34,7 @@ The site has four primary actions:
 - `docs/Syllabus for Venice Conference.docx`
 - `docs/Training for OC for one hour.docx`
 - `https://NPOlawyers.com`
-- `https://mediumslateblue-caterpillar-718620.hostingersite.com/`
+- `https://lawngreen-antelope-903219.hostingersite.com/`
 - IRS, California Attorney General, BoardSource, National Council of Nonprofits, W3C/WCAG, and Google Search Central references.
 - Google Stitch, Figma MCP, Claude Code plugins/subagents, Codex configuration, Astro Hostinger deployment, Hostinger Git deployment, and Hostinger cache references.
 - `docs/BT_Plan_v2.md`, which reframes the site as a boardroom field manual for working California nonprofit board members.
