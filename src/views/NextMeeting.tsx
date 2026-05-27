@@ -121,13 +121,13 @@ export const NextMeeting: React.FC = () => {
         dls.notice, 
         dls.notice, 
         'Statutory 10-Day Board Meeting Notice Deadline', 
-        'California Corporations Code mandates that formal board meeting notice must be transmitted to all active directors at least 10 days in advance of the meeting date. Ensure you have sent the agenda and notice of physical/digital location via email or letter.'
+        'Formal board meeting notice must typically be transmitted at least 10 days in advance under most state corporate codes (including California Corporations Code § 5015). Ensure you have sent the agenda and notice of physical/digital location via email or letter.'
       ),
       createEvent(
         dls.packet, 
         dls.packet, 
         '5-Day Board Packet Delivery Target (Duty of Care)', 
-        'To fulfill California Duty of Care standards, a complete board packet (prior minutes, executive summaries, draft budget, and financial comparisons) should be in the hands of directors at least 5 days in advance, allowing for reasonable pre-meeting study.'
+        'To fulfill standard fiduciary Duty of Care requirements (such as California Corporations Code § 5231), a complete board packet (prior minutes, executive summaries, draft budget, and financial comparisons) should be in the hands of directors at least 5 days in advance, allowing for reasonable pre-meeting study.'
       ),
       createEvent(
         dls.financial, 
@@ -301,13 +301,13 @@ export const NextMeeting: React.FC = () => {
       title: "2. CEO/ED Salary & Compensation Review",
       category: "Legal & Fiduciary",
       requiredFiles: [
-        "Executive Salary Survey Report for Northern/Southern California Organizations",
+        "Executive Salary Survey Report for Regional and California Organizations",
         "Current CEO Employment Contract & Performance Reviews",
         "Disinterested Director Recusal Resolution Form"
       ],
       statuteBadge: { statute: "IRC § 4958", text: "Satisfy Rebuttable Presumption of Reasonableness." },
       askScript: {
-        question: "Does our proposed executive salary package stay within the 50th to 75th percentile of our compiled California compensation survey, and does the ED agree to step out during discussion?",
+        question: "Does our proposed executive salary package stay within the 50th to 75th percentile of comparable market compensation data (such as peer regional or California surveys), and does the Executive Director agree to step out during discussion?",
         rationale: "Establishes compliance with the IRS safe harbor compensation standard, protecting board members from personal excise tax fines.",
         targetRole: "the Board Chair"
       },
@@ -322,7 +322,7 @@ export const NextMeeting: React.FC = () => {
       },
       minutesMock: {
         agendaItem: "Executive Compensation Approval",
-        mockMinutes: "The President (CEO) and her sister-in-law (Director) recused themselves from the meeting and physically left the room. The remaining three disinterested directors (constituting a quorum) reviewed Northern California Organization Salary surveys for literacy programs. Based on this data, the board voted unanimously to approve a base salary of $72,000 for the CEO, effective immediately.",
+        mockMinutes: "The President (CEO) and her sister-in-law (Director) recused themselves from the meeting and physically left the room. The remaining three disinterested directors (constituting a quorum) reviewed comparable regional and California nonprofit organization salary surveys for literacy programs. Based on this data, the board voted unanimously to approve a base salary of $72,000 for the CEO, effective immediately.",
         whyItMatters: "Meticulously documents recusal and reliance on written comparable surveys, achieving full IRS safe harbor."
       }
     },
@@ -348,7 +348,7 @@ export const NextMeeting: React.FC = () => {
           "Do not allow the interested director to vote on or run the discussion of their contract.",
           "Do not make loans of corporate funds to any director, officer, or key employee."
         ],
-        consequence: "In California, loans to officers are strictly illegal, and unvoted conflict contracts are voidable by the AG, creating personal director liability."
+        consequence: "In most jurisdictions (including California under Corporations Code § 5236), loans to officers are strictly illegal, and unvoted conflict contracts are voidable by the Attorney General, creating personal director liability."
       },
       minutesMock: {
         agendaItem: "Approval of Software Contract Conflict Transaction",
@@ -397,7 +397,7 @@ export const NextMeeting: React.FC = () => {
       ],
       statuteBadge: { statute: "CA Gov Code § 12586(e)", text: "Required standalone committee for $2M+ revenues." },
       askScript: {
-        question: "Does our proposed Audit Committee contain zero staff members, zero officers, and no Treasurer, in accordance with the California Nonprofit Integrity Act?",
+        question: "Does our proposed Audit Committee contain zero staff members, zero officers, and no Treasurer, in accordance with state statutory thresholds (such as the California Nonprofit Integrity Act)?",
         rationale: "Ensures the committee is structured with complete independent, disinterested oversight.",
         targetRole: "the Board President"
       },
@@ -408,7 +408,7 @@ export const NextMeeting: React.FC = () => {
           "Do not let the Executive Director or staff members serve as voting members on the Audit Committee.",
           "Do not allow the Finance Committee to make up 50% or more of the Audit Committee seats."
         ],
-        consequence: "Failing to isolate the Audit Committee from the Finance Committee is a direct violation of California law, leading to loss of corporate standing."
+        consequence: "Failing to isolate the Audit Committee from the Finance Committee violates standard corporate independence rules (and is a statutory violation in states like California under Gov. Code § 12586), leading to loss of corporate standing."
       },
       minutesMock: {
         agendaItem: "Resolution of Standalone Audit Committee Establishment",
@@ -442,7 +442,7 @@ export const NextMeeting: React.FC = () => {
       },
       minutesMock: {
         agendaItem: "Statement of Information Filing Review",
-        mockMinutes: "The Secretary presented the completed copy of Form SI-100 filed with the California Secretary of State on April 12, 2026, listing current corporate officers and Agent for Service of Process. The filing was approved for the corporate records binder.",
+        mockMinutes: "The Secretary presented the completed copy of standard periodic state filings (such as Form SI-100 filed with the California Secretary of State) on April 12, 2026, listing current corporate officers and Agent for Service of Process. The filing was approved for the corporate records binder.",
         whyItMatters: "Establishes that the board actively tracked and verified its biennial Secretary of State filings."
       }
     },
@@ -517,7 +517,7 @@ export const NextMeeting: React.FC = () => {
       ],
       statuteBadge: { statute: "CA Gov Code § 12586", text: "Attorney General oversight of public benefit trusts." },
       askScript: {
-        question: "When was the last time our bylaws were formally audited by a charity attorney, and do they align with recent California registry changes?",
+        question: "When was the last time our bylaws were formally audited by a charity attorney, and do they align with recent federal and state registry changes?",
         rationale: "Ensures the board operates with valid, enforceable legal regulations, protecting directors from internal disputes.",
         targetRole: "the Board Chair"
       },
@@ -532,8 +532,8 @@ export const NextMeeting: React.FC = () => {
       },
       minutesMock: {
         agendaItem: "Resolution of Corporate Bylaws Update",
-        mockMinutes: "The Nominating Committee presented the updated bylaws audited by California Center for Nonprofit Law. After review of the updated quorum structures, the Board voted unanimously to adopt the revised bylaws as presented, directing the Secretary to file them with the Registry.",
-        whyItMatters: "Proves that the board proactively audits and keeps its legal bylaws in sync with California state laws."
+        mockMinutes: "The Nominating Committee presented the updated bylaws audited by qualified nonprofit counsel. After review of the updated quorum structures, the Board voted unanimously to adopt the revised bylaws as presented, directing the Secretary to file them with the Registry.",
+        whyItMatters: "Proves that the board proactively audits and keeps its legal bylaws in sync with state and federal legal standards."
       }
     }
   ];
@@ -574,7 +574,7 @@ export const NextMeeting: React.FC = () => {
                 Calculate & Export Statutory Notice Milestones
               </h2>
               <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                The California Corporations Code and fiduciary Duty of Care require key items (notices, board packets, financial statements) to be compiled and delivered strictly in advance. Input your upcoming meeting date below to establish your boardroom deadline compliance roadmap.
+                State corporate codes (including the California Corporations Code) and fiduciary Duty of Care standards require key items (notices, board packets, financial statements) to be compiled and delivered strictly in advance. Input your upcoming meeting date below to establish your boardroom deadline compliance roadmap.
               </p>
             </div>
 

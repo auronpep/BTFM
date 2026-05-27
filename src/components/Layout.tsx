@@ -739,7 +739,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             </span>
                           </div>
                           <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                            Apply this concept interactively in the <strong className="text-teal-700 font-bold">{term.laboratoryName}</strong> to practice compliance scanning under California law.
+                            Apply this concept interactively in the <strong className="text-teal-700 font-bold">{term.laboratoryName}</strong> to practice compliance scanning under state and federal legal standards.
                           </p>
                           <button
                             onClick={() => {
@@ -762,7 +762,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                           </span>
                         </div>
                         <p className="text-xs text-ink/75 leading-relaxed font-sans font-medium">
-                          Fiduciary guidelines under California law are strict. If your board has an active conflict of interest, spousal contracts, or registry issues, protect your directors under direct attorney-client privilege.
+                          Fiduciary guidelines under state laws are strict. If your board has an active conflict of interest, spousal contracts, or registry issues, protect your directors under direct attorney-client privilege.
                         </p>
                         <a
                           href="https://NPOlawyers.com"

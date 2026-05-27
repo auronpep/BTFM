@@ -464,7 +464,7 @@ export const CaliforniaRules: React.FC = () => {
                     <div className="pt-2">
                       <LegalEscalationCard 
                         trigger={rule.legalEscalationTrigger} 
-                        explanation="Failing to address California's organization statutory limits exposes the entity to immediate revocation by the Attorney General. Seek Counsel from NPO Lawyers to correct regulatory delinquent statuses."
+                        explanation="Failing to address state-level registry guidelines and statutory limits exposes the entity to immediate revocation by the Attorney General. Seek Counsel from qualified legal advisors (such as NPO Lawyers for California snapshots) to correct regulatory delinquent statuses."
                         actionText="Schedule Regulatory Audit"
                         relatedTopic={rule.title}
                       />
@@ -557,7 +557,7 @@ export const CaliforniaRules: React.FC = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Enter Organization Name or 7-Digit California Entity Number..."
+                    placeholder="Enter Organization Name or State Entity/Registry Number..."
                     value={registryQuery}
                     onChange={(e) => setRegistryQuery(e.target.value)}
                     disabled={isScanning}
@@ -614,7 +614,7 @@ export const CaliforniaRules: React.FC = () => {
                         <span className="text-[10px] font-extrabold text-teal-600 uppercase tracking-wider block">Registry Stance: CURRENT & SECURE</span>
                         <h4 className="font-serif font-black text-lg text-ink">Compliance Verification Succeeded</h4>
                         <p className="text-xs text-ink/75 leading-relaxed">
-                          The mock query confirms that <strong>"{registryQuery}"</strong> is fully <strong>ACTIVE</strong> with the California Registry of Charitable Trusts (CT) and <strong>CURRENT</strong> with the Secretary of State (SOS). No late penalties or administrative blocks exist.
+                          The mock query confirms that <strong>"{registryQuery}"</strong> is fully <strong>ACTIVE</strong> with state regulatory agencies (such as the California Registry of Charitable Trusts) and <strong>CURRENT</strong> with the Secretary of State. No late penalties or administrative blocks exist.
                         </p>
                       </div>
                     </div>
@@ -772,7 +772,7 @@ export const CaliforniaRules: React.FC = () => {
                     <span>🚨 CRITICAL FIDUCIARY EXPOSURE DETECTED</span>
                   </p>
                   <p className="font-medium text-ink/90 font-semibold">
-                    A bylaws score under 80% indicates major structural gaps under California charity law. Outdated clauses or missing bans (e.g. allowing proxies or omitting electronic definitions) can <strong>void board votes</strong> and trigger <strong>personal joint-and-several liability</strong> under California Corporations Code § 5239.
+                    A bylaws score under 80% indicates major structural gaps under state charity law. Outdated clauses or missing bans (e.g. allowing proxies or omitting electronic definitions) can <strong>void board votes</strong> and trigger <strong>personal joint-and-several liability</strong> under applicable state laws (including California Corporations Code § 5239).
                   </p>
                 </div>
               ) : bylawScore < 100 ? (
@@ -792,7 +792,7 @@ export const CaliforniaRules: React.FC = () => {
                     <span>💎 FULL STATUTORY COMPLIANCE</span>
                   </p>
                   <p className="font-medium text-teal-950 font-semibold">
-                    Excellent. Your bylaws explicitly incorporate all 10 critical California Corporations Code governance constraints. Keep a physical signed copy in your minute book and run an attorney review every 3 years.
+                    Excellent. Your bylaws explicitly incorporate all 10 critical state and corporate governance constraints (including California Corporations Code). Keep a physical signed copy in your minute book and run an attorney review every 3 years.
                   </p>
                 </div>
               )}
@@ -848,12 +848,12 @@ export const CaliforniaRules: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-3.5 bg-white rounded border border-fog/80 flex flex-col justify-between h-full space-y-3">
                   <p className="font-sans text-xs italic text-ink/80 leading-relaxed text-left">
-                    "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under the California Corporations Code. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting."
+                    "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under applicable state corporate codes. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting."
                   </p>
                   <button
                     type="button"
                     onClick={() => handleCopyScript(
-                      "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under the California Corporations Code. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting.",
+                      "Fellow Board Members, our bylaws audit shows we have potential statutory compliance gaps under applicable state corporate codes. To protect the board from personal liability, I move that we authorize a special committee or counsel to review our current bylaws and draft compliant amendments before our next annual meeting.",
                       1
                     )}
                     className="w-full py-1.5 bg-brass/10 hover:bg-brass/20 text-brass text-[10px] font-bold uppercase tracking-wider rounded border border-brass/20 transition-premium flex items-center justify-center gap-1.5 cursor-pointer"
@@ -874,12 +874,12 @@ export const CaliforniaRules: React.FC = () => {
 
                 <div className="p-3.5 bg-white rounded border border-fog/80 flex flex-col justify-between h-full space-y-3">
                   <p className="font-sans text-xs italic text-ink/80 leading-relaxed text-left">
-                    "Under California Corporations Code Section 5213, our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State."
+                    "Under standard corporate officer split rules (such as California Corporations Code Section 5213), our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State."
                   </p>
                   <button
                     type="button"
                     onClick={() => handleCopyScript(
-                      "Under California Corporations Code Section 5213, our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State.",
+                      "Under standard corporate officer split rules (such as California Corporations Code Section 5213), our current officer split is legally non-compliant. I propose we amend our leadership roles to separate the President/CEO from the Treasurer and Secretary positions immediately, and update our corporate records with the Secretary of State.",
                       2
                     )}
                     className="w-full py-1.5 bg-brass/10 hover:bg-brass/20 text-brass text-[10px] font-bold uppercase tracking-wider rounded border border-brass/20 transition-premium flex items-center justify-center gap-1.5 cursor-pointer"
@@ -911,7 +911,7 @@ export const CaliforniaRules: React.FC = () => {
                 D&O Liability & Fiduciary Coverage Estimator
               </h3>
               <p className="text-xs text-ink/70 font-sans max-w-2xl leading-relaxed">
-                Adjust the sliders representing your organization's annual operating budget and employee headcount to calculate your statutory risk exposure and suggested insurance parameters in California.
+                Adjust the sliders representing your organization's annual operating budget and employee headcount to calculate your statutory risk exposure and suggested insurance parameters nationally and regionally.
               </p>
             </div>
 
@@ -1053,7 +1053,7 @@ export const CaliforniaRules: React.FC = () => {
                 Board Liability Protection Spotlight: D&O vs. EPLI Matrix
               </h3>
               <p className="text-xs text-paper/70 font-sans max-w-2xl leading-relaxed">
-                Many California directors mistakenly believe standard General Liability policies shield their personal savings. In reality, board-level lawsuits (which are 90% employment-related) require targeted riders.
+                Many directors mistakenly believe standard General Liability policies shield their personal savings. In reality, board-level lawsuits (which are 90% employment-related) require targeted riders.
               </p>
             </div>
 
@@ -1091,8 +1091,8 @@ export const CaliforniaRules: React.FC = () => {
                     <td className="py-4 px-4">Wrongful termination, sexual harassment, discrimination, hostile work environment (90% of organization claims).</td>
                     <td className="py-4 px-4 text-center font-bold text-teal-brand">YES</td>
                     <td className="py-4 px-4 font-mono">Often bundled with D&O or as separate $1M rider.</td>
-                    <td className="py-4 px-4">Wage & hour claims (unpaid overtime, missed meal breaks in California).</td>
-                    <td className="py-4 px-4 italic font-semibold text-brass">Verify this rider is active; ensure your HR policy manual complies with CA wage-and-hour.</td>
+                    <td className="py-4 px-4">Wage & hour claims (unpaid overtime, missed meal breaks under strict state guidelines, such as in California).</td>
+                    <td className="py-4 px-4 italic font-semibold text-brass">Verify this rider is active; ensure your HR policy manual complies with applicable state wage-and-hour laws.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1105,7 +1105,7 @@ export const CaliforniaRules: React.FC = () => {
                   <span>Wage & Hour Exclusion Risk Alert</span>
                 </h5>
                 <p className="text-xs text-ink/75 font-sans leading-relaxed max-w-2xl font-semibold">
-                  California's wage-and-hour laws are exceptionally strict. Because standard EPLI excludes missed breaks and overtime disputes, board members must conduct regular HR audits. NPO Lawyers provides privileged audits.
+                  State wage-and-hour laws (such as California's strict guidelines) are exceptionally strict. Because standard EPLI excludes missed breaks and overtime disputes, board members must conduct regular HR audits. NPO Lawyers provides privileged audits.
                 </p>
               </div>
               <a
