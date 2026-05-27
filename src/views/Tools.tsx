@@ -1150,8 +1150,8 @@ export const Tools: React.FC = () => {
             </div>
 
             {/* Persistence & Synchronization Actions */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 border-t border-fog/60 pt-5">
-              <div className="w-full sm:w-1/2 space-y-1.5">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-4 border-t border-fog/60 pt-5">
+              <div className="w-full sm:w-[40%] space-y-1.5 text-left">
                 <label className="text-[9.5px] font-extrabold text-ink/50 uppercase tracking-widest block">
                   Organization Entity / Board Name (Synced)
                 </label>
@@ -1160,10 +1160,10 @@ export const Tools: React.FC = () => {
                   value={userOrgName}
                   onChange={(e) => setUserOrganizationName(e.target.value)}
                   placeholder="e.g. Hope Foundation Board of Directors"
-                  className="w-full text-xs font-bold border border-fog/70 p-2.5 rounded bg-paper/5 focus:ring-1 focus:ring-brass focus:border-brass focus:outline-none text-ink"
+                  className="w-full text-xs font-bold border border-fog/70 py-3 px-3.5 rounded bg-paper/5 focus:ring-1 focus:ring-brass focus:border-brass focus:outline-none text-ink"
                 />
               </div>
-              <div className="w-full sm:w-1/2 flex flex-col sm:flex-row gap-3 sm:pt-5">
+              <div className="w-full sm:w-[60%] flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setIsPortfolioOpen(true)}
                   className="w-full py-3 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded transition-premium cursor-pointer shadow-md inline-flex justify-center items-center gap-2"
