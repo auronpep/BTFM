@@ -33,7 +33,7 @@ export const AuthorityMap: React.FC = () => {
       id: 'amend-bylaws',
       action: 'Amending the Corporate Bylaws',
       correctGroup: 'board',
-      explanation: 'California law strictly prohibits committees or executives from amending corporate bylaws. This is a non-delegable duty reserved solely for the full Board.',
+      explanation: 'Standard corporate law, including California law (Corp Code § 5212(a)(1)), strictly prohibits committees or executives from amending corporate bylaws. This is a non-delegable duty reserved solely for the full Board.',
       statute: 'CA Corp Code § 5212(a)(1)',
       rationale: 'Bylaws dictate corporate rules. Delegating amendment authority to a subset of directors invites coups, deadlock, or minoritarian rule.'
     },
@@ -41,7 +41,7 @@ export const AuthorityMap: React.FC = () => {
       id: 'appoint-ceo',
       action: 'Appointing or Terminating the CEO',
       correctGroup: 'board',
-      explanation: 'Appointing, evaluating, compensating, and terminating the Executive Director or chief officers is an exclusive, non-delegable responsibility of the full Board.',
+      explanation: 'Appointing, evaluating, compensating, and terminating the Executive Director or chief officers is an exclusive, non-delegable responsibility under standard corporate rules (such as California Corporations Code § 5212(a)(2)).',
       statute: 'CA Corp Code § 5212(a)(2)',
       rationale: 'The Board is the sole employer of the executive. Allowing a committee or the CEO themselves to appoint officers voids independent oversight.'
     },
@@ -65,7 +65,7 @@ export const AuthorityMap: React.FC = () => {
       id: 'emergency-spend',
       action: 'Approving an Mid-Quarter $15,000 Emergency Budget Amendment',
       correctGroup: 'committee',
-      explanation: 'Board Executive Committees are designed to handle interim, time-sensitive operational updates between scheduled quarterly board meetings, provided the bylaws authorize it.',
+      explanation: 'Board Executive Committees are designed to handle interim, time-sensitive operational updates between scheduled quarterly board meetings, provided bylaws and state laws permit committee spending delegations.',
       statute: 'CA Corp Code § 5212',
       rationale: 'The Executive Committee represents a rapid-response unit that can exercise board-like powers on interim, un-restricted cash decisions within bylaw limits.'
     },
@@ -115,7 +115,7 @@ export const AuthorityMap: React.FC = () => {
       correctGroup: 'ceo',
       explanation: 'Filing routine corporate compliance updates, changing mailing locations, and filing standard administrative reports are standard CEO operations.',
       statute: 'Standard Corporate Operations',
-      rationale: 'Routine regulatory filings (excluding Form 990 or bylaws) are administrative tasks executed by staff under general operational delegation.'
+      rationale: 'Routine regulatory filings (excluding Form 990 or state corporate articles) are administrative tasks executed by staff under general operational delegation.'
     },
     {
       id: 'emergency-repair',
@@ -603,7 +603,7 @@ export const AuthorityMap: React.FC = () => {
 
               <div className="space-y-2 text-xs text-ink/75 max-w-md mx-auto leading-relaxed font-sans">
                 <p>
-                  <strong>Why Section 5212 Matters:</strong> Under California law, a board can delegate powers to committees, but certain fundamental actions can *never* be outsourced. Ensuring bylaws and policies match these statutory boundaries protects the corporation from operational invalidations and regulatory sanctions.
+                  <strong>Why Section 5212 Matters:</strong> Under standard corporate law (and California law specifically), a board can delegate powers to committees, but certain fundamental actions can *never* be outsourced. Ensuring bylaws and policies match these statutory boundaries protects the corporation from operational invalidations and regulatory sanctions.
                 </p>
               </div>
 
@@ -651,7 +651,7 @@ export const AuthorityMap: React.FC = () => {
                   <div className="space-y-6 text-xs text-ink/80 leading-relaxed font-sans">
                     <div>
                       <h3 className="font-bold text-slate-brand uppercase tracking-wider mb-2">Non-Delegable Duties (Board Only)</h3>
-                      <p className="mb-2">Under <strong>California Corporations Code § 5212(a)</strong>, certain corporate powers can never be outsourced to any committee, officer, or individual:</p>
+                      <p className="mb-2">Under <strong>standard corporate codes (and California Corporations Code § 5212(a) specifically)</strong>, certain corporate powers can never be outsourced to any committee, officer, or individual:</p>
                       <ul className="list-disc pl-4 space-y-1.5">
                         <li><strong>Bylaw Amendments:</strong> Amending or repealing bylaws is strictly reserved for the full Board.</li>
                         <li><strong>Officer Selection:</strong> Appointing or removing chief officers or the CEO/ED must be decided by the Board.</li>
@@ -676,7 +676,7 @@ export const AuthorityMap: React.FC = () => {
                       <ul className="list-disc pl-4 space-y-1.5">
                         <li><strong>Budget Spending:</strong> Executing approved budget line-items (e.g., standard office rent, utility bills).</li>
                         <li><strong>Staff Management:</strong> Hiring, supervising, and terminating entry-to-mid-level employees.</li>
-                        <li><strong>Routine Filings:</strong> Submitting standard compliance notices (such as changing the mailing address on the California Statement of Information).</li>
+                        <li><strong>Routine Filings:</strong> Submitting standard compliance notices (such as changing the mailing address on standard state filings like the California Statement of Information).</li>
                         <li><strong>Asset Protection:</strong> Executing immediate minor building repairs to prevent facility damage.</li>
                       </ul>
                     </div>

@@ -78,21 +78,21 @@ export const BudgetWorksheet: React.FC = () => {
       consequence: 'Under IRC § 4958, the IRS can impose "Intermediate Sanctions" for paying compensation in excess of fair market value. This consists of a 25% personal tax on the executive and a 10% personal tax on individual directors who approved the salary without relying on comparable data.',
       statute: 'IRC § 4958',
       statuteText: 'IRS Excess Benefit Transactions and board safe harbors.',
-      scriptQuestion: 'Did the board vote to authorize this $35,000 increase using formal local compensation comparability studies of peer California organizations, and are we recording that the executive was completely recused?',
+      scriptQuestion: 'Did the board vote to authorize this $35,000 increase using formal regional or California compensation comparability studies of peer organizations, and are we recording that the executive was completely recused?',
       scriptRationale: 'Relying on three comparable salary studies and recusing the employee grants the board "rebuttable presumption of reasonableness," shielding directors from personal audit assessments.',
       scriptTarget: 'Board President & Treasurer',
       cfoInquiry: [
         'Are we currently filing or preparing IRS Form 990 Schedule J for this position?',
-        'Can the Finance Department produce the exact three local comparability reports or IRS guidelines used to establish the compensation range?',
+        'Can the Finance Department produce the exact three regional comparability reports or IRS guidelines used to establish the compensation range?',
         'Is there a formal signed conflict of interest recusal form for the Executive Director for the meeting during which this increase was discussed and voted upon?'
       ],
       invoicesRequest: [
-        'Compensation survey data or salary reports from 3 similar California budget-sized organizations.',
+        'Compensation survey data or salary reports from 3 similar budget-sized organizations.',
         'Board meeting minutes containing the formal approval of compensation, detailing the comparability data and recusal.',
         'Signed employment agreement amendment or offer letter signed by the Board President.'
       ],
-      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized California organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRC Section 4958.',
-      advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates California Attorney General guidelines, initiating immediate IRC § 4958 intermediate sanctions risk.'
+      minutesShow: 'RESOLVED, that the Board of Directors, having reviewed compensation comparability data for similar-sized organizations and confirming the complete recusal and absence of the Executive Director, hereby approves an amendment to the Executive Director\'s employment agreement to set annual compensation at $145,000, which is determined to be reasonable and not an excess benefit under IRC Section 4958.',
+      advisoryText: 'COMPENSATION OVERRUN TRIGGERED: A 31.8% salary increase without peer salary comparability data violates state charitable guidelines, initiating immediate IRC § 4958 intermediate sanctions risk.'
     },
     'self-dealing': {
       id: 'self-dealing',
@@ -113,11 +113,11 @@ export const BudgetWorksheet: React.FC = () => {
       statute: 'CA Corp Code § 5233',
       statuteText: 'California self-dealing standards and board approval steps.',
       scriptQuestion: 'Since this marketing vendor is owned by your spouse, this represents a conflict of interest. Did the board formally vote to approve this contract prior to signing, and were competing contractor bids reviewed?',
-      scriptRationale: 'Conflicts must be disclosed, competed, and authorized solely by disinterested directors to remain valid under California corporations law.',
+      scriptRationale: 'Conflicts must be disclosed, competed, and authorized solely by disinterested directors to remain valid under standard corporate law (including California guidelines).',
       scriptTarget: 'Executive Director (CEO) & Board Secretary',
       cfoInquiry: [
         'When was this contract signed, and did the Executive Director sign it on behalf of the organization without board knowledge?',
-        'Were at least two other competitive proposals obtained from unrelated web development firms in California?',
+        'Were at least two other competitive proposals obtained from unrelated web development firms?',
         'Did the Executive Director completely leave the room during the board discussion and vote?'
       ],
       invoicesRequest: [
@@ -126,7 +126,7 @@ export const BudgetWorksheet: React.FC = () => {
         'Bylaws or procurement policies showing conflict of interest guidelines.'
       ],
       minutesShow: 'RESOLVED, that the disinterested members of the Board, having reviewed two competitive bids and finding the agreement with [Spousal Entity] to be of fair market value, highly advantageous, and in the best interest of the corporation, hereby approves the $15,000 agreement. The Executive Director was recused, did not participate in discussion, and abstained from voting in compliance with CA Corp Code § 5233.',
-      advisoryText: 'SELF-DEALING CONTRACT EXCEEDED: Awarding a 100% spousal contract without pre-approval, competitive bids, or recusal violates CA Corp Code § 5233. This exposes voting directors to direct corporate restitution demands.'
+      advisoryText: 'SELF-DEALING CONTRACT EXCEEDED: Awarding a 100% spousal contract without pre-approval, competitive bids, or recusal violates CA Corp Code § 5233. This exposes voting directors to direct state AG personal enforcement actions.'
     },
     'payroll-tax': {
       id: 'payroll-tax',
@@ -150,17 +150,17 @@ export const BudgetWorksheet: React.FC = () => {
       scriptRationale: 'Directors have an active duty to verify tax compliance. Trusting the executive\'s verbal assurance is legally insufficient when personal joint-and-several financial penalties are active under federal tax law.',
       scriptTarget: 'Treasurer & Executive Director',
       cfoInquiry: [
-        'What is the exact amount of unpaid federal tax Form 941 deposits and state DE-9 deposits?',
-        'Has the IRS or California EDD issued any notice of intent to levy or unpaid balance letters?',
+        'What is the exact amount of unpaid federal tax Form 941 deposits and state payroll tax deposits (such as DE-9)?',
+        'Has the IRS or state tax authorities (such as California EDD) issued any notice of intent to levy or unpaid balance letters?',
         'Are we currently prioritizing paying any vendors, landlords, or employee net wages over payroll taxes?'
       ],
       invoicesRequest: [
-        'Most recent IRS Form 941 and California EDD DE-9 filings.',
+        'Most recent IRS Form 941 and state payroll tax filings, such as California EDD DE-9 filings.',
         'EFTPS (Electronic Federal Tax Payment System) receipt confirmations for the last 3 pay periods.',
-        'All recent IRS and EDD billing notices or outstanding balance notices.'
+        'All recent IRS and state tax agency billing notices or outstanding balance notices.'
       ],
       minutesShow: 'RESOLVED, that the Board of Directors directs the Treasurer and Executive Director to immediately pay all outstanding federal and state employee tax withholdings. The Board hereby mandates that no other operating expense or vendor payment be authorized if employee payroll tax withholdings remain unpaid, to preserve compliance and eliminate direct director personal liability under IRC § 6672.',
-      advisoryText: 'TRUST FUND EXPOSURE EXCEEDED: Failing to deposit payroll withholdings triggers immediate 100% personal liability for directors under IRC § 6672. The IRS can seize personal assets to recover these trust fund taxes.'
+      advisoryText: 'TRUST FUND EXPOSURE EXCEEDED: Failing to deposit payroll withholdings triggers immediate 100% personal liability for directors under IRC § 6672. The IRS and state tax agencies can seize personal assets to recover these trust fund taxes.'
     },
     'restricted-funds': {
       id: 'restricted-funds',
@@ -177,7 +177,7 @@ export const BudgetWorksheet: React.FC = () => {
         'Donor-restricted scholarship funds were diverted to pay general operating overhead and administrative payroll.',
         'The transfer occurred without written donor consent or a California court order.'
       ],
-      consequence: 'Under the California Charitable Trust Doctrine, donor-restricted funds represent a strict trust. Diverting restricted assets to cover general administrative expenses—even during a cash crunch—is a breach of trust. The California Attorney General actively prosecutes boards for restricted fund diversion and demands personal restitution from individual directors.',
+      consequence: 'Under standard Charitable Trust Doctrines (including California\'s), donor-restricted funds represent a strict trust. Diverting restricted assets to cover general administrative expenses—even during a cash crunch—is a breach of trust. State Attorneys General actively prosecute boards for restricted fund diversion and demand personal restitution from individual directors.',
       statute: 'CA Gov Code § 12580',
       statuteText: 'Supervision of Trustees and Charitable Trusts Act.',
       scriptQuestion: 'These funds were donor-restricted for student scholarships. Did the organization secure written consent from the original donors before diverting this $65,000 to cover general operating expenses?',
@@ -194,7 +194,7 @@ export const BudgetWorksheet: React.FC = () => {
         'Bank statements for restricted accounts and copies of any written correspondence with the donor.'
       ],
       minutesShow: 'RESOLVED, that the Board of Directors directs the immediate transfer of $65,000 from the general operating cash account back into the donor-restricted scholarship account. The Board further mandates that no restricted funds are to be used for general operations, and that a formal written donor consent protocol must be initiated before any restricted asset is reallocated in the future.',
-      advisoryText: 'BREACH OF CHARITABLE TRUST TRIGGERED: Diverting 76.5% of scholarship funds to cover administrative payroll violates the CA Charitable Trust Doctrine. This triggers direct California Attorney General personal enforcement actions.'
+      advisoryText: 'BREACH OF CHARITABLE TRUST TRIGGERED: Diverting 76.5% of scholarship funds to cover administrative payroll violates standard Charitable Trust Doctrines. This triggers direct state AG personal enforcement actions.'
     },
     'luxury-travel': {
       id: 'luxury-travel',
@@ -245,10 +245,10 @@ export const BudgetWorksheet: React.FC = () => {
         'The D&O insurance policy was allowed to lapse to conserve operating cash.',
         'Directors have no personal liability shield in the event of third-party or regulatory lawsuits.'
       ],
-      consequence: 'In California, statutory volunteer immunity protections (CA Corp Code § 5047.5) *only* apply if the corporation maintains active liability insurance. Allowing the D&O policy to lapse strips the board of personal protection, exposing individual directors\' personal savings and homes to active corporate lawsuits.',
+      consequence: 'Standard state volunteer immunity statutes (such as California Corporations Code § 5047.5) *only* apply if the corporation maintains active liability insurance. Allowing the D&O policy to lapse strips the board of personal protection, exposing individual directors\' personal savings and homes to active corporate lawsuits.',
       statute: 'CA Corp Code § 5047.5',
       statuteText: 'Mandatory insurance thresholds for volunteer director immunity protection.',
-      scriptQuestion: 'Has our D&O liability policy actively lapsed, and can we immediately reinstate the policy to preserve statutory personal immunity under California law?',
+      scriptQuestion: 'Has our D&O liability policy actively lapsed, and can we immediately reinstate the policy to preserve statutory personal immunity under applicable state laws?',
       scriptRationale: 'Maintaining active D&O insurance represents the absolute baseline of personal asset protection for volunteer board directors.',
       scriptTarget: 'Board President & Treasurer',
       cfoInquiry: [
@@ -262,7 +262,7 @@ export const BudgetWorksheet: React.FC = () => {
         'Most recent written notification of policy expiration or non-renewal.'
       ],
       minutesShow: 'RESOLVED, that the Board of Directors finds the lapse of the Director and Officer (D&O) liability insurance policy to represent an unacceptable exposure of the personal assets of the directors. The Treasurer is hereby authorized and directed to immediately fund the premium payment of $35,000 and reinstate the policy to preserve volunteer director immunity under CA Corp Code § 5047.5.',
-      advisoryText: 'IMMUNITY SHIELD NULLIFIED: A lapsed D&O policy strips volunteer directors of California statutory immunity (CA Corp Code § 5047.5). Directors are 100% personally exposed to lawsuit defense costs.'
+      advisoryText: 'IMMUNITY SHIELD NULLIFIED: A lapsed D&O policy strips volunteer directors of standard state volunteer immunity protections (such as California Corporations Code § 5047.5). Directors are 100% personally exposed to lawsuit defense costs.'
     }
   };
 
@@ -338,7 +338,7 @@ export const BudgetWorksheet: React.FC = () => {
                     Operating Ledger - FY 2026 Q2 Interim Report
                   </span>
                 </div>
-                <CaliforniaNoteBadge statute="CA AG Standard" text="Fiduciary Asset Control" className="scale-90 origin-right py-0.5" />
+                <CaliforniaNoteBadge statute="Standard Fiduciary Code" text="Fiduciary Asset Control" className="scale-90 origin-right py-0.5" />
               </div>
 
               {/* Audit Progress Scanner Banner */}
@@ -504,12 +504,12 @@ export const BudgetWorksheet: React.FC = () => {
                                           <span className="text-[9px] bg-rose-200 text-rose-800 px-1.5 py-0.5 rounded-full font-mono font-extrabold tracking-widest uppercase">Variance Limit Exceeded</span>
                                         </h4>
                                         <p className="text-xs text-rose-700 font-semibold leading-relaxed">
-                                          {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under California charity law."}
+                                          {line.advisoryText || "This expense exceeds your configured variance risk tolerance, triggering potential regulatory scrutiny under standard charitable oversight rules."}
                                         </p>
                                         <div className="pt-2 flex items-center gap-4">
                                           <button
                                             onClick={() => {
-                                              const messageText = `We are reviewing the budget sheet: "${line.category}" line showing budgeted $${line.budgeted.toLocaleString()} vs actual $${line.actual.toLocaleString()} (${line.pct}% variance). This variance alert advises an immediate review because: ${line.advisoryText || 'of California statutory limits'}.`;
+                                              const messageText = `We are reviewing the budget sheet: "${line.category}" line showing budgeted $${line.budgeted.toLocaleString()} vs actual $${line.actual.toLocaleString()} (${line.pct}% variance). This variance alert advises an immediate review because: ${line.advisoryText || 'of state statutory limits'}.`;
                                               navigate(`contact-us?topic=budget&message=${encodeURIComponent(messageText)}`);
                                             }}
                                             className="text-[10px] font-extrabold uppercase tracking-wider text-rose-800 hover:text-rose-950 flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0"
@@ -684,7 +684,7 @@ export const BudgetWorksheet: React.FC = () => {
                   {/* Legal Escalation Referrals (LegalEscalationCard) */}
                   {currentLine.status === 'extreme' ? (
                     <LegalEscalationCard 
-                      trigger="California Fiduciary Risk Alert" 
+                      trigger="State Fiduciary Risk Alert" 
                       explanation={`This finding represents a direct violation of regulatory law. Proceeding without certified legal restructuring can trigger severe state penalties, personal director audit assessments, or loss of tax exemption. We recommend obtaining a bylaws or procedures audit from independent legal counsel.`} 
                       actionText="Consult Charity Attorneys"
                       relatedTopic={currentLine.statute}
@@ -720,7 +720,7 @@ export const BudgetWorksheet: React.FC = () => {
           {/* Quick Disclaimer */}
           <div className="bg-white/50 border border-fog/80 rounded-xl p-5 text-center text-xs text-ink/60 font-sans max-w-4xl mx-auto">
             <strong className="text-brass uppercase tracking-wider text-[10px] block mb-1">Educational Fiduciary Laboratory</strong>
-            These scenarios are modeled after common corporate and financial errors inspected by California regulators. They are designed for educational training purposes only. Always consult a licensed attorney to audit your specific board packets and operational policies.
+            These scenarios are modeled after common corporate and financial errors inspected by state and federal regulators. They are designed for educational training purposes only. Always consult a licensed attorney to audit your specific board packets and operational policies.
           </div>
 
         </div>

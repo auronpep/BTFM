@@ -44,7 +44,7 @@ export const BoardPacketLab: React.FC = () => {
       consequence: 'Under IRC Section 4958 (Intermediate Sanctions), paying an executive in excess of fair market value can trigger a 25% excise tax on the executive and a 10% personal tax on individual directors who approved the package without standard comparable data.',
       statute: 'IRC § 4958',
       statuteText: 'IRS Intermediate Sanctions & Rebuttable Presumption Safe Harbor.',
-      scriptQuestion: 'Has this board obtained independent comparability data of salaries from similar-sized California organizations in our geographic region, and will the Executive Director recuse themselves from both our deliberations and the vote?',
+      scriptQuestion: 'Has this board obtained independent comparability data of salaries from similar-sized regional or California organizations in our geographic region, and will the Executive Director recuse themselves from both our deliberations and the vote?',
       scriptRationale: 'Securing three comparable salary data points and ensuring the executive is absent during debate grants the board safe harbor protection under IRS guidelines, preventing personal director penalties.',
       scriptTarget: 'Board President & Treasurer',
       isSevere: true
@@ -56,12 +56,12 @@ export const BoardPacketLab: React.FC = () => {
       flagTitle: 'Bypassing Counsel & Deliberative Duties',
       redFlags: [
         'A comprehensive 30-page bylaw revision is scheduled for an immediate vote without a legal redline draft provided in advance.',
-        'No review or sign-off by a California-admitted attorney specializing in tax-exempt organizations is cited.'
+        'No review or sign-off by a qualified attorney specializing in tax-exempt organizations is cited.'
       ],
-      consequence: 'Amending bylaws without legal counsel frequently introduces clauses that violate California Corporations Code, create governance deadlocks, or fail to conform with active IRS definitions, risking the corporate tax-exempt status.',
+      consequence: 'Amending bylaws without legal counsel frequently introduces clauses that violate standard state corporate codes, create governance deadlocks, or fail to conform with active IRS definitions, risking the corporate tax-exempt status.',
       statute: 'CA Corp Code § 5150',
       statuteText: 'California Corporations Code regulating amendment of bylaws.',
-      scriptQuestion: 'Have these proposed bylaw amendments been vetted and certified by an independent California charity attorney, and can we postpone this vote to allow directors at least seven days to read the full redline draft?',
+      scriptQuestion: 'Have these proposed bylaw amendments been vetted and certified by an independent charity law attorney, and can we postpone this vote to allow directors at least seven days to read the full redline draft?',
       scriptRationale: 'Fiduciary Duty of Care requires directors to make informed decisions. Voting on complex governing documents without reading them or having counsel review them is a prime indicator of negligence.',
       scriptTarget: 'Governance Committee Chair',
       isSevere: false
@@ -77,11 +77,11 @@ export const BoardPacketLab: React.FC = () => {
         'Executive director took out personal debt and extended it to the charity without board authorization.',
         'Charity is paying 10% interest directly to the executive without self-dealing reviews or alternative bid disclosures.'
       ],
-      consequence: 'Under California Corporations Code Section 5233, any transaction where an officer or director has a material financial interest is legally defined as self-dealing. Bypassing statutory approval and filing requirements renders directors personally liable for restoring any unauthorized payments with interest.',
+      consequence: 'Under standard corporate self-dealing rules (including California Corporations Code Section 5233), any transaction where an officer or director has a material financial interest is legally defined as self-dealing. Bypassing statutory approval and filing requirements renders directors personally liable for restoring any unauthorized payments with interest.',
       statute: 'CA Corp Code § 5233',
       statuteText: 'Strict statutory rules and approval steps for Self-Dealing Transactions.',
       scriptQuestion: 'Before the organization pays any interest or accepts this loan, did the disinterested board formalize a Section 5233 self-dealing review, verify that the charity could not obtain standard bank terms, and document this in the minutes?',
-      scriptRationale: 'Section 5233 transactions are highly scrutinized by the CA Attorney General. The board must formally prove the transaction was fair, in the charity\'s best interest, and that a more advantageous arrangement was not obtainable.',
+      scriptRationale: 'Section 5233 transactions are highly scrutinized by state Attorneys General. The board must formally prove the transaction was fair, in the charity\'s best interest, and that a more advantageous arrangement was not obtainable.',
       scriptTarget: 'Executive Director (CEO) & Board President',
       isSevere: true
     },
@@ -98,7 +98,7 @@ export const BoardPacketLab: React.FC = () => {
       statute: 'CA Corp Code § 5230',
       statuteText: 'Duty of Loyalty and standard Conflict of Interest regulations.',
       scriptQuestion: 'Since the marketing vendor is owned by your spouse, this represents a conflict of interest under our bylaws. Was this conflict formally disclosed, did we solicit at least two other competitive bids, and will the board vote to approve or reject this contract in your absence?',
-      scriptRationale: 'Conflicts are not inherently illegal, but they MUST be disclosed, competed, and voted on solely by disinterested, independent directors to remain compliant with California law and protect the board.',
+      scriptRationale: 'Conflicts are not inherently illegal, but they MUST be disclosed, competed, and voted on solely by disinterested, independent directors to remain compliant with state laws and protect the board.',
       scriptTarget: 'Executive Director (CEO)',
       isSevere: true
     },
@@ -113,7 +113,7 @@ export const BoardPacketLab: React.FC = () => {
         'Donor-restricted scholarship funds were diverted to pay general operating overhead and administrative payroll.',
         'The transfer occurred without written donor consent or a California court order.'
       ],
-      consequence: 'Under the California Charitable Trust Doctrine, donor-restricted funds represent a strict trust. Diverting restricted assets to cover general administrative expenses—even during a cash crunch—is a breach of trust. The California Attorney General actively prosecutes boards for restricted fund diversion and demands personal restitution from individual directors.',
+      consequence: 'Under standard Charitable Trust Doctrines (including in California), donor-restricted funds represent a strict trust. Diverting restricted assets to cover general administrative expenses—even during a cash crunch—is a breach of trust. State Attorneys General actively prosecute boards for restricted fund diversion and demand personal restitution from individual directors.',
       statute: 'CA Gov Code § 12580',
       statuteText: 'Supervision of Trustees and Charitable Trusts Act.',
       scriptQuestion: 'These funds were donor-restricted for student scholarships. Did the organization secure written consent from the original donors before diverting this $65,000 to cover general operating expenses?',
@@ -153,7 +153,7 @@ export const BoardPacketLab: React.FC = () => {
       statute: 'CA Corp Code § 5231',
       statuteText: 'Duty of Care and standard of care requirements for board directors.',
       scriptQuestion: 'What specific business travel or executive retreats accounted for this $35,000 budget overrun, and why was this variance not flagged and pre-authorized by the Treasurer or the Finance Committee?',
-      scriptRationale: 'Fiduciary care requires active budget tracking. Allowing large, unapproved discretionary travel budgets suggests a lack of active internal financial oversight and controls.',
+      scriptRationale: 'Standard fiduciary Duty of Care (modeled in California Corporations Code Section 5231) requires active budget tracking. Allowing large, unapproved discretionary travel budgets suggests a lack of active internal financial oversight and controls.',
       scriptTarget: 'Treasurer & Executive Director',
       isSevere: false
     },
@@ -166,11 +166,11 @@ export const BoardPacketLab: React.FC = () => {
         'A sitting director was hired as an emergency consultant, receiving $28,000 in personal compensation.',
         'This contract threatens the statutory 51% disinterested board ratio.'
       ],
-      consequence: 'California Corporations Code Section 5227 mandates that no more than 49% of the board may be "interested persons" (individuals compensated by the organization for services, or their relatives). Violating the 51% disinterested board rule invalidates board actions and is a primary trigger for Attorney General enforcement actions.',
+      consequence: 'Standard corporate codes, such as California Corporations Code Section 5227, mandate that no more than 49% of the board may be "interested persons" (individuals compensated by the organization for services, or their relatives). Violating the 51% disinterested board rule invalidates board actions and is a primary trigger for Attorney General enforcement actions.',
       statute: 'CA Corp Code § 5227',
       statuteText: 'The mandatory 51% Disinterested Board Independence Rule.',
       scriptQuestion: 'Does compensating John Doe for consulting services push our board above the 49% "interested person" limit, and did the disinterested board review comparable contractor bids before hiring a sitting director?',
-      scriptRationale: 'Under Section 5227, the board must ensure that the vast majority of directors are completely independent and uncompensated to maintain legal integrity and regulatory compliance in California.',
+      scriptRationale: 'Under Section 5227, the board must ensure that the vast majority of directors are completely independent and uncompensated to maintain legal integrity and regulatory compliance nationally.',
       scriptTarget: 'Governance Committee Chair',
       isSevere: true
     },
@@ -186,7 +186,7 @@ export const BoardPacketLab: React.FC = () => {
         'The Executive Director is permitted to sign and authorize their own reimbursement checks.'
       ],
       consequence: 'Weak internal controls invite embezzlement and fraud. In a lawsuit or theft event, insurance carriers frequently deny D&O coverage if the board failed to enforce basic industry-standard dual signature controls, leaving individual directors exposed.',
-      statute: 'SOX Act / CA AG Best Practices',
+      statute: 'SOX Act / State AG Best Practices',
       statuteText: 'Internal controls standards and Asset Protection Guidelines.',
       scriptQuestion: 'Will the board immediate pass a resolution mandating a dual-signature policy for all bank and electronic transfers over $5,000, and require that any executive reimbursement be reviewed and signed off by the Treasurer?',
       scriptRationale: 'Segregation of duties is the absolute baseline of fiduciary asset protection. Allowing an executive to sign checks to themselves represents a complete breakdown of internal controls.',
@@ -239,7 +239,7 @@ export const BoardPacketLab: React.FC = () => {
       id: 'agenda-call',
       title: 'I. Call to Order & Welcome',
       description: 'Recording attendance, verifying a quorum, and formally approving previous minutes are standard practices.',
-      complianceNote: 'A timely Call to Order, verifying quorum under California Corporations Code § 5211, and approving past minutes establishes a legal, transparent record of the board\'s meeting.'
+      complianceNote: 'A timely Call to Order, verifying quorum under standard state codes (such as California Corporations Code § 5211), and approving past minutes establishes a legal, transparent record of the board\'s meeting.'
     },
     'agenda-reports': {
       id: 'agenda-reports',
@@ -281,7 +281,7 @@ export const BoardPacketLab: React.FC = () => {
       id: 'budget-program',
       title: 'Program Delivery Costs',
       description: 'Aligning operating budgets directly with programs satisfies efficiency rules.',
-      complianceNote: 'Allocating the majority of funds (above 65%) directly to program services is highly praised by the CA Attorney General and major charity oversight bureaus.'
+      complianceNote: 'Allocating the majority of funds (above 65%) directly to program services is highly praised by state regulators and major charity oversight bureaus.'
     },
     'budget-lease': {
       id: 'budget-lease',
@@ -1119,7 +1119,7 @@ export const BoardPacketLab: React.FC = () => {
                         Next Professional Action Recommended:
                       </p>
                       <p className="text-[11px] text-ink/65 leading-relaxed">
-                        To cement these protections for your California entity, request a formal attorney review of your current Bylaws and Corporate Book. Our firm specializing in charity law will evaluate your complete record suite.
+                        To cement these protections for your entity (including any specific California snapshot requirements), request a formal attorney review of your current Bylaws and Corporate Book. Our firm specializing in charity law will evaluate your complete record suite.
                       </p>
                     </div>
 
@@ -1254,7 +1254,7 @@ export const BoardPacketLab: React.FC = () => {
                   {/* Legal Escalation Referrals (LegalEscalationCard) */}
                   {currentFlag?.isSevere ? (
                     <LegalEscalationCard 
-                      trigger="California Fiduciary Risk Alert" 
+                      trigger="State Fiduciary Risk Alert" 
                       explanation={`This finding represents a direct violation of regulatory law. Proceeding without certified legal restructuring can trigger severe state penalties, personal director audit assessments, or loss of tax exemption. We recommend obtaining a bylaws or procedures audit from independent legal counsel.`} 
                       actionText="Consult Charity Attorneys"
                       relatedTopic={currentFlag.statute}
@@ -1287,7 +1287,7 @@ export const BoardPacketLab: React.FC = () => {
           {/* Quick Disclaimer */}
           <div className="bg-white/50 border border-fog/80 rounded-xl p-5 text-center text-xs text-ink/60 font-sans max-w-4xl mx-auto">
             <strong className="text-brass uppercase tracking-wider text-[10px] block mb-1">Educational Fiduciary Laboratory</strong>
-            These scenarios are modeled after common corporate and financial errors inspected by California regulators. They are designed for educational training purposes only. Always consult a licensed attorney to audit your specific board packets and operational policies.
+            These scenarios are modeled after common corporate and financial errors inspected by state and federal regulators (such as California AG audits). They are designed for educational training purposes only. Always consult a licensed attorney to audit your specific board packets and operational policies.
           </div>
 
           {/* Scanner Audit Assistant Drawer */}
@@ -1363,7 +1363,7 @@ export const BoardPacketLab: React.FC = () => {
                           {
                             title: "Whistleblower Protection Policy (CA Labor Code § 1102.5)",
                             desc: "Mandatory for organizations with employees. Ensures staff can report financial or governance variances without retaliation.",
-                            script: "Do we have an active Whistleblower Protection policy matching California Labor Code standards? I request we formalize and review this at our next meeting to protect the board from employer liability."
+                            script: "Do we have an active Whistleblower Protection policy matching standard state labor codes (such as California's strict guidelines)? I request we formalize and review this at our next meeting to protect the board from employer liability."
                           },
                           {
                             title: "Document Retention & Destruction Policy (Sarbanes-Oxley / IRS Form 990)",

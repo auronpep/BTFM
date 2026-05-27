@@ -91,7 +91,7 @@ const questions: Question[] = [
     text: "Conflict-of-Interest Handling",
     options: [
       { text: "We do transactions with directors' private businesses without formal votes.", points: 1, description: "Direct violation of the Duty of Loyalty. Suspect transactions." },
-      { text: "Conflicts are disclosed, but the interested directors remain in the room and vote.", points: 3, description: "Violates California Corporations Code. Transactions voidable." },
+      { text: "Conflicts are disclosed, but the interested directors remain in the room and vote.", points: 3, description: "Violates standard state corporate codes (including California Corp Code § 5233). Transactions voidable." },
       { text: "Conflicts disclosed; interested director recuses, leaves room, and disinterested vote occurs.", points: 5, description: "Fulfills Duty of Loyalty. Bulletproof record of disinterested voting." }
     ]
   },
@@ -100,7 +100,7 @@ const questions: Question[] = [
     text: "Bylaws and Policy Review",
     options: [
       { text: "Our bylaws are over 10 years old, or we have no Board Policy Manual.", points: 1, description: "Bylaws are obsolete. Operating without a legal guide book." },
-      { text: "We have bylaws and policies, but haven't reviewed them in over 3 years.", points: 3, description: "Out of sync with modern California regulatory changes." },
+      { text: "We have bylaws and policies, but haven't reviewed them in over 3 years.", points: 3, description: "Out of sync with modern state and federal regulatory changes." },
       { text: "Bylaws and policy manuals are formally audited and updated every 2 years.", points: 5, description: "Maximum compliance readiness. Aligned with current statutory rules." }
     ]
   }
@@ -235,7 +235,7 @@ export const SelfAssessment: React.FC = () => {
           "Distribute detailed board packets at least 5 business days prior to meetings.",
           "Mandate that interested directors recuse themselves from salary votes."
         ],
-        referralReason: "Your Level 1 score indicates significant legal exposures. We recommend requesting an immediate Bylaws and Governance Audit with the California Center for Nonprofit Law to establish basic fiduciary compliance before a regulatory problem arises."
+        referralReason: "Your Level 1 score indicates significant legal exposures. We recommend requesting a comprehensive Bylaws and Governance Review (with specialized state-level counsel or the California Center for Nonprofit Law / NPO Lawyers for West Coast entities) to establish basic fiduciary compliance before a regulatory problem arises."
       };
     } else if (score <= 30) {
       return {
@@ -250,7 +250,7 @@ export const SelfAssessment: React.FC = () => {
           "Create a formal Board Policy Manual to prevent directors from micromanaging staff.",
           "Audit the screening background status of all youth-facing staff/volunteers."
         ],
-        referralReason: "Your board is outgrowing its startup foundations but lacks the defensive structures of an established organization. Speak with CCNL regarding drafting a customized Board Policy Manual and setting up disinterested executive salary safe harbors."
+        referralReason: "Your board is outgrowing its startup foundations but lacks the defensive structures of an established organization. Speak with qualified nonprofit counsel (or the legal team at California Center for Nonprofit Law / NPO Lawyers) regarding drafting a customized Board Policy Manual and setting up disinterested executive salary safe harbors."
       };
     } else if (score <= 42) {
       return {
@@ -261,11 +261,11 @@ export const SelfAssessment: React.FC = () => {
         priority: "POLISH & SOLIDIFY",
         recs: [
           "Formalize your Audit Committee by board resolution if revenues approach $2M.",
-          "Benchmark your executive salary using professional Northern/Southern California CPA surveys.",
-          "Conduct biennial reviews of your bylaws to ensure alignment with recent California changes.",
+          "Benchmark your executive salary using professional regional or California CPA comparability surveys.",
+          "Conduct biennial reviews of your bylaws to ensure alignment with recent state corporate law developments.",
           "Establish an annual board self-assessment rhythm."
         ],
-        referralReason: "Your board is highly functional. To maintain this excellence and ensure bulletproof compliance with California's strict $2M audit rules or executive compensation standards, let the team at NPO Lawyers conduct a routine annual review of your minutes and filings."
+        referralReason: "Your board is highly functional. To maintain this excellence and ensure compliance with strict state audit thresholds (such as California's $2M rule) or executive compensation standards, consider a routine annual review of your minutes and filings by specialized counsel, such as the team at NPO Lawyers."
       };
     } else {
       return {
@@ -275,11 +275,11 @@ export const SelfAssessment: React.FC = () => {
         desc: "Congratulations. Your board operates at the absolute gold standard of institutional governance. You have a highly diverse, independent board, complete pre-meeting discipline, separate audit committees, robust comparability salary records, and clean defensive minutes. You serve as an exemplar of organization stewardship.",
         priority: "PRESERVE EXCELLENCE",
         recs: [
-          "Mentor other local California boards on governance best-practices.",
+          "Mentor other local and regional boards on governance best-practices.",
           "Incorporate a standing annual board calendar into your policy manuals.",
           "Conduct a peer-review or external legal check on your bylaws every 3 years."
         ],
-        referralReason: "Your board is exceptional. Ensure your high-level governance is perfectly integrated into your donor solicitation materials and grant proposals. NPO Lawyers can provide regulatory counsel as you navigate strategic growth, endowment building, or real estate acquisitions."
+        referralReason: "Your board is exceptional. Ensure your high-level governance is integrated into your donor solicitation materials and grant proposals. For continuing regulatory counsel or California-specific operations, the team at NPO Lawyers can assist as you navigate strategic growth, endowment building, or real estate acquisitions."
       };
     }
   };
@@ -303,7 +303,7 @@ export const SelfAssessment: React.FC = () => {
               Mature Board Self-Assessment
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
-              Evaluate your board against the strict fiduciary standards of California law and IRS 501(c)(3) guidelines. Complete this 10-question diagnostic to discover your maturity tier.
+              Evaluate your board against standard state fiduciary laws (with California statutory snapshots) and IRS 501(c)(3) guidelines. Complete this 10-question diagnostic to discover your maturity tier.
             </p>
           </div>
 
@@ -473,13 +473,13 @@ export const SelfAssessment: React.FC = () => {
                         
                         if (idx === 0) { // Legal & Compliance
                           if (ratio <= 0.6) {
-                            adviceTitle = "🚨 Critical Compliance Risk (CA Corp Code Violation)";
-                            advice = "CRITICAL COMPLIANCE RISK: Your board is operating with high exposure. Executive salary setting violates Rebuttable Presumption rules (IRC § 4958), or board size fails California statutory guidelines. Direct personal excise taxes may apply.";
+                            adviceTitle = "🚨 Critical Compliance Risk (State Code or IRS Violation)";
+                            advice = "CRITICAL COMPLIANCE RISK: Your board is operating with high exposure. Executive salary setting violates Rebuttable Presumption rules (IRC § 4958), or board size fails state statutory guidelines. Direct personal excise taxes may apply.";
                             adviceBorder = "border-rose-300";
                             adviceBg = "bg-rose-50/50";
                           } else if (ratio <= 0.85) {
                             adviceTitle = "⚠️ Compliance Advisory (Comparability Studies Needed)";
-                            advice = "MODERATE ADVISORY: Basic meeting discipline is present, but lacks formal recusal documentation or independent salary benchmarks. Obtain written Northern/Southern California comparability studies.";
+                            advice = "MODERATE ADVISORY: Basic meeting discipline is present, but lacks formal recusal documentation or independent salary benchmarks. Obtain written regional or California comparability studies.";
                             adviceBorder = "border-amber-300";
                             adviceBg = "bg-amber-50/40";
                           } else {
@@ -525,12 +525,12 @@ export const SelfAssessment: React.FC = () => {
                         } else { // Board Leadership
                           if (ratio <= 0.6) {
                             adviceTitle = "🚨 Outdated Bylaws (Decisions Legally Voidable)";
-                            advice = "CRITICAL GOVERNING DEFICIT: Bylaws are obsolete (exceeding 10 years old) or conflict-of-interest voting procedures directly violate California Corporations Code. Decisions may be legally voided.";
+                            advice = "CRITICAL GOVERNING DEFICIT: Bylaws are obsolete (exceeding 10 years old) or conflict-of-interest voting procedures directly violate standard state corporate codes (such as California Corporations Code § 5233). Decisions may be legally voided.";
                             adviceBorder = "border-rose-300";
                             adviceBg = "bg-rose-50/50";
                           } else if (ratio <= 0.85) {
                             adviceTitle = "⚠️ Governance Code Advisory";
-                            advice = "GOVERNANCE REVIEW: Basic policies are available but updated infrequently. Plan a formal bylaws review session in the next 12 months to align with California organization statutory shifts.";
+                            advice = "GOVERNANCE REVIEW: Basic policies are available but updated infrequently. Plan a formal bylaws review session in the next 12 months to align with recent state statutory shifts.";
                             adviceBorder = "border-amber-300";
                             adviceBg = "bg-amber-50/40";
                           } else {

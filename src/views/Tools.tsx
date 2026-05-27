@@ -3,7 +3,7 @@ import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { 
   Award, FileText, ShieldCheck, Scale, Landmark, ChevronRight, Activity, 
-  ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion, CheckSquare
+  ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion, CheckSquare, Download
 } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
 
@@ -63,7 +63,7 @@ const form990Questions = [
     line: 'Line 8a & 8b',
     question: "Did your board contemporaneously document all meetings and committee votes with written minutes?",
     optimal: 'yes',
-    guidance: "Contemporaneous means before the next meeting or within 60 days. Failing to record minutes invalidates actions and violates CA law.",
+    guidance: "Contemporaneous means before the next meeting or within 60 days. Failing to record minutes invalidates actions and violates corporate requirements in many states (including California Corporations Code § 5215).",
   },
   {
     id: 'pre_filing_review',
@@ -91,14 +91,14 @@ const form990Questions = [
     line: 'Line 12c',
     question: "Does the organization actively monitor and enforce compliance with its Conflict of Interest policy?",
     optimal: 'yes',
-    guidance: "Review must include recusing interested parties. Failure to enforce voids CA self-dealing protections.",
+    guidance: "Review must include recusing interested parties. Failure to enforce voids statutory self-dealing protections (such as in California).",
   },
   {
     id: 'whistleblower_policy',
     line: 'Line 13',
     question: "Do you have an active, written Whistleblower Protection policy?",
     optimal: 'yes',
-    guidance: "Under Sarbanes-Oxley, document destruction and whistleblower retaliation are criminal offenses. California Labor Code § 1102.5 mandates protection.",
+    guidance: "Under Sarbanes-Oxley, document destruction and whistleblower retaliation are criminal offenses. Federal law mandates protection, alongside strict state codes (such as California Labor Code § 1102.5).",
   },
   {
     id: 'retention_policy',
@@ -180,9 +180,9 @@ export const Tools: React.FC = () => {
         },
         {
           question: 'Did the Executive Director physically leave the room and completely recuse themselves from both the discussion and the vote to approve this salary adjustment?',
-          rationale: 'Required by California self-dealing safe harbors and IRS conflicts of interest standards.',
+          rationale: 'Required by standard self-dealing safe harbors and IRS conflicts of interest standards.',
           targetResponse: '"The Executive was in the room to answer questions but did not cast a vote."',
-          counterStrike: 'Presence during the debate destroys the recusal safe harbor. California law requires complete absence during deliberations to prevent undue influence. The minutes must show they left the room prior to any executive payroll discussion.'
+          counterStrike: 'Presence during the debate destroys the recusal safe harbor. Standard fiduciary practice, and California law (Corp Code § 5213), requires complete absence during deliberations to prevent undue influence. The minutes must show they left the room prior to any executive payroll discussion.'
         }
       ]
     },
@@ -191,20 +191,20 @@ export const Tools: React.FC = () => {
       title: 'Spousal Vendor Conflict',
       problem: 'A $15,000 web contract awarded to the Executive Director\'s spouse without bids.',
       statute: 'CA Corp Code § 5233 / Bylaws § 7',
-      statuteTitle: 'California Statutory Self-Dealing Prohibition',
+      statuteTitle: 'Statutory Self-Dealing Prohibition (California Corp Code § 5233)',
       target: 'Executive Director & Board Secretary',
       questions: [
         {
           question: 'Since this marketing contract was awarded to your spouse\'s LLC, did the board obtain and evaluate at least two other competitive independent bids before signing?',
           rationale: 'Fulfills the duty to prove the organization could not secure a more advantageous arrangement with reasonable effort.',
           targetResponse: '"They gave us a spousal discount, so they were obviously the cheapest and best option."',
-          counterStrike: 'An untested spousal discount is not a legal substitute for independent bids. Under CA Corp Code § 5233, any transaction with a spousal entity is a "self-dealing transaction" and is voidable by the Attorney General unless disinterested directors prove they vetted other market options beforehand.'
+          counterStrike: 'An untested spousal discount is not a legal substitute for independent bids. Under standard self-dealing rules (including CA Corp Code § 5233), any transaction with a spousal entity is a "self-dealing transaction" and is voidable by the Attorney General unless disinterested directors prove they vetted other market options beforehand.'
         },
         {
           question: 'Was this transaction formally disclosed, debated, and approved by a vote of the disinterested directors *prior* to executing the contract?',
           rationale: 'Ensures the contract was approved in good faith by disinterested members.',
           targetResponse: '"The Executive Director signed it under their general operational spending authority, and the board reviewed it later."',
-          counterStrike: 'A conflicted contract cannot be authorized retroactively by the executive alone. Self-dealing safe harbor rules require explicit advance board approval by disinterested directors. If signed without advance board action, individual directors may face personal restitution demands from the CA AG.'
+          counterStrike: 'A conflicted contract cannot be authorized retroactively by the executive alone. Self-dealing safe harbor rules require explicit advance board approval by disinterested directors. If signed without advance board action, individual directors may face personal restitution demands from state AG regulators.'
         }
       ]
     },
@@ -212,7 +212,7 @@ export const Tools: React.FC = () => {
       id: 'payroll-taxes',
       title: 'Deferred Payroll Tax Exposures',
       problem: 'Withholding taxes unpaid to conserve cash, creating direct joint-and-several director liability.',
-      statute: 'IRC § 6672 / CA UI Code § 1735',
+      statute: 'IRC § 6672 / State UI Code',
       statuteTitle: '100% Trust Fund Recovery Penalty',
       target: 'CFO, Treasurer, or Executive Director',
       questions: [
@@ -235,14 +235,14 @@ export const Tools: React.FC = () => {
       title: 'Donor-Restricted Fund Diversion',
       problem: '$65,000 in donor-restricted scholarship funds spent on administrative overhead.',
       statute: 'CA Gov Code § 12580 / UPMIFA',
-      statuteTitle: 'California Charitable Trust Doctrine',
+      statuteTitle: 'Charitable Trust Doctrine',
       target: 'Executive Director & Treasurer',
       questions: [
         {
-          question: 'Did we secure explicit written donor consent or a California court order before utilizing these restricted scholarship funds to cover administrative payroll?',
-          rationale: 'Donor restrictions are legally binding trusts under the California Charitable Trust Doctrine.',
+          question: 'Did we secure explicit written donor consent or a state court order before utilizing these restricted scholarship funds to cover administrative payroll?',
+          rationale: 'Donor restrictions are legally binding trusts under standard Charitable Trust Doctrines (including California\'s).',
           targetResponse: '"It was a temporary loan to cover payroll during a cash gap; we will reimburse the account once funding arrives."',
-          counterStrike: 'Hardship does not authorize a loan from restricted trust funds. Diverting restricted assets for general overhead is a breach of trust under CA Gov Code § 12580. The California Attorney General actively prosecutes board members for restricted fund diversion, demanding personal restitution of the diverted funds.'
+          counterStrike: 'Hardship does not authorize a loan from restricted trust funds. Diverting restricted assets for general overhead is a breach of trust under standard Charitable Trust Doctrines. State Attorneys General actively prosecute board members for restricted fund diversion, demanding personal restitution of the diverted funds.'
         }
       ]
     }
@@ -391,6 +391,35 @@ export const Tools: React.FC = () => {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
+  const handleDownloadScript = () => {
+    const script = scriptTemplates[selectedScriptId];
+    if (!script) return;
+
+    let text = `FIDUCIARY BOARDROOM SCRIPT: ${script.title.toUpperCase()}\n`;
+    text += `GOVERNANCE CHALLENGE: ${script.problem}\n`;
+    text += `RELEVANT LAW: ${script.statute} (${script.statuteTitle})\n`;
+    text += `TARGET FOR INQUIRY: ${script.target}\n\n`;
+    
+    script.questions.forEach((q, idx) => {
+      text += `QUESTION ${idx + 1}: "${q.question}"\n`;
+      text += `RATIONALE: ${q.rationale}\n`;
+      text += `EXPECTED EVASIVE ANSWER: ${q.targetResponse}\n`;
+      text += `ATTORNEY ACTION PLAN: ${q.counterStrike}\n\n`;
+    });
+
+    text += `CONFIDENTIAL LEGAL NOTE: Drafted in connection with California Center for Nonprofit Law (NPOlawyers.com). Privileged for internal board review only.`;
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `board_inquiry_script_${selectedScriptId}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handlePrintScript = () => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
@@ -522,7 +551,7 @@ export const Tools: React.FC = () => {
               <div class="signature-block">
                 <div class="sig-name" style="font-size: 14px; margin-bottom: 4px;">Myron Steeves, J.D.</div>
                 <div class="line"></div>
-                <div>Dean, California Boardroom Initiative</div>
+                <div>Dean, National Boardroom Initiative (California Chapter)</div>
                 <div style="font-size: 10px;">California Center for Nonprofit Law</div>
               </div>
               
@@ -1324,6 +1353,13 @@ export const Tools: React.FC = () => {
                     <span>{copySuccess ? 'Copied Script!' : 'Copy Script Text'}</span>
                   </button>
                   <button 
+                    onClick={handleDownloadScript}
+                    className="w-full inline-flex justify-center items-center gap-2 px-3 py-2 bg-paper/20 hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog/50 transition-premium cursor-pointer"
+                  >
+                    <Download className="w-4 h-4 text-brass" />
+                    <span>Download .txt Script</span>
+                  </button>
+                  <button 
                     onClick={handlePrintScript}
                     className="w-full inline-flex justify-center items-center gap-2 px-3 py-2 bg-paper/20 hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog/50 transition-premium cursor-pointer"
                   >
@@ -1807,13 +1843,13 @@ export const Tools: React.FC = () => {
 
                   <div className="text-center space-y-2 border-b border-brass/30 pb-4">
                     <span className="font-sans text-[11px] font-extrabold uppercase tracking-widest text-brass block">
-                      California Boardroom Initiative
+                      National Boardroom Initiative (California Snapshot)
                     </span>
                     <h4 className="text-2xl font-bold tracking-wide text-ink">
                       BOARD GOVERNANCE COMPLIANCE MEMORANDUM
                     </h4>
                     <p className="text-xs font-sans italic text-ink/55">
-                      Executed in Connection with California Corporations Code & IRS Part VI Standards
+                      Executed in Connection with Standard Corporate Codes & IRS Part VI Standards
                     </p>
                   </div>
 
@@ -1941,9 +1977,9 @@ export const Tools: React.FC = () => {
                           </head>
                           <body>
                             <div class="double-border">
-                              <div style="text-align: center; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #a47e3c; font-family: sans-serif; text-transform: uppercase;">California Boardroom Initiative</div>
+                              <div style="text-align: center; font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #a47e3c; font-family: sans-serif; text-transform: uppercase;">National Boardroom Initiative (California Snapshot)</div>
                               <h2>Governance Memorandum</h2>
-                              <div class="subtitle">Execution Record under California Corporations Code & IRS Part VI Standards</div>
+                              <div class="subtitle">Execution Record under Standard Corporate Codes & IRS Part VI Standards</div>
                               
                               <div class="meta">
                                 <div><strong>Organization Entity:</strong> ${userOrgName}</div>

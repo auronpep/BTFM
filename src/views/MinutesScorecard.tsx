@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { 
   CheckSquare, Square, AlertTriangle, Copy, Check,
-  FileText, FileCheck, Sparkles, Terminal, ChevronRight
+  FileText, FileCheck, Sparkles, Terminal, ChevronRight, Download
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
 
@@ -35,7 +35,7 @@ Minutes written by Mary.`;
 
 // Courtroom safe minutes template
 const defensiveMinutesTemplate = `MINUTES OF A REGULAR MEETING OF THE BOARD OF DIRECTORS
-OF [ORGANIZATION NAME], A CALIFORNIA ORGANIZATION BENEFIT CORPORATION
+OF [ORGANIZATION NAME], A [STATE] PUBLIC BENEFIT CORPORATION
 
 A regular meeting of the Board of Directors of the Corporation was held on [Date], at [Time] PST, at [Location / Videoconference link]. 
 
@@ -66,7 +66,7 @@ The Board President raised the matter of the proposed software contract with [Ve
 IV. EXECUTIVE COMPENSATION REVIEW & SAFETY COMPLIANCE (IRS SAFE HARBOR)
 The Board reviewed the compensation package for the Executive Director for FY 2026-2027. Prior to deliberations, Executive Director [Name] recused themselves and exited the room.
 
-The Treasurer presented independent salary comparability studies gathered from three peer California organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
+The Treasurer presented independent salary comparability studies gathered from three peer organizations of similar budget size and scope. Following discussion, and on motion duly made and seconded, the independent, disinterested directors voted [Unanimously / or specify vote count] to establish the Executive Director's annual salary at [Salary Amount], effective [Date]. The Board concluded that this compensation is fair, reasonable, and based on objective market comparables. The Executive Director was not present for, and did not participate in, the debate or vote.
 
 V. IRS FORM 990 REVIEW
 The Treasurer presented the draft of the annual IRS Form 990 for review. Following a comprehensive review of the filing disclosures and upon motion duly made, seconded, and unanimously carried, the Board approved the Form 990 as presented and authorized the Treasurer to file the return.
@@ -120,7 +120,7 @@ The board meeting convened at 6:00 PM with a legal quorum present. John Doe pres
 I. EXECUTIVE COMPENSATION REASONABLENESS RESOLUTION (IRC § 4958)
 The board reviewed proposed compensation for the Executive Director. The interested director was fully recused and exited the meeting room prior to deliberations.
 
-The board reviewed independent salary comparability survey data of peer California organizations. Based on this market data, the independent and disinterested directors voted to approve a reasonable salary resolution of $120,000, determining the amount is fair and justified.
+The board reviewed independent salary comparability survey data of peer regional or California organizations. Based on this market data, the independent and disinterested directors voted to approve a reasonable salary resolution of $120,000, determining the amount is fair and justified.
 
 II. INTERESTED PARTY TRANSACTION DISCLOSURE (CA CORP CODE § 5233)
 The Board reviewed a proposal to contract with Beacon Tech Solutions. Director Mary Smith disclosed their material financial interest and was fully recused from discussions and the vote.
@@ -251,7 +251,7 @@ NOW, THEREFORE, BE IT RESOLVED:
 
 1. RECUSAL: It is hereby recorded that the Executive Director was fully recused from all board discussions, deliberations, and votes regarding their proposed compensation, and formally exited the meeting room prior to any debate or vote.
 
-2. INDEPENDENT COMPARABLES: The Board Treasurer presented and the Board reviewed independent salary comparability data from a comprehensive salary study of peer California organizations of similar budget size ($500,000 to $2,500,000) and geographic scope (the ${comparableRegion} region). This data demonstrated that the median annual compensation for executive directors of comparable organizations ranges from $95,000 to $135,000.
+2. INDEPENDENT COMPARABLES: The Board Treasurer presented and the Board reviewed independent salary comparability data from a comprehensive salary study of peer organizations of similar budget size ($500,000 to $2,500,000) and geographic scope (the ${comparableRegion} region). This data demonstrated that the median annual compensation for executive directors of comparable organizations ranges from $95,000 to $135,000.
 
 3. APPROVAL AND BASIS: Based on its review of the independent comparability data, the disinterested directors of the Board hereby approve an annual salary of $${salaryAmount} for the Executive Director, finding this amount to be fair, reasonable, and in the best interests of the Corporation.
 
@@ -272,7 +272,7 @@ WHEREAS, the Corporation proposes to enter into a contract with ${vendorName} fo
 
 WHEREAS, Board member ${conflictDirector} has disclosed a material financial conflict of interest in connection with this transaction due to being ${conflictNature}; and
 
-WHEREAS, under California Corporations Code Section 5233, the Board must review and approve self-dealing contracts in good faith, with disinterested directors verifying that the transaction is fair and reasonable and that a more advantageous arrangement could not have been obtained with reasonable effort;
+WHEREAS, under applicable state self-dealing rules (such as California Corporations Code Section 5233), the Board must review and approve self-dealing contracts in good faith, with disinterested directors verifying that the transaction is fair and reasonable and that a more advantageous arrangement could not have been obtained with reasonable effort;
 
 NOW, THEREFORE, BE IT RESOLVED:
 
@@ -298,7 +298,7 @@ WHEREAS, the Corporation received a generous contribution in the amount of $${re
 
 WHEREAS, the donor has expressed the specific intent and restriction that these funds be utilized solely for the purpose of ${restrictionPurpose}; and
 
-WHEREAS, the Board of Directors of ${organizationName} is committed to upholding its fiduciary duty to protect and preserve donor-restricted assets in compliance with California's Uniform Prudent Management of Institutional Funds Act (UPMIFA);
+WHEREAS, the Board of Directors of ${organizationName} is committed to upholding its fiduciary duty to protect and preserve donor-restricted assets in compliance with the Uniform Prudent Management of Institutional Funds Act (UPMIFA), active in most states including California;
 
 NOW, THEREFORE, BE IT RESOLVED:
 
@@ -321,6 +321,31 @@ ${secretaryName}, Board Secretary`;
     setTimeout(() => setCopiedSandbox(false), 2000);
   };
 
+  const downloadTemplateAsText = () => {
+    const blob = new Blob([defensiveMinutesTemplate], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `defensive_board_minutes_template.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadResolutionAsText = () => {
+    const text = compileResolutionText();
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `board_resolution_${resolutionState.resolutionType}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   // Criteria database
   const [criteria, setCriteria] = useState<ScoringCriterion[]>(() => {
     const savedIds = localStorage.getItem('cdx_minutes_scorecard_checked_ids');
@@ -333,7 +358,7 @@ ${secretaryName}, Board Secretary`;
         label: 'Accurate Attendance & Quorum Verified',
         description: 'Record meeting date, time, location, names of directors present and absent, and verify that a legal quorum was established.',
         whyMatters: 'If a regulatory audit challenges a board decision, the minutes must prove a quorum existed. Without a quorum, any board votes are legally void.',
-        statute: 'CA Corp Code § 5211'
+        statute: 'CA Corp Code § 5211 / State Code'
       },
       {
         id: 'no-transcripts',
@@ -341,15 +366,15 @@ ${secretaryName}, Board Secretary`;
         label: 'Deliberations Recorded as "Actions & Decisions" (No Verbatim Transcripts)',
         description: 'Completely exclude verbatim statements, word-for-word quotes, personal slurs, or detailed logs of disagreements. Document *decisions* and general topics of deliberation.',
         whyMatters: 'Recording "who said what" creates immediate division and exposes individual directors to heavy subpoenas and discovery during litigation. Minutes are legal evidence, not a newsletter.',
-        statute: 'CA AG Best Practices'
+        statute: 'State AG & IRS Guidelines'
       },
       {
         id: 'conflict-recusal',
         category: 'substantive',
         label: 'Conflict Disclosures & Executive Recusals Documented',
         description: 'State any director conflicts, record that the interested party made disclosures, and explicitly note that they *exited the room* during discussion and the vote.',
-        whyMatters: 'To protect self-dealing contracts from being voided under California Section 5233, the minutes must prove the conflicted director was recused and absent for the vote.',
-        statute: 'CA Corp Code § 5233'
+        whyMatters: 'To protect self-dealing contracts from being voided under applicable state self-dealing codes (such as California Section 5233), the minutes must prove the conflicted director was recused and absent for the vote.',
+        statute: 'applicable state self-dealing codes (such as California Section 5233)'
       },
       {
         id: 'comp-comparables',
@@ -364,7 +389,7 @@ ${secretaryName}, Board Secretary`;
         category: 'defensive',
         label: 'Paid Employees Absent for Vote & Deliberations',
         description: 'Ensure the Executive Director or other compensated staff are completely recused and absent during discussions regarding their own performance and pay.',
-        whyMatters: 'Failing to recuse paid executives invalidates IRS safe harbor structures and compromises the independent governance expected by the California Attorney General.',
+        whyMatters: 'Failing to recuse paid executives invalidates IRS safe harbor structures and compromises the independent governance expected by state regulators and Attorneys General.',
         statute: 'IRS Safe Harbor Guidelines'
       },
       {
@@ -373,7 +398,7 @@ ${secretaryName}, Board Secretary`;
         label: 'Key Board Deliberations Summarized Generally',
         description: 'Summarize discussions briefly, showing the board considered alternative risk options (e.g. "Directors discussed budget variances, evaluated the risk of expansion, and...").',
         whyMatters: 'General summaries demonstrate that the board acted with due diligence (Duty of Care), fulfilling the Business Judgment Rule without detailing sensitive inner disputes.',
-        statute: 'CA Corp Code § 5231'
+        statute: 'CA Corp Code § 5231 / Fiduciary Standards'
       },
       {
         id: 'tax-review',
@@ -389,7 +414,7 @@ ${secretaryName}, Board Secretary`;
         label: 'Signed off by Board Secretary & Centralized Record keeping',
         description: 'Bylaw mandates that final minutes must be formally typed, signed by the Board Secretary, and bound in a central corporate record book.',
         whyMatters: 'Minutes are not official corporate documents until they are voted approved at the subsequent meeting and hand-signed by the Secretary.',
-        statute: 'CA Corp Code § 5215'
+        statute: 'CA Corp Code § 5215 / Secretary Mandates'
       }
     ];
 
@@ -425,7 +450,7 @@ ${secretaryName}, Board Secretary`;
     grade = 'A';
     gradeColor = 'text-teal-brand bg-teal-brand/10 border-teal-brand';
     gradeLabel = 'Courtroom-Ready Defensive Minutes';
-    gradeDesc = 'Excellent. Your minutes conform to high-stakes legal guidelines. They provide a robust shield under the Business Judgment Rule and satisfy strict IRS and California Attorney General audit expectations.';
+    gradeDesc = 'Excellent. Your minutes conform to high-stakes legal guidelines. They provide a robust shield under the Business Judgment Rule and satisfy strict IRS and state regulatory audit expectations.';
   } else if (score >= 6) {
     grade = 'B';
     gradeColor = 'text-emerald-700 bg-emerald-50 border-emerald-300';
@@ -476,7 +501,7 @@ ${secretaryName}, Board Secretary`;
                 Minutes Quality Scorecard
               </h1>
               <p className="text-sm text-ink/70">
-                Are your board minutes a legal shield, or are they a litigation roadmap? Grade your records against California AG standards.
+                Are your board minutes a legal shield, or are they a litigation roadmap? Grade your records against strict state regulatory and IRS guidelines (with specialized California snapshots).
               </p>
             </div>
 
@@ -598,7 +623,7 @@ ${secretaryName}, Board Secretary`;
                   Require a Professional Records Audit?
                 </h4>
                 <p className="text-xs text-paper/80 leading-relaxed font-sans">
-                  The California Center for Nonprofit Law conducts detailed bylaws, policy, and minutes audits. Ensure your board is fully shielded under corporate safe harbors before a dispute arises.
+                  Specialized nonprofit counsel (such as the California Center for Nonprofit Law / NPO Lawyers) conducts detailed bylaws, policy, and minutes audits. Ensure your board is fully shielded under corporate safe harbors before a dispute arises.
                 </p>
                 <div className="pt-1.5">
                   <button
@@ -649,7 +674,7 @@ ${secretaryName}, Board Secretary`;
                         <h4 className={`font-sans font-bold text-sm leading-snug ${item.checked ? 'text-teal-brand' : 'text-ink'}`}>
                           {item.label}
                         </h4>
-                        <CaliforniaNoteBadge statute={item.statute} text="California Standard" className="scale-90 origin-right py-0.5 bg-brass/5" />
+                        <CaliforniaNoteBadge statute={item.statute} text="Statutory Benchmark" className="scale-90 origin-right py-0.5 bg-brass/5" />
                       </div>
                       
                       <p className="text-xs text-ink/70 leading-relaxed font-sans">
@@ -712,6 +737,14 @@ ${secretaryName}, Board Secretary`;
                     </>
                   )}
                 </button>
+
+                <button
+                  onClick={downloadTemplateAsText}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog shadow transition-premium cursor-pointer"
+                >
+                  <Download className="w-4 h-4 text-brass" />
+                  <span>Download .txt Template</span>
+                </button>
               </div>
             </div>
 
@@ -754,6 +787,14 @@ ${secretaryName}, Board Secretary`;
                       <span>Copy Draft Resolution</span>
                     </>
                   )}
+                </button>
+
+                <button
+                  onClick={downloadResolutionAsText}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-fog text-ink text-xs font-bold uppercase tracking-wider rounded border border-fog shadow transition-premium cursor-pointer"
+                >
+                  <Download className="w-4 h-4 text-brass" />
+                  <span>Download .txt Resolution</span>
                 </button>
               </div>
             </div>
@@ -920,7 +961,7 @@ ${secretaryName}, Board Secretary`;
                 )}
 
                 <div className="bg-brass/5 border border-brass/10 p-3.5 rounded-lg text-[11px] text-ink/80 leading-relaxed font-sans mt-4">
-                  <strong>Corporate Law Note:</strong> Once compiled, copy and paste this resolution directly into your meeting minutes. California Corp Code § 5215 confirms that certified copies of minutes are prima facie evidence of meeting proceedings.
+                  <strong>Corporate Law Note:</strong> Once compiled, copy and paste this resolution directly into your meeting minutes. Standard corporate codes (including California Corp Code § 5215) confirm that certified copies of minutes are prima facie evidence of meeting proceedings.
                 </div>
               </div>
 
