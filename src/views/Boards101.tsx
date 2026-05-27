@@ -38,6 +38,7 @@ export const Boards101: React.FC = () => {
   const [customConcerns, setCustomConcerns] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
+  const [consentChecked, setConsentChecked] = useState(false);
 
   // Audio Lecture Desk States (Enhancement 6)
   const [playingLecture, setPlayingLecture] = useState<string | null>(null);
@@ -134,6 +135,10 @@ export const Boards101: React.FC = () => {
       setFormError('Please complete all required fields.');
       return;
     }
+    if (!consentChecked) {
+      setFormError('Please acknowledge the informational disclaimer.');
+      return;
+    }
     setFormError('');
 
     const booking = {
@@ -184,22 +189,28 @@ export const Boards101: React.FC = () => {
                 <div className="absolute top-0 right-0 w-24 h-24 bg-brass/5 rounded-bl-full pointer-events-none" />
                 <h3 className="font-serif text-xl sm:text-2xl text-ink font-bold tracking-tight border-b border-fog/60 pb-3 flex items-center gap-2">
                   <Scale className="w-5 h-5 text-brass" />
-                  Two Fiduciary Responsibilities
+                  Three Fiduciary Duties of Nonprofit Directors
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/80 leading-relaxed">
-                  Every director's actions are bound by statutory law under two primary fiduciary standard vectors:
+                  Every director's actions are bound by statutory law under three primary fiduciary standards:
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
-                    <h4 className="font-serif font-bold text-sm text-slate-brand">1. The Duty of Loyalty</h4>
-                    <p className="text-xs text-ink/70 leading-relaxed">
-                      {parseTextWithGlossary("Caring about the organization more than yourself when conflicts or business opportunities arise. Personal interests must never infect board votes.")}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5 flex flex-col h-full">
+                    <h4 className="font-serif font-bold text-xs text-slate-brand uppercase tracking-wider">1. The Duty of Care</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed flex-grow">
+                      {parseTextWithGlossary("Making decisions based on reasonable diligence, active attendance, and robust inquiry. Fiduciaries must actively investigate what they do not understand.")}
                     </p>
                   </div>
-                  <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
-                    <h4 className="font-serif font-bold text-sm text-slate-brand">2. The Duty of Care</h4>
-                    <p className="text-xs text-ink/70 leading-relaxed">
-                      {parseTextWithGlossary("Making decisions based on reasonable diligence, regular meeting attendance, and robust inquiry. Fiduciaries must actively investigate what they do not understand.")}
+                  <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5 flex flex-col h-full">
+                    <h4 className="font-serif font-bold text-xs text-slate-brand uppercase tracking-wider">2. The Duty of Loyalty</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed flex-grow">
+                      {parseTextWithGlossary("Putting the organization's interests above personal financial or private concerns. Personal interests must never conflict with or infect board votes.")}
+                    </p>
+                  </div>
+                  <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5 flex flex-col h-full">
+                    <h4 className="font-serif font-bold text-xs text-slate-brand uppercase tracking-wider">3. The Duty of Obedience</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed flex-grow">
+                      {parseTextWithGlossary("Remaining faithful to the organization's public charitable purpose, complying with bylaws and state/federal laws, and executing donor intent.")}
                     </p>
                   </div>
                 </div>
@@ -485,6 +496,9 @@ export const Boards101: React.FC = () => {
 
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Bylaws Concerns or Specific Focus Areas:</label>
+                    <div className="p-3 bg-copper/5 border-l-2 border-copper rounded text-[11px] text-copper leading-relaxed font-sans font-medium mb-1.5">
+                      <strong>⚠️ Privacy Notice:</strong> To protect your organization, please do not submit highly confidential details regarding active disputes or pending litigation here. This form is for booking inquiries only and does not establish an attorney-client relationship.
+                    </div>
                     <textarea
                       value={customConcerns}
                       onChange={(e) => setCustomConcerns(e.target.value)}
@@ -492,6 +506,20 @@ export const Boards101: React.FC = () => {
                       rows={3}
                       className="w-full bg-paper/20 border border-fog/80 focus:border-brass rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brass transition-premium"
                     />
+                  </div>
+
+                  <div className="flex items-start gap-2.5 bg-paper/30 p-4 rounded-lg border border-fog/50">
+                    <input
+                      type="checkbox"
+                      id="booking-consent"
+                      required
+                      checked={consentChecked}
+                      onChange={(e) => setConsentChecked(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded border-fog text-brass focus:ring-brass cursor-pointer"
+                    />
+                    <label htmlFor="booking-consent" className="text-[11px] text-ink/75 leading-relaxed font-sans font-medium cursor-pointer select-none">
+                      I understand this is a request for training information and educational materials. I agree that submitting this form does not form a binding legal contract or establish an attorney-client relationship.
+                    </label>
                   </div>
 
                   <button
