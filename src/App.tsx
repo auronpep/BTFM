@@ -39,6 +39,7 @@ function AppContent() {
       return <ArticleReader />;
     case 'scenario':
       return <ScenarioReader />;
+    case 'federal-governance-checklist':
     case 'california-board-rules':
       return <CaliforniaRules />;
     case 'next-meeting':

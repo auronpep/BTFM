@@ -533,7 +533,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     {[
                       { title: "Mature Board Self-Assessment", path: "tools/self-assessment", desc: "Evaluate your board's fiduciary competency" },
                       { title: "Form 990 & Compensation Studies", path: "article/form-990-and-executive-compensation-governance", desc: "IRS executive compensation safe harbors" },
-                      { title: "California Board Rules Index", path: "california-board-rules", desc: "CPA audits and Registry of Charitable Trusts" },
+                      { title: "Federal Governance Checklist", path: "federal-governance-checklist", desc: "CPA audits, Form 990, and state registry guidelines" },
                       { title: "Conflict of Interest Recusals", path: "scenario/founder-salary-conflict", desc: "How to handle interested director votes" }
                     ].map((s) => (
                       <button
@@ -581,7 +581,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
                     const pages = [
                       { title: "Prepare for Your Next Meeting", subtitle: "Structured prep agenda checklist & balanced meeting planning", path: "next-meeting" },
-                      { title: "California Board Rules Index", subtitle: "CPA audits, Form 990, SOI, and CT registry requirements", path: "california-board-rules" },
+                      { title: "Federal Governance Checklist", subtitle: "Federal tax-exempt standards and California snapshot compliance requirements", path: "federal-governance-checklist" },
                       { title: "Training Syllabus Planner", subtitle: "Diagnostic workbook and board capacity planner", path: "training" },
                       { title: "Boards 101 Reference Manual", subtitle: "Governance rules, quick quiz and video resources", path: "boards-101" },
                       { title: "Mature Board Self-Assessment Lab", subtitle: "10-question compliance rating & fiduciary analytics scorecard", path: "tools/self-assessment" },
@@ -865,8 +865,8 @@ const glossaryData: Record<string, GlossaryItem> = {
     definition: 'A unique California statute dictating that not more than 49% of the board of directors can be "interested persons"—meaning anyone compensated by the charity for services (such as the CEO or staff) or their relatives.',
     statute: 'California Corporations Code § 5227',
     consequences: 'Operating a board with an interested majority (e.g. founder, husband, and daughter on a 4-person board) is a major structural violation. All board actions can be declared void, and the corporation risks immediate dissolution by the CA Secretary of State.',
-    laboratoryLink: 'california-board-rules',
-    laboratoryName: 'California Board Rules Center'
+    laboratoryLink: 'federal-governance-checklist',
+    laboratoryName: 'Federal Governance Checklist'
   },
   'ultra-vires': {
     id: 'ultra-vires',

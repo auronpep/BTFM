@@ -59,6 +59,10 @@ const parseHash = () => {
       queryParams: params
     };
   }
+  if (pathname === 'california-board-rules') {
+    window.location.hash = '#/federal-governance-checklist' + (queryString ? `?${queryString}` : '');
+    pathname = 'federal-governance-checklist';
+  }
   
   return {
     path: pathname || 'home',
