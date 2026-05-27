@@ -46,7 +46,7 @@ const simulationData: Record<string, SimOption[]> = {
       riskLevel: 5,
       color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
       meterColor: "bg-emerald-500",
-      commentary: "FULL LEGAL PROTECTION. This meets the IRC § 4958 Rebuttable Presumption standard. The conflict is neutralized, and the board is legally shielded by relying on written market surveys of similar California literacy programs."
+      commentary: "FULL LEGAL PROTECTION. This meets the IRC § 4958 Rebuttable Presumption standard. The conflict is neutralized, and the board is legally shielded by relying on written market surveys of similar literacy programs."
     }
   ],
   "director-micromanaging-staff": [
@@ -98,7 +98,7 @@ const simulationData: Record<string, SimOption[]> = {
       riskLevel: 5,
       color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
       meterColor: "bg-emerald-500",
-      commentary: "PRISTINE STEWARDSHIP. Establishing a separate Audit Committee complies with California law (required at $2M+ gross revenues). Requiring timely detailed financials and deviation reports shields the board under the Business Judgment Rule."
+      commentary: "PRISTINE STEWARDSHIP. Establishing a separate Audit Committee complies with federal best practices and state laws (e.g., required in California at $2M+ gross revenues). Requiring timely detailed financials and deviation reports shields the board under the Business Judgment Rule."
     }
   ],
   "missing-receipts-variance": [
@@ -108,7 +108,7 @@ const simulationData: Record<string, SimOption[]> = {
       riskLevel: 100,
       color: "border-burgundy/40 bg-burgundy/5 text-burgundy",
       meterColor: "bg-burgundy",
-      commentary: "SEVERE AG EXPOSURE. Approving unsubstantiated charges is a breach of trust and a misdemeanor under CA law. The IRS can classify these as automatic taxable income to the ED, and the AG may investigate the board for failure to protect assets."
+      commentary: "SEVERE AG EXPOSURE. Approving unsubstantiated charges is a breach of trust and a potential criminal violation. The IRS can classify these as automatic taxable income to the ED, and the AG may investigate the board for failure to protect assets."
     },
     {
       text: "Option B: Ask the ED to look for the receipts again and tell him to be more careful in the future.",
@@ -150,7 +150,7 @@ const simulationData: Record<string, SimOption[]> = {
       riskLevel: 5,
       color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
       meterColor: "bg-emerald-500",
-      commentary: "SECURE & ETHICAL. Reviewing original documentation determines the legal reality. Communicating transparently and establishing clear Gift Acceptance agreements prevents donor disputes and shields the board under California law."
+      commentary: "SECURE & ETHICAL. Reviewing original documentation determines the legal reality. Communicating transparently and establishing clear Gift Acceptance agreements prevents donor disputes and shields the board under state and federal law."
     }
   ],
   "youth-safety-compliance-failure": [
@@ -176,7 +176,7 @@ const simulationData: Record<string, SimOption[]> = {
       riskLevel: 1,
       color: "border-emerald-500/40 bg-emerald-50/50 text-emerald-800",
       meterColor: "bg-emerald-500",
-      commentary: "OUTSTANDING FIDUCIARY DEFENSE. Halting unscreened programs immediately and executing an emergency safety blitz preserves youth protection. Creating a standing board oversight committee satisfies California's strict Duty of Care standards."
+      commentary: "OUTSTANDING FIDUCIARY DEFENSE. Halting unscreened programs immediately and executing an emergency safety blitz preserves youth protection. Creating a standing board oversight committee satisfies strict fiduciary Duty of Care standards."
     }
   ]
 };
@@ -498,7 +498,7 @@ export const ScenarioReader: React.FC = () => {
                 </div>
 
                 <div className="p-4 bg-paper/50 border border-fog/60 rounded text-[11px] text-ink/60 leading-relaxed font-sans italic">
-                  <strong>Educational Case Disclaimer:</strong> This scenario study represents structural governance patterns. It is published by the California Center for Nonprofit Law for general board training. It is not formal legal counsel, does not establish an attorney-client relationship, and must not be used as a substitute for consulting qualified legal counsel.
+                  <strong>Educational Case Disclaimer:</strong> These resources are educational and focus on nonprofit board governance, federal tax-exempt organization issues, and practical oversight. They are not legal, tax, accounting, or employment advice and do not create an attorney-client relationship. State nonprofit corporation law, charitable registration rules, employment law, mandatory reporting law, governing documents, grant terms, and organization-specific facts may change the analysis.
                 </div>
               </div>
 
@@ -530,7 +530,7 @@ export const ScenarioReader: React.FC = () => {
               {/* RELATED ARTICLES */}
               {matchedArticles.length > 0 && (
                 <div className="pt-6 border-t border-fog/60 space-y-3">
-                  <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50">Related Fiduciary Masterclasses:</h4>
+                  <h4 className="font-sans font-extrabold text-xs uppercase tracking-widest text-ink/50">Related Fiduciary Training Series:</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {matchedArticles.map((art) => (
                       <div 
@@ -634,7 +634,7 @@ export const ScenarioReader: React.FC = () => {
               <div className="pt-2">
                 <LegalEscalationCard 
                   trigger="Navigating a delicate conflict or board compliance crisis?"
-                  explanation="The attorneys at NPO Lawyers advise boards on recusal procedures, comparable salary documentation audits, and corporate restructurings in accordance with California AG standards."
+                  explanation="The attorneys at NPO Lawyers advise boards on recusal procedures, comparable salary documentation audits, and corporate restructurings in accordance with state and federal standards."
                   actionText="Schedule Direct Counsel"
                   relatedTopic={scenario.issueType}
                 />

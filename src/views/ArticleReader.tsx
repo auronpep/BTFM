@@ -242,7 +242,7 @@ export const ArticleReader: React.FC = () => {
     return (
       <Layout>
         <div className="py-20 text-center space-y-4">
-          <p className="font-serif text-2xl font-bold text-burgundy">Masterclass Not Found</p>
+          <p className="font-serif text-2xl font-bold text-burgundy">Training Series Not Found</p>
           <button 
             onClick={() => navigate('articles')}
             className="inline-flex items-center gap-1.5 px-4 py-2 bg-brass text-ink font-bold uppercase text-xs rounded shadow"
@@ -267,7 +267,7 @@ export const ArticleReader: React.FC = () => {
               className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-brand hover:text-brass transition-premium"
             >
               <ArrowLeft className="w-4.5 h-4.5" />
-              <span>Back to Masterclass Library</span>
+              <span>Back to Resource Library</span>
             </button>
           </div>
 
@@ -337,7 +337,7 @@ export const ArticleReader: React.FC = () => {
                                       t.includes('budget') ? 'budget' :
                                       t.includes('bylaws') ? 'bylaws' :
                                       t.includes('fiduciary') ? 'fiduciary' : 'general';
-                    const messageText = `We are reading the masterclass article: "${article.title}" and would like to request further training or advice regarding this topic.`;
+                    const messageText = `We are reading the training series article: "${article.title}" and would like to request further training or advice regarding this topic.`;
                     navigate(`contact-us?topic=${topicSlug}&message=${encodeURIComponent(messageText)}`);
                   }}
                   className="w-full inline-flex justify-center items-center gap-1.5 py-2 bg-burgundy hover:bg-ink text-white text-[10px] font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer border-0"
@@ -360,7 +360,7 @@ export const ArticleReader: React.FC = () => {
 
               {/* PREMIUM AUDIO NARRATOR */}
               <div className="py-2">
-                <AudioNarrator title={`Masterclass Tutorial: ${article.title}`} durationSeconds={article.readingTime * 45} />
+                <AudioNarrator title={`Training Series Tutorial: ${article.title}`} durationSeconds={article.readingTime * 45} />
               </div>
 
               {/* Problem/Challenge Box */}
@@ -383,7 +383,7 @@ export const ArticleReader: React.FC = () => {
               <div className="mt-8 pt-6 border-t border-fog/60 space-y-4">
                 {feedback === null ? (
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-paper/10 p-4 rounded-lg border border-fog/55 text-left">
-                    <span className="text-xs font-bold text-ink/70 tracking-wide font-sans">Was this masterclass guide helpful for your board?</span>
+                    <span className="text-xs font-bold text-ink/70 tracking-wide font-sans">Was this training series guide helpful for your board?</span>
                     <div className="flex items-center gap-3 shrink-0">
                       <button
                         onClick={() => handleFeedback('yes')}
@@ -437,7 +437,7 @@ export const ArticleReader: React.FC = () => {
                         Need specialized counsel or a custom bylaws checkup?
                       </h4>
                       <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
-                        Since this masterclass template does not address your unique board posture, we recommend securing a formal **Bylaws and Board Governance Audit** with California Center for Nonprofit Law. Avoid volunteer director liability and secure your safe harbor compliance.
+                        Since this training series template does not address your unique board posture, we recommend securing a formal **Bylaws and Board Governance Audit** with legal counsel. Avoid volunteer director liability and secure your safe harbor compliance.
                       </p>
                       <div className="pt-2">
                         <button
@@ -447,7 +447,7 @@ export const ArticleReader: React.FC = () => {
                                               t.includes('budget') ? 'budget' :
                                               t.includes('bylaws') ? 'bylaws' :
                                               t.includes('fiduciary') ? 'fiduciary' : 'general';
-                            const messageText = `We are reading the masterclass article: "${article.title}" and would like to request a formal Board Governance and Bylaws Audit for our organization.`;
+                            const messageText = `We are reading the training series article: "${article.title}" and would like to request a formal Board Governance and Bylaws Audit for our organization.`;
                             navigate(`contact-us?topic=${topicSlug}&message=${encodeURIComponent(messageText)}`);
                           }}
                           className="inline-flex items-center gap-1.5 px-4 py-2 bg-burgundy hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer font-sans font-bold border-0"

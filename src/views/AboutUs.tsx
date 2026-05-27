@@ -185,7 +185,7 @@ RE: Fiduciary Compliance and Board Governance Briefing Memo
 - Meeting Frequency: ${freqMap[frequency] || frequency}
 
 2. COMPLIANCE STATUS & REGISTRY STANDING
-- California Registry Status: ${statusMap[stateStatus] || stateStatus}
+- State Registry Status: ${statusMap[stateStatus] || stateStatus}
 ${stateStatus === 'delinquent' ? '  *ALERT: Registry delinquency triggers severe financial fines and loss of charity solicitation rights.' : ''}
 ${stateStatus === 'suspended' ? '  *CRITICAL WARNING: Corporate powers are currently suspended. Immediate revivor petition required.' : ''}
 
@@ -214,7 +214,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
               About the Faculty
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70 font-sans">
-              Meet our founder, Myron Steeves, J.D., and the legal support teams providing educational resources and custom workshops for California board directors.
+              Meet our founder, Myron Steeves, J.D., and the legal support teams providing educational resources and custom workshops for board directors nationwide.
             </p>
           </div>
 
@@ -266,10 +266,10 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
               <div className="space-y-3">
                 <h3 className="font-serif font-bold text-lg text-teal-brand flex items-center gap-2">
                   <Scale className="w-5 h-5 text-brass" />
-                  California & Nationwide Reach
+                  National Governance Training
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/75 leading-relaxed font-sans">
-                  While Myron is based in Southern California and serves as a key authority on California statutory board rules (such as the California Registry of Charitable Trusts filings and the $2M independent audit threshold), he conducts customized **Board Training and governance workshops nationwide** to help boards build defensive, compliant cultures.
+                  While Myron is based in Southern California and serves as a key authority on California statutory board rules, he conducts customized **Board Training and governance workshops nationwide** to help boards build defensive, compliant cultures regardless of their home state.
                 </p>
               </div>
             </div>
@@ -449,7 +449,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                     <div className="space-y-4 animate-fade-in">
                       <div className="space-y-1.5">
                         <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
-                          California Registry Standing
+                          State Registry Standing
                         </label>
                         <select 
                           value={stateStatus}
@@ -459,7 +459,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                           }}
                           className="w-full p-3 bg-white border border-fog/80 rounded-lg text-sm text-ink focus:border-brass focus:outline-none cursor-pointer"
                         >
-                          <option value="current">Current & Compliant with CA Attorney General Registry</option>
+                          <option value="current">Current & Compliant with State Registry (e.g., CA Attorney General)</option>
                           <option value="delinquent">Delinquent (Late RRF-1/CT-TR-1 filings, fines threatened)</option>
                           <option value="suspended">Suspended (FTB, Secretary of State, or Registry Suspended)</option>
                         </select>
@@ -621,7 +621,7 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                       }</strong>. 
                       {stateStatus === 'delinquent' && (
                         <span className="block mt-1.5 p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded font-sans text-xs">
-                          <strong>⚠️ REGISTRY WARNING:</strong> Delinquency status in California results in immediate accumulation of daily fiscal penalties and the loss of your right to solicit charitable contributions. Form RRF-1 and Form CT-TR-1 filing must be completed immediately.
+                          <strong>⚠️ REGISTRY WARNING:</strong> Delinquency status (e.g., in California) results in immediate accumulation of daily fiscal penalties and the loss of your right to solicit charitable contributions. State filings must be completed immediately.
                         </span>
                       )}
                       {stateStatus === 'suspended' && (

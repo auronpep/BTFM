@@ -7,7 +7,11 @@ import { Search, ChevronRight, BookOpen, AlertTriangle, Award, Star, CheckSquare
 
 export const Library: React.FC = () => {
   const { navigate, path } = useRouter();
-  const [activeTab, setActiveTab] = useState<'articles' | 'scenarios'>('articles');
+  const getInitialTab = () => {
+    if (path === 'scenarios') return 'scenarios';
+    return 'articles';
+  };
+  const [activeTab, setActiveTab] = useState<'articles' | 'scenarios'>(getInitialTab());
   const [searchQuery, setSearchQuery] = useState('');
   
   // Mastery filter states
@@ -83,6 +87,10 @@ export const Library: React.FC = () => {
       } else if (path === 'minutes-records') {
         setSelectedCategory('Legal');
         setActiveTab('articles');
+      } else if (path === 'scenarios') {
+        setActiveTab('scenarios');
+      } else if (path === 'library' || path === 'articles') {
+        setActiveTab('articles');
       }
     }, 0);
     return () => clearTimeout(timer);
@@ -149,7 +157,7 @@ export const Library: React.FC = () => {
               The Desk Reference Library
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
-              A comprehensive archive of fiduciaries masterclasses, regulatory guidelines, and classroom-style scenarios. Grounded directly in California state code and IRS safe harbors.
+              A comprehensive archive of fiduciaries training articles, regulatory guidelines, and classroom-style scenarios. Grounded directly in statutory codes and IRS safe harbors.
             </p>
           </div>
 
@@ -159,7 +167,7 @@ export const Library: React.FC = () => {
             {/* LEFT MAIN RAIL: ARTICLES OR SCENARIOS LIST GRID (col-span-8) */}
             <main className="lg:col-span-8 space-y-6">
               
-              {/* Toggle tabs for Masterclasses vs Scenarios */}
+              {/* Toggle tabs for Articles vs Scenarios */}
               <div className="bg-white rounded-xl shadow-sm border border-fog flex p-1.5">
                 <button
                   onClick={() => setActiveTab('articles')}
@@ -170,7 +178,7 @@ export const Library: React.FC = () => {
                   }`}
                 >
                   <BookOpen className="w-4.5 h-4.5" />
-                  <span>Masterclasses ({filteredArticles.length})</span>
+                  <span>Training Articles ({filteredArticles.length})</span>
                 </button>
                 
                 <button
@@ -254,7 +262,7 @@ export const Library: React.FC = () => {
                 ) : (
                   <div className="bg-white rounded-xl border border-fog p-12 text-center text-ink/50 space-y-3">
                     <BookOpen className="w-12 h-12 mx-auto text-ink/20" />
-                    <p className="font-serif text-lg font-bold">No masterclasses found matching your filter</p>
+                    <p className="font-serif text-lg font-bold">No articles found matching your filter</p>
                     <p className="text-sm font-sans">Try expanding your search query or adjusting your filters in the sidebar.</p>
                   </div>
                 )
@@ -406,7 +414,7 @@ export const Library: React.FC = () => {
                   <p className="text-[10px] text-ink/65 leading-relaxed font-sans">
                     {studiedList.length > 0 
                       ? "Great progress. Reviewing cases protects your personal assets and builds board compliance shields."
-                      : "Complete case studies and masterclass checklist tasks to earn 'Governing Director' status!"
+                      : "Complete case studies and article checklist tasks to earn 'Governing Director' status!"
                     }
                   </p>
                 </div>
@@ -502,7 +510,7 @@ export const Library: React.FC = () => {
             <div className="space-y-1">
               <h4 className="font-serif font-bold text-base text-ink">Need a customized bylaws or governance audit?</h4>
               <p className="text-xs text-ink/70 leading-relaxed font-sans max-w-2xl font-semibold">
-                The Attorney General's Registry of Charitable Trusts monitors charities strictly. If you have been delinquent, or your bylaws are outdated, consult the team at California Center for Nonprofit Law.
+                State Attorney Generals monitor charities strictly. If you have been delinquent, or your bylaws are outdated, consult the team at NPO Lawyers.
               </p>
             </div>
             <button

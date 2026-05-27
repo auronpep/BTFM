@@ -10,7 +10,7 @@ import { articles } from '../data/articles';
 export const Home: React.FC = () => {
   const { navigate } = useRouter();
   const [heroTab, setHeroTab] = useState<'ledger' | 'schedule'>('ledger');
-  const [activeCategory, setActiveCategory] = useState<'conflicts' | 'oversight' | 'audits' | 'california'>('conflicts');
+  const [activeCategory, setActiveCategory] = useState<'conflicts' | 'oversight' | 'audits' | 'compliance'>('conflicts');
   
   // Storing resolved problems locally
   const [resolvedProblems, setResolvedProblems] = useState<string[]>(() => {
@@ -36,7 +36,7 @@ export const Home: React.FC = () => {
         id: 'spousal-dev',
         title: "Awarding Spousal Web Dev Contracts",
         subtitle: "Self-Dealing & Procurement Violations",
-        desc: "The Board awards a $15,000 contract directly to the ED's spouse. Identify California self-dealing warning signs and approvals.",
+        desc: "The Board awards a $15,000 contract directly to the ED's spouse. Identify self-dealing warning signs and approvals.",
         target: "tools/budget-worksheet"
       }
     ],
@@ -72,20 +72,20 @@ export const Home: React.FC = () => {
         target: "tools/budget-worksheet"
       }
     ],
-    california: [
+    compliance: [
       {
         id: 'independent-audit',
-        title: "The California $2M Independent Audit Mandate",
-        subtitle: "CA Government Code § 12586",
+        title: "The State Independent Audit Mandate",
+        subtitle: "State Government Codes",
         desc: "Check if your organization requires a CPA-audited financial statement and a separate, independent Audit Committee.",
-        target: "california-board-rules"
+        target: "federal-board-rules"
       },
       {
         id: 'biennial-audit',
         title: "Bylaws Biennial Audit Schedule",
-        subtitle: "California Registry Compliance",
-        desc: "Obsolete bylaws put volunteer directors at risk. Verify compliance with California Registry of Charitable Trusts rules.",
-        target: "california-board-rules"
+        subtitle: "State Registry Compliance",
+        desc: "Obsolete bylaws put volunteer directors at risk. Verify compliance with state charity registry rules.",
+        target: "federal-board-rules"
       }
     ]
   };
@@ -120,7 +120,7 @@ export const Home: React.FC = () => {
             </h1>
             
             <p className="text-paper/80 font-sans text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl">
-              Practical, legally-informed guidelines and interactive laboratories for working board members of $3M+ established California organizations. Learn to lead defensively, protect your directors, and fulfill your duties of Care, Loyalty, and Obedience.
+              Practical, legally-informed guidelines and interactive laboratories for working board members of $3M+ established organizations nationwide. Learn to lead defensively, protect your directors, and fulfill your duties of Care, Loyalty, and Obedience.
             </p>
             
             <div className="pt-4 flex flex-col sm:flex-row gap-4">
@@ -198,17 +198,17 @@ export const Home: React.FC = () => {
               <div className="space-y-4 animate-fade-in text-left">
                 <div className="space-y-1">
                   <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest">Enrollment Panel</span>
-                  <h3 className="font-serif text-lg font-bold text-white leading-tight">Join Masterclass Training</h3>
+                  <h3 className="font-serif text-lg font-bold text-white leading-tight">Join Training Series</h3>
                 </div>
                 <div className="space-y-2 text-xs">
                   <div 
                     onClick={() => navigate('webinar-registration?webinar=webinar-fiduciary-update')}
                     className="p-3.5 bg-white/5 border border-paper/10 hover:border-brass rounded flex items-start gap-3 hover:bg-white/10 transition-premium cursor-pointer select-none"
-                    title="Register for California Board Fiduciary Compliance Update Webinar"
+                    title="Register for Board Fiduciary Compliance Update Webinar"
                   >
                     <Calendar className="w-5 h-5 text-brass mt-0.5 shrink-0" />
                     <div className="space-y-0.5">
-                      <span className="font-semibold text-white block">California Board Fiduciary Compliance Update</span>
+                      <span className="font-semibold text-white block">Board Fiduciary Compliance Update</span>
                       <span className="text-paper/65 font-sans block">Online Webinar &bull; June 17, 2026</span>
                     </div>
                   </div>
@@ -287,7 +287,7 @@ export const Home: React.FC = () => {
               The Three Jobs of a Mature Board
             </h2>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
-              Under California statutory law, directors must operate under a tripartite standard of stewardship. Move away from ornamenting and into active governance.
+              Under statutory law, directors must operate under a tripartite standard of stewardship. Move away from ornamenting and into active governance.
             </p>
           </div>
 
@@ -390,7 +390,7 @@ export const Home: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="font-serif font-bold text-sm text-ink">Bylaws & Charter Audits</h4>
-                      <p className="text-xs text-ink/65 font-medium leading-normal">Resolve obsolete corporate terms and align with recent CA Attorney General guidelines.</p>
+                      <p className="text-xs text-ink/65 font-medium leading-normal">Resolve obsolete corporate terms and align with recent state Attorney General guidelines.</p>
                     </div>
                   </div>
                   
@@ -563,15 +563,15 @@ export const Home: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveCategory('california')}
+              onClick={() => setActiveCategory('compliance')}
               className={`flex-1 py-3 px-4 text-xs font-bold uppercase tracking-wider rounded-lg transition-premium select-none cursor-pointer flex items-center justify-center gap-2 border ${
-                activeCategory === 'california'
+                activeCategory === 'compliance'
                   ? 'bg-brass text-ink border-brass shadow-md font-extrabold'
                   : 'bg-white border-fog/40 text-ink/70 hover:text-ink hover:bg-fog/10'
               }`}
             >
-              <span className={`w-2 h-2 rounded-full ${activeCategory === 'california' ? 'bg-ink' : 'bg-brass'}`} />
-              <span>California Rules</span>
+              <span className={`w-2 h-2 rounded-full ${activeCategory === 'compliance' ? 'bg-ink' : 'bg-brass'}`} />
+              <span>Compliance Rules</span>
             </button>
           </div>
 
@@ -634,7 +634,7 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. Featured Classroom Scenarios & Masterclasses */}
+      {/* 5. Featured Classroom Scenarios & Training Series */}
       <section className="py-20 bg-white px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: The 40-40-20 Rule Highlighting */}
@@ -714,14 +714,14 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Key Masterclass Articles */}
+          {/* Right Column: Key Training Articles */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <div className="space-y-2">
               <h3 className="font-serif font-extrabold text-2xl sm:text-3xl text-ink tracking-wide">
-                Governance Masterclasses
+                Governance Training Series
               </h3>
               <p className="text-xs sm:text-sm text-ink/60">
-                Thorough fiduciaries desk articles mapped directly to California Organization guidelines.
+                Thorough fiduciaries desk articles mapped directly to statutory organization guidelines.
               </p>
             </div>
 
@@ -751,7 +751,7 @@ export const Home: React.FC = () => {
                 onClick={() => navigate('articles')}
                 className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-brand hover:text-brass transition-premium"
               >
-                <span>View Full Library (12 Masterclasses)</span>
+                <span>View Full Library (12 Training Sessions)</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

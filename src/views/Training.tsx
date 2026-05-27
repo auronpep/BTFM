@@ -60,20 +60,20 @@ export const Training: React.FC = () => {
     if (anxiety === 'Financials & Overruns') {
       title = "Financial Control & Audit Protocol";
       desc = `Your primary concern is managing budgets and overruns. With your selected budget of ${budget}, establishing robust independent variance review is a top legal duty.`;
-      tools = ["Budget Worksheet Audit Lab", "California Board Rules Center"];
-      rationale = budget === 'Over $5M' || budget === '$1M - $5M'
-        ? "California mandates a fully independent CPA Audit Committee for organizations exceeding $2M in gross revenues (CA Gov Code § 12586). Your budget size puts you in high statutory exposure."
-        : "While a formal CPA audit isn't mandated for budgets under $2M, the California Attorney General recommends a 3-director Audit Task Force to oversee financial ledgers and prevent internal embezzlement.";
+      tools = ["Budget Worksheet Audit Lab", "Federal Board Rules Center"];
+      rationale = budget === "Over $5M" || budget === "$1M - $5M"
+        ? "Many states mandate a fully independent CPA Audit Committee for organizations exceeding $2M in gross revenues. Your budget size puts you in high statutory exposure."
+        : "While a formal CPA audit isn't mandated for budgets under $2M, state Attorney Generals recommend a 3-director Audit Task Force to oversee financial ledgers and prevent internal embezzlement.";
     } else if (anxiety === 'Conflict of Interest') {
       title = "Conflict Recusal & Compliance Protocol";
       desc = "Managing self-dealing transactions is critical. Interested director contracts must be handled via strict statutory safe harbors.";
       tools = ["Minutes Quality Scorecard", "Board Authority Map"];
-      rationale = "Under California Section 5233, any contract involving a conflicted director must be approved by fully disinterested, independent board members. Conflicted parties must exit the room and be recused from voting.";
+      rationale = "Under state corporate codes, any contract involving a conflicted director must be approved by fully disinterested, independent board members. Conflicted parties must exit the room and be recused from voting.";
     } else if (anxiety === 'IRS Filings & Delinquency') {
-      title = "California Board Status & Registry Protocol";
+      title = "State Board Status & Registry Protocol";
       desc = "Failure to file required state forms will cause immediate, automatic registry suspension and status loss.";
-      tools = ["California Board Rules Center", "Self-Assessment Diagnostic"];
-      rationale = "The California Attorney General requires annual CT-TR-1 filing and SOI-100 Statement of Information to be filed on time. Any delay can trigger automatic suspension, making the board personally liable for corporate actions.";
+      tools = ["Federal Board Rules Center", "Self-Assessment Diagnostic"];
+      rationale = "State Attorney Generals require annual charity registrations and Statements of Information to be filed on time. Any delay can trigger automatic suspension, making the board personally liable for corporate actions.";
     } else {
       title = "Defensive Governance Minutes Protocol";
       desc = "Protect individual directors from litigation discovery and IRS personal excise tax penalties.";
@@ -145,12 +145,12 @@ export const Training: React.FC = () => {
                 Live Educational Webinars
               </h3>
               <p className="font-sans text-xs sm:text-sm text-ink/75 leading-relaxed">
-                Our webinars are short, intensive, and designed directly for California governing board members. Each session focuses on a specific, high-risk fiduciary compliance topic, providing practical checklists and ask-this question scripts.
+                Our webinars are short, intensive, and designed directly for governing board members. Each session focuses on a specific, high-risk fiduciary compliance topic, providing practical checklists and ask-this question scripts.
               </p>
               <ul className="space-y-2 text-xs font-medium text-ink/80 pt-2">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brass mt-0.5 shrink-0" />
-                  <span>Interactive Q&A session with California charity attorneys.</span>
+                  <span>Interactive Q&A session with charity attorneys.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brass mt-0.5 shrink-0" />
@@ -182,7 +182,7 @@ export const Training: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brass mt-0.5 shrink-0" />
-                  <span>Facilitated by California Center for Nonprofit Law legal counsels.</span>
+                  <span>Facilitated by NPO Lawyers legal counsels.</span>
                 </li>
               </ul>
             </div>
@@ -401,12 +401,12 @@ export const Training: React.FC = () => {
               {/* Webinar Registration CTA Card */}
               <div id="webinar-card" className="bg-white rounded-xl shadow-md border border-fog overflow-hidden text-left">
                 <div className="bg-slate-brand text-paper p-5 border-b border-brass/20 space-y-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Live Governance Masterclasses</span>
-                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Masterclass Series</h4>
-                  <p className="text-xs text-paper/70 font-sans leading-relaxed">
-                    Intensive, legal-focused training sessions for California directors. Learn to protect your board from high-risk compliance liabilities.
-                  </p>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brass block">Live Governance Training Series</span>
+                  <h4 className="font-serif text-lg font-bold text-white tracking-wide">Webinar Training Series</h4>
                 </div>
+                <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium mt-1 mb-4">
+                  Intensive, legal-focused training sessions for directors. Learn to protect your board from high-risk compliance liabilities.
+                </p>
 
                 <div className="p-5 space-y-4">
                   {/* Webinar Schedule List */}
@@ -414,7 +414,7 @@ export const Training: React.FC = () => {
                     {[
                       { 
                         id: 'webinar-fiduciary-update', 
-                        title: 'California Board Fiduciary Update', 
+                        title: 'Board Fiduciary Update', 
                         date: 'June 17, 2026', 
                         time: '10:00 AM PST',
                         badge: 'Fiduciary Duty'
@@ -567,7 +567,7 @@ export const Training: React.FC = () => {
                       >
                         <option value="">-- Select Target Curriculum Area --</option>
                         <option value="onboarding">Board Onboarding & Fiduciary Duties (Care, Loyalty, Obedience)</option>
-                        <option value="audit">Bylaws Auditing & California Registry Requirements</option>
+                        <option value="audit">Bylaws Auditing & State Registry Requirements</option>
                         <option value="compensation">Executive Compensation surveys & Safe Harbors (Form 990)</option>
                         <option value="boundaries">Strategic Deliberation & Governance vs. Management (40-40-20 Rule)</option>
                       </select>
@@ -606,7 +606,7 @@ export const Training: React.FC = () => {
                       <h5 className="font-serif font-bold text-lg text-ink">Training Inquiry Received</h5>
                       <p className="text-xs text-ink/65 font-bold uppercase tracking-widest">{orgName} - {trainingTopic}</p>
                       <p className="text-xs sm:text-sm text-ink/85 leading-relaxed max-w-md mx-auto">
-                        Thank you, <strong className="text-ink font-bold">{contactName}</strong>. Your workshop request has been successfully recorded. An attorney from the <strong className="text-ink font-bold">California Center for Nonprofit Law</strong> will contact you at <strong className="text-ink font-bold">{contactEmail}</strong> within 2 business days to schedule a custom curriculum planning session.
+                        Thank you, <strong className="text-ink font-bold">{contactName}</strong>. Your workshop request has been successfully recorded. An attorney from <strong>NPO Lawyers</strong> will contact you at <strong className="text-ink font-bold">{contactEmail}</strong> within 2 business days to schedule a custom curriculum planning session.
                       </p>
                     </div>
 

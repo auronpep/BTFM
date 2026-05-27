@@ -237,10 +237,10 @@ export const CaliforniaRules: React.FC = () => {
               <span>Fiduciary Regulatory Registry</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink font-bold tracking-wide">
-              California Board Rules Index
+              Federal Tax & Governance Checklist for Nonprofit Boards
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70">
-              A comprehensive reference of verified state legal thresholds, strict filing timelines, and Registry mandates under the California Corporations Code. Complete the active checklists to verify your board's compliance.
+              A comprehensive reference of verified federal IRS thresholds, governance standards, and strict filing timelines for nonprofits. Includes a California compliance snapshot. Complete the active checklists to verify your board's compliance.
             </p>
           </div>
 
@@ -252,10 +252,10 @@ export const CaliforniaRules: React.FC = () => {
                   Fiduciary Security Dashboard
                 </span>
                 <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide">
-                  California Compliance Stance
+                  Federal & State Compliance Stance
                 </h3>
                 <p className="text-xs text-paper/70 font-sans max-w-lg leading-relaxed">
-                  The California Attorney General requires rigorous corporate governance. Complete all checklist items on each state mandate to secure a fully compliant legal posture.
+                  The IRS and State Attorney Generals require rigorous corporate governance. Complete all checklist items on each state mandate to secure a fully compliant legal posture.
                 </p>
               </div>
 
@@ -301,7 +301,7 @@ export const CaliforniaRules: React.FC = () => {
             <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
               <p className="text-xs text-paper/60 font-sans leading-relaxed">
                 {compliantRulesCount === californiaRules.length
-                  ? "✓ Excellent. Your board satisfies all 5 major California regulatory thresholds. Keep all records updated."
+                  ? "✓ Excellent. Your board satisfies all 5 major regulatory thresholds. Keep all records updated."
                   : "⚠ Fiduciary vulnerabilities detected. Check the red boxes below and complete outstanding action items."
                 }
               </p>

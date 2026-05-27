@@ -220,7 +220,7 @@ This is a clear, actionable instruction. Once voted on and recorded, it gives th
       statute: "CA Corp Code § 5047.5",
       text: "Uncompensated directors have limited liability ONLY if the corporation maintains a general liability policy meeting specific statutory minimums."
     },
-    content: `It is a common myth that volunteer directors can never be sued. While California and federal laws provide general protections for volunteer board members, these protections are highly conditional.
+    content: `It is a common myth that volunteer directors can never be sued. While state and federal laws provide general protections for volunteer board members, these protections are highly conditional.
 
 ### Why Incorporation is Not Enough
 Incorporation creates a legal barrier that prevents creditors from coming after directors' personal assets for the organization's general debts. However, this "corporate shield" instantly pierces under several circumstances:
@@ -246,7 +246,7 @@ When reviewing your policy, look out for "Employment Practices Liability (EPLI).
     readingTime: 5,
     problem: "Founders or senior pastors treat the organization as a personal fiefdom, ignoring the board's legal authority, leading to severe corporate breakdowns.",
     ruleTitle: "The Legal Chain of Corporate Command",
-    ruleContent: "Under California law, the board of directors sits at the top of the corporate pyramid. Officers (President, Treasurer, Secretary) receive delegated authority from the board. Staff and volunteers report to the officers, who report collectively to the board.",
+    ruleContent: "Under state corporate laws, the board of directors sits at the top of the corporate pyramid. Officers (President, Treasurer, Secretary) receive delegated authority from the board. Staff and volunteers report to the officers, who report collectively to the board.",
     askQuestions: [
       {
         question: "As the board of directors, we are the ultimate authority. Does our CEO's employment contract clearly state that they serve at the pleasure of the board?",
@@ -596,8 +596,8 @@ If travel costs doubled, or program enrollment is projected to drop by 20%, dema
     },
     minutesTemplate: {
       agendaItem: "Executive Compensation Review",
-      mockMinutes: "The Board reviewed independent salary data for executives of comparable California organizations. Following discussion, and with the Executive Director absent from the room, the Board approved a 3% salary adjustment by a unanimous vote of the disinterested directors.",
-      whyItMatters: "Clean, professional, and proves compliance with California disinterested director rules without unnecessary detail."
+      mockMinutes: "The Board reviewed independent salary data for executives of comparable organizations. Following discussion, and with the Executive Director absent from the room, the Board approved a 3% salary adjustment by a unanimous vote of the disinterested directors.",
+      whyItMatters: "Clean, professional, and proves compliance with disinterested director rules without unnecessary detail."
     },
     content: `Board minutes are the official, legal record of a corporation's actions. In a lawsuit or a regulatory audit by the Attorney General, the minutes are the very first document requested. They are the supreme evidence of whether the board is fulfilling its fiduciary duties of Care and Loyalty.
 
@@ -653,12 +653,12 @@ Once minutes are drafted by the Secretary, they must be distributed in the next 
     },
     minutesTemplate: {
       agendaItem: "Executive Compensation Audit",
-      mockMinutes: "The Compensation Committee presented salary comparability data from the 2026 Northern California Organization Compensation Survey. With the Executive Director absent, the disinterested board members reviewed the data showing the median salary for similar $3M budgets is $125,000. Upon motion, the Board approved an annual salary of $122,000.",
+      mockMinutes: "The Compensation Committee presented salary comparability data from the 2026 Regional Organization Compensation Survey. With the Executive Director absent, the disinterested board members reviewed the data showing the median salary for similar $3M budgets is $125,000. Upon motion, the Board approved an annual salary of $122,000.",
       whyItMatters: "Bulletproof documentation that directly satisfies the IRS Rebuttable Presumption requirements."
     },
     californiaThreshold: {
       statute: "CA Gov Code § 12586",
-      text: "California Nonprofit Integrity Act requires the board to review and approve the compensation of the President and CFO to ensure it is just and reasonable."
+      text: "Many state nonprofit integrity acts require the board to review and approve the compensation of the President and CFO to ensure it is just and reasonable."
     },
     content: `IRS Form 990 is not just a financial return. It is a highly public governance scorecard. The IRS uses the Form 990 to ask direct, uncomfortable questions about how your board operates:
 * *Did the organization review executive compensation using comparability data?*

@@ -110,14 +110,14 @@ export const Boards101: React.FC = () => {
       title: '1. The Safe Harbor of Care: Proving Reasonableness',
       duration: '12 min',
       instructor: 'Myron Steeves, J.D.',
-      description: 'How to establish reasonable inquiry, review independent reports, and document deliberations to gain California safe harbor protection.'
+      description: 'How to establish reasonable inquiry, review independent reports, and document deliberations to gain safe harbor protection.'
     },
     {
       id: 'lecture-2',
-      title: '2. Disinterested Quorums: Avoiding California Penalties',
+      title: '2. Disinterested Quorums: Avoiding Penalties',
       duration: '15 min',
       instructor: 'Myron Steeves, J.D.',
-      description: 'A masterclass on CA Corp Code § 5227, the 51% Independent Board rule, and protecting volunteer directors from self-dealing contracts.'
+      description: 'A training session on board independence rules (e.g., CA Corp Code § 5227) and protecting volunteer directors from self-dealing contracts.'
     },
     {
       id: 'lecture-3',
@@ -169,7 +169,7 @@ export const Boards101: React.FC = () => {
               Boards 101: Core Governance Training
             </h1>
             <p className="max-w-3xl mx-auto text-sm sm:text-base text-ink/75 leading-relaxed">
-              A strong board can save an organization enormous amounts of time, confusion, and unnecessary expense. A poorly trained board can do the opposite. Boards 101 is a 60-minute training session designed specifically for California organizations, led by Myron Steeves, J.D., or his senior legal team.
+              A strong board can save an organization enormous amounts of time, confusion, and unnecessary expense. A poorly trained board can do the opposite. Boards 101 is a 60-minute training session designed for nonprofit organizations nationwide, led by Myron Steeves, J.D., or his senior legal team.
             </p>
           </div>
 
@@ -187,7 +187,7 @@ export const Boards101: React.FC = () => {
                   Two Fiduciary Responsibilities
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/80 leading-relaxed">
-                  Every director's actions are bound by California statutory law under two primary fiduciary standard vectors:
+                  Every director's actions are bound by statutory law under two primary fiduciary standard vectors:
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div className="bg-paper/50 p-4 rounded-lg border border-brass/15 space-y-1.5">
@@ -256,7 +256,7 @@ export const Boards101: React.FC = () => {
                     <div className="space-y-1">
                       <h4 className="font-serif font-bold text-base text-ink">Audit: "Trust, But Verify" Standards</h4>
                       <p className="text-xs sm:text-sm text-ink/75 leading-relaxed">
-                        You trust your CEO, but your fiduciary duty requires proof. We teach boards to review the CFO's reports by scrutinizing the <strong>10 biggest budget deviations</strong> to understand the strategic narrative, and verifying that the entity strictly abides by California's statutory guidelines.
+                        You trust your CEO, but your fiduciary duty requires proof. We teach boards to review the CFO's reports by scrutinizing the <strong>10 biggest budget deviations</strong> to understand the strategic narrative, and verifying that the entity strictly abides by statutory guidelines.
                       </p>
                     </div>
                   </div>
@@ -305,12 +305,12 @@ export const Boards101: React.FC = () => {
                     Dean's Audio Lecture Desk
                   </h3>
                   <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest bg-brass/10 px-2 py-0.5 rounded border border-brass/20">
-                    Myron Steeves Audio Masterclass
+                    Myron Steeves Audio Training Series
                   </span>
                 </div>
 
                 <p className="text-xs text-ink/70 leading-relaxed font-sans font-medium">
-                  {parseTextWithGlossary("Listen to exclusive legal masterclasses detailing statutory Duty of Care and Duty of Loyalty compliance strategies under California law.")}
+                  {parseTextWithGlossary("Listen to exclusive legal training sessions detailing statutory Duty of Care and Duty of Loyalty compliance strategies.")}
                 </p>
 
                 {/* Simulated Audio Player Box */}
@@ -516,7 +516,7 @@ export const Boards101: React.FC = () => {
                       Congratulations, <strong className="text-ink font-semibold">{contactName}</strong>! Your Boards 101 training session inquiry for <strong className="text-ink font-semibold">{preferredDate}</strong> has been logged locally in `localStorage`.
                     </p>
                     <p className="text-xs text-ink/60 leading-relaxed max-w-sm mx-auto pt-1">
-                      A coordinator from the <strong>California Center for Nonprofit Law</strong> will reach out to you at <strong className="text-ink font-semibold">{contactEmail}</strong> to review your bylaws structure and confirm scheduling details.
+                      A coordinator from <strong>NPO Lawyers</strong> will reach out to you at <strong className="text-ink font-semibold">{contactEmail}</strong> to review your bylaws structure and confirm scheduling details.
                     </p>
                   </div>
 
@@ -571,7 +571,7 @@ export const Boards101: React.FC = () => {
                 <div className="space-y-3 text-left">
                   <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
                     <span className="text-brass">Q1:</span>
-                    <span>What percentage of your California board can be "interested" (i.e. paid employees, the CEO, or their direct relatives on payroll) under CA Corp Code § 5227?</span>
+                    <span>What percentage of your nonprofit board can be "interested" (i.e. paid employees, the CEO, or their direct relatives on payroll) under typical state independence rules?</span>
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
@@ -637,7 +637,7 @@ export const Boards101: React.FC = () => {
                 <div className="space-y-3 text-left border-t border-fog/40 pt-4">
                   <h4 className="font-serif font-bold text-sm sm:text-base text-ink flex gap-2">
                     <span className="text-brass">Q3:</span>
-                    <span>How often are California directors required to sign a written Conflict of Interest disclosure questionnaire?</span>
+                    <span>How often are nonprofit directors required to sign a written Conflict of Interest disclosure questionnaire?</span>
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
@@ -687,7 +687,7 @@ export const Boards101: React.FC = () => {
                       <span>Grade A — Fully Safe Harbor Aligned</span>
                     </div>
                     <p className="text-xs sm:text-sm text-emerald-900 leading-relaxed font-sans font-medium">
-                      Congratulations! Your understanding of California board requirements is flawless. You answered <strong>3 out of 3</strong> questions correctly. Your board is positioned with a strong regulatory shield, satisfying quorums and executive compensation rules.
+                      Congratulations! Your understanding of board requirements is flawless. You answered <strong>3 out of 3</strong> questions correctly. Your board is positioned with a strong regulatory shield, satisfying quorums and executive compensation rules.
                     </p>
                     <p className="text-xs text-emerald-800 leading-relaxed max-w-2xl font-medium pt-1">
                       To maintain this level of fiduciary hygiene, we recommend downloading our <strong>Defensive Minutes Template</strong> and <strong>Annual Compliance Calendar</strong> from our library.
@@ -700,14 +700,14 @@ export const Boards101: React.FC = () => {
                       <span>Grade C — Compliance Gaps Identified</span>
                     </div>
                     <p className="text-xs sm:text-sm text-ink/80 leading-relaxed font-sans font-medium">
-                      You answered <strong>2 out of 3</strong> questions correctly. While you understand some core fiduciary parameters, critical compliance gaps exist. Obsolete quorum provisions (allowing paid employees to control votes) or bad recusal procedures are the leading causes of California Attorney General corporate registry suspensions.
+                      You answered <strong>2 out of 3</strong> questions correctly. While you understand some core fiduciary parameters, critical compliance gaps exist. Obsolete quorum provisions (allowing paid employees to control votes) or bad recusal procedures are the leading causes of state Attorney General corporate registry suspensions.
                     </p>
                     
                     {/* Legal Consultation Escalation */}
                     <div className="bg-burgundy/5 border-l-4 border-burgundy p-4 rounded-r-lg space-y-2">
                       <h4 className="font-serif font-bold text-xs text-ink">Bylaws Deficiencies Create Volunteer Liability Exposure</h4>
                       <p className="text-xs text-ink/75 leading-relaxed">
-                        In California, volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional <strong>Bylaws and Board Governance Audit</strong> with California Center for Nonprofit Law.
+                        Volunteer directors lose their personal civil immunity if bylaws do not strictly isolate voting and officer self-dealing thresholds. We recommend a professional <strong>Bylaws and Board Governance Audit</strong> with legal counsel.
                       </p>
                       <div className="pt-1">
                         <button

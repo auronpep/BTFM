@@ -13,10 +13,10 @@ export const WebinarRegistration: React.FC = () => {
   const webinarsList = [
     { 
       id: 'webinar-fiduciary-update', 
-      title: 'California Board Fiduciary Compliance Update', 
+      title: 'Board Fiduciary Compliance Update', 
       date: 'June 17, 2026', 
       time: '10:00 AM - 11:30 AM PST',
-      desc: 'Critical governance requirements, conflict recusal structures, and state filing deadlines for California directors.'
+      desc: 'Critical governance requirements, conflict recusal structures, and state filing deadlines for directors.'
     },
     { 
       id: 'webinar-comp', 
@@ -27,7 +27,7 @@ export const WebinarRegistration: React.FC = () => {
     },
     { 
       id: 'webinar-audit', 
-      title: 'California $2M Independent Audit & Audit Committee Mandate', 
+      title: 'State $2M Independent Audit & Audit Committee Mandate', 
       date: 'July 15, 2026', 
       time: '1:00 PM - 2:00 PM PST',
       desc: 'Navigating CA Gov Code § 12586 requirements, selecting independent CPAs, and structuring defensive audits.'
@@ -183,7 +183,7 @@ export const WebinarRegistration: React.FC = () => {
               Webinar Enrollment Suite
             </h1>
             <p className="max-w-2xl mx-auto text-sm sm:text-base text-ink/70 leading-relaxed font-sans">
-              Secure your place in our professional governance masterclass series. Each session provides practical scripts, defensive templates, and active California statutory checklists.
+              Secure your place in our professional governance training series. Each session provides practical scripts, defensive templates, and active statutory checklists.
             </p>
           </div>
 
@@ -203,7 +203,7 @@ export const WebinarRegistration: React.FC = () => {
                     <span className="text-[9px] font-extrabold text-brass uppercase tracking-widest block">Lead Speaker & Instructor</span>
                     <h3 className="font-serif font-bold text-lg text-ink">Myron Steeves, J.D.</h3>
                     <p className="text-xs text-ink/65 leading-relaxed font-sans font-medium">
-                      Dean Emeritus of Trinity Law School & Founder of California Center for Nonprofit Law. Over 30 years representing California charitable corporations.
+                      Dean Emeritus of Trinity Law School & Founder of NPO Lawyers. Over 30 years representing charitable corporations nationwide.
                     </p>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export const WebinarRegistration: React.FC = () => {
                       <Check className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <strong className="text-ink block font-semibold text-[13px] mb-0.5">California Compliance Thresholds</strong>
+                      <strong className="text-ink block font-semibold text-[13px] mb-0.5">State Compliance Thresholds</strong>
                       <p className="text-ink/70 leading-relaxed font-medium">
                         Master the statutory triggers for independent audits (gross revenue above $2M under Gov Code § 12586) and registry compliance.
                       </p>
@@ -334,7 +334,7 @@ export const WebinarRegistration: React.FC = () => {
 
                     {/* Webinar Dropdown Selector */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Masterclass:</label>
+                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Training Session:</label>
                       <div className="relative">
                         <select
                           required

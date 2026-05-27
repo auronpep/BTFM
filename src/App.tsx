@@ -29,6 +29,7 @@ function AppContent() {
       return <Home />;
     case 'articles':
     case 'library':
+    case 'scenarios':
     case 'money-audit':
     case 'executive-oversight':
     case 'risk-safety':

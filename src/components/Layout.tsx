@@ -141,16 +141,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Situational/Topic Navigation configuration
   const navItems = [
-    { label: 'Next Meeting', target: 'next-meeting', bg: 'hover:border-slate-brand' },
-    { label: 'Money & Audit', target: 'money-audit', bg: 'hover:border-teal-brand' },
-    { label: 'Executive Oversight', target: 'executive-oversight', bg: 'hover:border-slate-brand' },
-    { label: 'Minutes & Records', target: 'minutes-records', bg: 'hover:border-slate-brand' },
-    { label: 'California Rules', target: 'california-board-rules', bg: 'hover:border-brass' },
-    { label: 'Tools', target: 'tools', bg: 'hover:border-teal-brand' },
+    { label: 'Home', target: 'home', bg: 'hover:border-slate-brand' },
+    { label: 'Library', target: 'library', bg: 'hover:border-teal-brand' },
+    { label: 'Scenarios', target: 'scenarios', bg: 'hover:border-slate-brand' },
     { label: 'Training', target: 'training', bg: 'hover:border-brass' },
-    { label: 'Boards 101', target: 'boards-101', bg: 'hover:border-brass' },
-    { label: 'About Us', target: 'about-us', bg: 'hover:border-slate-brand' },
-    { label: 'Contact Us', target: 'contact-us', bg: 'hover:border-burgundy' },
+    { label: 'Forms & Tools', target: 'tools', bg: 'hover:border-teal-brand' },
   ];
 
   const handleNavClick = (target: string) => {
@@ -461,16 +456,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <div className="flex flex-col">
               <span className="font-serif italic font-semibold text-paper/90 text-sm">The Principles of Board Training</span>
-              <span className="text-[9px] uppercase tracking-widest text-brass font-bold mt-0.5">California Organization Governance</span>
+              <span className="text-[9px] uppercase tracking-widest text-brass font-bold mt-0.5">National Organization Governance</span>
             </div>
           </div>
           
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium">
             <button onClick={() => handleNavClick('home')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Home</button>
-            <button onClick={() => handleNavClick('next-meeting')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Next Meeting</button>
-            <button onClick={() => handleNavClick('california-board-rules')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">California Rules</button>
-            <button onClick={() => handleNavClick('tools')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Tools & Labs</button>
+            <button onClick={() => handleNavClick('library')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Library</button>
+            <button onClick={() => handleNavClick('scenarios')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Scenarios</button>
             <button onClick={() => handleNavClick('training')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Training</button>
+            <button onClick={() => handleNavClick('tools')} className="hover:text-brass hover:underline transition-premium text-[11px] uppercase tracking-wider">Forms & Tools</button>
           </div>
         </div>
 

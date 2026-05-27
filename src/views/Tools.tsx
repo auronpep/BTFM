@@ -508,14 +508,14 @@ export const Tools: React.FC = () => {
         </head>
         <body>
           <div class="border-double">
-            <div class="header">California Boardroom Initiative</div>
+            <div class="header">National Boardroom Initiative</div>
             <div class="title">Certificate of Fiduciary Mastery</div>
             <div class="subtitle">Awarded for Educational Excellence in Charity Law</div>
             
             <div class="recipient">${userOrgName}</div>
             
             <div class="prose">
-              This certificate verifies that the governing directors have successfully undertaken and completed the clinical boardroom audit laboratories of the California Board Training Initiative, confirming their competency in independent oversight quorums, executive compensation reviews, conflict of interest mitigation, and restricted asset stewardship under California legal standards.
+              This certificate verifies that the governing directors have successfully undertaken and completed the clinical boardroom audit laboratories of the National Board Training Initiative, confirming their competency in independent oversight quorums, executive compensation reviews, conflict of interest mitigation, and restricted asset stewardship under applicable state and federal legal standards.
             </div>
             
             <div class="footer-grid">
@@ -649,7 +649,7 @@ export const Tools: React.FC = () => {
         <body>
           <div class="border-double">
             <div class="header">
-              <div class="header-initiative">California Boardroom Initiative</div>
+              <div class="header-initiative">National Boardroom Initiative</div>
               <div class="header-title">Fiduciary Diligence Portfolio</div>
               <div class="header-subtitle">Consolidated Board Self-Audit Compliance Dossier</div>
             </div>
@@ -660,13 +660,13 @@ export const Tools: React.FC = () => {
                 <strong>Compilation Date:</strong> ${todayStr}
               </div>
               <div class="metadata-item">
-                <strong>Registry Jurisdiction:</strong> California<br/>
-                <strong>Audit Standard:</strong> California Corporations Code & IRS Guidelines
+                <strong>Registry Jurisdiction:</strong> State & Federal<br/>
+                <strong>Audit Standard:</strong> Applicable State Code & IRS Guidelines
               </div>
             </div>
             
             <div class="dossier-intro">
-              This dossier compiles the diagnostic metrics and verification states from the California Boardroom Initiative laboratories. 
+              This dossier compiles the diagnostic metrics and verification states from the National Boardroom Initiative laboratories. 
               The governance checklists contained herein are designed to align boardroom oversight with fiduciary statutory duties, ensuring proper diligence is exercised regarding conflicts of interest, executive payroll, asset restrictions, and minute keeping.
             </div>
             
@@ -953,7 +953,7 @@ export const Tools: React.FC = () => {
       path: 'tools/self-assessment',
       icon: <Award className="w-6 h-6" />,
       themeColor: 'border-t-brass hover:border-brass text-brass bg-brass/10',
-      description: "A 10-question dynamic diagnostic evaluating your board size, independent quorums, meeting prep, and insurance posture against California AG standards.",
+      description: "A 10-question dynamic diagnostic evaluating your board size, independent quorums, meeting prep, and insurance posture against state AG standards.",
       cta: "Start Assessment"
     },
     {
@@ -1095,14 +1095,14 @@ export const Tools: React.FC = () => {
                 <div className="flex items-center gap-1.5 text-burgundy">
                   <Award className="w-4 h-4 text-brass" />
                   <span className="text-[10px] font-extrabold uppercase tracking-widest font-sans">
-                    California Boardroom compliance portal
+                    National Boardroom compliance portal
                   </span>
                 </div>
                 <h3 className="font-serif text-xl sm:text-2xl text-ink font-bold">
                   Fiduciary Diligence Portfolio Desk
                 </h3>
                 <p className="text-xs sm:text-sm text-ink/75 leading-relaxed font-sans max-w-2xl">
-                  Assemble, review, and print your permanent board self-audit records under California law. Track, optimize, and lock clearances across all 7 interactive laboratories.
+                  Assemble, review, and print your permanent board self-audit records under state and federal law. Track, optimize, and lock clearances across all 7 interactive laboratories.
                 </p>
               </div>
               <div className="shrink-0 font-sans text-right">
@@ -1424,7 +1424,7 @@ export const Tools: React.FC = () => {
             {/* Mini Certificate Render */}
             <div className="border-8 double border-brass/35 p-6 bg-paper/5 text-center space-y-4 max-w-lg mx-auto rounded font-serif">
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass/75 block font-sans">
-                California Boardroom Initiative
+                National Boardroom Initiative
               </span>
               <h4 className="text-lg font-bold text-ink">
                 Certificate of Fiduciary Mastery
@@ -1433,7 +1433,7 @@ export const Tools: React.FC = () => {
                 {userOrgName}
               </p>
               <p className="text-[10px] text-ink/75 leading-relaxed max-w-sm mx-auto font-sans">
-                Acknowledged for educational excellence in California organization governance audit, quorums, and restricted asset stewardship.
+                Acknowledged for educational excellence in organization governance audit, quorums, and restricted asset stewardship.
               </p>
               <div className="flex justify-between items-center text-[8px] font-sans font-extrabold uppercase tracking-wider text-ink/40 pt-2 px-4">
                 <span>Myron Steeves, J.D. &bull; Dean</span>
@@ -1485,7 +1485,7 @@ export const Tools: React.FC = () => {
               <div className="border-8 double border-burgundy p-6 sm:p-10 bg-[#fcfbf7] text-left space-y-6 max-w-3xl mx-auto rounded shadow-inner font-serif text-ink relative">
                 <div className="text-center space-y-1.5 border-b border-brass/25 pb-4">
                   <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass block font-sans">
-                    California Boardroom Initiative
+                    National Boardroom Initiative
                   </span>
                   <h4 className="text-xl sm:text-2xl font-bold text-burgundy tracking-wide uppercase">
                     Fiduciary Diligence Portfolio
@@ -1518,7 +1518,7 @@ export const Tools: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-ink/75 leading-relaxed font-sans text-justify">
-                  This portfolio compiles the complete self-audit clearance status for all 7 interactive laboratories. Completed labs represent certified clearance states aligned with California statutory codes and IRS best practices. Pending labs highlight areas where structural governance and risk diagnostics remain unchecked.
+                  This portfolio compiles the complete self-audit clearance status for all 7 interactive laboratories. Completed labs represent certified clearance states aligned with state statutory codes and IRS best practices. Pending labs highlight areas where structural governance and risk diagnostics remain unchecked.
                 </p>
 
                 {/* Scorecard Table */}
