@@ -1221,8 +1221,7 @@ export const Tools: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="px-6 py-4 bg-paper/10 border-t border-fog/60 flex items-center justify-between text-xs font-bold text-slate-brand uppercase tracking-wider">
-                  <span>Client-Side Lab</span>
+                <div className="px-6 py-4 bg-paper/10 border-t border-fog/60 flex items-center justify-end text-xs font-bold text-slate-brand uppercase tracking-wider">
                   <div className="inline-flex items-center gap-1.5 hover:text-brass transition-premium">
                     <span>{tool.cta}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
