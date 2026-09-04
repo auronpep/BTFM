@@ -510,8 +510,9 @@ export const Training: React.FC = () => {
                       {/* Row 1: Organization Name & Approximate Board Size */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
+                          <label htmlFor="training-org" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name:</label>
                           <input
+                            id="training-org"
                             type="text"
                             required
                             value={orgName}
@@ -522,8 +523,9 @@ export const Training: React.FC = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
+                          <label htmlFor="training-board-size" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Approximate Board Size:</label>
                           <select
+                            id="training-board-size"
                             required
                             value={boardSize}
                             onChange={(e) => setBoardSize(e.target.value)}
@@ -541,8 +543,9 @@ export const Training: React.FC = () => {
                       {/* Row 2: Contact Person & Contact Email */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
+                          <label htmlFor="training-contact" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person:</label>
                           <input
+                            id="training-contact"
                             type="text"
                             required
                             value={contactName}
@@ -553,8 +556,9 @@ export const Training: React.FC = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
+                          <label htmlFor="training-email" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email:</label>
                           <input
+                            id="training-email"
                             type="email"
                             required
                             value={contactEmail}
@@ -567,8 +571,9 @@ export const Training: React.FC = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Main Training Topic:</label>
+                      <label htmlFor="training-topic" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Main Training Topic:</label>
                       <select
+                        id="training-topic"
                         required
                         value={trainingTopic}
                         onChange={(e) => setTrainingTopic(e.target.value)}
@@ -583,11 +588,12 @@ export const Training: React.FC = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Optional Notes or Specific Concerns:</label>
+                      <label htmlFor="training-notes" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Optional Notes or Specific Concerns:</label>
                       <div className="p-3 bg-copper/5 border-l-2 border-copper rounded text-[11px] text-copper leading-relaxed font-sans font-medium">
                         <strong>⚠️ Privacy Notice:</strong> To protect your organization, please do not submit highly confidential details regarding active internal disputes, active board audits, or pending litigation here. This form is for general training inquiries only and does not establish attorney-client privilege.
                       </div>
                       <textarea
+                        id="training-notes"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="List any specific bylaws delinquency or IRS concerns..."
