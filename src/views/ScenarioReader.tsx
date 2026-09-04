@@ -220,7 +220,7 @@ export const ScenarioReader: React.FC = () => {
     try {
       const saved = localStorage.getItem(`cdx_feedback_status_${slug}`);
       return saved as 'yes' | 'no' | null;
-    } catch (e) {
+    } catch {
       return null;
     }
   });

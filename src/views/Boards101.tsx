@@ -49,7 +49,7 @@ export const Boards101: React.FC = () => {
   const [quizSubmitted, setQuizSubmitted] = useState(() => {
     try {
       return localStorage.getItem('cdx_bylaws_quick_check') !== null;
-    } catch (e) {
+    } catch {
       return false;
     }
   });
@@ -57,7 +57,7 @@ export const Boards101: React.FC = () => {
     try {
       const saved = localStorage.getItem('cdx_bylaws_quick_check');
       return saved ? parseInt(saved) : 0;
-    } catch (e) {
+    } catch {
       return 0;
     }
   });
@@ -90,7 +90,9 @@ export const Boards101: React.FC = () => {
 
     try {
       localStorage.setItem('cdx_bylaws_quick_check', score.toString());
-    } catch (e) {}
+    } catch {
+      // Storage unavailable or malformed; keep the existing value.
+    }
 
     setQuizScore(score);
     setQuizSubmitted(true);
@@ -99,7 +101,9 @@ export const Boards101: React.FC = () => {
   const handleResetQuiz = () => {
     try {
       localStorage.removeItem('cdx_bylaws_quick_check');
-    } catch (e) {}
+    } catch {
+      // Storage unavailable or malformed; keep the existing value.
+    }
     setQuizAnswers({});
     setQuizScore(0);
     setQuizSubmitted(false);

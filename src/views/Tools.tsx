@@ -260,7 +260,9 @@ export const Tools: React.FC = () => {
       if (packetSaved) {
         packetCount = JSON.parse(packetSaved).length || 0;
       }
-    } catch (e) {}
+    } catch {
+      // Storage unavailable or malformed; keep the existing value.
+    }
 
     // 3. Minutes scorecard
     const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade');
@@ -273,7 +275,9 @@ export const Tools: React.FC = () => {
       if (budgetSaved) {
         budgetCount = JSON.parse(budgetSaved).length || 0;
       }
-    } catch (e) {}
+    } catch {
+      // Storage unavailable or malformed; keep the existing value.
+    }
 
     // 5. Authority map
     const authScore = localStorage.getItem('cdx_authority_map_score');
@@ -284,7 +288,9 @@ export const Tools: React.FC = () => {
       if (authSaved) {
         authCount = Object.keys(JSON.parse(authSaved)).length || 0;
       }
-    } catch (e) {}
+    } catch {
+      // Storage unavailable or malformed; keep the existing value.
+    }
 
     // 6. Script Builder
     const scriptCompleted = localStorage.getItem('cdx_script_builder_completed') === 'true';
