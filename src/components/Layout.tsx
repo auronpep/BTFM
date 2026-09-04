@@ -161,6 +161,19 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-paper text-ink selection:bg-brass selection:text-ink font-sans transition-premium antialiased">
+      {/*
+        Skip link: first thing in the tab order on every page. Ten header
+        controls sit ahead of the article, so a keyboard or screen-reader
+        visitor otherwise re-tabs the whole masthead on every navigation.
+        Invisible until focused, then it renders as a normal brass button.
+      */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-ink focus:text-paper focus:text-xs focus:font-bold focus:uppercase focus:tracking-wider focus:rounded focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-brass"
+      >
+        Skip to main content
+      </a>
+
       {/* Webinar Seat Tracker Countdown Ribbon Banner (Enhancement 10) */}
       <div 
         onClick={handleRibbonClick}
@@ -413,7 +426,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-grow">
+      <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
         {children}
       </main>
 

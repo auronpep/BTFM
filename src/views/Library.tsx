@@ -166,7 +166,9 @@ export const Library: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* LEFT MAIN RAIL: ARTICLES OR SCENARIOS LIST GRID (col-span-8) */}
-            <main className="lg:col-span-8 space-y-6">
+            {/* A plain div, not <main>: Layout already provides the page's one
+                main landmark, and nesting a second one inside it is invalid. */}
+            <div className="lg:col-span-8 space-y-6">
               
               {/* Toggle tabs for Articles vs Scenarios */}
               <div className="bg-white rounded-xl shadow-sm border border-fog flex p-1.5">
@@ -340,7 +342,7 @@ export const Library: React.FC = () => {
                   </div>
                 )
               )}
-            </main>
+            </div>
 
             {/* RIGHT SIDEBAR: CONTROLS & MONITOR DESK (col-span-4) */}
             <aside aria-label="Search Desk" className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
