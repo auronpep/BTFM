@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 export interface RouterContextType {
   path: string;
@@ -100,6 +100,22 @@ const parseHash = () => {
 
 export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [route, setRoute] = useState(parseHash());
+  const isInitialRender = useRef(true);
+
+  // A hash change swaps the whole page, but focus stays on whatever nav button
+  // was clicked. A screen-reader user hears nothing and keeps reading the old
+  // position; a keyboard user's next Tab resumes inside the header instead of
+  // the new page. Moving focus to the main landmark is what a real document
+  // navigation would have done.
+  useEffect(() => {
+    if (isInitialRender.current) {
+      // Don't steal focus on first paint - the user hasn't navigated yet.
+      isInitialRender.current = false;
+      return;
+    }
+    // preventScroll: the smooth scroll-to-top above owns scrolling.
+    document.getElementById('main-content')?.focus({ preventScroll: true });
+  }, [route.path]);
 
   useEffect(() => {
     const handleHashChange = () => {
