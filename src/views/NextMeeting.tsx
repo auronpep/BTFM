@@ -733,6 +733,7 @@ export const NextMeeting: React.FC = () => {
                 </div>
                 <input
                   type="range"
+                  aria-label="Routine Reports share of meeting time (percent)"
                   min="0"
                   max="100"
                   value={sliders.routine}
@@ -752,6 +753,7 @@ export const NextMeeting: React.FC = () => {
                 </div>
                 <input
                   type="range"
+                  aria-label="Strategic Planning share of meeting time (percent)"
                   min="0"
                   max="100"
                   value={sliders.strategy}
@@ -771,6 +773,7 @@ export const NextMeeting: React.FC = () => {
                 </div>
                 <input
                   type="range"
+                  aria-label="Risk and Compliance share of meeting time (percent)"
                   min="0"
                   max="100"
                   value={sliders.risk}
