@@ -23,10 +23,14 @@ const MIME_TYPES = {
 
 const server = http.createServer((req, res) => {
   // Normalize URL path to prevent directory traversal
-  let filePath = path.join(DIST_DIR, req.url.split('?')[0]);
-  
-  // If the path is a directory, serve index.html
-  if (filePath === DIST_DIR || filePath.endsWith('/')) {
+  const urlPath = req.url.split('?')[0];
+  let filePath = path.join(DIST_DIR, urlPath);
+
+  // If the request names a directory, serve its index.html. Test the URL, not
+  // the joined filesystem path: on Windows path.join() emits '\' separators, so
+  // a filePath check for a trailing '/' never matches and '/' fell through to
+  // fs.readFile() on the dist directory itself (EISDIR -> 500).
+  if (urlPath === '' || urlPath.endsWith('/')) {
     filePath = path.join(filePath, 'index.html');
   }
 
