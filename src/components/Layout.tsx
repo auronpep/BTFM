@@ -511,6 +511,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <input
                 type="text"
                 autoFocus
+                aria-label="Search articles, scenarios, and tools"
                 placeholder="Search articles, scenarios, and tools... (e.g. Compensation, Audit, Bylaws)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
