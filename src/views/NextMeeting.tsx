@@ -159,7 +159,7 @@ export const NextMeeting: React.FC = () => {
     try {
       const saved = localStorage.getItem('cdx_agenda_sliders_allocation');
       return saved ? JSON.parse(saved) : { routine: 40, strategy: 40, risk: 20 };
-    } catch (e) {
+    } catch {
       return { routine: 40, strategy: 40, risk: 20 };
     }
   });
@@ -169,7 +169,7 @@ export const NextMeeting: React.FC = () => {
     try {
       const saved = localStorage.getItem('cdx_next_meeting_checked_files');
       return saved ? JSON.parse(saved) : {};
-    } catch (e) {
+    } catch {
       return {};
     }
   });
