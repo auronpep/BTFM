@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { Calendar, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
+import { safeStorage } from '../lib/safeStorage';
 
 /** Shape persisted under cdx_training_diagnostic. */
 interface TrainingDiagnostic {
@@ -15,8 +16,8 @@ export const Training: React.FC = () => {
   const { navigate } = useRouter();
 
   // 3. Syllabus Diagnostic Wizard States
-  const [diagnostic, setDiagnostic] = useState<TrainingDiagnostic>(() => {
-    const saved = localStorage.getItem('cdx_training_diagnostic');
+  const [diagnostic, setDiagnostic] = useState(() => {
+    const saved = safeStorage.getItem('cdx_training_diagnostic');
     return saved ? JSON.parse(saved) : {
       step: 1, // 1, 2, 3, or 'completed'
       budget: '$250k - $1M',
@@ -26,7 +27,7 @@ export const Training: React.FC = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('cdx_training_diagnostic', JSON.stringify(diagnostic));
+    safeStorage.setItem('cdx_training_diagnostic', JSON.stringify(diagnostic));
   }, [diagnostic]);
 
   const handleNextStep = () => {
@@ -119,9 +120,9 @@ export const Training: React.FC = () => {
       notes,
       date: new Date().toISOString()
     };
-    const list = JSON.parse(localStorage.getItem('inperson_inquiries') || '[]');
+    const list = JSON.parse(safeStorage.getItem('inperson_inquiries') || '[]');
     list.push(inquiry);
-    localStorage.setItem('inperson_inquiries', JSON.stringify(list));
+    safeStorage.setItem('inperson_inquiries', JSON.stringify(list));
 
     setInpersonSubmitted(true);
   };

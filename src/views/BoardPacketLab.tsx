@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
+import { safeStorage } from '../lib/safeStorage';
 import { 
   ShieldAlert, AlertCircle, HelpCircle, ArrowRight, BookOpen, CheckCircle, X, ShieldCheck 
 } from 'lucide-react';
@@ -200,18 +201,18 @@ export const BoardPacketLab: React.FC = () => {
   const [isScannerDrawerOpen, setIsScannerDrawerOpen] = useState(false);
   const [showSuccessSeal, setShowSuccessSeal] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_packet_audited_seal');
+      const saved = safeStorage.getItem('cdx_packet_audited_seal');
       return saved === 'true';
     } catch {
       return false;
     }
   });
   const [uncoveredFlags, setUncoveredFlags] = useState<string[]>(() => {
-    const saved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+    const saved = safeStorage.getItem('cdx_board_packet_uncovered_flags');
     return saved ? JSON.parse(saved) : [];
   });
   const [auditedCompliant, setAuditedCompliant] = useState<string[]>(() => {
-    const saved = localStorage.getItem('cdx_board_packet_audited_compliant');
+    const saved = safeStorage.getItem('cdx_board_packet_audited_compliant');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -221,9 +222,9 @@ export const BoardPacketLab: React.FC = () => {
     setSelectedItemId(null);
     setShowSolutions(false);
     setShowSuccessSeal(false);
-    localStorage.removeItem('cdx_board_packet_uncovered_flags');
-    localStorage.removeItem('cdx_board_packet_audited_compliant');
-    localStorage.removeItem('cdx_packet_audited_seal');
+    safeStorage.removeItem('cdx_board_packet_uncovered_flags');
+    safeStorage.removeItem('cdx_board_packet_audited_compliant');
+    safeStorage.removeItem('cdx_packet_audited_seal');
   };
 
   const tabFlags: Record<string, string[]> = {
@@ -309,17 +310,17 @@ export const BoardPacketLab: React.FC = () => {
     if (itemId in redFlagsDb && !uncoveredFlags.includes(itemId)) {
       const updated = [...uncoveredFlags, itemId];
       setUncoveredFlags(updated);
-      localStorage.setItem('cdx_board_packet_uncovered_flags', JSON.stringify(updated));
+      safeStorage.setItem('cdx_board_packet_uncovered_flags', JSON.stringify(updated));
       if (updated.length === 9) {
         setShowSuccessSeal(true);
-        localStorage.setItem('cdx_packet_audited_seal', 'true');
+        safeStorage.setItem('cdx_packet_audited_seal', 'true');
       }
     }
     // If it's a compliant item, track it in auditedCompliant
     if (itemId in compliantDb && !auditedCompliant.includes(itemId)) {
       const updated = [...auditedCompliant, itemId];
       setAuditedCompliant(updated);
-      localStorage.setItem('cdx_board_packet_audited_compliant', JSON.stringify(updated));
+      safeStorage.setItem('cdx_board_packet_audited_compliant', JSON.stringify(updated));
     }
   };
 

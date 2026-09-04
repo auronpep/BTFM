@@ -6,6 +6,7 @@ import {
   ChevronRight, Activity, Zap, Calendar, Award, Check, Sparkles, Users
 } from 'lucide-react';
 import { articles } from '../data/articles';
+import { safeStorage } from '../lib/safeStorage';
 
 export const Home: React.FC = () => {
   const { navigate } = useRouter();
@@ -15,7 +16,7 @@ export const Home: React.FC = () => {
   // Storing resolved problems locally
   const [resolvedProblems, setResolvedProblems] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('cdx_resolved_problems');
+      const saved = safeStorage.getItem('cdx_resolved_problems');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -94,7 +95,7 @@ export const Home: React.FC = () => {
     e.stopPropagation(); // Avoid triggering card navigation
     setResolvedProblems(prev => {
       const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
-      localStorage.setItem('cdx_resolved_problems', JSON.stringify(next));
+      safeStorage.setItem('cdx_resolved_problems', JSON.stringify(next));
       return next;
     });
   };

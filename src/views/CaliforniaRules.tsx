@@ -6,6 +6,7 @@ import type { CaliforniaRule } from '../data/californiaRules';
 import { CaliforniaNoteBadge, LegalEscalationCard } from '../components/BoardroomCards';
 import { CheckSquare, Square, Landmark, ChevronRight, ShieldCheck, AlertTriangle, Terminal, Search, Loader2, Copy, Check, ShieldAlert, FileText } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { safeStorage } from '../lib/safeStorage';
 
 export const CaliforniaRules: React.FC = () => {
   const { navigate } = useRouter();
@@ -13,7 +14,7 @@ export const CaliforniaRules: React.FC = () => {
   // State for Registry Finder Widget (Enhancement 4)
   const [registryQuery, setRegistryQuery] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_registry_scanner_cache');
+      const saved = safeStorage.getItem('cdx_registry_scanner_cache');
       return saved ? JSON.parse(saved).query : '';
     } catch {
       return '';
@@ -22,7 +23,7 @@ export const CaliforniaRules: React.FC = () => {
 
   const [scanResult, setScanResult] = useState<'active' | 'delinquent' | 'suspended' | null>(() => {
     try {
-      const saved = localStorage.getItem('cdx_registry_scanner_cache');
+      const saved = safeStorage.getItem('cdx_registry_scanner_cache');
       return saved ? JSON.parse(saved).status : null;
     } catch {
       return null;
@@ -60,7 +61,7 @@ export const CaliforniaRules: React.FC = () => {
         clearInterval(interval);
         setIsScanning(false);
         setScanResult(activeTab);
-        localStorage.setItem('cdx_registry_scanner_cache', JSON.stringify({
+        safeStorage.setItem('cdx_registry_scanner_cache', JSON.stringify({
           query: registryQuery,
           status: activeTab
         }));
@@ -71,7 +72,7 @@ export const CaliforniaRules: React.FC = () => {
   // State for Bylaws Health Analyzer (Enhancement 5)
   const [bylawChecks, setBylawChecks] = useState<boolean[]>(() => {
     try {
-      const stored = localStorage.getItem('cdx_bylaws_audit_checked');
+      const stored = safeStorage.getItem('cdx_bylaws_audit_checked');
       return stored ? JSON.parse(stored) : Array(10).fill(false);
     } catch {
       return Array(10).fill(false);
@@ -82,7 +83,7 @@ export const CaliforniaRules: React.FC = () => {
     const next = [...bylawChecks];
     next[idx] = !next[idx];
     setBylawChecks(next);
-    localStorage.setItem('cdx_bylaws_audit_checked', JSON.stringify(next));
+    safeStorage.setItem('cdx_bylaws_audit_checked', JSON.stringify(next));
   };
 
   const bylawScore = Math.round((bylawChecks.filter(Boolean).length / 10) * 100);
@@ -161,7 +162,7 @@ export const CaliforniaRules: React.FC = () => {
   // State for D&O estimator (Enhancement 2)
   const [budget, setBudget] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_do_liability_estimator');
+      const saved = safeStorage.getItem('cdx_do_liability_estimator');
       return saved ? JSON.parse(saved).budget : 500000;
     } catch {
       return 500000;
@@ -170,7 +171,7 @@ export const CaliforniaRules: React.FC = () => {
 
   const [headcount, setHeadcount] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_do_liability_estimator');
+      const saved = safeStorage.getItem('cdx_do_liability_estimator');
       return saved ? JSON.parse(saved).headcount : 8;
     } catch {
       return 8;
@@ -178,7 +179,7 @@ export const CaliforniaRules: React.FC = () => {
   });
 
   const saveEstimator = (b: number, h: number) => {
-    localStorage.setItem('cdx_do_liability_estimator', JSON.stringify({ budget: b, headcount: h }));
+    safeStorage.setItem('cdx_do_liability_estimator', JSON.stringify({ budget: b, headcount: h }));
   };
 
   const handleBudgetChange = (val: number) => {
@@ -195,7 +196,7 @@ export const CaliforniaRules: React.FC = () => {
   // key format: "ruleId-actionIndex"
   const [checkedActions, setCheckedActions] = useState<Record<string, boolean>>(() => {
     try {
-      const stored = localStorage.getItem('cdx_cal_rules_checked_ids');
+      const stored = safeStorage.getItem('cdx_cal_rules_checked_ids');
       return stored ? JSON.parse(stored) : {};
     } catch (e) {
       console.error(e);
@@ -210,7 +211,7 @@ export const CaliforniaRules: React.FC = () => {
         ...prev,
         [key]: !prev[key]
       };
-      localStorage.setItem('cdx_cal_rules_checked_ids', JSON.stringify(next));
+      safeStorage.setItem('cdx_cal_rules_checked_ids', JSON.stringify(next));
       return next;
     });
   };

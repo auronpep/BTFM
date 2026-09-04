@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { Award, Landmark, ExternalLink, Users, Scale, ChevronRight, ChevronLeft, FileText, Clipboard, Check, Printer, RotateCcw, AlertCircle, Sparkles } from 'lucide-react';
+import { safeStorage } from '../lib/safeStorage';
 
 /** Shape persisted under cdx_about_legal_intake. */
 interface LegalIntake {
@@ -21,7 +22,7 @@ export const AboutUs: React.FC = () => {
   const [step, setStep] = useState(1);
   const [orgName, setOrganizationName] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).orgName || '';
       }
@@ -32,7 +33,7 @@ export const AboutUs: React.FC = () => {
   });
   const [budget, setBudget] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).budget || 'under-250k';
       }
@@ -43,7 +44,7 @@ export const AboutUs: React.FC = () => {
   });
   const [boardSize, setBoardSize] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).boardSize || '3-5';
       }
@@ -54,7 +55,7 @@ export const AboutUs: React.FC = () => {
   });
   const [frequency, setFrequency] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).frequency || 'quarterly';
       }
@@ -65,7 +66,7 @@ export const AboutUs: React.FC = () => {
   });
   const [stateStatus, setStateStatus] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).stateStatus || 'current';
       }
@@ -76,7 +77,7 @@ export const AboutUs: React.FC = () => {
   });
   const [worries, setWorries] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).worries || [];
       }
@@ -87,7 +88,7 @@ export const AboutUs: React.FC = () => {
   });
   const [customConcerns, setCustomConcerns] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).customConcerns || '';
       }
@@ -98,7 +99,7 @@ export const AboutUs: React.FC = () => {
   });
   const [isCompiled, setIsCompiled] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       if (saved) {
         return JSON.parse(saved).isCompiled || false;
       }
@@ -111,9 +112,9 @@ export const AboutUs: React.FC = () => {
 
   const saveIntakeToLocalStorage = (updated: Partial<LegalIntake>) => {
     try {
-      const saved = localStorage.getItem('cdx_about_legal_intake');
+      const saved = safeStorage.getItem('cdx_about_legal_intake');
       const current = saved ? JSON.parse(saved) : {};
-      localStorage.setItem('cdx_about_legal_intake', JSON.stringify({
+      safeStorage.setItem('cdx_about_legal_intake', JSON.stringify({
         orgName, budget, boardSize, frequency, stateStatus, worries, customConcerns, isCompiled,
         ...current, ...updated
       }));
@@ -141,10 +142,8 @@ export const AboutUs: React.FC = () => {
     setIsCompiled(false);
     setStep(1);
     try {
-      localStorage.removeItem('cdx_about_legal_intake');
-    } catch {
-      // Storage unavailable; there is no saved draft to clear.
-    }
+      safeStorage.removeItem('cdx_about_legal_intake');
+    } catch(e) {}
   };
 
   const handleCompile = () => {

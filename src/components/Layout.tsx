@@ -3,6 +3,7 @@ import { useRouter } from './Router';
 import { Menu, X, Landmark, ExternalLink, ShieldCheck, ChevronRight, GraduationCap, Search, Scale, BookOpen, AlertCircle } from 'lucide-react';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
+import { safeStorage } from '../lib/safeStorage';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,24 +35,24 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   try {
-    const selfAssessment = localStorage.getItem('cdx_self_assessment_score') !== null;
+    const selfAssessment = safeStorage.getItem('cdx_self_assessment_score') !== null;
     
     let packetCount = 0;
-    const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+    const packetSaved = safeStorage.getItem('cdx_board_packet_uncovered_flags');
     if (packetSaved) {
       packetCount = JSON.parse(packetSaved).length || 0;
     }
     
-    const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade') !== null;
+    const minutesGrade = safeStorage.getItem('cdx_minutes_scorecard_grade') !== null;
     
     let budgetCount = 0;
-    const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
+    const budgetSaved = safeStorage.getItem('cdx_budget_audited_lines');
     if (budgetSaved) {
       budgetCount = JSON.parse(budgetSaved).length || 0;
     }
     
     let authCount = 0;
-    const authSaved = localStorage.getItem('cdx_authority_map_assignments');
+    const authSaved = safeStorage.getItem('cdx_authority_map_assignments');
     if (authSaved) {
       authCount = Object.keys(JSON.parse(authSaved)).length || 0;
     }
@@ -60,7 +61,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const completedPacket = packetCount === 9;
     const completedMinutes = minutesGrade;
     const completedBudget = budgetCount === 6;
-    const completedAuth = localStorage.getItem('cdx_authority_map_score') !== null;
+    const completedAuth = safeStorage.getItem('cdx_authority_map_score') !== null;
 
     const anyIncompleteAndStarted = 
       (packetCount > 0 && packetCount < 9) || 

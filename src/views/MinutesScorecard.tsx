@@ -6,6 +6,7 @@ import {
   FileText, FileCheck, Sparkles, Terminal, ChevronRight, Download
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
+import { safeStorage } from '../lib/safeStorage';
 
 interface ScoringCriterion {
   id: string;
@@ -89,7 +90,7 @@ export const MinutesScorecard: React.FC = () => {
   // State for Minutes Sandbox Correction (Enhancement 7)
   const [sandboxText, setSandboxText] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_minutes_correction_draft');
+      const saved = safeStorage.getItem('cdx_minutes_correction_draft');
       return saved || horrificMinutesMock;
     } catch {
       return horrificMinutesMock;
@@ -100,13 +101,13 @@ export const MinutesScorecard: React.FC = () => {
 
   const handleSandboxChange = (text: string) => {
     setSandboxText(text);
-    localStorage.setItem('cdx_minutes_correction_draft', text);
+    safeStorage.setItem('cdx_minutes_correction_draft', text);
   };
 
   const handleResetSandbox = () => {
     if (window.confirm("Reset sandbox text back to the non-compliant Grade F draft?")) {
       setSandboxText(horrificMinutesMock);
-      localStorage.setItem('cdx_minutes_correction_draft', horrificMinutesMock);
+      safeStorage.setItem('cdx_minutes_correction_draft', horrificMinutesMock);
     }
   };
 
@@ -130,7 +131,7 @@ The disinterested board reviewed competitive bids and determined a more advantag
 Respectfully submitted,
 Sarah Jenkins, Board Secretary`;
     setSandboxText(perfectSample);
-    localStorage.setItem('cdx_minutes_correction_draft', perfectSample);
+    safeStorage.setItem('cdx_minutes_correction_draft', perfectSample);
   };
 
   const handleCopySandbox = () => {
@@ -209,7 +210,7 @@ Sarah Jenkins, Board Secretary`;
   }
 
   const [resolutionState, setResolutionState] = useState(() => {
-    const saved = localStorage.getItem('cdx_minutes_resolution_builder');
+    const saved = safeStorage.getItem('cdx_minutes_resolution_builder');
     return saved ? JSON.parse(saved) : {
       organizationName: 'CDX Charity Initiatives',
       secretaryName: 'Sarah Jenkins',
@@ -229,7 +230,7 @@ Sarah Jenkins, Board Secretary`;
   });
 
   useEffect(() => {
-    localStorage.setItem('cdx_minutes_resolution_builder', JSON.stringify(resolutionState));
+    safeStorage.setItem('cdx_minutes_resolution_builder', JSON.stringify(resolutionState));
   }, [resolutionState]);
 
   const compileResolutionText = () => {
@@ -348,7 +349,7 @@ ${secretaryName}, Board Secretary`;
 
   // Criteria database
   const [criteria, setCriteria] = useState<ScoringCriterion[]>(() => {
-    const savedIds = localStorage.getItem('cdx_minutes_scorecard_checked_ids');
+    const savedIds = safeStorage.getItem('cdx_minutes_scorecard_checked_ids');
     const checkedIds: string[] = savedIds ? JSON.parse(savedIds) : [];
     
     const initialCriteria: Omit<ScoringCriterion, 'checked'>[] = [
@@ -469,10 +470,10 @@ ${secretaryName}, Board Secretary`;
   }
 
   useEffect(() => {
-    localStorage.setItem('cdx_minutes_scorecard_score', score.toString());
-    localStorage.setItem('cdx_minutes_scorecard_grade', grade);
+    safeStorage.setItem('cdx_minutes_scorecard_score', score.toString());
+    safeStorage.setItem('cdx_minutes_scorecard_grade', grade);
     const checkedIds = criteria.filter(c => c.checked).map(c => c.id);
-    localStorage.setItem('cdx_minutes_scorecard_checked_ids', JSON.stringify(checkedIds));
+    safeStorage.setItem('cdx_minutes_scorecard_checked_ids', JSON.stringify(checkedIds));
   }, [score, grade, criteria]);
 
   // Static mock declarations moved to top of file to prevent early access errors

@@ -13,7 +13,7 @@ import {
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Clock, Award, CheckSquare, Square, AlertCircle } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
-import { useDocumentTitle, withSiteName, useMetaDescription, truncateForMeta } from '../lib/pageTitles';
+import { safeStorage } from '../lib/safeStorage';
 
 // Simple Markdown to HTML parser for articles (robust line-by-line processing)
 const renderMarkdown = (text: string) => {
@@ -193,7 +193,7 @@ export const ArticleReader: React.FC = () => {
 
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
     try {
-      const saved = localStorage.getItem(`cdx_feedback_status_${slug}`);
+      const saved = safeStorage.getItem(`cdx_feedback_status_${slug}`);
       return saved as 'yes' | 'no' | null;
     } catch {
       return null;
@@ -202,7 +202,7 @@ export const ArticleReader: React.FC = () => {
 
   const handleFeedback = (val: 'yes' | 'no') => {
     try {
-      localStorage.setItem(`cdx_feedback_status_${slug}`, val);
+      safeStorage.setItem(`cdx_feedback_status_${slug}`, val);
       setFeedback(val);
     } catch (e) {
       console.error(e);
@@ -212,7 +212,7 @@ export const ArticleReader: React.FC = () => {
   // Local storage mastery tracking state
   const [isStudied, setIsStudied] = useState(() => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       if (stored) {
         const parsed = JSON.parse(stored);
         return Array.isArray(parsed) && parsed.includes(slug);
@@ -225,7 +225,7 @@ export const ArticleReader: React.FC = () => {
 
   const toggleStudied = () => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       let parsed = stored ? JSON.parse(stored) : [];
       if (!Array.isArray(parsed)) parsed = [];
 
@@ -236,7 +236,7 @@ export const ArticleReader: React.FC = () => {
           parsed.push(slug);
         }
       }
-      localStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
+      safeStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
       setIsStudied(!isStudied);
     } catch (e) {
       console.error(e);
@@ -409,7 +409,7 @@ export const ArticleReader: React.FC = () => {
                     <span>✓ Thank you for your feedback! Your mark of study excellence has been registered.</span>
                     <button
                       onClick={() => {
-                        localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                        safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                         setFeedback(null);
                       }}
                       className="text-[10px] text-emerald-600 hover:underline font-bold uppercase cursor-pointer"
@@ -423,7 +423,7 @@ export const ArticleReader: React.FC = () => {
                       <span>Thank you for your feedback. We regret that this general outline did not meet your board's specific complexity.</span>
                       <button
                         onClick={() => {
-                          localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                          safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                           setFeedback(null);
                         }}
                         className="text-[10px] text-burgundy hover:underline font-bold uppercase shrink-0 cursor-pointer"
