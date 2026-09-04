@@ -34,7 +34,7 @@ export const parseTextWithStatutesAndGlossary = (text: string): React.ReactNode[
   if (!text) return [];
 
   // Match: Glossary Terms or Statute Citations (including full or short names)
-  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires|CA Corp Code § \d+(?:\.\d+)?(?:\([a-z0-9]+\))*(?:\(\d\))*|CA Gov Code § \d+[\w\d\(\).]*|CA UI Code § \d+|\bIRC § \d+\b|UPMIFA|California Corporations Code § \d+[\w\d\(\).]*|California Government Code § \d+[\w\d\(\).]*|California Unemployment Insurance Code § \d+[\w\d\(\).]*|California Labor Code § \d+[\w\d\(\).]*)/gi;
+  const regex = /(self-dealing|rebuttable presumption|donor intent|duty of care|duty of loyalty|\bquorum\b|interested director|interested person|ultra vires|CA Corp Code § \d+(?:\.\d+)?(?:\([a-z0-9]+\))*(?:\(\d\))*|CA Gov Code § \d+[\w\d().]*|CA UI Code § \d+|\bIRC § \d+\b|UPMIFA|California Corporations Code § \d+[\w\d().]*|California Government Code § \d+[\w\d().]*|California Unemployment Insurance Code § \d+[\w\d().]*|California Labor Code § \d+[\w\d().]*)/gi;
   
   const parts = text.split(regex);
   
