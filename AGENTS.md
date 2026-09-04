@@ -20,12 +20,22 @@ Win the website selection process by delivering the clearest, most practical, mo
 - Favor simple, static-first implementation unless a server requirement is proven.
 - Treat accessibility, readable typography, legal disclaimers, and mobile layout as first-class requirements.
 
-## Preferred Stack
+## Stack
 
-- Astro static site with MDX/content collections.
-- TypeScript where useful, but avoid unnecessary client JavaScript.
-- Static output for Hostinger `public_html` deployment unless the hosting plan is confirmed to support Node.js app deployment and server rendering is needed.
-- Forms should start as external embeds or a small hosting-compatible endpoint decided during implementation.
+This is the stack the repository actually uses. Match it; do not introduce a second
+framework or a second styling system.
+
+- React 19 with TypeScript, built by Vite 8.
+- Tailwind CSS 4 via `@tailwindcss/vite`. Design tokens live in the `@theme` block in
+  `src/index.css` - there is no `tailwind.config.js`.
+- Routing is the hand-rolled hash router in `src/components/Router.tsx`, with routes
+  mapped in `src/App.tsx`. Hash routing is deliberate: it keeps the built output
+  deployable to static hosting with no server rewrite rules.
+- Icons come from `lucide-react`.
+- `npm run build` emits a static `dist/` for Hostinger `public_html`. `server.js` is a
+  dependency-free Node static server for hosts that run Node directly.
+- Forms should start as external embeds or a small hosting-compatible endpoint decided
+  during implementation.
 
 ## Parallel Work Rules
 
