@@ -70,3 +70,7 @@ Node directly; it needs no dependencies beyond Node itself.
 - `tasks/todo.md` - task tracking and setup notes.
 
 Contributor guidance lives in `AGENTS.md`.
+
+## Maintainers
+
+- auronpep (owner)
