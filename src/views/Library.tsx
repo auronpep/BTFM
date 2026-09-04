@@ -356,6 +356,7 @@ export const Library: React.FC = () => {
                   <Search className="absolute left-3 top-3 w-4 h-4 text-ink/40" />
                   <input
                     type="text"
+                    aria-label="Search the library"
                     placeholder="Scan keywords..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
