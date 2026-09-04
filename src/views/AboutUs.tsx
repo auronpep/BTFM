@@ -13,7 +13,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).orgName || '';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return '';
   });
   const [budget, setBudget] = useState(() => {
@@ -22,7 +24,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).budget || 'under-250k';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return 'under-250k';
   });
   const [boardSize, setBoardSize] = useState(() => {
@@ -31,7 +35,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).boardSize || '3-5';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return '3-5';
   });
   const [frequency, setFrequency] = useState(() => {
@@ -40,7 +46,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).frequency || 'quarterly';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return 'quarterly';
   });
   const [stateStatus, setStateStatus] = useState(() => {
@@ -49,7 +57,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).stateStatus || 'current';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return 'current';
   });
   const [worries, setWorries] = useState<string[]>(() => {
@@ -58,7 +68,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).worries || [];
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return [];
   });
   const [customConcerns, setCustomConcerns] = useState(() => {
@@ -67,7 +79,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).customConcerns || '';
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return '';
   });
   const [isCompiled, setIsCompiled] = useState(() => {
@@ -76,7 +90,9 @@ export const AboutUs: React.FC = () => {
       if (saved) {
         return JSON.parse(saved).isCompiled || false;
       }
-    } catch(e) {}
+    } catch {
+      // Storage unavailable or holding malformed JSON - fall through to the default below.
+    }
     return false;
   });
   const [isCopied, setIsCopied] = useState(false);
@@ -114,7 +130,9 @@ export const AboutUs: React.FC = () => {
     setStep(1);
     try {
       localStorage.removeItem('cdx_about_legal_intake');
-    } catch(e) {}
+    } catch {
+      // Storage unavailable; there is no saved draft to clear.
+    }
   };
 
   const handleCompile = () => {
