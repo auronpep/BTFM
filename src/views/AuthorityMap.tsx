@@ -6,6 +6,7 @@ import {
   X, Award, HelpCircle, ChevronRight
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
+import { safeStorage } from '../lib/safeStorage';
 
 interface ActionItem {
   id: string;
@@ -20,11 +21,11 @@ export const AuthorityMap: React.FC = () => {
   const { navigate } = useRouter();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Record<string, 'board' | 'committee' | 'ceo'>>(() => {
-    const saved = localStorage.getItem('cdx_authority_map_assignments');
+    const saved = safeStorage.getItem('cdx_authority_map_assignments');
     return saved ? JSON.parse(saved) : {};
   });
   const [showResults, setShowResults] = useState<boolean>(() => {
-    return localStorage.getItem('cdx_authority_map_show_results') === 'true';
+    return safeStorage.getItem('cdx_authority_map_show_results') === 'true';
   });
   const [isHelpDrawerOpen, setIsHelpDrawerOpen] = useState<boolean>(false);
 
@@ -154,10 +155,10 @@ export const AuthorityMap: React.FC = () => {
     setAssignments({});
     setSelectedItemId(null);
     setShowResults(false);
-    localStorage.removeItem('cdx_authority_map_assignments');
-    localStorage.removeItem('cdx_authority_map_show_results');
-    localStorage.removeItem('cdx_authority_map_score');
-    localStorage.removeItem('cdx_authority_map_total');
+    safeStorage.removeItem('cdx_authority_map_assignments');
+    safeStorage.removeItem('cdx_authority_map_show_results');
+    safeStorage.removeItem('cdx_authority_map_score');
+    safeStorage.removeItem('cdx_authority_map_total');
   };
 
   const solveAll = () => {
@@ -167,8 +168,8 @@ export const AuthorityMap: React.FC = () => {
     });
     setAssignments(solved);
     setShowResults(true);
-    localStorage.setItem('cdx_authority_map_assignments', JSON.stringify(solved));
-    localStorage.setItem('cdx_authority_map_show_results', 'true');
+    safeStorage.setItem('cdx_authority_map_assignments', JSON.stringify(solved));
+    safeStorage.setItem('cdx_authority_map_show_results', 'true');
   };
 
   const correctCount = calculateScore();
@@ -176,20 +177,20 @@ export const AuthorityMap: React.FC = () => {
 
   useEffect(() => {
     if (Object.keys(assignments).length > 0) {
-      localStorage.setItem('cdx_authority_map_assignments', JSON.stringify(assignments));
+      safeStorage.setItem('cdx_authority_map_assignments', JSON.stringify(assignments));
     } else {
-      localStorage.removeItem('cdx_authority_map_assignments');
+      safeStorage.removeItem('cdx_authority_map_assignments');
     }
   }, [assignments]);
 
   useEffect(() => {
-    localStorage.setItem('cdx_authority_map_show_results', showResults.toString());
+    safeStorage.setItem('cdx_authority_map_show_results', showResults.toString());
     if (showResults) {
-      localStorage.setItem('cdx_authority_map_score', correctCount.toString());
-      localStorage.setItem('cdx_authority_map_total', items.length.toString());
+      safeStorage.setItem('cdx_authority_map_score', correctCount.toString());
+      safeStorage.setItem('cdx_authority_map_total', items.length.toString());
     } else {
-      localStorage.removeItem('cdx_authority_map_score');
-      localStorage.removeItem('cdx_authority_map_total');
+      safeStorage.removeItem('cdx_authority_map_score');
+      safeStorage.removeItem('cdx_authority_map_total');
     }
   }, [showResults, correctCount]);
 

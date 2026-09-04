@@ -6,6 +6,7 @@ import {
   ArrowRight, RefreshCw, X, Copy, Check, Printer, Sparkles, AlertTriangle, FileQuestion, CheckSquare, Download
 } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { safeStorage } from '../lib/safeStorage';
 
 interface ScriptTemplate {
   id: string;
@@ -116,11 +117,11 @@ export const Tools: React.FC = () => {
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
   const [userOrgName, setUserOrganizationName] = useState(() => {
-    return localStorage.getItem('cdx_user_org_name') || 'Our Charitable Board';
+    return safeStorage.getItem('cdx_user_org_name') || 'Our Charitable Board';
   });
 
   useEffect(() => {
-    localStorage.setItem('cdx_user_org_name', userOrgName);
+    safeStorage.setItem('cdx_user_org_name', userOrgName);
   }, [userOrgName]);
 
   const [copySuccess, setCopySuccess] = useState(false);
@@ -130,7 +131,7 @@ export const Tools: React.FC = () => {
   const [form990ActiveIndex, setForm990ActiveIndex] = useState(0);
   const [form990Answers, setForm990Answers] = useState<Record<string, 'yes' | 'no' | null>>(() => {
     try {
-      const saved = localStorage.getItem('cdx_form_990_answers');
+      const saved = safeStorage.getItem('cdx_form_990_answers');
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -140,14 +141,14 @@ export const Tools: React.FC = () => {
   const handleAnswerForm990 = (qId: string, value: 'yes' | 'no') => {
     const updated = { ...form990Answers, [qId]: value };
     setForm990Answers(updated);
-    localStorage.setItem('cdx_form_990_answers', JSON.stringify(updated));
+    safeStorage.setItem('cdx_form_990_answers', JSON.stringify(updated));
   };
 
   const handleResetForm990 = () => {
     if (window.confirm("Reset all Form 990 answers?")) {
       setForm990Answers({});
       setForm990ActiveIndex(0);
-      localStorage.removeItem('cdx_form_990_answers');
+      safeStorage.removeItem('cdx_form_990_answers');
     }
   };
 
@@ -250,44 +251,44 @@ export const Tools: React.FC = () => {
 
   const loadLabStates = () => {
     // 1. Self assessment
-    const selfScore = localStorage.getItem('cdx_self_assessment_score');
-    const selfLevel = localStorage.getItem('cdx_self_assessment_level');
+    const selfScore = safeStorage.getItem('cdx_self_assessment_score');
+    const selfLevel = safeStorage.getItem('cdx_self_assessment_level');
 
     // 2. Board packet
     let packetCount = 0;
     try {
-      const packetSaved = localStorage.getItem('cdx_board_packet_uncovered_flags');
+      const packetSaved = safeStorage.getItem('cdx_board_packet_uncovered_flags');
       if (packetSaved) {
         packetCount = JSON.parse(packetSaved).length || 0;
       }
     } catch (e) {}
 
     // 3. Minutes scorecard
-    const minutesGrade = localStorage.getItem('cdx_minutes_scorecard_grade');
-    const minutesScore = localStorage.getItem('cdx_minutes_scorecard_score');
+    const minutesGrade = safeStorage.getItem('cdx_minutes_scorecard_grade');
+    const minutesScore = safeStorage.getItem('cdx_minutes_scorecard_score');
 
     // 4. Budget worksheet
     let budgetCount = 0;
     try {
-      const budgetSaved = localStorage.getItem('cdx_budget_audited_lines');
+      const budgetSaved = safeStorage.getItem('cdx_budget_audited_lines');
       if (budgetSaved) {
         budgetCount = JSON.parse(budgetSaved).length || 0;
       }
     } catch (e) {}
 
     // 5. Authority map
-    const authScore = localStorage.getItem('cdx_authority_map_score');
-    const authTotal = localStorage.getItem('cdx_authority_map_total');
+    const authScore = safeStorage.getItem('cdx_authority_map_score');
+    const authTotal = safeStorage.getItem('cdx_authority_map_total');
     let authCount = 0;
     try {
-      const authSaved = localStorage.getItem('cdx_authority_map_assignments');
+      const authSaved = safeStorage.getItem('cdx_authority_map_assignments');
       if (authSaved) {
         authCount = Object.keys(JSON.parse(authSaved)).length || 0;
       }
     } catch (e) {}
 
     // 6. Script Builder
-    const scriptCompleted = localStorage.getItem('cdx_script_builder_completed') === 'true';
+    const scriptCompleted = safeStorage.getItem('cdx_script_builder_completed') === 'true';
 
     setLabStates({
       selfAssessment: { score: selfScore, level: selfLevel },
@@ -322,14 +323,12 @@ export const Tools: React.FC = () => {
       'cdx_script_builder_completed',
       'cdx_form_990_answers'
     ];
-    keysToRemove.forEach(k => localStorage.removeItem(k));
+    keysToRemove.forEach(k => safeStorage.removeItem(k));
     
-    for (let i = localStorage.length - 1; i >= 0; i--) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('cdx_feedback_status_')) {
-        localStorage.removeItem(key);
-      }
-    }
+    safeStorage
+      .keys()
+      .filter((key) => key.startsWith('cdx_feedback_status_'))
+      .forEach((key) => safeStorage.removeItem(key));
 
     setLabStates({
       selfAssessment: { score: null, level: null },
@@ -363,7 +362,7 @@ export const Tools: React.FC = () => {
   const isMasteryUnlocked = completedCount >= 3;
 
   const handleCompleteScriptSandbox = () => {
-    localStorage.setItem('cdx_script_builder_completed', 'true');
+    safeStorage.setItem('cdx_script_builder_completed', 'true');
     loadLabStates();
     setIsScriptSandboxOpen(false);
   };
