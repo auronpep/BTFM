@@ -7,6 +7,7 @@ import { LegalEscalationCard } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle, Sparkles } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { safeStorage } from '../lib/safeStorage';
 
 // React-safe glossary parser (Enhancement 6)
 const parseTextWithGlossary = (text: string): React.ReactNode => {
@@ -191,7 +192,7 @@ export const ScenarioReader: React.FC = () => {
   // Simulation Option State
   const [selectedOption, setSelectedOption] = useState<number | null>(() => {
     try {
-      const saved = localStorage.getItem('cdx_scenario_sim_decisions');
+      const saved = safeStorage.getItem('cdx_scenario_sim_decisions');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object' && typeof parsed[slug] === 'number') {
@@ -207,10 +208,10 @@ export const ScenarioReader: React.FC = () => {
   const handleSelectOption = (idx: number) => {
     setSelectedOption(idx);
     try {
-      const saved = localStorage.getItem('cdx_scenario_sim_decisions');
+      const saved = safeStorage.getItem('cdx_scenario_sim_decisions');
       const parsed = saved ? JSON.parse(saved) : {};
       parsed[slug] = idx;
-      localStorage.setItem('cdx_scenario_sim_decisions', JSON.stringify(parsed));
+      safeStorage.setItem('cdx_scenario_sim_decisions', JSON.stringify(parsed));
     } catch (e) {
       console.error(e);
     }
@@ -218,7 +219,7 @@ export const ScenarioReader: React.FC = () => {
 
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
     try {
-      const saved = localStorage.getItem(`cdx_feedback_status_${slug}`);
+      const saved = safeStorage.getItem(`cdx_feedback_status_${slug}`);
       return saved as 'yes' | 'no' | null;
     } catch (e) {
       return null;
@@ -227,7 +228,7 @@ export const ScenarioReader: React.FC = () => {
 
   const handleFeedback = (val: 'yes' | 'no') => {
     try {
-      localStorage.setItem(`cdx_feedback_status_${slug}`, val);
+      safeStorage.setItem(`cdx_feedback_status_${slug}`, val);
       setFeedback(val);
     } catch (e) {
       console.error(e);
@@ -237,7 +238,7 @@ export const ScenarioReader: React.FC = () => {
   // Local storage mastery tracking state
   const [isStudied, setIsStudied] = useState(() => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       if (stored) {
         const parsed = JSON.parse(stored);
         return Array.isArray(parsed) && parsed.includes(slug);
@@ -250,7 +251,7 @@ export const ScenarioReader: React.FC = () => {
 
   const toggleStudied = () => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       let parsed = stored ? JSON.parse(stored) : [];
       if (!Array.isArray(parsed)) parsed = [];
 
@@ -261,7 +262,7 @@ export const ScenarioReader: React.FC = () => {
           parsed.push(slug);
         }
       }
-      localStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
+      safeStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
       setIsStudied(!isStudied);
     } catch (e) {
       console.error(e);
@@ -574,7 +575,7 @@ export const ScenarioReader: React.FC = () => {
                     <span>✓ Thank you! Your review has been added to our board alignment records.</span>
                     <button
                       onClick={() => {
-                        localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                        safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                         setFeedback(null);
                       }}
                       className="text-[10px] text-emerald-600 hover:underline font-bold uppercase cursor-pointer"
@@ -588,7 +589,7 @@ export const ScenarioReader: React.FC = () => {
                       <span>Thank you. We understand this general scenario might not match the specific legal complexities your board is facing.</span>
                       <button
                         onClick={() => {
-                          localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                          safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                           setFeedback(null);
                         }}
                         className="text-[10px] text-burgundy hover:underline font-bold uppercase shrink-0 cursor-pointer"

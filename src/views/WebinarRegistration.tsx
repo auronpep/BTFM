@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
+import { safeStorage } from '../lib/safeStorage';
 import { 
   Calendar, User, Mail, ShieldCheck, ChevronRight, 
   Award, GraduationCap, Sparkles, Check, ArrowLeft, Clock, BookOpen, Building 
@@ -87,9 +88,9 @@ export const WebinarRegistration: React.FC = () => {
       };
       
       // Push to simulated local database
-      const list = JSON.parse(localStorage.getItem('webinar_registrations') || '[]');
+      const list = JSON.parse(safeStorage.getItem('webinar_registrations') || '[]');
       list.push(reg);
-      localStorage.setItem('webinar_registrations', JSON.stringify(list));
+      safeStorage.setItem('webinar_registrations', JSON.stringify(list));
 
       const confirmed = webinarsList.find(w => w.id === selectedWebinar);
       setWebinarSubmitted(confirmed ? confirmed.title : 'Selected Webinar');

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { safeStorage } from '../lib/safeStorage';
 
 // React-safe glossary parser (Enhancement 6)
 const parseTextWithGlossary = (text: string): React.ReactNode => {
@@ -48,14 +49,14 @@ export const Boards101: React.FC = () => {
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(() => {
     try {
-      return localStorage.getItem('cdx_bylaws_quick_check') !== null;
+      return safeStorage.getItem('cdx_bylaws_quick_check') !== null;
     } catch (e) {
       return false;
     }
   });
   const [quizScore, setQuizScore] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_bylaws_quick_check');
+      const saved = safeStorage.getItem('cdx_bylaws_quick_check');
       return saved ? parseInt(saved) : 0;
     } catch (e) {
       return 0;
@@ -89,7 +90,7 @@ export const Boards101: React.FC = () => {
     if (quizAnswers[3] === 'B') score++;
 
     try {
-      localStorage.setItem('cdx_bylaws_quick_check', score.toString());
+      safeStorage.setItem('cdx_bylaws_quick_check', score.toString());
     } catch (e) {}
 
     setQuizScore(score);
@@ -98,7 +99,7 @@ export const Boards101: React.FC = () => {
 
   const handleResetQuiz = () => {
     try {
-      localStorage.removeItem('cdx_bylaws_quick_check');
+      safeStorage.removeItem('cdx_bylaws_quick_check');
     } catch (e) {}
     setQuizAnswers({});
     setQuizScore(0);
@@ -152,9 +153,9 @@ export const Boards101: React.FC = () => {
     };
 
     // Save to localStorage to persist for demonstration
-    const list = JSON.parse(localStorage.getItem('boards101_bookings') || '[]');
+    const list = JSON.parse(safeStorage.getItem('boards101_bookings') || '[]');
     list.push(booking);
-    localStorage.setItem('boards101_bookings', JSON.stringify(list));
+    safeStorage.setItem('boards101_bookings', JSON.stringify(list));
 
     setFormSubmitted(true);
   };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { Layout } from '../components/Layout';
 import { Award, CheckCircle, RefreshCw, ChevronRight, ChevronLeft, ShieldCheck, Printer } from 'lucide-react';
+import { safeStorage } from '../lib/safeStorage';
 
 interface Question {
   id: number;
@@ -198,8 +199,8 @@ export const SelfAssessment: React.FC = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setQuizComplete(true);
-      localStorage.setItem('cdx_self_assessment_score', score.toString());
-      localStorage.setItem('cdx_self_assessment_level', assessment.level.split(':')[0].trim());
+      safeStorage.setItem('cdx_self_assessment_score', score.toString());
+      safeStorage.setItem('cdx_self_assessment_level', assessment.level.split(':')[0].trim());
     }
   };
 
