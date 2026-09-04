@@ -13,6 +13,7 @@ import {
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Clock, Award, CheckSquare, Square, AlertCircle } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { safeStorage } from '../lib/safeStorage';
 
 // Simple Markdown to HTML parser for articles (robust line-by-line processing)
 const renderMarkdown = (text: string) => {
@@ -186,18 +187,22 @@ export const ArticleReader: React.FC = () => {
   // Find article
   const article = articles.find((art) => art.slug === slug);
 
+  // This route owns its title: only the view can resolve the slug to a headline.
+  useDocumentTitle(withSiteName(article ? article.title : 'Training Series Not Found'));
+  useMetaDescription(article ? truncateForMeta(article.description) : undefined);
+
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
     try {
-      const saved = localStorage.getItem(`cdx_feedback_status_${slug}`);
+      const saved = safeStorage.getItem(`cdx_feedback_status_${slug}`);
       return saved as 'yes' | 'no' | null;
-    } catch (e) {
+    } catch {
       return null;
     }
   });
 
   const handleFeedback = (val: 'yes' | 'no') => {
     try {
-      localStorage.setItem(`cdx_feedback_status_${slug}`, val);
+      safeStorage.setItem(`cdx_feedback_status_${slug}`, val);
       setFeedback(val);
     } catch (e) {
       console.error(e);
@@ -207,7 +212,7 @@ export const ArticleReader: React.FC = () => {
   // Local storage mastery tracking state
   const [isStudied, setIsStudied] = useState(() => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       if (stored) {
         const parsed = JSON.parse(stored);
         return Array.isArray(parsed) && parsed.includes(slug);
@@ -220,7 +225,7 @@ export const ArticleReader: React.FC = () => {
 
   const toggleStudied = () => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       let parsed = stored ? JSON.parse(stored) : [];
       if (!Array.isArray(parsed)) parsed = [];
 
@@ -231,7 +236,7 @@ export const ArticleReader: React.FC = () => {
           parsed.push(slug);
         }
       }
-      localStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
+      safeStorage.setItem('board_mastery_progress', JSON.stringify(parsed));
       setIsStudied(!isStudied);
     } catch (e) {
       console.error(e);
@@ -275,7 +280,7 @@ export const ArticleReader: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left Rail (Editorial Meta Panel) - lg:col-span-3 */}
-            <aside className="lg:col-span-3 bg-white p-6 rounded-xl border border-fog/80 shadow-sm text-left space-y-5 lg:sticky lg:top-24">
+            <aside aria-label="Reading Desk" className="lg:col-span-3 bg-white p-6 rounded-xl border border-fog/80 shadow-sm text-left space-y-5 lg:sticky lg:top-24">
               <div className="space-y-1">
                 <span className="text-[10px] font-extrabold uppercase tracking-widest text-brass bg-brass/10 border border-brass/20 px-2.5 py-0.5 rounded">
                   {article.category}
@@ -404,7 +409,7 @@ export const ArticleReader: React.FC = () => {
                     <span>✓ Thank you for your feedback! Your mark of study excellence has been registered.</span>
                     <button
                       onClick={() => {
-                        localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                        safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                         setFeedback(null);
                       }}
                       className="text-[10px] text-emerald-600 hover:underline font-bold uppercase cursor-pointer"
@@ -418,7 +423,7 @@ export const ArticleReader: React.FC = () => {
                       <span>Thank you for your feedback. We regret that this general outline did not meet your board's specific complexity.</span>
                       <button
                         onClick={() => {
-                          localStorage.removeItem(`cdx_feedback_status_${slug}`);
+                          safeStorage.removeItem(`cdx_feedback_status_${slug}`);
                           setFeedback(null);
                         }}
                         className="text-[10px] text-burgundy hover:underline font-bold uppercase shrink-0 cursor-pointer"
@@ -462,7 +467,7 @@ export const ArticleReader: React.FC = () => {
             </article>
 
             {/* Right Rail (Interactive Meeting Prep Box) - lg:col-span-3 */}
-            <aside className="lg:col-span-3 space-y-6 lg:sticky lg:top-24">
+            <aside aria-label="Actionable Prep Desk" className="lg:col-span-3 space-y-6 lg:sticky lg:top-24">
               
               {/* Header block for prep box */}
               <div className="bg-slate-brand text-paper p-4 rounded-t-xl border-b border-brass/25 text-left space-y-1">

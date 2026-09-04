@@ -5,6 +5,7 @@ import {
   Table, ArrowRight, Activity, CheckCircle, Scale, ShieldAlert, AlertCircle
 } from 'lucide-react';
 import { DoNotDoThisCard, AskThisCard, CaliforniaNoteBadge, LegalEscalationCard } from '../components/BoardroomCards';
+import { safeStorage } from '../lib/safeStorage';
 
 interface BudgetLine {
   id: string;
@@ -35,17 +36,17 @@ export const BudgetWorksheet: React.FC = () => {
   const [selectedLineId, setSelectedLineId] = useState<string | null>(null);
   const [showVulnerabilities, setShowVulnerabilities] = useState(false);
   const [auditedLines, setAuditedLines] = useState<string[]>(() => {
-    const saved = localStorage.getItem('cdx_budget_audited_lines');
+    const saved = safeStorage.getItem('cdx_budget_audited_lines');
     return saved ? JSON.parse(saved) : [];
   });
   const [varianceRiskTolerance, setVarianceRiskTolerance] = useState<number>(() => {
-    const saved = localStorage.getItem('cdx_variance_risk_tolerance');
+    const saved = safeStorage.getItem('cdx_variance_risk_tolerance');
     return saved ? Number(saved) : 25; // default is 25%
   });
 
   const handleToleranceChange = (value: number) => {
     setVarianceRiskTolerance(value);
-    localStorage.setItem('cdx_variance_risk_tolerance', String(value));
+    safeStorage.setItem('cdx_variance_risk_tolerance', String(value));
   };
 
   const resetScan = () => {
@@ -53,8 +54,8 @@ export const BudgetWorksheet: React.FC = () => {
     setSelectedLineId(null);
     setShowVulnerabilities(false);
     setVarianceRiskTolerance(25);
-    localStorage.removeItem('cdx_budget_audited_lines');
-    localStorage.removeItem('cdx_variance_risk_tolerance');
+    safeStorage.removeItem('cdx_budget_audited_lines');
+    safeStorage.removeItem('cdx_variance_risk_tolerance');
   };
 
   // Budget database
@@ -271,7 +272,7 @@ export const BudgetWorksheet: React.FC = () => {
     if (!auditedLines.includes(lineId)) {
       const updated = [...auditedLines, lineId];
       setAuditedLines(updated);
-      localStorage.setItem('cdx_budget_audited_lines', JSON.stringify(updated));
+      safeStorage.setItem('cdx_budget_audited_lines', JSON.stringify(updated));
     }
   };
 

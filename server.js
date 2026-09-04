@@ -52,6 +52,17 @@ const server = http.createServer((req, res) => {
   const extname = path.extname(filePath);
   let contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
+  // Vite fingerprints everything under /assets (index-BQ06fu8v.js), so those URLs
+  // can never point at different bytes - cache them hard. index.html is the one
+  // file whose URL is stable while its contents change every deploy, so it must
+  // be revalidated or visitors keep booting the previous build's asset names.
+  res.setHeader(
+    'Cache-Control',
+    req.url.startsWith('/assets/')
+      ? 'public, max-age=31536000, immutable'
+      : 'no-cache'
+  );
+
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
@@ -76,6 +87,39 @@ const server = http.createServer((req, res) => {
   });
 });
 
+// Running `npm start` before `npm run build` otherwise fails one confusing
+// request at a time instead of saying what's wrong once, up front.
+if (!fs.existsSync(DIST_DIR)) {
+  console.error(`No build found at ${DIST_DIR}`);
+  console.error('Run `npm run build` first.');
+  process.exit(1);
+}
+
+// Without this, a taken port prints an unhandled 'error' event and a raw stack
+// trace, which buries the one line the operator needs.
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use.`);
+    console.error('Set a different one with: PORT=3001 npm start');
+  } else if (err.code === 'EACCES') {
+    console.error(`Not allowed to bind port ${PORT}. Ports below 1024 need elevated privileges.`);
+  } else {
+    console.error(`Server error: ${err.message}`);
+  }
+  process.exit(1);
+});
+
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });
+
+// A host redeploying this process sends SIGTERM. Closing the server lets
+// in-flight responses finish instead of cutting them mid-transfer.
+for (const signal of ['SIGTERM', 'SIGINT']) {
+  process.on(signal, () => {
+    console.log(`\n${signal} received, shutting down.`);
+    server.close(() => process.exit(0));
+    // Don't hang forever on a wedged keep-alive connection.
+    setTimeout(() => process.exit(0), 5000).unref();
+  });
+}

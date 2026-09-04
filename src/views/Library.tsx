@@ -4,6 +4,7 @@ import { Layout } from '../components/Layout';
 import { articles } from '../data/articles';
 import { scenarios } from '../data/scenarios';
 import { Search, ChevronRight, BookOpen, AlertTriangle, Award, Star, CheckSquare, Square, Trash2 } from 'lucide-react';
+import { safeStorage } from '../lib/safeStorage';
 
 export const Library: React.FC = () => {
   const { navigate, path } = useRouter();
@@ -20,7 +21,7 @@ export const Library: React.FC = () => {
   // Local storage state
   const [studiedList, setStudiedList] = useState<string[]>(() => {
     try {
-      const stored = localStorage.getItem('board_mastery_progress');
+      const stored = safeStorage.getItem('board_mastery_progress');
       if (stored) {
         const parsed = JSON.parse(stored);
         return Array.isArray(parsed) ? parsed : [];
@@ -33,7 +34,7 @@ export const Library: React.FC = () => {
 
   const [bookmarkedList, setBookmarkedList] = useState<string[]>(() => {
     try {
-      const stored = localStorage.getItem('cdx_bookmarked_slugs');
+      const stored = safeStorage.getItem('cdx_bookmarked_slugs');
       if (stored) {
         const parsed = JSON.parse(stored);
         return Array.isArray(parsed) ? parsed : [];
@@ -48,7 +49,7 @@ export const Library: React.FC = () => {
     e.stopPropagation();
     setBookmarkedList(prev => {
       const next = prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug];
-      localStorage.setItem('cdx_bookmarked_slugs', JSON.stringify(next));
+      safeStorage.setItem('cdx_bookmarked_slugs', JSON.stringify(next));
       return next;
     });
   };
@@ -57,7 +58,7 @@ export const Library: React.FC = () => {
     e.stopPropagation();
     setStudiedList(prev => {
       const next = prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug];
-      localStorage.setItem('board_mastery_progress', JSON.stringify(next));
+      safeStorage.setItem('board_mastery_progress', JSON.stringify(next));
       return next;
     });
   };
@@ -342,7 +343,7 @@ export const Library: React.FC = () => {
             </main>
 
             {/* RIGHT SIDEBAR: CONTROLS & MONITOR DESK (col-span-4) */}
-            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+            <aside aria-label="Search Desk" className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
               
               {/* Search Widget */}
               <div className="bg-white p-5 rounded-xl border border-fog shadow-sm text-left space-y-4">

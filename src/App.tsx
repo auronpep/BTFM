@@ -1,4 +1,5 @@
 import { RouterProvider, useRouter } from './components/Router';
+import { titleForPath, useDocumentTitle, descriptionForPath, useMetaDescription } from './lib/pageTitles';
 
 // Core Page Views
 import Home from './views/Home';
@@ -23,6 +24,10 @@ import AuthorityMap from './views/AuthorityMap';
 
 function AppContent() {
   const { path } = useRouter();
+
+  // Hash navigation never reloads the document, so the title has to follow the route.
+  useDocumentTitle(titleForPath(path));
+  useMetaDescription(descriptionForPath(path));
 
   switch (path) {
     case 'home':

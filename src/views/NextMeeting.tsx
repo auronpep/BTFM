@@ -8,6 +8,7 @@ import {
   CaliforniaNoteBadge 
 } from '../components/BoardroomCards';
 import { Calendar, FileText, ChevronDown, ChevronUp, Printer, CheckSquare, ShieldCheck, ChevronRight, Activity, RefreshCw, AlertCircle, Square, Download, Clock, Sparkles } from 'lucide-react';
+import { safeStorage } from '../lib/safeStorage';
 
 interface AgendaItem {
   id: string;
@@ -26,12 +27,12 @@ export const NextMeeting: React.FC = () => {
 
   // Meeting date state loaded from/saved to local storage
   const [meetingDate, setMeetingDate] = useState(() => {
-    return localStorage.getItem('cdx_meeting_reminder_date') || '';
+    return safeStorage.getItem('cdx_meeting_reminder_date') || '';
   });
 
   const handleMeetingDateChange = (dateVal: string) => {
     setMeetingDate(dateVal);
-    localStorage.setItem('cdx_meeting_reminder_date', dateVal);
+    safeStorage.setItem('cdx_meeting_reminder_date', dateVal);
   };
 
   const getCalculatedDeadlines = (dateStr: string) => {
@@ -157,9 +158,9 @@ export const NextMeeting: React.FC = () => {
   // Agenda Sliders State (40-40-20 Rule)
   const [sliders, setSliders] = useState(() => {
     try {
-      const saved = localStorage.getItem('cdx_agenda_sliders_allocation');
+      const saved = safeStorage.getItem('cdx_agenda_sliders_allocation');
       return saved ? JSON.parse(saved) : { routine: 40, strategy: 40, risk: 20 };
-    } catch (e) {
+    } catch {
       return { routine: 40, strategy: 40, risk: 20 };
     }
   });
@@ -167,9 +168,9 @@ export const NextMeeting: React.FC = () => {
   // Checklist State for Required Files
   const [checkedFiles, setCheckedFiles] = useState<Record<string, boolean>>(() => {
     try {
-      const saved = localStorage.getItem('cdx_next_meeting_checked_files');
+      const saved = safeStorage.getItem('cdx_next_meeting_checked_files');
       return saved ? JSON.parse(saved) : {};
-    } catch (e) {
+    } catch {
       return {};
     }
   });
@@ -190,8 +191,8 @@ export const NextMeeting: React.FC = () => {
       const v2 = prev[k2];
 
       const remaining = 100 - val;
-      let newV1 = 0;
-      let newV2 = 0;
+      let newV1: number;
+      let newV2: number;
 
       if (v1 + v2 > 0) {
         newV1 = Math.round((v1 / (v1 + v2)) * remaining);
@@ -207,7 +208,7 @@ export const NextMeeting: React.FC = () => {
         [k2]: newV2
       } as typeof prev;
 
-      localStorage.setItem('cdx_agenda_sliders_allocation', JSON.stringify(next));
+      safeStorage.setItem('cdx_agenda_sliders_allocation', JSON.stringify(next));
       return next;
     });
   };
@@ -219,7 +220,7 @@ export const NextMeeting: React.FC = () => {
         ...prev,
         [key]: !prev[key]
       };
-      localStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
+      safeStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
       return next;
     });
   };
@@ -230,7 +231,7 @@ export const NextMeeting: React.FC = () => {
       files.forEach(file => {
         delete next[`${topicId}-${file}`];
       });
-      localStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
+      safeStorage.setItem('cdx_next_meeting_checked_files', JSON.stringify(next));
       return next;
     });
   };

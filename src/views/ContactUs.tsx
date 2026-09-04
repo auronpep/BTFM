@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
+import { safeStorage } from '../lib/safeStorage';
 import { 
   Mail, 
   Phone, 
@@ -114,7 +115,7 @@ export const ContactUs: React.FC = () => {
   // Prefill fields from query parameters or localStorage
   useEffect(() => {
     // 1. Organization Name prefill (override localStorage with queryParam if present)
-    const localOrg = localStorage.getItem('cdx_user_org_name') || '';
+    const localOrg = safeStorage.getItem('cdx_user_org_name') || '';
     if (queryParams.org) {
       setOrgName(queryParams.org);
     } else if (localOrg) {
@@ -204,7 +205,7 @@ export const ContactUs: React.FC = () => {
       
       // Save record in localStorage to persist submission history
       try {
-        const savedIntakes = JSON.parse(localStorage.getItem('cdx_contact_intakes') || '[]');
+        const savedIntakes = JSON.parse(safeStorage.getItem('cdx_contact_intakes') || '[]');
         savedIntakes.push({
           orgName,
           contactName,
@@ -215,7 +216,7 @@ export const ContactUs: React.FC = () => {
           message,
           timestamp: new Date().toISOString()
         });
-        localStorage.setItem('cdx_contact_intakes', JSON.stringify(savedIntakes));
+        safeStorage.setItem('cdx_contact_intakes', JSON.stringify(savedIntakes));
       } catch (err) {
         console.error('LocalStorage write failed:', err);
       }
@@ -554,15 +555,16 @@ Submitting this form does not establish an attorney-client relationship.
 
                     {/* Interactive Topics Selection Chips */}
                     <div className="space-y-2.5">
-                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                      <span id="contact-topics-label" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                         Core Subjects of Interest <span className="text-ink/40 font-normal">(Select all that apply)</span>
-                      </label>
+                      </span>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div role="group" aria-labelledby="contact-topics-label" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {topicsList.map((topic) => {
                           const isSelected = selectedTopics.includes(topic.id);
                           return (
                             <button
+                              aria-pressed={isSelected}
                               key={topic.id}
                               type="button"
                               onClick={() => handleToggleTopic(topic.id)}

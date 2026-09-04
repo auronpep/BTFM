@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same branch instead of paying for both.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build, test, and lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # vite@8 requires ^20.19.0 || >=22.12.0 (see its package.json engines).
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # `npm run build` is `tsc -b && vite build`, so this is the type check and
+      # the production build in one step. It must pass.
+      - name: Build
+        run: npm run build
+
+      # The suite serves dist/, so it has to run after the build step above.
+      - name: Test
+        run: npm test
+
+      # Lint currently reports 78 pre-existing problems on main, so a hard
+      # failure here would make CI red on arrival and train everyone to ignore
+      # it. Reported, not enforced, until that backlog is cleared - then drop
+      # this line and let lint gate merges like the build does.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
