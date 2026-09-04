@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build and lint
+    name: Build, test, and lint
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +31,10 @@ jobs:
       # the production build in one step. It must pass.
       - name: Build
         run: npm run build
+
+      # The suite serves dist/, so it has to run after the build step above.
+      - name: Test
+        run: npm test
 
       # Lint currently reports 78 pre-existing problems on main, so a hard
       # failure here would make CI red on arrival and train everyone to ignore
