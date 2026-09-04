@@ -463,12 +463,13 @@ Submitting this form does not establish an attorney-client relationship.
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Contact Representative */}
                       <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        <label htmlFor="contact-name" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                           Contact Name <span className="text-burgundy">*</span>
                         </label>
                         <div className="relative">
                           <User className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
+                            id="contact-name"
                             type="text"
                             required
                             placeholder="e.g. Eleanor Vance"
@@ -481,12 +482,13 @@ Submitting this form does not establish an attorney-client relationship.
 
                       {/* Organization Name */}
                       <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        <label htmlFor="contact-organization" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                           Organization Name <span className="text-burgundy">*</span>
                         </label>
                         <div className="relative">
                           <Building className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
+                            id="contact-organization"
                             type="text"
                             required
                             placeholder="e.g. Community Health Coalition"
@@ -501,12 +503,13 @@ Submitting this form does not establish an attorney-client relationship.
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Email Address */}
                       <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        <label htmlFor="contact-email" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                           Email Address <span className="text-burgundy">*</span>
                         </label>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
+                            id="contact-email"
                             type="email"
                             required
                             placeholder="e.g. e.vance@yourorganization.org"
@@ -519,12 +522,13 @@ Submitting this form does not establish an attorney-client relationship.
 
                       {/* Direct Phone (Optional) */}
                       <div className="space-y-1.5">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                        <label htmlFor="contact-phone" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                           Telephone Number <span className="text-ink/40 font-normal">(Optional)</span>
                         </label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-3 w-4 h-4 text-ink/35" />
                           <input 
+                            id="contact-phone"
                             type="tel"
                             placeholder="e.g. (555) 019-2834"
                             value={phone}
@@ -537,10 +541,11 @@ Submitting this form does not establish an attorney-client relationship.
 
                     {/* Board Size scale */}
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                      <label htmlFor="contact-board-size" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                         Approximate Board Size / Scale
                       </label>
                       <select 
+                        id="contact-board-size"
                         value={boardSize}
                         onChange={(e) => setBoardSize(e.target.value)}
                         className="w-full bg-paper/30 border border-fog hover:border-brass focus:border-brass rounded-lg px-3 py-2.5 text-xs text-ink focus:outline-none transition-premium font-medium cursor-pointer"
@@ -592,10 +597,11 @@ Submitting this form does not establish an attorney-client relationship.
 
                     {/* Explanatory Message */}
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                      <label htmlFor="contact-message" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                         Tell us about your board's goals or questions <span className="text-burgundy">*</span>
                       </label>
                       <textarea 
+                        id="contact-message"
                         required
                         rows={5}
                         placeholder="What specific topics or questions are your trustees hoping to address? Are you looking for customized study materials, guides, or on-site workshops?"

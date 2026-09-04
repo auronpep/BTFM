@@ -302,10 +302,11 @@ export const WebinarRegistration: React.FC = () => {
 
                     {/* Name Input */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Director Full Name:</label>
+                      <label htmlFor="webinar-name" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Director Full Name:</label>
                       <div className="relative">
                         <User className="absolute left-3.5 top-3 w-4.5 h-4.5 text-ink/30" />
                         <input
+                          id="webinar-name"
                           type="text"
                           required
                           value={webinarName}
@@ -318,10 +319,11 @@ export const WebinarRegistration: React.FC = () => {
 
                     {/* Email Input */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Official Email Address:</label>
+                      <label htmlFor="webinar-email" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Official Email Address:</label>
                       <div className="relative">
                         <Mail className="absolute left-3.5 top-3 w-4.5 h-4.5 text-ink/30" />
                         <input
+                          id="webinar-email"
                           type="email"
                           required
                           value={webinarEmail}
@@ -334,9 +336,10 @@ export const WebinarRegistration: React.FC = () => {
 
                     {/* Webinar Dropdown Selector */}
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Training Session:</label>
+                      <label htmlFor="webinar-session" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Select Webinar Training Session:</label>
                       <div className="relative">
                         <select
+                          id="webinar-session"
                           required
                           value={selectedWebinar}
                           onChange={(e) => setSelectedWebinar(e.target.value)}
