@@ -42,6 +42,17 @@ const server = http.createServer((req, res) => {
   const extname = path.extname(filePath);
   let contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
+  // Vite fingerprints everything under /assets (index-BQ06fu8v.js), so those URLs
+  // can never point at different bytes - cache them hard. index.html is the one
+  // file whose URL is stable while its contents change every deploy, so it must
+  // be revalidated or visitors keep booting the previous build's asset names.
+  res.setHeader(
+    'Cache-Control',
+    req.url.startsWith('/assets/')
+      ? 'public, max-age=31536000, immutable'
+      : 'no-cache'
+  );
+
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
