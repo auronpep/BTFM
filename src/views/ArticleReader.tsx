@@ -13,6 +13,7 @@ import {
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Clock, Award, CheckSquare, Square, AlertCircle } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { useDocumentTitle, withSiteName } from '../lib/pageTitles';
 
 // Simple Markdown to HTML parser for articles (robust line-by-line processing)
 const renderMarkdown = (text: string) => {
@@ -185,6 +186,9 @@ export const ArticleReader: React.FC = () => {
 
   // Find article
   const article = articles.find((art) => art.slug === slug);
+
+  // This route owns its title: only the view can resolve the slug to a headline.
+  useDocumentTitle(withSiteName(article ? article.title : 'Training Series Not Found'));
 
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(() => {
     try {
