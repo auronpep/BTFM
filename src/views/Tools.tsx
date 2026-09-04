@@ -110,6 +110,17 @@ const form990Questions = [
   }
 ];
 
+// The print/export views below are assembled as raw HTML strings and handed to
+// `printWindow.document.write`. Any value the user typed must be escaped on the
+// way in, or the generated document is at the mercy of its own content.
+const escapeHtml = (value: string): string =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 export const Tools: React.FC = () => {
   const { navigate } = useRouter();
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -557,7 +568,7 @@ export const Tools: React.FC = () => {
             <div class="title">Certificate of Fiduciary Mastery</div>
             <div class="subtitle">Awarded for Educational Excellence in Charity Law</div>
             
-            <div class="recipient">${userOrgName}</div>
+            <div class="recipient">${escapeHtml(userOrgName)}</div>
             
             <div class="prose">
               This certificate verifies that the governing directors have successfully undertaken and completed the clinical boardroom audit laboratories of the National Board Training Initiative, confirming their competency in independent oversight quorums, executive compensation reviews, conflict of interest mitigation, and restricted asset stewardship under applicable state and federal legal standards.
@@ -637,7 +648,7 @@ export const Tools: React.FC = () => {
     const html = `
       <html>
         <head>
-          <title>Fiduciary Diligence Portfolio - ${userOrgName}</title>
+          <title>Fiduciary Diligence Portfolio - ${escapeHtml(userOrgName)}</title>
           <style>
             @media print {
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #ffffff; }
@@ -701,7 +712,7 @@ export const Tools: React.FC = () => {
             
             <div class="metadata-grid">
               <div class="metadata-item">
-                <strong>Organization Entity:</strong> ${userOrgName}<br/>
+                <strong>Organization Entity:</strong> ${escapeHtml(userOrgName)}<br/>
                 <strong>Compilation Date:</strong> ${todayStr}
               </div>
               <div class="metadata-item">
@@ -810,7 +821,7 @@ export const Tools: React.FC = () => {
               <div class="firm-text">
                 For formal corporate bylaws reviews, executive compensation safe harbor reviews, conflict of interest evaluations, or statutory dispute resolution under California law, please contact Myron Steeves, J.D., founder of the California Center for Nonprofit Law / NPO Lawyers.
               </div>
-              <a href="https://NPOlawyers.com" target="_blank" class="firm-link">Visit NPOlawyers.com &rarr;</a>
+              <a href="https://NPOlawyers.com" target="_blank" rel="noopener noreferrer" class="firm-link">Visit NPOlawyers.com &rarr;</a>
             </div>
             
             <div class="footer-grid">
@@ -818,14 +829,14 @@ export const Tools: React.FC = () => {
                 <div class="sig-name"></div>
                 <div class="line"></div>
                 <div>Board President Signature</div>
-                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${userOrgName}</div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${escapeHtml(userOrgName)}</div>
               </div>
               
               <div class="signature-block">
                 <div class="sig-name"></div>
                 <div class="line"></div>
                 <div>Board Secretary Signature</div>
-                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${userOrgName}</div>
+                <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${escapeHtml(userOrgName)}</div>
               </div>
               
               <div class="signature-block">
@@ -2027,7 +2038,7 @@ export const Tools: React.FC = () => {
                               <div class="subtitle">Execution Record under Standard Corporate Codes & IRS Part VI Standards</div>
                               
                               <div class="meta">
-                                <div><strong>Organization Entity:</strong> ${userOrgName}</div>
+                                <div><strong>Organization Entity:</strong> ${escapeHtml(userOrgName)}</div>
                                 <div><strong>Review Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                               </div>
 
@@ -2045,7 +2056,7 @@ export const Tools: React.FC = () => {
 
                               <div class="resolutions">
                                 <p><strong>WHEREAS</strong>, Section B, Part VI of the Internal Revenue Service (IRS) Form 990 actively audits organization policies and structural quorums to ensure directors protect public charity assets; and</p>
-                                <p><strong>WHEREAS</strong>, the Board of Directors of <strong>${userOrgName}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;</p>
+                                <p><strong>WHEREAS</strong>, the Board of Directors of <strong>${escapeHtml(userOrgName)}</strong> has completed a thorough, clinical self-audit of its quorums, disclosures, relationships, conflict management processes, whistleblower safety, and document archiving policies;</p>
                                 <p><strong>NOW, THEREFORE, BE IT RESOLVED</strong>, that this Board hereby endorses this Governance Memorandum, commits to resolving any flagged non-compliances, and directs the Secretary to append this document to the permanent corporate record.</p>
                               </div>
 
