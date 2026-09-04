@@ -7,6 +7,7 @@ import { LegalEscalationCard } from '../components/BoardroomCards';
 import { AudioNarrator } from '../components/AudioNarrator';
 import { ArrowLeft, Landmark, AlertTriangle, CheckCircle2, ChevronRight, PlayCircle, CheckSquare, Square, AlertCircle, Sparkles } from 'lucide-react';
 import { parseTextWithStatutesAndGlossary } from '../components/StatuteTooltip';
+import { useDocumentTitle, withSiteName, useMetaDescription, truncateForMeta } from '../lib/pageTitles';
 
 // React-safe glossary parser (Enhancement 6)
 const parseTextWithGlossary = (text: string): React.ReactNode => {
@@ -187,6 +188,10 @@ export const ScenarioReader: React.FC = () => {
 
   // Find scenario
   const scenario = scenarios.find((sc) => sc.slug === slug);
+
+  // This route owns its title: only the view can resolve the slug to a headline.
+  useDocumentTitle(withSiteName(scenario ? scenario.title : 'Case Study Not Found'));
+  useMetaDescription(scenario ? truncateForMeta(scenario.facts) : undefined);
 
   // Simulation Option State
   const [selectedOption, setSelectedOption] = useState<number | null>(() => {
