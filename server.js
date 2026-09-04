@@ -21,7 +21,26 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
 };
 
+// Baseline security headers. Set via setHeader() rather than being spread into
+// each writeHead() call so that every exit path - success, SPA fallback, 404,
+// 500 - carries them, including any response branch added later.
+const SECURITY_HEADERS = {
+  // Don't let a browser second-guess our Content-Type and execute a .txt or an
+  // image as script.
+  'X-Content-Type-Options': 'nosniff',
+  // Send the full URL only to this origin; send just the origin cross-site.
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  // The site is never meant to be framed by a third party.
+  'X-Frame-Options': 'SAMEORIGIN',
+  // Nothing here uses these; deny them rather than leaving them available.
+  'Permissions-Policy': 'geolocation=(), camera=(), microphone=()',
+};
+
 const server = http.createServer((req, res) => {
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    res.setHeader(name, value);
+  }
+
   // Normalize URL path to prevent directory traversal
   let filePath = path.join(DIST_DIR, req.url.split('?')[0]);
   
