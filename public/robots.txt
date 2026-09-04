@@ -1,0 +1,15 @@
+# The Boardroom Field Manual
+# Static site. Everything here is public educational material meant to be indexed.
+
+User-agent: *
+Allow: /
+
+# Nothing to disallow: the build output is a single-page app with no admin
+# surface, no user accounts, and no private paths. This file exists so crawlers
+# get a 200 instead of a soft-404 on /robots.txt, which some hosts serve as the
+# SPA shell - an HTML body where a crawler expects text/plain.
+
+# Note: routing is hash-based (#/tools/self-assessment), and crawlers do not
+# treat fragments as separate URLs. Per-route indexing would need history
+# routing or prerendering; that is a separate change, not something robots.txt
+# can express.
