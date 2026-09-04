@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { scrollBehavior } from '../lib/motion';
 
 export interface RouterContextType {
   path: string;
@@ -122,7 +123,7 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setRoute(parseHash());
       canonicalizeLegacyHash();
       // Smooth scroll to top when changing views
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: scrollBehavior() });
     };
 
     // Covers a legacy URL that was the entry point for the session.

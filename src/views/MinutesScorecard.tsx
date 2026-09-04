@@ -6,7 +6,7 @@ import {
   FileText, FileCheck, Sparkles, Terminal, ChevronRight, Download
 } from 'lucide-react';
 import { CaliforniaNoteBadge } from '../components/BoardroomCards';
-import { safeStorage } from '../lib/safeStorage';
+import { scrollBehavior } from '../lib/motion';
 
 interface ScoringCriterion {
   id: string;
@@ -714,7 +714,7 @@ ${secretaryName}, Board Secretary`;
                 <button
                   onClick={() => {
                     checkAll();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: scrollBehavior() });
                   }}
                   className="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-brand hover:bg-ink text-white text-xs font-bold uppercase tracking-wider rounded shadow transition-premium cursor-pointer"
                 >
