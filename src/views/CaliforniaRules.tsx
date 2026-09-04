@@ -558,6 +558,7 @@ export const CaliforniaRules: React.FC = () => {
                   </div>
                   <input
                     type="text"
+                    aria-label="Organization name or state entity/registry number"
                     placeholder="Enter Organization Name or State Entity/Registry Number..."
                     value={registryQuery}
                     onChange={(e) => setRegistryQuery(e.target.value)}
