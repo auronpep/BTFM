@@ -1,26 +1,41 @@
+import { Suspense, lazy } from 'react';
 import { RouterProvider, useRouter } from './components/Router';
 import { titleForPath, useDocumentTitle, descriptionForPath, useMetaDescription } from './lib/pageTitles';
 
-// Core Page Views
+// Home is the landing view and the `default` branch below, so it stays in the
+// entry chunk — lazy-loading it would only buy a flash of the fallback.
 import Home from './views/Home';
-import Library from './views/Library';
-import ArticleReader from './views/ArticleReader';
-import ScenarioReader from './views/ScenarioReader';
-import CaliforniaRules from './views/CaliforniaRules';
-import NextMeeting from './views/NextMeeting';
-import Tools from './views/Tools';
-import Training from './views/Training';
-import AboutUs from './views/AboutUs';
-import Boards101 from './views/Boards101';
-import ContactUs from './views/ContactUs';
-import WebinarRegistration from './views/WebinarRegistration';
+
+// Every other view is fetched when its route is actually visited. A first-time
+// visitor reading the homepage should not pay to download the interactive labs.
+const Library = lazy(() => import('./views/Library'));
+const ArticleReader = lazy(() => import('./views/ArticleReader'));
+const ScenarioReader = lazy(() => import('./views/ScenarioReader'));
+const CaliforniaRules = lazy(() => import('./views/CaliforniaRules'));
+const NextMeeting = lazy(() => import('./views/NextMeeting'));
+const Tools = lazy(() => import('./views/Tools'));
+const Training = lazy(() => import('./views/Training'));
+const AboutUs = lazy(() => import('./views/AboutUs'));
+const Boards101 = lazy(() => import('./views/Boards101'));
+const ContactUs = lazy(() => import('./views/ContactUs'));
+const WebinarRegistration = lazy(() => import('./views/WebinarRegistration'));
 
 // Interactive Laboratories & Workshops
-import { SelfAssessment } from './views/SelfAssessment';
-import BoardPacketLab from './views/BoardPacketLab';
-import MinutesScorecard from './views/MinutesScorecard';
-import BudgetWorksheet from './views/BudgetWorksheet';
-import AuthorityMap from './views/AuthorityMap';
+const SelfAssessment = lazy(() =>
+  import('./views/SelfAssessment').then((m) => ({ default: m.SelfAssessment }))
+);
+const BoardPacketLab = lazy(() => import('./views/BoardPacketLab'));
+const MinutesScorecard = lazy(() => import('./views/MinutesScorecard'));
+const BudgetWorksheet = lazy(() => import('./views/BudgetWorksheet'));
+const AuthorityMap = lazy(() => import('./views/AuthorityMap'));
+
+function RouteFallback() {
+  return (
+    <div className="min-h-screen bg-paper flex items-center justify-center" role="status" aria-live="polite">
+      <span className="text-ink/40 text-sm tracking-wide">Loading&hellip;</span>
+    </div>
+  );
+}
 
 function AppContent() {
   const { path } = useRouter();
@@ -79,7 +94,9 @@ function AppContent() {
 function App() {
   return (
     <RouterProvider>
-      <AppContent />
+      <Suspense fallback={<RouteFallback />}>
+        <AppContent />
+      </Suspense>
     </RouterProvider>
   );
 }
