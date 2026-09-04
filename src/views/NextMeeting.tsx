@@ -190,8 +190,8 @@ export const NextMeeting: React.FC = () => {
       const v2 = prev[k2];
 
       const remaining = 100 - val;
-      let newV1 = 0;
-      let newV2 = 0;
+      let newV1: number;
+      let newV2: number;
 
       if (v1 + v2 > 0) {
         newV1 = Math.round((v1 / (v1 + v2)) * remaining);

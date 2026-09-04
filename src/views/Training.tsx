@@ -39,7 +39,7 @@ export const Training: React.FC = () => {
   };
 
   const handleAutoSelectWebinar = () => {
-    let target = 'webinar-fiduciary-update';
+    let target: string;
     if (diagnostic.anxiety === 'Financials & Overruns') {
       target = 'webinar-audit';
     } else if (diagnostic.anxiety === 'Conflict of Interest') {
@@ -52,10 +52,10 @@ export const Training: React.FC = () => {
 
   const getRecommendation = () => {
     const { budget, anxiety } = diagnostic;
-    let title = "Fiduciary Oversight Plan";
-    let desc = "";
-    let tools = [] as string[];
-    let rationale = "";
+    let title: string;
+    let desc: string;
+    let tools: string[];
+    let rationale: string;
 
     if (anxiety === 'Financials & Overruns') {
       title = "Financial Control & Audit Protocol";
