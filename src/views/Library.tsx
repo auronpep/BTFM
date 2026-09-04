@@ -342,7 +342,7 @@ export const Library: React.FC = () => {
             </main>
 
             {/* RIGHT SIDEBAR: CONTROLS & MONITOR DESK (col-span-4) */}
-            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+            <aside aria-label="Search Desk" className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
               
               {/* Search Widget */}
               <div className="bg-white p-5 rounded-xl border border-fog shadow-sm text-left space-y-4">
