@@ -496,10 +496,10 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                       </div>
                       
                       <div className="space-y-2">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <span id="intake-worries-label" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           What primary worries keep your board up? (Select all that apply)
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        </span>
+                        <div role="group" aria-labelledby="intake-worries-label" className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                           {[
                             { id: 'conflicts', label: 'Interested Director / Self-Dealing Contracts' },
                             { id: 'compensation', label: 'Executive Salaries & Benefit Audits' },

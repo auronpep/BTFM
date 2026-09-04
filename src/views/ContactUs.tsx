@@ -554,15 +554,16 @@ Submitting this form does not establish an attorney-client relationship.
 
                     {/* Interactive Topics Selection Chips */}
                     <div className="space-y-2.5">
-                      <label className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
+                      <span id="contact-topics-label" className="text-[11px] font-bold uppercase tracking-wider text-ink/75 block">
                         Core Subjects of Interest <span className="text-ink/40 font-normal">(Select all that apply)</span>
-                      </label>
+                      </span>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div role="group" aria-labelledby="contact-topics-label" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {topicsList.map((topic) => {
                           const isSelected = selectedTopics.includes(topic.id);
                           return (
                             <button
+                              aria-pressed={isSelected}
                               key={topic.id}
                               type="button"
                               onClick={() => handleToggleTopic(topic.id)}
