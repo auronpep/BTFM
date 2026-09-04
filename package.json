@@ -1,8 +1,12 @@
 {
-  "name": "app-scaffold",
+  "name": "boardroom-field-manual",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Nonprofit board training website and resource library, published in connection with the California Center for Nonprofit Law / NPO Lawyers.",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
