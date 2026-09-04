@@ -118,6 +118,17 @@ export const Tools: React.FC = () => {
   const [userOrgName, setUserOrganizationName] = useState(() => {
     return localStorage.getItem('cdx_user_org_name') || 'Our Charitable Board';
   });
+  const [isPrintBlocked, setIsPrintBlocked] = useState(false);
+
+  // Every print/export path opens a new window. Browsers block that by default
+  // in plenty of managed and mobile setups, and window.open then returns null.
+  // Returning quietly meant the button appeared to do nothing at all, with no
+  // way for the user to know the browser had intervened.
+  const openPrintWindow = (): Window | null => {
+    const printWindow = window.open('', '_blank');
+    setIsPrintBlocked(!printWindow);
+    return printWindow;
+  };
 
   useEffect(() => {
     localStorage.setItem('cdx_user_org_name', userOrgName);
@@ -421,7 +432,7 @@ export const Tools: React.FC = () => {
   };
 
   const handlePrintScript = () => {
-    const printWindow = window.open('', '_blank');
+    const printWindow = openPrintWindow();
     if (!printWindow) return;
     const script = scriptTemplates[selectedScriptId];
 
@@ -475,7 +486,7 @@ export const Tools: React.FC = () => {
   };
 
   const handlePrintCertificate = () => {
-    const printWindow = window.open('', '_blank');
+    const printWindow = openPrintWindow();
     if (!printWindow) return;
 
     const html = `
@@ -570,7 +581,7 @@ export const Tools: React.FC = () => {
   };
 
   const handlePrintPortfolio = () => {
-    const printWindow = window.open('', '_blank');
+    const printWindow = openPrintWindow();
     if (!printWindow) return;
 
     const todayStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -1062,6 +1073,28 @@ export const Tools: React.FC = () => {
 
   return (
     <Layout>
+      {isPrintBlocked && (
+        <div
+          role="alert"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] max-w-md w-[calc(100%-2rem)] bg-burgundy text-paper rounded-lg shadow-2xl border border-brass/40 px-4 py-3 flex items-start gap-3 font-sans"
+        >
+          <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-brass" />
+          <div className="text-xs leading-relaxed">
+            <p className="font-bold">Your browser blocked the print window.</p>
+            <p className="text-paper/80">
+              Allow pop-ups for this site, then use the print or download button again.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsPrintBlocked(false)}
+            aria-label="Dismiss"
+            className="ml-auto text-paper/60 hover:text-paper font-bold leading-none"
+          >
+            &times;
+          </button>
+        </div>
+      )}
       <div className="py-12 bg-paper/30 min-h-screen px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto space-y-10">
           
@@ -1954,7 +1987,7 @@ export const Tools: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      const printWindow = window.open('', '_blank');
+                      const printWindow = openPrintWindow();
                       if (!printWindow) return;
                       const reportHtml = `
                         <html>
