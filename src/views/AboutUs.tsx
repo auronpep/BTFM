@@ -398,10 +398,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                   {step === 1 && (
                     <div className="space-y-4 animate-fade-in">
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <label htmlFor="intake-org" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           Organization Name <span className="text-rose-500">*</span>
                         </label>
                         <input 
+                          id="intake-org"
                           type="text" 
                           placeholder="e.g. Hope Community Services of California" 
                           value={orgName}
@@ -413,10 +414,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <label htmlFor="intake-budget" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           Annual Operating Budget
                         </label>
                         <select 
+                          id="intake-budget"
                           value={budget}
                           onChange={(e) => {
                             setBudget(e.target.value);
@@ -436,10 +438,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                   {step === 2 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in">
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <label htmlFor="intake-board-size" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           Active Board Members
                         </label>
                         <select 
+                          id="intake-board-size"
                           value={boardSize}
                           onChange={(e) => {
                             setBoardSize(e.target.value);
@@ -454,10 +457,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                         </select>
                       </div>
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <label htmlFor="intake-frequency" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           Meeting Frequency
                         </label>
                         <select 
+                          id="intake-frequency"
                           value={frequency}
                           onChange={(e) => {
                             setFrequency(e.target.value);
@@ -477,10 +481,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
                   {step === 3 && (
                     <div className="space-y-4 animate-fade-in">
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                        <label htmlFor="intake-registry" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                           State Registry Standing
                         </label>
                         <select 
+                          id="intake-registry"
                           value={stateStatus}
                           onChange={(e) => {
                             setStateStatus(e.target.value);
@@ -523,10 +528,11 @@ CONFIDENTIALITY NOTE: This intake memorandum compiles organizational concerns sp
 
                   {step === 4 && (
                     <div className="space-y-2 animate-fade-in">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-ink/75">
+                      <label htmlFor="intake-narrative" className="block text-xs font-bold uppercase tracking-wider text-ink/75">
                         Situational Narrative & Custom Governance Concerns (Optional)
                       </label>
                       <textarea 
+                        id="intake-narrative"
                         rows={4}
                         placeholder="Provide details about your current conflict of interest contract, bylaws issue, or audit delinquency to customize the memo."
                         value={customConcerns}
