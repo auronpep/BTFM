@@ -103,8 +103,8 @@ export const WebinarRegistration: React.FC = () => {
     const webinar = webinarsList.find(w => w.id === webinarId);
     if (!webinar) return;
 
-    let start = '';
-    let end = '';
+    let start: string;
+    let end: string;
     if (webinar.id === 'webinar-fiduciary-update') {
       start = '20260617T170000Z';
       end = '20260617T183000Z';

@@ -163,8 +163,8 @@ export const SelfAssessment: React.FC = () => {
       const percent = Math.round((score / cat.maxPoints) * 100);
       
       // Rating
-      let rating = "";
-      let ratingColor = "";
+      let rating: string;
+      let ratingColor: string;
       const ratio = score / cat.maxPoints;
       if (ratio <= 0.45) {
         rating = "Critical Exposure";
@@ -467,10 +467,10 @@ export const SelfAssessment: React.FC = () => {
                         const isExpanded = expandedCategory === idx;
                         const ratio = cat.score / cat.maxPoints;
                         
-                        let advice = "";
-                        let adviceTitle = "";
-                        let adviceBorder = "";
-                        let adviceBg = "";
+                        let advice: string;
+                        let adviceTitle: string;
+                        let adviceBorder: string;
+                        let adviceBg: string;
                         
                         if (idx === 0) { // Legal & Compliance
                           if (ratio <= 0.6) {

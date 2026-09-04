@@ -22,6 +22,15 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+  // This server only ever reads files off disk. Anything other than GET/HEAD is
+  // a client mistake, and answering POST with 200 and a page body (which is what
+  // happened before) makes that mistake look like it worked.
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(405, { 'Content-Type': 'text/plain', Allow: 'GET, HEAD' });
+    res.end('405 Method Not Allowed');
+    return;
+  }
+
   // Normalize URL path to prevent directory traversal
   let filePath = path.join(DIST_DIR, req.url.split('?')[0]);
   
@@ -57,6 +66,39 @@ const server = http.createServer((req, res) => {
   });
 });
 
+// Running `npm start` before `npm run build` otherwise fails one confusing
+// request at a time instead of saying what's wrong once, up front.
+if (!fs.existsSync(DIST_DIR)) {
+  console.error(`No build found at ${DIST_DIR}`);
+  console.error('Run `npm run build` first.');
+  process.exit(1);
+}
+
+// Without this, a taken port prints an unhandled 'error' event and a raw stack
+// trace, which buries the one line the operator needs.
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use.`);
+    console.error('Set a different one with: PORT=3001 npm start');
+  } else if (err.code === 'EACCES') {
+    console.error(`Not allowed to bind port ${PORT}. Ports below 1024 need elevated privileges.`);
+  } else {
+    console.error(`Server error: ${err.message}`);
+  }
+  process.exit(1);
+});
+
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });
+
+// A host redeploying this process sends SIGTERM. Closing the server lets
+// in-flight responses finish instead of cutting them mid-transfer.
+for (const signal of ['SIGTERM', 'SIGINT']) {
+  process.on(signal, () => {
+    console.log(`\n${signal} received, shutting down.`);
+    server.close(() => process.exit(0));
+    // Don't hang forever on a wedged keep-alive connection.
+    setTimeout(() => process.exit(0), 5000).unref();
+  });
+}

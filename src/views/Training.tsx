@@ -4,6 +4,14 @@ import { useRouter } from '../components/Router';
 import { Calendar, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
 import { safeStorage } from '../lib/safeStorage';
 
+/** Shape persisted under cdx_training_diagnostic. */
+interface TrainingDiagnostic {
+  step: number | 'completed';
+  budget: string;
+  anxiety: string;
+  boardFrequency: string;
+}
+
 export const Training: React.FC = () => {
   const { navigate } = useRouter();
 
@@ -23,11 +31,11 @@ export const Training: React.FC = () => {
   }, [diagnostic]);
 
   const handleNextStep = () => {
-    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? prev.step + 1 : prev.step }));
+    setDiagnostic((prev) => ({ ...prev, step: typeof prev.step === 'number' ? prev.step + 1 : prev.step }));
   };
 
   const handlePrevStep = () => {
-    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? Math.max(1, prev.step - 1) : 1 }));
+    setDiagnostic((prev) => ({ ...prev, step: typeof prev.step === 'number' ? Math.max(1, prev.step - 1) : 1 }));
   };
 
   const handleResetDiagnostic = () => {
@@ -40,7 +48,7 @@ export const Training: React.FC = () => {
   };
 
   const handleAutoSelectWebinar = () => {
-    let target = 'webinar-fiduciary-update';
+    let target: string;
     if (diagnostic.anxiety === 'Financials & Overruns') {
       target = 'webinar-audit';
     } else if (diagnostic.anxiety === 'Conflict of Interest') {
@@ -53,10 +61,10 @@ export const Training: React.FC = () => {
 
   const getRecommendation = () => {
     const { budget, anxiety } = diagnostic;
-    let title = "Fiduciary Oversight Plan";
-    let desc = "";
-    let tools = [] as string[];
-    let rationale = "";
+    let title: string;
+    let desc: string;
+    let tools: string[];
+    let rationale: string;
 
     if (anxiety === 'Financials & Overruns') {
       title = "Financial Control & Audit Protocol";
@@ -331,7 +339,7 @@ export const Training: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setDiagnostic((prev: any) => ({ ...prev, step: 'completed' }))}
+                      onClick={() => setDiagnostic((prev) => ({ ...prev, step: 'completed' }))}
                       className="py-2 bg-teal-brand hover:bg-ink text-white rounded text-xs font-bold uppercase tracking-wider transition-premium cursor-pointer"
                     >
                       Generate Plan

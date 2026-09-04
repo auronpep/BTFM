@@ -58,7 +58,7 @@ export const Boards101: React.FC = () => {
     try {
       const saved = safeStorage.getItem('cdx_bylaws_quick_check');
       return saved ? parseInt(saved) : 0;
-    } catch (e) {
+    } catch {
       return 0;
     }
   });

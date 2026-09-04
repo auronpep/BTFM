@@ -189,6 +189,10 @@ export const ScenarioReader: React.FC = () => {
   // Find scenario
   const scenario = scenarios.find((sc) => sc.slug === slug);
 
+  // This route owns its title: only the view can resolve the slug to a headline.
+  useDocumentTitle(withSiteName(scenario ? scenario.title : 'Case Study Not Found'));
+  useMetaDescription(scenario ? truncateForMeta(scenario.facts) : undefined);
+
   // Simulation Option State
   const [selectedOption, setSelectedOption] = useState<number | null>(() => {
     try {
@@ -221,7 +225,7 @@ export const ScenarioReader: React.FC = () => {
     try {
       const saved = safeStorage.getItem(`cdx_feedback_status_${slug}`);
       return saved as 'yes' | 'no' | null;
-    } catch (e) {
+    } catch {
       return null;
     }
   });
