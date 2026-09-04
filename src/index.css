@@ -58,6 +58,29 @@
   }
 }
 
+/*
+  Honour the OS "reduce motion" setting.
+
+  The site leans on animation heavily - .transition-premium alone is applied in
+  hundreds of places, alongside Tailwind animate-* utilities and the rotated
+  .stamp-premium. For a visitor with a vestibular disorder that is not polish,
+  it is a barrier, and this is the setting they have already used to say so.
+
+  Motion is reduced to a near-zero duration rather than 0 so that transitionend
+  and animationend handlers still fire and nothing waits forever on an event
+  that never arrives.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Base utility for premium micro-animations */
 .transition-premium {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

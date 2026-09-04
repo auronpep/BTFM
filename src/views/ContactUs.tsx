@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
-import { safeStorage } from '../lib/safeStorage';
+import { scrollBehavior } from '../lib/motion';
 import { 
   Mail, 
   Phone, 
@@ -108,7 +108,7 @@ export const ContactUs: React.FC = () => {
   // Scroll to status panel as it activates
   useEffect(() => {
     if (submissionStatus !== 'input' && statusTopRef.current) {
-      statusTopRef.current.scrollIntoView({ behavior: 'smooth' });
+      statusTopRef.current.scrollIntoView({ behavior: scrollBehavior() });
     }
   }, [submissionStatus]);
 
