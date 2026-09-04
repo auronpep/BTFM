@@ -1219,10 +1219,11 @@ export const Tools: React.FC = () => {
             {/* Persistence & Synchronization Actions */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-4 border-t border-fog/60 pt-5">
               <div className="w-full sm:w-[40%] space-y-1.5 text-left">
-                <label className="text-[9.5px] font-extrabold text-ink/50 uppercase tracking-widest block">
+                <label htmlFor="tools-org-name" className="text-[9.5px] font-extrabold text-ink/50 uppercase tracking-widest block">
                   Organization Entity / Board Name (Synced)
                 </label>
                 <input 
+                  id="tools-org-name"
                   type="text"
                   value={userOrgName}
                   onChange={(e) => setUserOrganizationName(e.target.value)}
@@ -1358,10 +1359,11 @@ export const Tools: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] font-extrabold text-ink/50 uppercase tracking-widest">
+                  <label htmlFor="script-track" className="text-[10px] font-extrabold text-ink/50 uppercase tracking-widest">
                     Governance Dispute Track
                   </label>
                   <select 
+                    id="script-track"
                     value={selectedScriptId} 
                     onChange={(e) => setSelectedScriptId(e.target.value)}
                     className="w-full text-xs font-medium border border-fog/60 p-2.5 rounded bg-paper/5 focus:border-brass focus:outline-none"
@@ -1482,10 +1484,11 @@ export const Tools: React.FC = () => {
 
             {/* Input Form */}
             <div className="max-w-md mx-auto space-y-1">
-              <label className="text-[9px] font-extrabold text-ink/40 uppercase tracking-widest block text-left">
+              <label htmlFor="portfolio-org" className="text-[9px] font-extrabold text-ink/40 uppercase tracking-widest block text-left">
                 Organization / Board Name
               </label>
               <input 
+                id="portfolio-org"
                 type="text"
                 value={userOrgName}
                 onChange={(e) => setUserOrganizationName(e.target.value)}
@@ -1571,8 +1574,9 @@ export const Tools: React.FC = () => {
                 {/* Metadata details */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans bg-paper/10 p-4 border border-fog/45 rounded-lg">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Organization Entity / Board Name</label>
+                    <label htmlFor="certificate-org" className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Organization Entity / Board Name</label>
                     <input 
+                      id="certificate-org"
                       type="text"
                       value={userOrgName}
                       onChange={(e) => setUserOrganizationName(e.target.value)}
@@ -1580,8 +1584,9 @@ export const Tools: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Compilation Date</label>
+                    <label htmlFor="certificate-date" className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest block">Compilation Date</label>
                     <input 
+                      id="certificate-date"
                       type="text"
                       value={new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       className="w-full font-bold border border-fog/40 p-2 rounded bg-paper/5 focus:outline-none text-ink cursor-default"
@@ -1894,8 +1899,9 @@ export const Tools: React.FC = () => {
                   {/* Fields for custom details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans border-b border-brass/25 pb-4">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Governing Board Name</label>
+                      <label htmlFor="form990-board-name" className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Governing Board Name</label>
                       <input 
+                        id="form990-board-name"
                         type="text"
                         value={userOrgName}
                         onChange={(e) => setUserOrganizationName(e.target.value)}
@@ -1903,8 +1909,9 @@ export const Tools: React.FC = () => {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Audit Conducted On</label>
+                      <label htmlFor="form990-audit-date" className="text-[9px] font-extrabold text-ink/50 uppercase tracking-widest">Audit Conducted On</label>
                       <input 
+                        id="form990-audit-date"
                         type="text"
                         defaultValue={new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         className="w-full font-bold border border-fog/40 p-2 rounded bg-paper/5 focus:outline-none text-ink cursor-default"
