@@ -1,0 +1,21 @@
+# Normalize text files to LF in the repository, check out native on each platform.
+# The index is already LF; this makes that explicit so it no longer depends on
+# each contributor's core.autocrlf setting. Without it, a Windows contributor
+# with autocrlf=false commits CRLF and every line of the file shows as changed.
+* text=auto
+
+# Keep these LF in the working tree too - shells and CI runners choke on CRLF.
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Never touch binaries.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.docx binary
