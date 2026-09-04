@@ -420,10 +420,11 @@ export const Boards101: React.FC = () => {
                   )}
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name <span className="text-burgundy">*</span></label>
+                    <label htmlFor="booking-org" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Organization Name <span className="text-burgundy">*</span></label>
                     <div className="relative">
                       <Building className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
                       <input
+                        id="booking-org"
                         type="text"
                         required
                         value={orgName}
@@ -435,8 +436,9 @@ export const Boards101: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Board Size <span className="text-burgundy">*</span></label>
+                    <label htmlFor="booking-board-size" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Board Size <span className="text-burgundy">*</span></label>
                     <select
+                      id="booking-board-size"
                       required
                       value={boardSize}
                       onChange={(e) => setBoardSize(e.target.value)}
@@ -451,10 +453,11 @@ export const Boards101: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person Name <span className="text-burgundy">*</span></label>
+                    <label htmlFor="booking-contact" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Person Name <span className="text-burgundy">*</span></label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
                       <input
+                        id="booking-contact"
                         type="text"
                         required
                         value={contactName}
@@ -466,10 +469,11 @@ export const Boards101: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email Address <span className="text-burgundy">*</span></label>
+                    <label htmlFor="booking-email" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Contact Email Address <span className="text-burgundy">*</span></label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
                       <input
+                        id="booking-email"
                         type="email"
                         required
                         value={contactEmail}
@@ -481,10 +485,11 @@ export const Boards101: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Preferred Training Date <span className="text-burgundy">*</span></label>
+                    <label htmlFor="booking-date" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Preferred Training Date <span className="text-burgundy">*</span></label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-3 w-4 h-4 text-ink/30" />
                       <input
+                        id="booking-date"
                         type="date"
                         required
                         value={preferredDate}
@@ -495,11 +500,12 @@ export const Boards101: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Bylaws Concerns or Specific Focus Areas:</label>
+                    <label htmlFor="booking-focus" className="text-xs font-bold uppercase tracking-wider text-ink/55 block">Bylaws Concerns or Specific Focus Areas:</label>
                     <div className="p-3 bg-copper/5 border-l-2 border-copper rounded text-[11px] text-copper leading-relaxed font-sans font-medium mb-1.5">
                       <strong>⚠️ Privacy Notice:</strong> To protect your organization, please do not submit highly confidential details regarding active disputes or pending litigation here. This form is for booking inquiries only and does not establish an attorney-client relationship.
                     </div>
                     <textarea
+                      id="booking-focus"
                       value={customConcerns}
                       onChange={(e) => setCustomConcerns(e.target.value)}
                       placeholder="e.g. Audit threshold, executive salary safe harbor, minutes reviews..."
