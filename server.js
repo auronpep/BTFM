@@ -47,19 +47,32 @@ const SECURITY_HEADERS = {
 };
 
 const server = http.createServer((req, res) => {
-  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
-    res.setHeader(name, value);
+  // Decode and normalize the URL path, then confine it to DIST_DIR so that
+  // "../" segments (raw or percent-encoded) cannot escape the served root.
+  let requestPath;
+  try {
+    requestPath = decodeURIComponent(req.url.split('?')[0]);
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('400 Bad Request');
+    return;
   }
 
-  // Normalize URL path to prevent directory traversal
-  const urlPath = req.url.split('?')[0];
-  let filePath = path.join(DIST_DIR, urlPath);
+  // path.posix.normalize resolves "." and ".." before the value ever reaches
+  // the filesystem; the leading slash keeps the result anchored at the root.
+  const safePath = path.posix.normalize(`/${requestPath}`).replace(/^(\.\.[/\\])+/, '');
+  let filePath = path.join(DIST_DIR, safePath);
 
-  // If the request names a directory, serve its index.html. Test the URL, not
-  // the joined filesystem path: on Windows path.join() emits '\' separators, so
-  // a filePath check for a trailing '/' never matches and '/' fell through to
-  // fs.readFile() on the dist directory itself (EISDIR -> 500).
-  if (urlPath === '' || urlPath.endsWith('/')) {
+  // Defence in depth: reject anything that still resolves outside DIST_DIR.
+  const resolved = path.resolve(filePath);
+  if (resolved !== path.resolve(DIST_DIR) && !resolved.startsWith(path.resolve(DIST_DIR) + path.sep)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('403 Forbidden');
+    return;
+  }
+
+  // If the path is a directory, serve index.html
+  if (filePath === DIST_DIR || filePath.endsWith('/') || filePath.endsWith(path.sep)) {
     filePath = path.join(filePath, 'index.html');
   }
 
