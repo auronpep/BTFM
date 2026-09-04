@@ -385,6 +385,7 @@ export const BudgetWorksheet: React.FC = () => {
                   </div>
                   <input
                     type="range"
+                    aria-label="Variance risk tolerance limit (percent)"
                     min="10"
                     max="50"
                     step="5"
