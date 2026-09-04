@@ -66,6 +66,16 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
+        // Only navigation requests get the SPA shell. A request that names a
+        // concrete asset (.js, .css, an image) is a genuine miss: answering it
+        // with 200 + HTML hides broken builds and makes the browser fail later
+        // with a confusing MIME error instead of a plain 404.
+        if (extname !== '' && extname !== '.html') {
+          res.writeHead(404, { 'Content-Type': 'text/plain' });
+          res.end('404 Not Found');
+          return;
+        }
+
         // Fallback to index.html for SPA client-side routing
         fs.readFile(path.join(DIST_DIR, 'index.html'), (err, indexContent) => {
           if (err) {
