@@ -804,8 +804,9 @@ ${secretaryName}, Board Secretary`;
               {/* Form parameters */}
               <div className="lg:col-span-5 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Resolution Type</label>
+                  <label htmlFor="resolution-type" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Resolution Type</label>
                   <select
+                    id="resolution-type"
                     value={resolutionState.resolutionType}
                     onChange={(e) => setResolutionState({ ...resolutionState, resolutionType: e.target.value })}
                     className="w-full bg-white border border-fog hover:border-brass focus:border-brass rounded px-3 py-2 text-xs font-medium text-ink focus:outline-none transition-premium cursor-pointer"
@@ -818,8 +819,9 @@ ${secretaryName}, Board Secretary`;
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Organization Name</label>
+                    <label htmlFor="resolution-org" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Organization Name</label>
                     <input
+                      id="resolution-org"
                       type="text"
                       value={resolutionState.organizationName}
                       onChange={(e) => setResolutionState({ ...resolutionState, organizationName: e.target.value })}
@@ -827,8 +829,9 @@ ${secretaryName}, Board Secretary`;
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Meeting Date</label>
+                    <label htmlFor="resolution-meeting-date" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Meeting Date</label>
                     <input
+                      id="resolution-meeting-date"
                       type="date"
                       value={resolutionState.meetingDate}
                       onChange={(e) => setResolutionState({ ...resolutionState, meetingDate: e.target.value })}
@@ -839,8 +842,9 @@ ${secretaryName}, Board Secretary`;
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Secretary Name</label>
+                    <label htmlFor="resolution-secretary" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Secretary Name</label>
                     <input
+                      id="resolution-secretary"
                       type="text"
                       value={resolutionState.secretaryName}
                       onChange={(e) => setResolutionState({ ...resolutionState, secretaryName: e.target.value })}
@@ -848,8 +852,9 @@ ${secretaryName}, Board Secretary`;
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Board President Name</label>
+                    <label htmlFor="resolution-president" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Board President Name</label>
                     <input
+                      id="resolution-president"
                       type="text"
                       value={resolutionState.presidentName}
                       onChange={(e) => setResolutionState({ ...resolutionState, presidentName: e.target.value })}
@@ -861,8 +866,9 @@ ${secretaryName}, Board Secretary`;
                 {resolutionState.resolutionType === 'compensation' && (
                   <div className="grid grid-cols-2 gap-4 border-t border-fog pt-3 mt-2 animate-fade-in">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Annual Salary ($)</label>
+                      <label htmlFor="resolution-salary" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Annual Salary ($)</label>
                       <input
+                        id="resolution-salary"
                         type="text"
                         value={resolutionState.salaryAmount}
                         onChange={(e) => setResolutionState({ ...resolutionState, salaryAmount: e.target.value })}
@@ -870,8 +876,9 @@ ${secretaryName}, Board Secretary`;
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Comparable Region</label>
+                      <label htmlFor="resolution-region" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Comparable Region</label>
                       <input
+                        id="resolution-region"
                         type="text"
                         value={resolutionState.comparableRegion}
                         onChange={(e) => setResolutionState({ ...resolutionState, comparableRegion: e.target.value })}
@@ -885,8 +892,9 @@ ${secretaryName}, Board Secretary`;
                   <div className="border-t border-fog pt-3 mt-2 space-y-3 animate-fade-in">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Conflicted Director</label>
+                        <label htmlFor="resolution-conflicted-director" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Conflicted Director</label>
                         <input
+                          id="resolution-conflicted-director"
                           type="text"
                           value={resolutionState.conflictDirector}
                           onChange={(e) => setResolutionState({ ...resolutionState, conflictDirector: e.target.value })}
@@ -894,8 +902,9 @@ ${secretaryName}, Board Secretary`;
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Vendor Name</label>
+                        <label htmlFor="resolution-vendor" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Vendor Name</label>
                         <input
+                          id="resolution-vendor"
                           type="text"
                           value={resolutionState.vendorName}
                           onChange={(e) => setResolutionState({ ...resolutionState, vendorName: e.target.value })}
@@ -905,8 +914,9 @@ ${secretaryName}, Board Secretary`;
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Contract Value ($)</label>
+                        <label htmlFor="resolution-contract-value" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Contract Value ($)</label>
                         <input
+                          id="resolution-contract-value"
                           type="text"
                           value={resolutionState.contractAmount}
                           onChange={(e) => setResolutionState({ ...resolutionState, contractAmount: e.target.value })}
@@ -914,8 +924,9 @@ ${secretaryName}, Board Secretary`;
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Nature of Conflict</label>
+                        <label htmlFor="resolution-conflict-nature" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Nature of Conflict</label>
                         <input
+                          id="resolution-conflict-nature"
                           type="text"
                           value={resolutionState.conflictNature}
                           onChange={(e) => setResolutionState({ ...resolutionState, conflictNature: e.target.value })}
@@ -931,8 +942,9 @@ ${secretaryName}, Board Secretary`;
                   <div className="border-t border-fog pt-3 mt-2 space-y-3 animate-fade-in">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Donor Name</label>
+                        <label htmlFor="resolution-donor" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Donor Name</label>
                         <input
+                          id="resolution-donor"
                           type="text"
                           value={resolutionState.donorName}
                           onChange={(e) => setResolutionState({ ...resolutionState, donorName: e.target.value })}
@@ -940,8 +952,9 @@ ${secretaryName}, Board Secretary`;
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Amount ($)</label>
+                        <label htmlFor="resolution-restricted-amount" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Amount ($)</label>
                         <input
+                          id="resolution-restricted-amount"
                           type="text"
                           value={resolutionState.restrictedAmount}
                           onChange={(e) => setResolutionState({ ...resolutionState, restrictedAmount: e.target.value })}
@@ -950,8 +963,9 @@ ${secretaryName}, Board Secretary`;
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Purpose</label>
+                      <label htmlFor="resolution-restricted-purpose" className="text-[10px] font-extrabold uppercase tracking-wider text-ink/50 block">Restricted Purpose</label>
                       <input
+                        id="resolution-restricted-purpose"
                         type="text"
                         value={resolutionState.restrictionPurpose}
                         onChange={(e) => setResolutionState({ ...resolutionState, restrictionPurpose: e.target.value })}
@@ -1034,6 +1048,7 @@ ${secretaryName}, Board Secretary`;
               <div className="lg:col-span-7 flex flex-col space-y-3">
                 <div className="relative flex-grow">
                   <textarea
+                    aria-label="Minutes draft"
                     value={sandboxText}
                     onChange={(e) => handleSandboxChange(e.target.value)}
                     rows={16}
