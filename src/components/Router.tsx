@@ -8,17 +8,22 @@ export interface RouterContextType {
 
 const RouterContext = createContext<RouterContextType | undefined>(undefined);
 
-// Helper function to parse hash location
-const parseHash = () => {
+// Old public URLs that must keep working, mapped to their current path.
+const LEGACY_PATHS: Record<string, string> = {
+  'california-board-rules': 'federal-governance-checklist',
+};
+
+// Splits '#/path/?a=b' into its normalized pathname and its raw query string.
+const splitHash = () => {
   const hash = window.location.hash || '#/';
   // Strip the '#' character
-  let rawPath = hash.substring(1) || '/';
-  
+  const rawPath = hash.substring(1) || '/';
+
   // Split query string if exists
   const queryIndex = rawPath.indexOf('?');
   let pathname = queryIndex !== -1 ? rawPath.substring(0, queryIndex) : rawPath;
-  let queryString = queryIndex !== -1 ? rawPath.substring(queryIndex + 1) : '';
-  
+  const queryString = queryIndex !== -1 ? rawPath.substring(queryIndex + 1) : '';
+
   // Standardize trailing/leading slashes
   if (pathname.startsWith('/')) {
     pathname = pathname.substring(1);
@@ -26,7 +31,29 @@ const parseHash = () => {
   if (pathname.endsWith('/')) {
     pathname = pathname.substring(0, pathname.length - 1);
   }
-  
+
+  return { pathname, queryString };
+};
+
+// Rewrites a legacy URL in the address bar to its current one.
+// This REPLACES the history entry instead of assigning window.location.hash,
+// which would push a new entry and trap the Back button on the legacy URL.
+const canonicalizeLegacyHash = () => {
+  const { pathname, queryString } = splitHash();
+  const canonical = LEGACY_PATHS[pathname];
+  if (!canonical) return;
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `#/${canonical}${queryString ? `?${queryString}` : ''}`
+  );
+};
+
+// Helper function to parse hash location
+const parseHash = () => {
+  const { pathname: rawPathname, queryString } = splitHash();
+  let pathname = rawPathname;
+
   // Parse query params
   const params: Record<string, string> = {};
   if (queryString) {
@@ -59,9 +86,10 @@ const parseHash = () => {
       queryParams: params
     };
   }
-  if (pathname === 'california-board-rules') {
-    window.location.hash = '#/federal-governance-checklist' + (queryString ? `?${queryString}` : '');
-    pathname = 'federal-governance-checklist';
+  // Resolve legacy URLs to the current path. Pure: the address bar is
+  // canonicalized separately, in an effect, so parsing stays side-effect free.
+  if (LEGACY_PATHS[pathname]) {
+    pathname = LEGACY_PATHS[pathname];
   }
   
   return {
@@ -76,10 +104,13 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     const handleHashChange = () => {
       setRoute(parseHash());
+      canonicalizeLegacyHash();
       // Smooth scroll to top when changing views
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // Covers a legacy URL that was the entry point for the session.
+    canonicalizeLegacyHash();
     window.addEventListener('hashchange', handleHashChange);
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
