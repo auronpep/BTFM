@@ -3,11 +3,19 @@ import { Layout } from '../components/Layout';
 import { useRouter } from '../components/Router';
 import { Calendar, CheckCircle2, ChevronRight, Award, GraduationCap, Building, Sparkles, Check, RefreshCw } from 'lucide-react';
 
+/** Shape persisted under cdx_training_diagnostic. */
+interface TrainingDiagnostic {
+  step: number | 'completed';
+  budget: string;
+  anxiety: string;
+  boardFrequency: string;
+}
+
 export const Training: React.FC = () => {
   const { navigate } = useRouter();
 
   // 3. Syllabus Diagnostic Wizard States
-  const [diagnostic, setDiagnostic] = useState(() => {
+  const [diagnostic, setDiagnostic] = useState<TrainingDiagnostic>(() => {
     const saved = localStorage.getItem('cdx_training_diagnostic');
     return saved ? JSON.parse(saved) : {
       step: 1, // 1, 2, 3, or 'completed'
@@ -22,11 +30,11 @@ export const Training: React.FC = () => {
   }, [diagnostic]);
 
   const handleNextStep = () => {
-    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? prev.step + 1 : prev.step }));
+    setDiagnostic((prev) => ({ ...prev, step: typeof prev.step === 'number' ? prev.step + 1 : prev.step }));
   };
 
   const handlePrevStep = () => {
-    setDiagnostic((prev: any) => ({ ...prev, step: typeof prev.step === 'number' ? Math.max(1, prev.step - 1) : 1 }));
+    setDiagnostic((prev) => ({ ...prev, step: typeof prev.step === 'number' ? Math.max(1, prev.step - 1) : 1 }));
   };
 
   const handleResetDiagnostic = () => {
@@ -330,7 +338,7 @@ export const Training: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setDiagnostic((prev: any) => ({ ...prev, step: 'completed' }))}
+                      onClick={() => setDiagnostic((prev) => ({ ...prev, step: 'completed' }))}
                       className="py-2 bg-teal-brand hover:bg-ink text-white rounded text-xs font-bold uppercase tracking-wider transition-premium cursor-pointer"
                     >
                       Generate Plan
